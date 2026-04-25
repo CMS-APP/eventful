@@ -9,8 +9,8 @@ export default ({ config }: ConfigContext) => {
     slug: "Eventful",
     scheme: "eventful",
     owner: "chrissharp",
-    version: "6.0.1",
-    runtimeVersion: "6.0.1",
+    version: "6.0.2",
+    runtimeVersion: "6.0.2",
     orientation: "portrait",
     icon: "./src/assets/logos/eventful-logo.png",
     userInterfaceStyle: "light",
@@ -22,7 +22,7 @@ export default ({ config }: ConfigContext) => {
     android: {
       package: "com.hostinghappily.app",
       icon: "./src/assets/logos/eventful-logo-android.png",
-      versionCode: 295,
+      versionCode: 296,
       softwareKeyboardLayoutMode: "pan",
       permissions: [
         "android.permission.READ_EXTERNAL_STORAGE",
@@ -35,7 +35,7 @@ export default ({ config }: ConfigContext) => {
     ios: {
       bundleIdentifier: "com.hostinghappily.app",
       icon: "./src/assets/logos/eventful-logo.png",
-      buildNumber: "294",
+      buildNumber: "295",
       supportsTablet: true,
       usesAppleSignIn: true,
       infoPlist: {
