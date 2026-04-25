@@ -82,7 +82,7 @@ export function ContactsSearchScreen({ route }: ContactsSearchScreenProps) {
         backgroundColor: colors.primary
       }}
       nonScrollConfig={{
-        paddingTop: 56
+        paddingTop: 52
       }}
       nonScrollChildren={
         <ContactsSearch

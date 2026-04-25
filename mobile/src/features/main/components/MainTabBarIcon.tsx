@@ -1,4 +1,4 @@
-import { Animated, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
@@ -27,36 +27,36 @@ export function MainTabBarIcon({
 }: MainTabBarIconProps) {
   const iconName = iconNames[route as keyof typeof iconNames];
   const iconColor = isFocused ? colors.secondary : colors.black;
-  const scale = new Animated.Value(1);
 
   return (
-    <Animated.View style={{ transform: [{ scale }] }}>
+    <>
       <FontAwesome5 name={iconName} size={24} color={iconColor} />
       {notifications > 0 && (
         <View style={styles.badge}>
-          <Text type="body" style={styles.badgeText}>
+          <Text type="header" style={styles.badgeText} center>
             {notifications}
           </Text>
         </View>
       )}
-    </Animated.View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   badge: {
     alignItems: "center",
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.primary,
     borderRadius: 12,
     height: 20,
     justifyContent: "center",
-    minWidth: 20,
+    minWidth: 24,
     paddingHorizontal: 6,
     position: "absolute",
-    right: -5,
-    top: -5
+    right: -12,
+    top: -8
   },
   badgeText: {
-    color: colors.white
+    color: colors.white,
+    fontSize: 12
   }
 });

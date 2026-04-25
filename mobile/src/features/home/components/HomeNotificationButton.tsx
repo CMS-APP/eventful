@@ -44,7 +44,7 @@ export function HomeNotificationButton({
 
       {unreadNotifications > 0 && (
         <View style={styles.badge}>
-          <Text type="body" color={colors.white}>
+          <Text type="header" style={styles.badgeText} center>
             {unreadNotifications}
           </Text>
         </View>
@@ -55,14 +55,16 @@ export function HomeNotificationButton({
 
 const styles = StyleSheet.create({
   badge: {
-    backgroundColor: colors.secondary,
-    borderRadius: 120,
-    paddingLeft: 7.5,
-    paddingRight: 6,
-    paddingVertical: 6,
+    alignItems: "center",
+    backgroundColor: colors.primary,
+    borderRadius: 12,
+    height: 20,
+    justifyContent: "center",
+    minWidth: 24,
+    paddingHorizontal: 6,
     position: "absolute",
-    right: -5,
-    top: 0
+    right: -4,
+    top: -4
   },
   container: {
     alignItems: "center",
@@ -76,5 +78,9 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: "center",
     width: 50
+  },
+  badgeText: {
+    color: colors.white,
+    fontSize: 12
   }
 });

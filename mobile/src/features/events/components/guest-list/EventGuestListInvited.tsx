@@ -7,6 +7,7 @@ import { StyleSheet, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 
 import { Text } from "@/components/text/Text";
+import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { getInvitedGuests } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
@@ -41,13 +42,13 @@ export function EventGuestListInvited({
   return (
     <View style={styles.container}>
       {host && (
-        <View style={styles.hostContainer}>
+        <>
           <Text type="subHeader" color="white">
             Host:
           </Text>
 
           <EventGuestListInvitedItem
-            index={-1}
+            key={host.uid}
             user={host}
             invite={{
               id: host.uid,
@@ -59,22 +60,24 @@ export function EventGuestListInvited({
             }}
             event={event}
           />
-        </View>
+        </>
       )}
 
       <Text type="subHeader" color="white">
         Invited Guests:
       </Text>
+
       {invitedGuests.length === 0 && (
-        <Text type="body" color="white" style={styles.noGuestsText}>
-          No other guests invited
-        </Text>
+        <EmptyStateContainer
+          title="No other guests"
+          description="No other guests have been invited to this event"
+          icon="users"
+        />
       )}
 
       {invitedGuests.length !== 0 &&
         invitedGuests.map((item, index) => (
           <EventGuestListInvitedItem
-            index={index}
             key={item.invite.id}
             user={item.user}
             invite={item.invite}
@@ -87,12 +90,7 @@ export function EventGuestListInvited({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 24
-  },
-  hostContainer: {
-    marginBottom: 12
-  },
-  noGuestsText: {
-    textAlign: "center"
+    paddingHorizontal: 24,
+    gap: 12
   }
 });

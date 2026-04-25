@@ -27,7 +27,6 @@ import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
 
 interface EventInviteGuestItemProps {
-  index: number;
   user: User;
   event: Event;
   invitedList: string[];
@@ -35,7 +34,6 @@ interface EventInviteGuestItemProps {
 }
 
 export function EventInviteGuestItem({
-  index,
   user,
   event,
   invitedList,

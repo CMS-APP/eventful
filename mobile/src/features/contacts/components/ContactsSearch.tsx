@@ -38,7 +38,7 @@ export function ContactsSearch({
         >
           <FontAwesome5 name="search" size={16} color={colors.black} />
           {disabled ? (
-            <Text type="body" style={styles.textInput}>
+            <Text type="body" style={styles.buttonLabel}>
               Search For Users...
             </Text>
           ) : (
@@ -91,6 +91,7 @@ export function ContactsSearch({
 const styles = StyleSheet.create({
   searchContainer: {
     alignItems: "center",
+    minHeight: 44,
     borderRadius: 16,
     flexDirection: "row",
     gap: 12,
@@ -112,7 +113,16 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 12,
     letterSpacing: 2,
-    paddingVertical: 12,
+    minHeight: 44,
+    paddingVertical: 0,
+    textAlignVertical: "center",
+    textTransform: "capitalize"
+  },
+  buttonLabel: {
+    color: colors.black,
+    flex: 1,
+    fontSize: 12,
+    letterSpacing: 2,
     textTransform: "capitalize"
   }
 });

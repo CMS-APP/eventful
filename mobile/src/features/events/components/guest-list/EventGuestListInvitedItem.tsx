@@ -21,14 +21,12 @@ import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
 
 interface EventGuestListInvitedItemProps {
-  index: number;
   user: User;
   invite: Invite;
   event: Event;
 }
 
 export function EventGuestListInvitedItem({
-  index,
   user,
   invite,
   event
@@ -189,8 +187,7 @@ const styles = StyleSheet.create({
     ...globalStyles.largeWidget,
     backgroundColor: colors.lightGray,
     flexDirection: "row",
-    gap: 12,
-    marginTop: 12
+    gap: 12
   },
   usernameText: {
     color: colors.gray,

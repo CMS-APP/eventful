@@ -108,9 +108,8 @@ export function EventInviteGuest({ navigation, route }: EventInviteGuestProps) {
               )}
 
             {filteredInvitedUsers !== null &&
-              filteredInvitedUsers.map((followingUser: User, index: number) => (
+              filteredInvitedUsers.map((followingUser: User) => (
                 <EventInviteGuestItem
-                  index={index}
                   key={followingUser.uid}
                   user={followingUser}
                   event={event}
@@ -139,18 +138,15 @@ export function EventInviteGuest({ navigation, route }: EventInviteGuestProps) {
               )}
 
             {filteredNonInvitedUsers !== null &&
-              filteredNonInvitedUsers.map(
-                (invitedUser: User, index: number) => (
-                  <EventInviteGuestItem
-                    index={index}
-                    key={invitedUser.uid}
-                    user={invitedUser}
-                    event={event}
-                    invitedList={invitedList}
-                    refreshInvites={refreshInvites}
-                  />
-                )
-              )}
+              filteredNonInvitedUsers.map((invitedUser: User) => (
+                <EventInviteGuestItem
+                  key={invitedUser.uid}
+                  user={invitedUser}
+                  event={event}
+                  invitedList={invitedList}
+                  refreshInvites={refreshInvites}
+                />
+              ))}
           </View>
         </View>
       </View>

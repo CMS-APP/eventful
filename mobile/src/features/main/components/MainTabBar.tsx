@@ -83,7 +83,7 @@ export function MainTabBar({ state, navigation }: MainTabBarProps) {
 
       Animated.sequence([
         Animated.timing(scale, {
-          toValue: 1.2,
+          toValue: 1.1,
           duration: 50,
           useNativeDriver: true
         }),

@@ -41,11 +41,15 @@ export function InviteDateViewMulti({
     <View style={styles.flexContainer}>
       <View style={[styles.topBar, { backgroundColor: color }]} />
       <View style={styles.boxContainer}>
-        <Text type="subHeader">{time}</Text>
-        <Text type="header">
+        <Text type="subHeader" center>
+          {time}
+        </Text>
+        <Text type="header" center>
           {day} {month}
         </Text>
-        <Text type="subHeader">{year}</Text>
+        <Text type="subHeader" center>
+          {year}
+        </Text>
       </View>
     </View>
   );
@@ -62,13 +66,13 @@ const styles = StyleSheet.create({
     shadowColor: colors.black,
     shadowOffset: {
       width: 0,
-      height: 1
+      height: 2
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41
+    shadowOpacity: 0.1,
+    shadowRadius: 4
   },
   flexContainer: {
-    flex: 10
+    flex: 1
   },
   topBar: {
     borderTopLeftRadius: 20,
