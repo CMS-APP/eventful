@@ -29,7 +29,7 @@ export default function About() {
           className={`hidden ${isMobile ? "" : "md:flex"} flex-[2] ml-[-15%] justify-center`}
         >
           <Image
-            className={`hidden ${isMobile ? "" : "md:block"} rounded-[24px] object-contain`}
+            className={`hidden ${isMobile ? "" : "md:block"} rounded-[25px] object-contain`}
             src={"/feature-pics/features-screenshots.png"}
             alt="feature"
             width={600}
