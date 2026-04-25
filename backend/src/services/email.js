@@ -1,7 +1,7 @@
 import Mailjet from "node-mailjet";
-import { feedbackEmailTemplate } from "./feedbackEmailTemplate.js";
-import { forgotPasswordTemplate } from "./forgotPasswordTemplate.js";
-import { verifyEmailTemplate } from "./verifyEmailTemplate.js";
+import { feedbackEmailTemplate } from "../templates/feedbackEmailTemplate.js";
+import { forgotPasswordTemplate } from "../templates/forgotPasswordTemplate.js";
+import { verifyEmailTemplate } from "../templates/verifyEmailTemplate.js";
 
 export async function sendVerificationEmailMailJet(
   MJ_API_KEY,

@@ -56,5 +56,6 @@
     "mobile/metadata": true,
     "mobile/screenshots": true,
     "web/.next/": true,
+    "web/next-env.d.ts": true,
   }
 }
