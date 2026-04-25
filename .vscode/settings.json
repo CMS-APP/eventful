@@ -35,17 +35,6 @@
   },
   "prettier.requireConfig": true,
   "prettier.useEditorConfig": false,
-  "cSpell.words": [
-    "adduser",
-    "camerao",
-    "checkcircle",
-    "closecircle",
-    "FIRESTORE",
-    "Firstore",
-    "playcircleo",
-    "Resumable",
-    "share-alt"
-  ],
   "files.exclude": {
     "**/node_modules/": true,
     "mobile/.expo/": true,
