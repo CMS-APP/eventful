@@ -39,7 +39,7 @@ exports.respondToEvent = onRequest(
 exports.appCheckToken = onRequest(createAppCheckTokenHandler({ admin }));
 
 exports.sendVerificationEmail = onRequest(
-  { secrets: [MJ_API_KEY, MJ_SECRET] },
+  { secrets: [MJ_API_KEY, MJ_SECRET], minInstances: 1 },
   createSendVerificationEmailHandler({
     admin,
     MJ_API_KEY,
