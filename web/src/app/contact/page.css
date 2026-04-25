@@ -1,0 +1,40 @@
+.contact-us {
+  border-radius: 50px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.contact-us-item {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  width: 200px;
+  align-items: center;
+}
+
+.contact-us-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+.contact-us-icon {
+  width: 30px;
+  height: 30px;
+}
+
+@media screen and (max-width: 800px) {
+  .contact-us {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}

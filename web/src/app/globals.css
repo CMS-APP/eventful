@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary: #0a3b2e;
+  --primaryTint: #0a3b2e80;
+  --secondary: #feba12;
+  --secondaryTint: #feba1280;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --primary: #0a3b2e;
+    --primaryTint: #0a3b2e80;
+    --secondary: #feba12;
+    --secondaryTint: #feba1280;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+  font-size: 2rem;
+  font-family: var(--font-poppins-bold);
+  color: white;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-family: var(--font-poppins-bold);
+  color: white;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-family: var(--font-poppins-bold);
+  color: white;
+}
+
+p {
+  font-size: 1rem;
+  font-family: var(--font-poppins-regular);
+  color: white;
+}

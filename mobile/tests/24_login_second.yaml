@@ -1,0 +1,21 @@
+appId: host.exp.Exponent
+---
+- assertVisible: "sign in"
+- tapOn:
+    id: "signInButton"
+
+# Sign In
+- tapOn:
+    id: "emailInput"
+- inputText:
+    text: "bananapajamagamer@gmail.com"
+
+- tapOn:
+    id: "passwordInput"
+- inputText:
+    text: "P*ssw0rd"
+- tapOn: "Return"
+
+- tapOn:
+    id: "signInButton"
+- tapOn: "Not Now"

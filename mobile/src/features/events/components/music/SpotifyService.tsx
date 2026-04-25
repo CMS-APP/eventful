@@ -1,0 +1,22 @@
+import { Linking } from "react-native";
+
+import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
+import { AppError } from "@/utils/error";
+
+export async function viewSpotifyPlaylist(playlist: SpotifyPlaylist) {
+  const spotifyUri = `spotify:playlist:${playlist.id}`;
+  const fallbackUrl = `https://open.spotify.com/playlist/${playlist.id}`;
+
+  try {
+    // Attempt to open in Spotify app
+    const canOpen = await Linking.canOpenURL(spotifyUri);
+    if (canOpen) {
+      await Linking.openURL(spotifyUri);
+    } else {
+      // Fallback to web URL
+      await Linking.openURL(fallbackUrl);
+    }
+  } catch (error) {
+    new AppError(error, "Error opening Spotify playlist", true);
+  }
+}

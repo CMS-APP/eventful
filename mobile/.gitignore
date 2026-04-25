@@ -1,0 +1,73 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# Expo
+.expo/
+dist/
+web-build/
+Eventful.app/
+*.tar.gz
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Compiled files
+*.ipa
+*.aab
+*.apk
+dsyms/
+
+# local env files
+.env*.local
+.env*
+
+# typescript
+*.tsbuildinfo
+
+# Testing
+/tests/test_logs/
+
+# dependencies
+node_modules/
+
+# Builds
+dist/
+*.ipa
+*.apk
+*.aab
+
+# Native
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+scripts/keys
+
+# macOS
+.DS_Store
+*.pem
+
+# typescript
+*.tsbuildinfo
+
+# Deploying
+deploy.*
+to
+
+.flaskenv*
+!.env.project
+!.env.vault
+
+.vscode/launch.json
+
+# Testing
+coverage/
+screenshots/
+metadata/
+build/

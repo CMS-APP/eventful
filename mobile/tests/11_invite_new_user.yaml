@@ -1,0 +1,58 @@
+appId: host.exp.Exponent # This is an example app id. Replace it with your app id.
+---
+- tapOn:
+    id: "EventsTab"
+- tapOn:
+    id: "EventsTab"
+
+- assertVisible:
+    id: "eventButton-0"
+
+- tapOn:
+    id: "eventButton-0"
+
+- assertVisible: "Edit Event"
+
+- scrollUntilVisible:
+    element:
+      id: "bottomPadding"
+
+- tapOn:
+    id: "invitesRSVPSection"
+
+- tapOn:
+    id: "inviteFriendsButton"
+
+- tapOn:
+    id: "inviteButton-0"
+
+- tapOn:
+    id: "inviteButton-0"
+
+- assertVisible: "Remove User"
+
+- tapOn: "Cancel"
+
+- tapOn:
+    id: "DoneButton"
+
+- assertVisible:
+    id: "response-0-pending"
+
+- tapOn:
+    id: "backButton"
+
+- assertVisible:
+    id: "totalGuests-4"
+
+- assertVisible:
+    id: "accept-1"
+
+- assertVisible:
+    id: "maybe-1"
+
+- assertVisible:
+    id: "decline-1"
+
+- tapOn:
+    id: "backButton"

@@ -1,0 +1,75 @@
+import {
+  FirebaseFirestoreTypes,
+  collection,
+  doc,
+  getDoc,
+  onSnapshot,
+  query,
+  where
+} from "@react-native-firebase/firestore";
+
+import { Event } from "@/types/Event";
+import { Invite } from "@/types/Invite";
+import { Invites } from "@/types/Invites";
+import { isActiveEvent } from "@/utils/date";
+import { AppError } from "@/utils/error";
+import { safeListener } from "@/utils/errorHandling";
+
+import { FIRESTORE_DB } from "./firebase";
+
+export function getInvitationsFromDatabaseSnapshot(
+  userId: string,
+  callback: (events: Invites) => void
+) {
+  return safeListener(() => {
+    const inviteRef = collection(FIRESTORE_DB, "invite");
+    const queryRef = query(inviteRef, where("recipient", "==", userId));
+
+    return onSnapshot(
+      queryRef,
+      async (querySnapshot: FirebaseFirestoreTypes.QuerySnapshot) => {
+        const events: Invites = { respond: [], noRespond: [] };
+        const eventPromises = querySnapshot.docs.map(
+          async (document: FirebaseFirestoreTypes.QueryDocumentSnapshot) => {
+            const invite = { ...document.data(), id: document.id } as Invite;
+            const eventRef = doc(
+              FIRESTORE_DB,
+              "event",
+              invite.eventId as string
+            );
+
+            // Use safe query pattern - don't throw in listener callback
+            try {
+              const event = await getDoc(eventRef);
+              if (event.exists()) {
+                const eventData = event.data() as Event;
+
+                if (isActiveEvent(eventData)) {
+                  if (
+                    invite.response === "pending" ||
+                    invite.response === "maybe"
+                  ) {
+                    events.noRespond.push({ invite, event: eventData });
+                  } else if (
+                    invite.response === "accept" ||
+                    invite.response === "decline"
+                  ) {
+                    events.respond.push({ invite, event: eventData });
+                  }
+                }
+              }
+            } catch (error) {
+              new AppError(error, "Error getting event in listener");
+            }
+          }
+        );
+
+        await Promise.all(eventPromises);
+        callback(events);
+      },
+      (error) => {
+        new AppError(error, "Error in invitations listener");
+      }
+    );
+  }, "FirebaseFunctions: Error setting up invitations listener");
+}

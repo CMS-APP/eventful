@@ -1,0 +1,225 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { File, Paths } from "expo-file-system";
+import * as MediaLibrary from "expo-media-library";
+import Share from "react-native-share";
+
+import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
+import { formatDate, parseDatabaseDate } from "@/utils/date";
+import { AppError } from "@/utils/error";
+import { log } from "@/utils/logging";
+
+import { getPhotoIdSplit } from "./utils";
+
+function mediaLibraryAssetRef(
+  photo: GalleryPhoto & { id?: string; uri?: string }
+) {
+  const uri = photo.url ?? photo.uri;
+  if (uri?.startsWith("ph://")) {
+    return uri.slice("ph://".length);
+  }
+  if (photo.photoId) {
+    return photo.photoId;
+  }
+  if (photo.id) {
+    return photo.id;
+  }
+  return uri ?? "";
+}
+
+export async function getPhotosDataLocally() {
+  try {
+    log("Getting photo data locally", "info");
+    const photoData = await AsyncStorage.getItem("photosData");
+    if (!photoData) {
+      log("No photo data found locally", "info");
+      return [];
+    }
+
+    return JSON.parse(photoData);
+  } catch (error) {
+    new AppError(error, "Error getting photo data");
+    return [];
+  }
+}
+
+export async function savePhotoDataLocally(
+  photoId: string,
+  eventTitle: string,
+  subtitle: string,
+  date: Date,
+  uri: string
+): Promise<void> {
+  try {
+    const photoData = await getPhotosDataLocally();
+    const stringDate = date.toISOString();
+
+    if (!eventTitle || eventTitle === "") {
+      eventTitle = formatDate(date);
+    }
+
+    const photoIdFormatted = photoId.split("/")[0];
+
+    photoData.push({
+      photoId: photoIdFormatted,
+      eventTitle: eventTitle ?? stringDate,
+      subtitle: subtitle,
+      createdAt: stringDate,
+      url: uri
+    });
+
+    log("Photo data saved: " + JSON.stringify(photoData), "info");
+    await AsyncStorage.setItem("photosData", JSON.stringify(photoData));
+  } catch (error) {
+    new AppError(error, "Error saving photo data");
+  }
+}
+
+export async function deletePhotoLocally(photo: GalleryPhoto): Promise<void> {
+  try {
+    const photoData = await getPhotosDataLocally();
+    const filteredPhotoData = photoData.filter(
+      (p: GalleryPhoto) => getPhotoIdSplit(p) !== getPhotoIdSplit(photo)
+    );
+
+    await MediaLibrary.deleteAssetsAsync([mediaLibraryAssetRef(photo)]);
+    await AsyncStorage.setItem("photosData", JSON.stringify(filteredPhotoData));
+  } catch (error) {
+    new AppError(error, "Error deleting photo data");
+  }
+}
+
+export async function getLocalEvents(): Promise<GalleryEvent[]> {
+  const eventsData: { [key: string]: GalleryEvent } = {};
+
+  try {
+    const newPhotosData = [] as GalleryPhoto[];
+    const photosData = await getPhotosDataLocally();
+    if (!photosData || photosData.length === 0) {
+      return [];
+    }
+
+    const assetChecks = await Promise.allSettled(
+      photosData.map((photo: GalleryPhoto & { id?: string; uri?: string }) => {
+        const ref = mediaLibraryAssetRef(photo);
+        if (!ref) {
+          console.warn("no ref found for photo", photo.photoId);
+          return Promise.resolve(null);
+        }
+        return MediaLibrary.getAssetInfoAsync(ref);
+      })
+    );
+
+    for (let i = 0; i < photosData.length; i++) {
+      const photo = photosData[i];
+      photo.type = "local";
+      const assetResult = assetChecks[i];
+
+      if (assetResult.status === "rejected" || !assetResult.value) {
+        console.warn("no asset found for photo", photo);
+        continue;
+      }
+
+      newPhotosData.push({
+        ...photo
+      });
+
+      if (!eventsData[photo.eventTitle]) {
+        eventsData[photo.eventTitle] = {
+          eventTitle: photo.eventTitle,
+          photos: [photo],
+          date: photo.createdAt,
+          type: "local"
+        };
+      } else {
+        eventsData[photo.eventTitle].photos.push(photo);
+      }
+
+      const storedEventDate = parseDatabaseDate(eventsData[photo.eventTitle].date);
+
+      const photoTime =
+        photo.createdAt ??
+        (photo as GalleryPhoto & { date?: string }).date ??
+        null;
+      const photoDate = parseDatabaseDate(photoTime);
+
+      if (!storedEventDate || !photoDate) {
+        continue;
+      }
+
+      if (photoDate < storedEventDate) {
+        eventsData[photo.eventTitle].date = photoTime as GalleryEvent["date"];
+      }
+    }
+
+    await AsyncStorage.setItem("photosData", JSON.stringify(newPhotosData));
+    return Object.values(eventsData);
+  } catch (error) {
+    new AppError(error, "Error getting events data");
+    return [];
+  }
+}
+
+function blobToBase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(reader.error);
+    reader.onloadend = () => {
+      const result = reader.result?.toString() ?? "";
+      resolve(result.split(",")[1] ?? "");
+    };
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function copyImageToShareCache(readUri: string): Promise<string> {
+  const response = await fetch(readUri);
+  const blob = await response.blob();
+  const base64data = await blobToBase64(blob);
+  const cacheFile = new File(Paths.cache, `photo-booth-share-${Date.now()}.png`);
+  if (cacheFile.exists) {
+    cacheFile.delete();
+  }
+  cacheFile.write(base64data, { encoding: "base64" });
+  return cacheFile.uri;
+}
+
+async function resolveUriForShare(uri: string): Promise<string> {
+  const trimmed = uri.trim();
+  if (!trimmed) {
+    throw new Error("Missing image URI");
+  }
+  if (trimmed.startsWith("ph://")) {
+    const assetId = trimmed.slice("ph://".length);
+    const asset = await MediaLibrary.getAssetInfoAsync(assetId);
+    if (!asset) {
+      throw new Error("Asset not found");
+    }
+    const readUri = asset.localUri ?? asset.uri;
+    return copyImageToShareCache(readUri);
+  }
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+    return copyImageToShareCache(trimmed);
+  }
+  if (trimmed.startsWith("file://")) {
+    return trimmed;
+  }
+  return copyImageToShareCache(trimmed);
+}
+
+export async function sharePhoto(uri: string): Promise<void> {
+  try {
+    const shareUrl = await resolveUriForShare(uri);
+    await Share.open({
+      title: "Share Photo",
+      url: shareUrl,
+      type: "image/png",
+      message: "Check out this photo from Eventful's photo booth!",
+      filename: "Photo Booth Photo"
+    });
+  } catch (error) {
+    const message = (error as Error)?.message ?? "";
+    if (message !== "User did not share") {
+      new AppError(error, "Error sharing photo", true);
+    }
+  }
+}

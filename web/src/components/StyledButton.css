@@ -1,0 +1,16 @@
+.styled-button {
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  transition: background-color 0.3s ease;
+  padding: 10px 20px 10px 20px;
+}
+
+.styled-button-text {
+  font-size: 14px;
+  color: white;
+  text-align: center;
+  font-family: var(--font-poppins);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}

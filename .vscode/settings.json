@@ -1,0 +1,60 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.removeUnusedImports": "explicit"
+  },
+  "prettier.arrowParens": "always",
+  "prettier.bracketSpacing": true,
+  "prettier.quoteProps": "consistent",
+  "prettier.singleQuote": false,
+  "prettier.semi": true,
+  "prettier.trailingComma": "none",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "prettier.requireConfig": true,
+  "prettier.useEditorConfig": false,
+  "cSpell.words": [
+    "adduser",
+    "camerao",
+    "checkcircle",
+    "closecircle",
+    "FIRESTORE",
+    "Firstore",
+    "playcircleo",
+    "Resumable",
+    "share-alt"
+  ],
+  "files.exclude": {
+    "**/node_modules/": true,
+    "mobile/.expo/": true,
+    "mobile/dist": true,
+    "mobile/coverage": true,
+    "mobile/credentials": true,
+    "mobile/dsyms": true,
+    "mobile/metadata": true,
+    "mobile/screenshots": true,
+    "web/.next/": true,
+  }
+}

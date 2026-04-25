@@ -1,0 +1,130 @@
+.user-stats-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.user-stats-header {
+  margin-bottom: 40px;
+}
+
+.user-stats-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-family: var(--font-poppins-regular);
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  transition: color var(--transition-base);
+}
+
+.user-stats-back-link:hover {
+  color: var(--color-white);
+}
+
+.user-stats-header h1 {
+  margin: 0 0 8px 0;
+  color: var(--color-white);
+  font-family: var(--font-poppins-bold);
+}
+
+.user-stats-subtitle {
+  margin: 0;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: var(--font-poppins-regular);
+}
+
+.user-stats-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 60px 20px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: var(--font-poppins-regular);
+}
+
+.user-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.user-stats-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: border-color var(--transition-base);
+}
+
+.user-stats-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.user-stats-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px 0;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--font-poppins-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.user-stats-card-title svg {
+  opacity: 0.9;
+}
+
+.user-stats-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.user-stats-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-family: var(--font-poppins-regular);
+}
+
+.user-stats-row:last-child {
+  border-bottom: none;
+}
+
+.user-stats-label {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-stats-count {
+  flex-shrink: 0;
+  color: var(--color-white);
+  font-family: var(--font-poppins-medium);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .user-stats-container {
+    padding: 10px;
+  }
+
+  .user-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

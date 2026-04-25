@@ -1,0 +1,60 @@
+{
+  "cli": {
+    "version": ">= 14.4.1",
+    "appVersionSource": "local"
+  },
+  "build": {
+    "development:simulator": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "development",
+      "ios": {
+        "simulator": true
+      }
+    },
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "development",
+      "env": {
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyCcAHVVo3FIJrSK1FVQ_hPRmQm635jbdlQ",
+        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "eventful-23690.firebaseapp.com",
+        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "eventful-23690",
+        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "eventful-23690.firebasestorage.app",
+        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "165003650822",
+        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:165003650822:web:88a7fa08ae63985891a087"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "channel": "preview",
+      "env": {
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyCcAHVVo3FIJrSK1FVQ_hPRmQm635jbdlQ",
+        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "eventful-23690.firebaseapp.com",
+        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "eventful-23690",
+        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "eventful-23690.firebasestorage.app",
+        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "165003650822",
+        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:165003650822:web:88a7fa08ae63985891a087"
+      }
+    },
+    "production": {
+      "developmentClient": false,
+      "env": {
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyCcAHVVo3FIJrSK1FVQ_hPRmQm635jbdlQ",
+        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "eventful-23690.firebaseapp.com",
+        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "eventful-23690",
+        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "eventful-23690.firebasestorage.app",
+        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "165003650822",
+        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:165003650822:web:88a7fa08ae63985891a087"
+      },
+      "channel": "production"
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "ascAppId": "6449842590"
+      }
+    }
+  }
+}

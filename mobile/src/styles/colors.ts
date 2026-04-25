@@ -1,0 +1,23 @@
+export const colors = {
+  primary: "#0a3b2e",
+  primaryDark: "#023025",
+  primaryTint: "#6e9975",
+  primaryTint2: "#8a9c94",
+  primaryTint3: "#5f7a71",
+  secondary: "#feba12",
+  secondaryDark: "#bb8c52",
+  secondaryTint: "#feba1260",
+  tertiary: "#66101F",
+  lightGray: "#E9E9E9",
+  darkGray: "#333333",
+  gray: "#999999",
+  white: "#FAF9F6",
+  black: "#000000",
+  blackTransparent: "#00000080",
+  transparent: "transparent",
+  red: "#FF0000",
+  green: "#00DD00",
+  grayTint: "#DEDEDE40",
+  buttonBlue: "#24A0ED",
+  buttonBorder: "#E9E9E940"
+};

@@ -1,0 +1,54 @@
+appId: host.exp.Exponent
+---
+- assertVisible: "Plan Your Perfect Event"
+- tapOn:
+    id: "nextButton"
+
+- assertVisible: "Connect With Your People"
+- tapOn:
+    id: "nextButton"
+
+- assertVisible: "Simplify"
+- tapOn:
+    id: "nextButton"
+
+- tapOn:
+    id: "firstNameInput"
+- inputText:
+    text: "Test"
+
+- tapOn:
+    id: "lastNameInput"
+- inputText:
+    text: "User"
+
+- tapOn:
+    id: "usernameInput"
+- inputText:
+    text: "te"
+
+- assertVisible: "Username must be at least 3 characters."
+
+- inputText:
+    text: "longlonglonglonglong"
+
+- inputText:
+    text: "te"
+
+- assertVisible: "Username must be less than 20 characters."
+
+- eraseText
+
+- inputText:
+    text: "testuser"
+
+- assertVisible: "Username available"
+
+- tapOn: "Return"
+
+- tapOn:
+    id: "nextButton"
+
+- tapOn: "Skip"
+
+- assertVisible: "Home"

@@ -1,0 +1,23 @@
+.feature-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.feature-item-image {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #00000033;
+  width: 50px;
+  height: 50px;
+}
+
+.feature-item-text {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}

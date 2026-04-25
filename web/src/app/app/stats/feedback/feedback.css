@@ -1,0 +1,171 @@
+.feedback-page-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.feedback-page-header {
+  margin-bottom: 40px;
+}
+
+.feedback-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-family: var(--font-poppins-regular);
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  transition: color var(--transition-base);
+}
+
+.feedback-back-link:hover {
+  color: var(--color-white);
+}
+
+.feedback-page-header h1 {
+  margin: 0 0 8px 0;
+  color: var(--color-white);
+  font-family: var(--font-poppins-bold);
+}
+
+.feedback-page-subtitle {
+  margin: 0;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: var(--font-poppins-regular);
+}
+
+.feedback-loading,
+.feedback-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 60px 20px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: var(--font-poppins-regular);
+}
+
+.feedback-empty-icon {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.feedback-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.feedback-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: border-color var(--transition-base);
+}
+
+.feedback-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.feedback-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: var(--font-poppins-regular);
+}
+
+.feedback-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.feedback-meta-item a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+}
+
+.feedback-meta-item a:hover {
+  text-decoration: underline;
+}
+
+.feedback-date {
+  margin-left: auto;
+}
+
+.feedback-delete-btn {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-md, 8px);
+  background: rgba(220, 80, 80, 0.2);
+  color: #e57373;
+  cursor: pointer;
+  transition:
+    background-color var(--transition-base),
+    color var(--transition-base);
+}
+
+.feedback-delete-btn:hover:not(:disabled) {
+  background: rgba(220, 80, 80, 0.4);
+  color: #ff8a80;
+}
+
+.feedback-delete-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.feedback-delete-spinner {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: feedback-spin 0.7s linear infinite;
+}
+
+@keyframes feedback-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.feedback-card-message {
+  color: var(--color-white);
+  font-family: var(--font-poppins-regular);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media (max-width: 768px) {
+  .feedback-page-container {
+    padding: 10px;
+  }
+
+  .feedback-card-meta {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .feedback-date {
+    margin-left: 0;
+  }
+}

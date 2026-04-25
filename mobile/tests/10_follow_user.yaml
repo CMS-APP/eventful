@@ -1,0 +1,36 @@
+appId: host.exp.Exponent # This is an example app id. Replace it with your app id.
+---
+- tapOn:
+    id: "ContactsTab"
+
+- tapOn:
+    id: "contactSearchInput"
+
+- tapOn:
+    id: "contactSearchInput"
+
+- inputText:
+    text: "Test"
+
+- tapOn: "Return"
+
+- tapOn:
+    id: "followButton"
+
+- tapOn:
+    id: "contactButton-0"
+
+- assertVisible: "Profile"
+- assertVisible: "You have not been invited to any events"
+
+- assertVisible:
+    id: "followers-1"
+
+- assertVisible:
+    id: "following-0"
+
+- tapOn:
+    id: "backButton"
+
+- tapOn:
+    id: "backButton"

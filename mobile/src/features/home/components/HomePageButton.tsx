@@ -1,0 +1,66 @@
+import { useCallback } from "react";
+
+import {
+  StyleProp,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ViewStyle
+} from "react-native";
+
+import { FontAwesome5 } from "@expo/vector-icons";
+
+import { Text } from "@/components/text/Text";
+import { haptics } from "@/utils/haptics";
+import { getHitSlop } from "@/utils/hitSlop";
+
+interface HomePageButtonProps {
+  icon: keyof typeof FontAwesome5.glyphMap;
+  color: string;
+  text: string;
+  textColor: string;
+  buttonAction: () => void;
+  style?: StyleProp<ViewStyle>;
+}
+
+export function HomePageButton({
+  icon,
+  color,
+  text,
+  textColor,
+  buttonAction,
+  style
+}: HomePageButtonProps) {
+  const handlePress = useCallback(() => {
+    haptics.soft();
+    buttonAction();
+  }, [buttonAction]);
+
+  return (
+    <TouchableOpacity
+      onPress={handlePress}
+      style={styles.flexContainer}
+      hitSlop={getHitSlop("medium")}
+    >
+      <View style={[styles.container, { backgroundColor: color }, style]}>
+        <FontAwesome5 name={icon} size={48} color={textColor} />
+        <Text type="body" color={textColor}>
+          {text}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    borderRadius: 24,
+    gap: 12,
+    justifyContent: "center",
+    paddingVertical: 24
+  },
+  flexContainer: {
+    flex: 1
+  }
+});

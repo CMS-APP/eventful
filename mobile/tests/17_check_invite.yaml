@@ -1,0 +1,36 @@
+appId: host.exp.Exponent
+---
+- tapOn:
+    id: "ContactsTab"
+
+- tapOn:
+    id: "ContactsTab"
+
+- tapOn:
+    id: "contactInvites"
+
+- assertVisible: "Event Invites"
+
+- tapOn:
+    id: "contactInvite-0-accept"
+
+- tapOn:
+    id: "contactInvite-0"
+
+- assertVisible: "Test User's Event"
+- assertVisible: "Test Event"
+- assertVisible: "1234 Test St"
+
+- tapOn:
+    id: "dietaryInput"
+
+- inputText:
+    text: "Test Preferences"
+
+- tapOn: "Return"
+
+- tapOn:
+    id: "backButton"
+
+- tapOn:
+    id: "backButton"

@@ -1,0 +1,18 @@
+appId: host.exp.Exponent
+---
+- tapOn:
+    id: "accountButton"
+
+- tapOn:
+    id: "settingsButton"
+
+- tapOn:
+    id: "dataSettingsButton"
+
+- tapOn:
+    id: "resetDataButton"
+
+- tapOn: "Yes"
+
+- assertVisible: "Success"
+- tapOn: "Ok"

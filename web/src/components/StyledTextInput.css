@@ -1,0 +1,34 @@
+.input,
+.textarea {
+  border: 1px solid;
+  padding: 10px 15px;
+  border-radius: 20px;
+  width: 100%;
+  font-family: var(--font-poppins-medium);
+  outline: none;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  color: black;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--focus-border-color, var(--secondary));
+}
+
+.textarea {
+  height: 150px; /* Set default height for multiline */
+  resize: vertical; /* Allow user to resize vertically */
+}
+
+.label {
+  position: absolute;
+  background-color: transparent;
+  left: 10px;
+  padding: 0 5px; /* Reduce padding for better positioning */
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+  z-index: 1;
+  font-family: var(--font-poppins-medium);
+  cursor: text;
+}

@@ -1,0 +1,88 @@
+import { useDispatch } from "react-redux";
+
+import { useEffect, useRef } from "react";
+
+import * as AuthSession from "expo-auth-session";
+
+import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { setSpotifyData } from "@/store/UserSlice";
+import { AppError } from "@/utils/error";
+import { log } from "@/utils/logging";
+
+import {
+  SPOTIFY_CLIENT_ID,
+  SPOTIFY_DISCOVERY,
+  SPOTIFY_SCOPES,
+  getSpotifyRedirectUri,
+  processAuthResponse
+} from "./spotifyAuth";
+
+interface UseSpotifyAuthOptions {
+  userId: string;
+  onSuccess: (accessToken: string) => void;
+}
+
+export function useSpotifyAuth({ userId, onSuccess }: UseSpotifyAuthOptions) {
+  const dispatch = useDispatch();
+  const redirectUri = getSpotifyRedirectUri();
+  const processedResponseRef = useRef<string | null>(null);
+
+  const [request, response, promptAsync] = AuthSession.useAuthRequest(
+    {
+      clientId: SPOTIFY_CLIENT_ID,
+      scopes: SPOTIFY_SCOPES,
+      redirectUri,
+      responseType: AuthSession.ResponseType.Code,
+      usePKCE: true
+    },
+    SPOTIFY_DISCOVERY
+  );
+
+  useEffect(() => {
+    const handleAuthResponse = async () => {
+      try {
+        const tokenData = await processAuthResponse(
+          response,
+          request,
+          redirectUri,
+          processedResponseRef
+        );
+
+        if (tokenData) {
+          const data = {
+            spotifyAccessToken: tokenData.accessToken,
+            spotifyExpirationDate: tokenData.expirationDate
+          };
+
+          await updateUserInfo(userId, {
+            spotifyData: data
+          });
+
+          dispatch(setSpotifyData(data));
+          onSuccess(tokenData.accessToken);
+          log("Spotify sign in success", "info");
+        }
+      } catch (error) {
+        // Reset processed ref on error
+        if (response?.type === "success" && response.params?.code) {
+          processedResponseRef.current = null;
+        }
+        new AppError(error, "Error signing into Spotify", true);
+      }
+    };
+
+    if (response) {
+      handleAuthResponse();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response, request, redirectUri, userId, onSuccess, dispatch]);
+
+  const resetProcessedResponse = () => {
+    processedResponseRef.current = null;
+  };
+
+  return {
+    promptAsync,
+    resetProcessedResponse
+  };
+}

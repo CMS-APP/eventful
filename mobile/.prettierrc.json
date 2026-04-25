@@ -1,0 +1,17 @@
+{
+  "trailingComma": "none",
+  "semi": true,
+  "printWidth": 80,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "^react$",
+    "^react-native$",
+    "^@react-navigation/(.*)$",
+    "^@expo/(.*)$",
+    "^expo(.*)$",
+    "^@/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}

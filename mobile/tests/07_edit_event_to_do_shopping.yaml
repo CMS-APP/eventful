@@ -1,0 +1,79 @@
+appId: host.exp.Exponent # This is an example app id. Replace it with your app id.
+---
+- tapOn:
+    id: "EventsTab"
+
+- assertVisible:
+    id: "eventButton-0"
+- tapOn:
+    id: "eventButton-0"
+
+- assertVisible:
+    id: "toDoShoppingSection"
+- tapOn:
+    id: "toDoShoppingSection"
+
+- tapOn: "To Do Item"
+
+- inputText:
+    text: "Test To Do Item 1"
+
+- tapOn: "Return"
+
+- assertVisible: "Test To Do Item 1"
+- assertVisible:
+    id: "completeButton-0"
+- tapOn:
+    id: "completeButton-0"
+
+- tapOn: "To Do Item"
+
+- inputText:
+    text: "Test To Do Item 2"
+
+- tapOn: "Return"
+
+- assertVisible: "Test To Do Item 2"
+
+- assertVisible:
+    id: "selection-Shopping List"
+- tapOn:
+    id: "selection-Shopping List"
+
+- assertVisible:
+    id: "newShoppingItem"
+- tapOn:
+    id: "newShoppingItem"
+
+- inputText:
+    text: "Test Shopping Item 1"
+
+- tapOn: "Return"
+
+- assertVisible: "Test Shopping Item 1"
+
+- assertVisible:
+    id: "completeButton-0"
+- tapOn:
+    id: "completeButton-0"
+
+- tapOn:
+    id: "newShoppingItem"
+
+- inputText:
+    text: "Test Shopping Item 2"
+
+- tapOn: "Return"
+
+- assertVisible: "Test Shopping Item 2"
+
+- assertVisible:
+    id: "backButton"
+
+- tapOn:
+    id: "backButton"
+
+- assertVisible:
+    id: "toDoItems-1/2"
+- assertVisible:
+    id: "shoppingItems-1/2"

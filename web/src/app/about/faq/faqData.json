@@ -1,0 +1,62 @@
+{
+  "General": [
+    {
+      "question": "What is Eventful?",
+      "answer": "Eventful is a platform for creating and managing events. You can create an event, invite people to it, and manage it all in one place."
+    },
+    {
+      "question": "How do I create an event?",
+      "answer": "You can create an event by clicking the 'New Event' button when you download the app. You will then be asked to enter the event name. Where you can then select the event type, the date, and the time."
+    },
+    {
+      "question": "How do I invite people to an event?",
+      "answer": "You can either invite people by using the app itself, but they need to have an account to do so. You can also invite people by using the 'Event Link' button on the event page, and then they can RSVP to your event without needing to download the app."
+    },
+    {
+      "question": "Where are my photo-booth photos stored?",
+      "answer": "Your photo-booth photos are stored on your device. However, in the future, we will be adding a feature to store your photos in the cloud."
+    }
+  ],
+  "Payment & Refunds": [
+    {
+      "question": "How do I pay for a subscription?",
+      "answer": "You can pay for a subscription by clicking on your account name, then going to the 'Subscriptions' tab in the app, selecting a subscription plan, and clicking 'Subscribe'."
+    },
+    {
+      "question": "How do I cancel a subscription?",
+      "answer": "If you are on an IOS device, head over to the settings app, then click on your Apple Id, then click on 'Subscriptions', then click on the Eventful subscription you want to cancel, then click 'Cancel Subscription'. If you are on an Android device, head over to the Google Play Store, then click on your Google Account, then click on 'Subscriptions', then click on the Eventful subscription you want to cancel, then click 'Cancel Subscription'."
+    },
+    {
+      "question": "How do I refund a subscription?",
+      "answer": "Depending on when the purchase was made, you may be able to get a refund from the Apple or Android store respectively."
+    }
+  ],
+  "Safety & Security": [
+    {
+      "question": "How do I report a safety issue?",
+      "answer": "You can report a safety issue by contacting our support team by using the contact form on the website or emailing us at help@eventful.com."
+    },
+    {
+      "question": "How do I report someone on the app?",
+      "answer": "At the moment, you cannot report someone on the app. You can only report a safety issue directly to us."
+    }
+  ],
+  "Account & Profile": [
+    {
+      "question": "How do I create an account?",
+      "answer": "You can create an account by clicking the 'Sign Up' button when you download the app."
+    },
+    {
+      "question": "How do I change my password?",
+      "answer": "You need to logout first, then click on the 'Forgot Password' button, then enter your email address, and click 'Reset Password'. You will then receive an email with a link to reset your password."
+    },
+    {
+      "question": "How do I delete my account?",
+      "answer": "You can delete your account by clicking on your account name, then going to the 'Settings' tab, then clicking 'Delete Account'. You will then be asked to confirm your decision."
+    },
+    {
+      "question": "How do I delete my data?",
+      "answer": "You can delete your data by clicking on your account name, then going to the 'Settings' tab, then clicking 'Delete Data'. You will then be asked to confirm your decision."
+    }
+  ]
+}

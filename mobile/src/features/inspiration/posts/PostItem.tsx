@@ -1,0 +1,258 @@
+import { useSelector } from "react-redux";
+
+import { useEffect, useRef, useState } from "react";
+
+import {
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View
+} from "react-native";
+
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+import { FontAwesome } from "@expo/vector-icons";
+
+import { Text } from "@/components/text/Text";
+import { InspirationStackParamList } from "@/features/app/navigationTypes";
+import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
+import {
+  getPostLikesCount,
+  hasUserLikedPost,
+  togglePostLike
+} from "@/services/firebase/firebaseInspirationFunctions";
+import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { UserState } from "@/store/UserSlice";
+import { colors } from "@/styles/colors";
+import { Post } from "@/types/Post";
+import { User } from "@/types/User";
+import { calculateTimeAgo } from "@/utils/date";
+import { AppError } from "@/utils/error";
+import { haptics } from "@/utils/haptics";
+import { getHitSlop } from "@/utils/hitSlop";
+
+import { PostImageCarousel } from "./PostImageCarousel";
+
+export function PostItem({ post }: { post: Post }) {
+  const [author, setAuthor] = useState<User | null>(null);
+  const [likesCount, setLikesCount] = useState(0);
+  const [isLiked, setIsLiked] = useState(false);
+
+  const lastTapRef = useRef<number>(0);
+  const tapTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const currentUserId = useSelector((state: UserState) => state.uid);
+  const navigation =
+    useNavigation() as StackNavigationProp<InspirationStackParamList>;
+
+  const loadLikeData = async () => {
+    try {
+      const [count, liked] = await Promise.all([
+        getPostLikesCount(post.id),
+        currentUserId
+          ? hasUserLikedPost(post.id, currentUserId)
+          : Promise.resolve(false)
+      ]);
+      setLikesCount(count);
+      setIsLiked(liked);
+    } catch (error) {
+      new AppError(error, "Error loading like data");
+    }
+  };
+
+  async function fetchAuthor() {
+    const user = await getUserInfo(post.authorId);
+    setAuthor(user);
+  }
+
+  useEffect(() => {
+    fetchAuthor();
+    loadLikeData();
+  }, [post.id, post.authorId, currentUserId]);
+
+  useEffect(() => {
+    return () => {
+      if (tapTimeoutRef.current) {
+        clearTimeout(tapTimeoutRef.current as unknown as number);
+      }
+    };
+  }, []);
+
+  const handlePress = async () => {
+    const now = Date.now();
+    const DOUBLE_TAP_DELAY = 300;
+
+    if (tapTimeoutRef.current) {
+      clearTimeout(tapTimeoutRef.current as unknown as number);
+      tapTimeoutRef.current = null;
+    }
+
+    if (now - lastTapRef.current < DOUBLE_TAP_DELAY) {
+      if (isLiked) {
+        return;
+      }
+
+      try {
+        haptics.success();
+        await togglePostLike(post.id, currentUserId);
+        setIsLiked(true);
+        setLikesCount((prev) => prev + 1);
+      } catch (error) {
+        new AppError(error, "Error liking post", true);
+      }
+    } else {
+      tapTimeoutRef.current = setTimeout(() => {
+        lastTapRef.current = 0;
+      }, DOUBLE_TAP_DELAY);
+    }
+
+    lastTapRef.current = now;
+  };
+
+  const handleLikePress = async () => {
+    if (!currentUserId) return;
+
+    const newLikedState = !isLiked;
+    setIsLiked(newLikedState);
+    setLikesCount((prev) => (newLikedState ? prev + 1 : prev - 1));
+
+    if (newLikedState) {
+      haptics.success();
+    } else {
+      haptics.error();
+    }
+
+    try {
+      await togglePostLike(post.id, currentUserId);
+    } catch (error) {
+      new AppError(error, "Error toggling like");
+    }
+  };
+
+  const handleUserPress = () => {
+    if (!author) return;
+    haptics.soft();
+
+    // Navigate to Account in Inspiration stack, then to Profile in Account stack
+    navigation.navigate("Account", {
+      screen: "Profile",
+      params: { screen: "ProfileView", params: { user: author as User } }
+    });
+  };
+
+  return (
+    <TouchableWithoutFeedback onPress={handlePress}>
+      <View style={styles.postItem}>
+        <TouchableOpacity
+          onPress={handleUserPress}
+          hitSlop={getHitSlop("medium")}
+        >
+          <View style={styles.header}>
+            {author && (
+              <ProfilePicture
+                user={author}
+                size={36}
+                borderColor={colors.lightGray}
+                borderWidth={2}
+              />
+            )}
+            <View style={styles.authorSection}>
+              <Text type="body">{post.authorName}</Text>
+              <Text type="footnote" style={styles.timeText}>
+                {calculateTimeAgo(new Date(post.createdAt))}
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+
+        {post.images && post.images.length > 0 && (
+          <PostImageCarousel photos={post.images} postId={post.id} />
+        )}
+
+        <View>
+          <Text type="subHeader" style={styles.titleText}>
+            {post.title}
+          </Text>
+          <Text type="body" style={styles.descriptionText}>
+            {post.description}
+          </Text>
+        </View>
+
+        <View style={styles.actionsSection}>
+          <TouchableOpacity
+            style={[styles.likeButton, isLiked && styles.likedButton]}
+            onPress={handleLikePress}
+            hitSlop={getHitSlop("medium")}
+          >
+            <FontAwesome
+              name="heart"
+              solid={isLiked}
+              size={20}
+              color={isLiked ? colors.secondary : colors.gray}
+            />
+            <Text style={[styles.likeText, isLiked && styles.likedText]}>
+              {likesCount}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+}
+
+const styles = StyleSheet.create({
+  actionsSection: {
+    flexDirection: "row"
+  },
+  authorSection: {
+    alignItems: "flex-start"
+  },
+  descriptionText: {
+    textAlign: "left"
+  },
+  header: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 12
+  },
+  likeButton: {
+    alignItems: "center",
+    backgroundColor: colors.lightGray,
+    borderRadius: 24,
+    flexDirection: "row",
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6
+  },
+  likeText: {
+    color: colors.black,
+    fontSize: 16
+  },
+  likedButton: {
+    backgroundColor: colors.primary
+  },
+  likedText: {
+    color: colors.white
+  },
+  postItem: {
+    backgroundColor: colors.white,
+    borderRadius: 16,
+    elevation: 6,
+    gap: 12,
+    padding: 16,
+    shadowColor: colors.black,
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4
+  },
+  timeText: {
+    color: colors.gray
+  },
+  titleText: {
+    textAlign: "left"
+  }
+});

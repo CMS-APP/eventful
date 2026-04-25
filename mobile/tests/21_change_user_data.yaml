@@ -1,0 +1,59 @@
+appId: host.exp.Exponent
+---
+- tapOn:
+    id: "accountButton"
+
+- tapOn:
+    id: "settingsButton"
+
+- tapOn:
+    id: "accountSettings"
+
+- tapOn:
+    id: "changeNameButton"
+
+- tapOn:
+    id: "firstNameInput"
+
+- inputText:
+    text: "Test"
+
+- tapOn:
+    id: "lastNameInput"
+
+- inputText:
+    text: "User-New"
+
+- tapOn: "Return"
+
+- tapOn:
+    id: "changeNameButton"
+
+- tapOn: "Ok"
+
+- tapOn:
+    id: "changeUsernameButton"
+
+- tapOn:
+    id: "firstNameInput"
+
+- inputText:
+    text: "testusernew"
+
+- tapOn: "Return"
+
+- tapOn:
+    id: "changeNameButton"
+
+- tapOn: "Ok"
+
+- tapOn:
+    id: "cancelChangeNameButton"
+
+- tapOn:
+    id: "backButton"
+
+- assertVisible: "TEST USER-NEW"
+
+- tapOn:
+    id: "backButton"

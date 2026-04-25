@@ -1,0 +1,39 @@
+import WebView from "react-native-webview";
+
+import { StyleSheet, View } from "react-native";
+
+import { RouteProp } from "@react-navigation/native";
+
+import { FlatHeader } from "@/components/views/screen/FlatHeader";
+import { colors } from "@/styles/colors";
+
+export function WebViewScreen({ route }: { route: RouteProp<any, any> }) {
+  const { title, uri } = route.params as { title: string; uri: string };
+
+  const headerConfig = {
+    title: title,
+    dark: true,
+    modal: true,
+    backgroundColor: colors.primary,
+    backAction: true
+  };
+
+  return (
+    <View style={styles.container}>
+      <FlatHeader {...headerConfig} />
+      <WebView source={{ uri: uri }} style={styles.webView} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.primary,
+    flex: 1,
+    paddingTop: 24
+  },
+  webView: {
+    backgroundColor: colors.primary,
+    marginTop: 12
+  }
+});
