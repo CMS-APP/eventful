@@ -1,2 +1,100 @@
-**/DS_Store
+# OS
+.DS_Store
+**/.DS_Store
+
+# Dependencies
 **/node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Environment files
+**/.env*
+!**/.env.project
+!**/.env.vault
+**/*.local
+
+# Logs and debug
+**/npm-debug.log*
+**/npm-debug.*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/firebase-debug.log
+**/firebase-debug.*.log
+
+# Build outputs
+**/dist/
+**/build/
+**/out/
+**/web-build/
+**/.next/
+mobile/Eventful.app/
+mobile/coverage/
+mobile/screenshots/
+mobile/metadata/
+mobile/tests/test_logs/
+
+# TypeScript
+**/*.tsbuildinfo
+web/next-env.d.ts
+
+# Keys and certificates
+**/*.pem
+mobile/**/*.jks
+mobile/**/*.p8
+mobile/**/*.p12
+mobile/**/*.key
+mobile/**/*.mobileprovision
+mobile/scripts/keys
+
+# Mobile artifacts
+mobile/**/*.ipa
+mobile/**/*.apk
+mobile/**/*.aab
+mobile/**/*.jsbundle
+mobile/**/*.orig.*
+mobile/**/*.tar.gz
+
+# Expo and React Native
+mobile/.expo/
+mobile/.metro-health-check*
+mobile/.flaskenv*
+mobile/deploy.*
+mobile/.vscode/launch.json
+
+# Vercel
+web/.vercel
+
+# Android (mobile/android)
+mobile/android/build/
+mobile/android/.idea
+mobile/android/.gradle
+mobile/android/local.properties
+mobile/android/*.iml
+mobile/android/*.hprof
+mobile/android/.cxx/
+mobile/android/**/.cxx/
+
+# iOS (mobile/ios)
+mobile/ios/build/
+mobile/ios/*.pbxuser
+!mobile/ios/default.pbxuser
+mobile/ios/*.mode1v3
+!mobile/ios/default.mode1v3
+mobile/ios/*.mode2v3
+!mobile/ios/default.mode2v3
+mobile/ios/*.perspectivev3
+!mobile/ios/default.perspectivev3
+mobile/ios/xcuserdata
+mobile/ios/*.xccheckout
+mobile/ios/*.moved-aside
+mobile/ios/DerivedData
+mobile/ios/*.hmap
+mobile/ios/*.xcuserstate
+mobile/ios/project.xcworkspace
+mobile/ios/.xcode.env.local
+mobile/ios/Pods/
