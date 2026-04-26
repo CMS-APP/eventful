@@ -1,8 +1,6 @@
-"use client";
-
 import { Page } from "@/components/views/Page";
 
-export default function Template() {
+export default function EventsPage() {
   return (
     <Page>
       <div />

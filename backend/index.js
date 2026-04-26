@@ -4,19 +4,24 @@ const { onSchedule } = require("firebase-functions/v2/scheduler");
 const { defineSecret } = require("firebase-functions/params");
 const admin = require("firebase-admin");
 const { getStoragePathFromUrl } = require("./src/services/photos");
-const { createAlgoliaUserSearchHandler } = require("./src/services/algoliaUserSearch");
+const {
+  createAlgoliaUserSearchHandler
+} = require("./src/services/algoliaUserSearch");
 const {
   createRespondToEventHandler,
   createAppCheckTokenHandler,
   createSendVerificationEmailHandler,
   createForgotPasswordHandler,
   createIncrementStatHandler,
+  createSignUpHandler
 } = require("./src/functions/httpHandlers");
 const {
   createSyncFollowersHandler,
-  createSendFeedbackEmailHandler,
+  createSendFeedbackEmailHandler
 } = require("./src/functions/firestoreHandlers");
-const { createDeleteOldPhotosHandler } = require("./src/functions/scheduledHandlers");
+const {
+  createDeleteOldPhotosHandler
+} = require("./src/functions/scheduledHandlers");
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -31,9 +36,9 @@ const ALGOLIA_API_KEY = defineSecret("ALGOLIA_API_KEY");
 exports.respondToEvent = onRequest(
   {
     secrets: [RECAPTCHA_SECRET],
-    cors: [/eventfulapp\.com$/],
+    cors: [/eventfulapp\.com$/]
   },
-  createRespondToEventHandler({ admin, db, RECAPTCHA_SECRET }),
+  createRespondToEventHandler({ admin, db, RECAPTCHA_SECRET })
 );
 
 exports.appCheckToken = onRequest(createAppCheckTokenHandler({ admin }));
@@ -43,21 +48,29 @@ exports.sendVerificationEmail = onRequest(
   createSendVerificationEmailHandler({
     admin,
     MJ_API_KEY,
-    MJ_SECRET,
-  }),
+    MJ_SECRET
+  })
 );
 
 exports.forgotPassword = onRequest(
   {
     secrets: [RECAPTCHA_SECRET, MJ_API_KEY, MJ_SECRET],
-    cors: [/eventfulapp\.com$/],
+    cors: [/eventfulapp\.com$/]
   },
   createForgotPasswordHandler({
     admin,
     RECAPTCHA_SECRET,
     MJ_API_KEY,
-    MJ_SECRET,
-  }),
+    MJ_SECRET
+  })
+);
+
+exports.signUp = onRequest(
+  {
+    secrets: [MJ_API_KEY, MJ_SECRET],
+    cors: [/eventfulapp\.com$/, "http://localhost:3000"]
+  },
+  createSignUpHandler({ admin, MJ_API_KEY, MJ_SECRET })
 );
 
 exports.incrementUserCount = onRequest(
@@ -66,8 +79,8 @@ exports.incrementUserCount = onRequest(
     db,
     fieldName: "userCount",
     successMessage: "User count incremented",
-    failureMessage: "Error incrementing user count",
-  }),
+    failureMessage: "Error incrementing user count"
+  })
 );
 
 exports.incrementEventCount = onRequest(
@@ -76,37 +89,37 @@ exports.incrementEventCount = onRequest(
     db,
     fieldName: "eventCount",
     successMessage: "Event count incremented",
-    failureMessage: "Error incrementing event count",
-  }),
+    failureMessage: "Error incrementing event count"
+  })
 );
 
 exports.searchUsers = onRequest(
   {
     secrets: [ALGOLIA_APP_ID, ALGOLIA_API_KEY],
     cors: [/eventfulapp\.com$/],
-    minInstances: 1,
+    minInstances: 1
   },
-  createAlgoliaUserSearchHandler({ admin, ALGOLIA_APP_ID, ALGOLIA_API_KEY }),
+  createAlgoliaUserSearchHandler({ admin, ALGOLIA_APP_ID, ALGOLIA_API_KEY })
 );
 
 exports.syncFollowers = onDocumentWritten(
   {
     document: "following/{userA}/following/{userB}",
-    region: "europe-west2",
+    region: "europe-west2"
   },
-  createSyncFollowersHandler({ admin, db }),
+  createSyncFollowersHandler({ admin, db })
 );
 
 exports.deleteOldPhotos = onSchedule(
   "every 24 hours",
-  createDeleteOldPhotosHandler({ admin, db, storage, getStoragePathFromUrl }),
+  createDeleteOldPhotosHandler({ admin, db, storage, getStoragePathFromUrl })
 );
 
 exports.sendFeedbackEmail = onDocumentWritten(
   {
     document: "feedback/{feedbackId}",
     region: "europe-west2",
-    secrets: [MJ_API_KEY, MJ_SECRET],
+    secrets: [MJ_API_KEY, MJ_SECRET]
   },
-  createSendFeedbackEmailHandler({ admin, MJ_API_KEY, MJ_SECRET }),
+  createSendFeedbackEmailHandler({ admin, MJ_API_KEY, MJ_SECRET })
 );

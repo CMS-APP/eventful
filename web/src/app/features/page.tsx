@@ -4,7 +4,6 @@ import FeatureItem from "@/components/FeatureItem";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { isMobileDevice } from "@/functions/IsMobileDevice.js";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function About() {
@@ -25,18 +24,6 @@ export default function About() {
     <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex flex-grow bg-[var(--primary)] p-10">
-        <div
-          className={`hidden ${isMobile ? "" : "md:flex"} flex-[2] ml-[-15%] justify-center`}
-        >
-          <Image
-            className={`hidden ${isMobile ? "" : "md:block"} rounded-[25px] object-contain`}
-            src={"/feature-pics/features-screenshots.png"}
-            alt="feature"
-            width={600}
-            height={600}
-          />
-        </div>
-
         <div className="flex flex-col flex-[3] items-center w-full gap-4">
           <div className="flex flex-row w-full">
             <h1 className="flex-1 text-left ml-[25px]">Features</h1>

@@ -1,0 +1,13 @@
+.page {
+  background-color: var(--color-gray-100);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin: 24px;
+}
