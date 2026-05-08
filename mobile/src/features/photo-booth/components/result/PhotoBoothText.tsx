@@ -64,6 +64,8 @@ export function PhotoBoothText({
       return { ...fontStyles.lobster, fontSize };
     } else if (font === "Great Vibes") {
       return { ...fontStyles.greatVibes, fontSize };
+    } else if (font === "Playfair") {
+      return { ...fontStyles.playfair, fontSize };
     } else if (
       font === "Tribune Bold" ||
       font === "Chloe" ||

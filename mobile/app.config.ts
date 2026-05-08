@@ -64,6 +64,7 @@ export default ({ config }: ConfigContext) => {
             "./src/assets/fonts/Poppins-Medium.ttf",
             "./src/assets/fonts/Poppins-Medium-Italic.ttf",
             "./src/assets/fonts/Gotham-Bold.otf",
+            "./src/assets/fonts/Playfair-Variable.ttf",
             "./src/assets/fonts/Anton-Regular.ttf",
             "./src/assets/fonts/BebasNeue-Regular.ttf",
             "./src/assets/fonts/Lobster.otf",

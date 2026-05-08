@@ -18,12 +18,12 @@ type TextType =
 
 const textStyles = {
   title: {
-    fontFamily: "Gotham-Bold",
+    fontFamily: "Playfair-Variable",
     fontSize: 36,
     textAlign: "center"
   },
   header: {
-    fontFamily: "Gotham-Bold",
+    fontFamily: "Playfair-Variable",
     fontSize: 24,
     textAlign: "center"
   },
