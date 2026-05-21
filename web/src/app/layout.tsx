@@ -27,6 +27,10 @@ const poppinsRegular = localFont({
 export const metadata: Metadata = {
   title: "Eventful | The Ultimate Event Planner",
   description: "Plan with Ease, Connect with Joy.",
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({

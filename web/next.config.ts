@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
       { source: "/blog/:path*", destination: EVENTFUL_WEBSITE, permanent: true },
       { source: "/about", destination: EVENTFUL_WEBSITE, permanent: true },
       { source: "/about/faq", destination: EVENTFUL_WEBSITE, permanent: true },
+      { source: "/favicon.ico", destination: "/icon.png", permanent: false },
     ];
   },
   images: {
