@@ -1,0 +1,9 @@
+.privacy-headerless-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--primary);
+}
+
+.privacy-headerless-main {
+  padding: 24px 20px 40px;
+}

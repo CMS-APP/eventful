@@ -1,0 +1,54 @@
+.public-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--primary);
+}
+
+.public-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background-color: var(--primaryTint);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+}
+
+.public-header-logo {
+  display: flex;
+  align-items: center;
+}
+
+.public-header-logo-img {
+  border-radius: 8px;
+}
+
+.public-header-account {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: var(--secondary);
+  color: #fff;
+  font-family: var(--font-poppins-medium);
+  font-size: 14px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.public-header-account:hover {
+  background-color: var(--color-secondary-dark, #e4a710);
+}
+
+.public-shell-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  color: #ffffff;
+}
+
+.public-shell-content > * {
+  width: 100%;
+  min-width: 0;
+}

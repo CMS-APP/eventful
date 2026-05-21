@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
 import "@/components/DeleteAccountModal.css";
-import StyledBigButton from "@/components/StyledBigButton";
-import StyledTextInput from "@/components/StyledTextInput";
+import SimpleButton from "@/components/SimpleButton";
+import SimpleTextInput from "@/components/SimpleTextInput";
 
 export default function DeleteAccountModal({
   isOpen,
@@ -18,7 +18,7 @@ export default function DeleteAccountModal({
     if (isOpen) {
       setIsAnimating(true);
     } else {
-      const timeout = setTimeout(() => setIsAnimating(false), 300); // Match with animation duration
+      const timeout = setTimeout(() => setIsAnimating(false), 300);
       return () => clearTimeout(timeout);
     }
   }, [isOpen]);
@@ -29,7 +29,7 @@ export default function DeleteAccountModal({
       setError("Please enter your password to confirm account deletion.");
       return;
     }
-    onDelete(password);
+    onDelete();
   };
 
   return (
@@ -53,7 +53,7 @@ export default function DeleteAccountModal({
 
           <form onSubmit={handleSubmit} className="modal-form">
             <div className="modal-input-group">
-              <StyledTextInput
+              <SimpleTextInput
                 id="password"
                 placeholder="Enter your password"
                 value={password}
@@ -64,19 +64,17 @@ export default function DeleteAccountModal({
             </div>
 
             <div className="modal-buttons">
-              <StyledBigButton
-                text="Delete Account"
-                color="var(--color-danger)"
-                hoverColor="var(--color-danger-dark)"
-                onClickAction={handleSubmit}
-              />
+              <SimpleButton type="submit" className="simple-button--danger">
+                Delete Account
+              </SimpleButton>
 
-              <StyledBigButton
-                text="Cancel"
-                color="var(--color-gray-600)"
-                hoverColor="var(--color-gray-700)"
-                onClickAction={onClose}
-              />
+              <SimpleButton
+                type="button"
+                className="simple-button--muted"
+                onClick={onClose}
+              >
+                Cancel
+              </SimpleButton>
             </div>
           </form>
         </div>

@@ -1,0 +1,23 @@
+/* Overrides Tailwind preflight / globals — text must stay white on green */
+.privacy-content,
+.privacy-content h1,
+.privacy-content h2,
+.privacy-content h3,
+.privacy-content p,
+.privacy-content a,
+.privacy-content span,
+.privacy-content li {
+  color: #ffffff !important;
+}
+
+.privacy-content a {
+  text-decoration: underline;
+}
+
+.privacy-content a:hover {
+  color: var(--secondary) !important;
+}
+
+.privacy-content h3 {
+  margin-top: 1.25rem;
+}
