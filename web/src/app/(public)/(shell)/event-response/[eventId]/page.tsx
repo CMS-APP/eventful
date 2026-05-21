@@ -20,6 +20,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
+import "./page.css";
+
 const RECAPTCHA_SITE_KEY = "6LfDpgQrAAAAAO0TSbcQban4TrA16CjelRzF_Urp";
 
 export default function EventResponse() {
@@ -174,126 +176,115 @@ export default function EventResponse() {
   }, []);
 
   function infoRow(title: string, value: string, icon: IconProp) {
+    if (!value) return null;
+
     return (
-      <div>
-        <p className="uppercase font-poppins-bold tracking-widest text-gray-500 mb-2">
-          <FontAwesomeIcon icon={icon} className="mr-2 w-5 text-[#6E9975]" />
+      <div className="event-response-info-row">
+        <p className="event-response-info-label">
+          <FontAwesomeIcon icon={icon} className="event-response-info-icon" />
           {title}
         </p>
-        <p className="text-sm uppercase font-poppins tracking-widest text-gray-500 mb-2">
-          {value}
-        </p>
+        <p className="event-response-info-value">{value}</p>
       </div>
     );
   }
 
   return (
-    <main className="flex flex-1 p-5 md:p-10">
-        <div className="flex justify-center">
-          <div className="bg-white/80 rounded-3xl p-2 shadow-xl">
-            <div className="border-2 border-white rounded-2xl p-6 max-w-3xl w-full mx-auto text-center">
-              <p className="text-sm uppercase font-poppins tracking-widest text-gray-500 mb-2 text-center">
-                YOU&apos;RE INVITED
+    <main className="event-response-page">
+      <div className="event-response-page-inner">
+        <div className="event-response-card-outer">
+          <div className="event-response-card">
+            <p className="event-response-invite-label">You&apos;re invited</p>
+            <form className="event-response-form">
+              {infoRow("Host:", hostName, faUser)}
+              {infoRow("Event:", eventName, faTag)}
+              {infoRow("Date:", eventDate, faCalendar)}
+              {infoRow("Theme:", eventTheme, faShirt)}
+              {infoRow("Location:", eventAddress, faLocationPin)}
+              {infoRow("Directions:", eventDirections, faLocationArrow)}
+
+              <p className="event-response-info-label">
+                <FontAwesomeIcon
+                  icon={faUserGroup}
+                  className="event-response-info-icon"
+                />
+                To see who&apos;s going —{" "}
+                <Link href="/" className="event-response-app-link">
+                  Download the app!
+                </Link>
               </p>
-              <form className="flex flex-col gap-2 w-full text-left font-poppins text-sm">
-                {infoRow("Host:", hostName, faUser)}
-                {infoRow("Event:", eventName, faTag)}
-                {infoRow("Date:", eventDate, faCalendar)}
-                {infoRow("Theme:", eventTheme, faShirt)}
-                {infoRow("Location:", eventAddress, faLocationPin)}
-                {infoRow("Directions:", eventDirections, faLocationArrow)}
 
-                <p className="text-sm uppercase font-poppins tracking-widest text-gray-500 mb-2">
-                  <FontAwesomeIcon
-                    icon={faUserGroup}
-                    className="mr-2 w-5 text-[#6E9975]"
-                  />
-                  To See Who&apos;s Going -{" "}
-                  <Link
-                    href={"/"}
-                    className="text-[#6E9975] underline hover:text-[#FEBA12] active:text-[#FEBA12]"
-                  >
-                    Download The App!
-                  </Link>
-                </p>
+              <div className="event-response-divider" />
 
-                <div className="w-full h-px bg-[#0A3B2E] my-6" />
-                <p
-                  className="text-sm uppercase font-poppins tracking-widest text-gray-500 mb-2 text-center"
-                  style={{ textAlign: "center" }}
-                >
-                  RSVP
-                </p>
+              <p className="event-response-section-label">RSVP</p>
 
-                <p className="text-sm uppercase font-poppins tracking-widest text-gray-500 mb-0">
-                  NAME:
-                </p>
-                <input
-                  type="text"
-                  className="text-black border p-2 rounded-xl mt-0 font-poppins focus:outline-none focus:border-[#FEBA12] focus:ring-1 focus:ring-[#FEBA12]"
-                  placeholder="Enter your name"
-                  required
+              <p className="event-response-field-label">Name</p>
+              <input
+                type="text"
+                className="event-response-input"
+                placeholder="Enter your name"
+                required
+              />
+              <p className="event-response-field-label">Email</p>
+              <input
+                type="email"
+                className="event-response-input"
+                placeholder="Enter your email"
+                required
+              />
+
+              <div className="event-response-rsvp-buttons">
+                <StyledButtonFlex
+                  color="#6E9975"
+                  hoverColor="#5E8263"
+                  text="Accept"
+                  onClickAction={() => handleResponse("Accept")}
+                  selected={response === "Accept"}
                 />
-                <p className="text-sm uppercase font-poppins tracking-widest text-gray-500 mb-0">
-                  EMAIL:
-                </p>
-                <input
-                  type="email"
-                  className="text-black border p-2 rounded-xl mt-0 font-poppins focus:outline-none focus:border-[#FEBA12] focus:ring-1 focus:ring-[#FEBA12]"
-                  placeholder="Enter your email"
-                  required
+                <StyledButtonFlex
+                  color="#FEBA12"
+                  hoverColor="#E4A710"
+                  text="Maybe"
+                  onClickAction={() => handleResponse("Maybe")}
+                  selected={response === "Maybe"}
                 />
-                <div className="flex flex-col md:flex-row gap-4 my-4 justify-center">
-                  <StyledButtonFlex
-                    color="#6E9975"
-                    hoverColor="#5E8263"
-                    text="Accept"
-                    onClickAction={() => handleResponse("Accept")}
-                    selected={response === "Accept"}
-                  />
+                <StyledButtonFlex
+                  color="#66101F"
+                  hoverColor="#550E1B"
+                  text="Decline"
+                  onClickAction={() => handleResponse("Decline")}
+                  selected={response === "Decline"}
+                />
+              </div>
 
-                  <StyledButtonFlex
-                    color="#FEBA12"
-                    hoverColor="#E4A710"
-                    text="Maybe"
-                    onClickAction={() => handleResponse("Maybe")}
-                    selected={response === "Maybe"}
+              {response && (
+                <div>
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey={RECAPTCHA_SITE_KEY}
+                    size="invisible"
                   />
-
-                  <StyledButtonFlex
-                    color="#66101F"
-                    hoverColor="#550E1B"
-                    text="Decline"
-                    onClickAction={() => handleResponse("Decline")}
-                    selected={response === "Decline"}
-                  />
-                </div>
-                {response && (
-                  <div>
-                    <ReCAPTCHA
-                      ref={recaptchaRef}
-                      sitekey={RECAPTCHA_SITE_KEY}
-                      size="invisible"
-                    />
-
-                    {isLoading ? (
-                      <div className="flex justify-center items-center py-2">
-                        <div className="animate-spin h-6 w-6 border-4 border-blue-400 border-t-transparent rounded-full"></div>
-                      </div>
-                    ) : (
-                      <StyledButton
-                        color={"var(--primary)"}
-                        hoverColor={"var(--primaryTint)"}
-                        text={"Submit"}
-                        onClickAction={sendResponse}
+                  {isLoading ? (
+                    <div className="event-response-submit-loading">
+                      <div
+                        className="event-response-spinner"
+                        aria-hidden
                       />
-                    )}
-                  </div>
-                )}
-              </form>
-            </div>
+                    </div>
+                  ) : (
+                    <StyledButton
+                      color="var(--primary)"
+                      hoverColor="var(--primaryTint)"
+                      text="Submit"
+                      onClickAction={sendResponse}
+                    />
+                  )}
+                </div>
+              )}
+            </form>
           </div>
         </div>
+      </div>
     </main>
   );
 }

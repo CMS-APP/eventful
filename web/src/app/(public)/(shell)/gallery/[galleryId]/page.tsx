@@ -18,6 +18,8 @@ import Link from "next/link";
 import GalleryImageView from "./GalleryImageView";
 import SelectedImageView from "./SelectedImageView";
 
+import "./page.css";
+
 export interface GalleryImage {
   name: string;
   url: string;
@@ -132,10 +134,10 @@ export default function Gallery() {
 
   if (isLoading) {
     return (
-      <main className="flex flex-1 items-center justify-center p-5 md:p-10">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white font-poppins">Loading gallery...</p>
+      <main className="gallery-page">
+        <div className="gallery-page-loading">
+          <div className="gallery-page-spinner" aria-hidden />
+          <p>Loading gallery...</p>
         </div>
       </main>
     );
@@ -143,9 +145,9 @@ export default function Gallery() {
 
   if (error) {
     return (
-      <main className="flex flex-1 items-center justify-center p-5 md:p-10">
-        <div className="text-center">
-          <p className="text-white font-poppins mb-4">{error}</p>
+      <main className="gallery-page">
+        <div className="gallery-page-error">
+          <p className="mb-4">{error}</p>
           <Link href="/" className="text-[#FEBA12] hover:underline">
             Return to Home
           </Link>
@@ -154,65 +156,67 @@ export default function Gallery() {
     );
   }
 
+  const hasImages = galleryImages.length > 0;
+
   return (
     <>
-      <main className="flex flex-1 py-5 md:py-10">
-        <div className="">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-poppins-bold text-white mb-4">
-              Event Gallery
-            </h1>
+      <main className="gallery-page">
+        <div className="gallery-page-inner">
+          <header className="gallery-page-header">
+            <h1 className="gallery-page-title">Event Gallery</h1>
             {galleryStats && (
-              <div className="flex justify-center items-center gap-4 text-white">
-                <div className="flex items-center gap-2">
-                  <FontAwesomeIcon icon={faImages} className="text-[#FEBA12]" />
+              <div className="gallery-page-stats">
+                <div className="gallery-page-stat">
+                  <FontAwesomeIcon
+                    icon={faImages}
+                    className="gallery-page-stat-icon"
+                  />
                   <span>{galleryStats.imageCount} photos</span>
                 </div>
                 {galleryStats.totalSize > 0 && (
-                  <div className="flex items-center gap-2">
+                  <div className="gallery-page-stat">
                     <FontAwesomeIcon
                       icon={faImage}
-                      className="text-[#FEBA12]"
+                      className="gallery-page-stat-icon"
                     />
                     <span>
                       {(galleryStats.totalSize / 1024 / 1024).toFixed(1)} MB
                     </span>
                   </div>
                 )}
-
-                <div
-                  className="flex justify-center items-center gap-4 text-white cursor-pointer"
+                <button
+                  type="button"
+                  className="gallery-page-download"
+                  disabled={!hasImages || isDownloadingAll}
                   onClick={() => downloadAllImages(galleryImages)}
                 >
-                  <div className="flex items-center gap-2">
-                    <FontAwesomeIcon
-                      icon={faDownload}
-                      className="text-[#FEBA12]"
-                    />
-                    <span>Download All</span>
-                  </div>
-                </div>
+                  <FontAwesomeIcon
+                    icon={faDownload}
+                    className="gallery-page-stat-icon"
+                  />
+                  <span>Download All</span>
+                </button>
               </div>
             )}
-          </div>
+          </header>
 
-          {galleryImages.length === 0 ? (
-            <div className="text-center py-12">
+          {!hasImages ? (
+            <div className="gallery-page-empty">
               <FontAwesomeIcon
                 icon={faImages}
-                className="text-6xl text-white/50 mb-4"
+                className="gallery-page-empty-icon"
               />
-              <p className="text-white font-poppins text-lg">
+              <p className="gallery-page-empty-title">
                 No photos in this gallery yet
               </p>
-              <p className="text-white/70 font-poppins text-sm mt-2">
+              <p className="gallery-page-empty-subtitle">
                 Photos will appear here once they are uploaded
               </p>
             </div>
           ) : (
-            <div className="flex flex-row gap-5 items-start">
+            <div className="gallery-page-grid-layout">
               {selectedImage && (
-                <div className="hidden md:flex lg:flex xl:flex relative group w-1/3">
+                <div className="gallery-page-preview">
                   <SelectedImageView
                     url={selectedImage.url}
                     name={selectedImage.name}
@@ -226,11 +230,11 @@ export default function Gallery() {
               )}
 
               <div
-                className={`pr-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 ${selectedImage ? "w-2/3 sm:w-full sm:pl-5" : "pl-5 w-full"}`}
+                className={`gallery-page-grid${selectedImage ? " gallery-page-grid--with-preview" : ""}`}
               >
                 {galleryImages.map((image, index) => (
                   <GalleryImageView
-                    key={index}
+                    key={image.fullPath}
                     url={image.url}
                     name={image.name}
                     index={index}
@@ -246,29 +250,24 @@ export default function Gallery() {
       </main>
 
       {isDownloadingAll && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FEBA12] mx-auto mb-4"></div>
-              <h3 className="text-lg font-poppins-bold text-gray-800 mb-2">
-                Creating Gallery Zip
-              </h3>
-              <p className="text-gray-600 font-poppins mb-4">
-                Adding images to zip file...
-              </p>
-
-              {/* Progress Bar */}
-              <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                <div
-                  className="bg-[#FEBA12] h-2 rounded-full transition-all duration-300 ease-out"
-                  style={{ width: `${downloadProgress}%` }}
-                ></div>
-              </div>
-
-              <p className="text-sm text-gray-500 font-poppins">
-                {Math.round(downloadProgress)}% complete
-              </p>
+        <div className="gallery-page-overlay">
+          <div className="gallery-page-overlay-card">
+            <div className="gallery-page-spinner" aria-hidden />
+            <h3 className="text-lg font-poppins-bold text-gray-800 mb-2">
+              Creating Gallery Zip
+            </h3>
+            <p className="text-gray-600 font-poppins mb-4">
+              Adding images to zip file...
+            </p>
+            <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+              <div
+                className="bg-[#FEBA12] h-2 rounded-full transition-all duration-300 ease-out"
+                style={{ width: `${downloadProgress}%` }}
+              />
             </div>
+            <p className="text-sm text-gray-500 font-poppins">
+              {Math.round(downloadProgress)}% complete
+            </p>
           </div>
         </div>
       )}
