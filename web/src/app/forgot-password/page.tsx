@@ -1,9 +1,9 @@
 "use client";
 
+import AppShell from "@/components/AppShell";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import StyledButton from "@/components/StyledButton";
-import StyledTextInput from "@/components/StyledTextInput";
+import SimpleButton from "@/components/SimpleButton";
+import SimpleTextInput from "@/components/SimpleTextInput";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -106,10 +106,8 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-
-      <main className="flex-grow flex items-center justify-center p-4 bg-[var(--primary)]">
+    <AppShell>
+      <main className="flex-1 flex items-center justify-center p-4 bg-[var(--primary)]">
         <div className="w-full max-w-md bg-white rounded-[25px] shadow-md p-8 h-auto">
           <h1 className="text-center mb-6 text-black">Reset Your Password</h1>
 
@@ -119,7 +117,7 @@ export default function ForgotPassword() {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <StyledTextInput
+            <SimpleTextInput
               id="email"
               placeholder="Email Address"
               value={email}
@@ -149,20 +147,16 @@ export default function ForgotPassword() {
             )}
 
             <div className="flex flex-col gap-4">
-              <StyledButton
-                color="var(--primary)"
-                hoverColor="var(--secondary)"
-                text={isLoading ? "Sending..." : "Send Reset Link"}
-                onClickAction={handleSubmit}
-                textAlign="center"
-              />
+              <SimpleButton type="submit" disabled={isLoading}>
+                {isLoading ? "Sending..." : "Send Reset Link"}
+              </SimpleButton>
 
               <button
                 type="button"
                 onClick={() => router.push("/")}
                 className="text-center text-gray-600 hover:text-gray-800"
               >
-                Back to Home
+                Back to Account
               </button>
             </div>
           </form>
@@ -170,6 +164,6 @@ export default function ForgotPassword() {
       </main>
 
       <Footer />
-    </div>
+    </AppShell>
   );
 }

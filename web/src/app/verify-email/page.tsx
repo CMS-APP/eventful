@@ -1,12 +1,11 @@
 "use client";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import AppShell from "@/components/AppShell";
 
 export default function VerifyEmail() {
   return (
-    <div className="flex flex-col min-h-screen bg-[--primary]">
-      <Header />
-      <main className="flex flex-grow flex-col p-10 md:p-20">
+    <AppShell className="bg-[var(--primary)]">
+      <main className="flex flex-1 flex-col p-10 md:p-20">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white">Email Verified!</h1>
           <p className="mt-4 text-lg text-white">
@@ -16,6 +15,6 @@ export default function VerifyEmail() {
         </div>
       </main>
       <Footer />
-    </div>
+    </AppShell>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { FIREBASE_AUTH } from "@/app/Firebase.js";
-import { checkAdmin, getUserData } from "@/app/app/home/database/utils";
+import { checkAdmin, getUserData } from "@/app/home/database/utils";
 import { User, onAuthStateChanged } from "firebase/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";
 

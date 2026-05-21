@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./design-system.css";
 import "./globals.css";
+import Providers from "./providers";
 
 const poppinsBold = localFont({
   src: "./fonts/Poppins-Bold.ttf",
@@ -23,12 +24,6 @@ const poppinsRegular = localFont({
   weight: "300",
 });
 
-const chloeRegular = localFont({
-  src: "./fonts/Chloe-Regular.otf",
-  variable: "--font-chloe-regular",
-  weight: "400",
-});
-
 export const metadata: Metadata = {
   title: "Eventful | The Ultimate Event Planner",
   description: "Plan with Ease, Connect with Joy.",
@@ -42,9 +37,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppinsBold.variable} ${poppinsMedium.variable} ${poppinsRegular.variable} ${chloeRegular.variable} antialiased`}
+        className={`${poppinsBold.variable} ${poppinsMedium.variable} ${poppinsRegular.variable} antialiased`}
       >
-        {children}
+        <Providers>{children}</Providers>
         <SpeedInsights />
         <Analytics />
       </body>

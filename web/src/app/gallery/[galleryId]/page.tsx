@@ -1,7 +1,7 @@
 "use client";
 
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import AppShell from "@/components/AppShell";
 import {
   galleryExists,
   getGalleryImages,
@@ -134,24 +134,22 @@ export default function Gallery() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col min-h-screen bg-[--primary]">
-        <Header />
-        <main className="flex-grow p-5 md:p-10 flex items-center justify-center">
+      <AppShell className="bg-[var(--primary)]">
+        <main className="flex-1 p-5 md:p-10 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
             <p className="text-white font-poppins">Loading gallery...</p>
           </div>
         </main>
         <Footer />
-      </div>
+      </AppShell>
     );
   }
 
   if (error) {
     return (
-      <div className="flex flex-col min-h-screen bg-[--primary]">
-        <Header />
-        <main className="flex-grow p-5 md:p-10 flex items-center justify-center">
+      <AppShell className="bg-[var(--primary)]">
+        <main className="flex-1 p-5 md:p-10 flex items-center justify-center">
           <div className="text-center">
             <p className="text-white font-poppins mb-4">{error}</p>
             <Link href="/" className="text-[#FEBA12] hover:underline">
@@ -160,14 +158,13 @@ export default function Gallery() {
           </div>
         </main>
         <Footer />
-      </div>
+      </AppShell>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-[--primary]">
-      <Header />
-      <main className="flex-grow py-5 md:py-10">
+    <AppShell className="bg-[var(--primary)]">
+      <main className="flex-1 py-5 md:py-10">
         <div className="">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-poppins-bold text-white mb-4">
@@ -284,6 +281,6 @@ export default function Gallery() {
           </div>
         </div>
       )}
-    </div>
+    </AppShell>
   );
 }

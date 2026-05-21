@@ -2,7 +2,7 @@
 
 import Footer from "@/components/Footer";
 import StyledBigButton from "@/components/StyledBigButton";
-import WebAppHeader from "@/components/WebAppHeader";
+import AppShell from "@/components/AppShell";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -18,9 +18,8 @@ export default function UnauthorizedAccess({
   showBackButton = true,
 }: UnauthorizedAccessProps) {
   return (
-    <div className="flex flex-col min-h-screen bg-[var(--primary)]">
-      <WebAppHeader />
-      <main className="flex flex-grow flex-col p-10 md:p-20 text-white items-center justify-center gap-5">
+    <AppShell authenticated className="bg-[var(--primary)]">
+      <main className="flex flex-1 flex-col p-10 md:p-20 text-white items-center justify-center gap-5">
         <div className="flex flex-row justify-center items-center gap-5">
           <FontAwesomeIcon
             icon={faLock}
@@ -37,11 +36,11 @@ export default function UnauthorizedAccess({
             text="Go Back To Home"
             color="var(--secondary)"
             hoverColor="var(--secondaryTint)"
-            onClickAction={() => (window.location.href = "/app/home")}
+            onClickAction={() => (window.location.href = "/home")}
           />
         )}
       </main>
       <Footer />
-    </div>
+    </AppShell>
   );
 }
