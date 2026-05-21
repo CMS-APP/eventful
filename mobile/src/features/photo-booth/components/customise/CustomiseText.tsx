@@ -17,6 +17,7 @@ export function CustomiseText() {
       style: fontStyles.greatVibes,
       font: "GreatVibes-Regular"
     },
+    Playfair: { style: fontStyles.playfair, font: "Playfair-Variable" },
     "Gotham Bold": { style: fontStyles.gotham, font: "Gotham-Bold" },
     Poppins: {
       style: fontStyles.poppinsRegular,

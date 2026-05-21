@@ -2,6 +2,7 @@ import { Platform, StyleSheet } from "react-native";
 
 export const fonts = {
   "Gotham-Bold": require("@/assets/fonts/Gotham-Bold.otf"),
+  "Playfair-Variable": require("@/assets/fonts/Playfair-Variable.ttf"),
   "Poppins-Regular": require("@/assets/fonts/Poppins-Regular.ttf"),
   "Poppins-Medium": require("@/assets/fonts/Poppins-Medium.ttf"),
   "Poppins-Medium-Italic": require("@/assets/fonts/Poppins-Medium-Italic.ttf"),
@@ -39,6 +40,11 @@ export const fontStyles = StyleSheet.create({
   },
   gotham: {
     fontFamily: "Gotham-Bold",
+    fontSize: 24,
+    ...androidFontAdjustments
+  },
+  playfair: {
+    fontFamily: "Playfair-Variable",
     fontSize: 24,
     ...androidFontAdjustments
   },
