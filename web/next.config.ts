@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
     return [
       { source: "/app", destination: "/", permanent: true },
       { source: "/app/:path*", destination: "/:path*", permanent: true },
+      { source: "/home", destination: "/account", permanent: true },
+      { source: "/home/:path*", destination: "/account/:path*", permanent: true },
       { source: "/features", destination: EVENTFUL_WEBSITE, permanent: true },
       { source: "/contact", destination: EVENTFUL_WEBSITE, permanent: true },
       { source: "/blog", destination: EVENTFUL_WEBSITE, permanent: true },

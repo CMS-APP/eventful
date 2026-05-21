@@ -1,11 +1,17 @@
 "use client";
 
-import { signOutUser } from "@/app/home/database/utils";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChartLine,
+  faRightFromBracket,
+  faUser
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+
+import { signOutUser } from "@/app/account/database/utils";
+import { useUser } from "@/contexts/UserContext";
 
 import "./Sidebar.css";
 
@@ -16,11 +22,12 @@ type SidebarProps = {
 export default function Sidebar({ authenticated = false }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const accountHref = authenticated ? "/home" : "/";
-  const isAccountActive =
-    pathname === accountHref ||
-    (authenticated &&
-      (pathname.startsWith("/home") || pathname.startsWith("/stats")));
+  const { isAdmin } = useUser();
+
+  const accountHref = authenticated ? "/account" : "/";
+  const accountActive =
+    authenticated &&
+    (pathname === "/account" || pathname.startsWith("/account/"));
 
   async function logout() {
     if (confirm("Are you sure you want to log out?")) {
@@ -31,39 +38,55 @@ export default function Sidebar({ authenticated = false }: SidebarProps) {
 
   return (
     <aside className="sidebar">
-      <a
-        href="https://www.eventfulapp.com"
-        className="sidebar-logo"
-        aria-label="Eventful"
-      >
+      <Link href={accountHref} className="sidebar-logo" aria-label="Home">
         <Image
           src="/icon.png"
           alt=""
-          width={44}
-          height={44}
-          className="sidebar-logo-image"
+          width={28}
+          height={28}
+          className="sidebar-logo-img"
+          priority
         />
-      </a>
+      </Link>
+
+      <div className="sidebar-divider" role="presentation" />
 
       <nav className="sidebar-nav">
         <Link
           href={accountHref}
-          className={`sidebar-icon-link ${isAccountActive ? "sidebar-icon-link--active" : ""}`}
-          aria-label="Account"
+          className={`sidebar-link${accountActive ? " is-active" : ""}`}
           title="Account"
         >
-          <FontAwesomeIcon icon={faUser} className="sidebar-icon" />
+          <FontAwesomeIcon icon={faUser} />
+          <span>Account</span>
         </Link>
-        {authenticated && (
-          <button
-            type="button"
-            className="sidebar-link sidebar-link--emphasis sidebar-link--logout"
-            onClick={logout}
+
+        {authenticated && isAdmin && (
+          <Link
+            href="/stats"
+            className={`sidebar-link${pathname.startsWith("/stats") ? " is-active" : ""}`}
+            title="Admin"
           >
-            Log out
-          </button>
+            <FontAwesomeIcon icon={faChartLine} />
+            <span>Admin</span>
+          </Link>
         )}
       </nav>
+
+      {authenticated && (
+        <div className="sidebar-footer">
+          <div className="sidebar-divider" role="presentation" />
+          <button
+            type="button"
+            className="sidebar-link sidebar-logout"
+            onClick={logout}
+            title="Log out"
+          >
+            <FontAwesomeIcon icon={faRightFromBracket} />
+            <span>Log out</span>
+          </button>
+        </div>
+      )}
     </aside>
   );
 }

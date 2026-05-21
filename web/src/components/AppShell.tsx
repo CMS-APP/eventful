@@ -1,17 +1,19 @@
+"use client";
+
+import { useUser } from "@/contexts/UserContext";
+
 import Sidebar from "./Sidebar";
 import "./Sidebar.css";
 
 type AppShellProps = {
   children: React.ReactNode;
-  authenticated?: boolean;
   className?: string;
 };
 
-export default function AppShell({
-  children,
-  authenticated = false,
-  className = "",
-}: AppShellProps) {
+export default function AppShell({ children, className = "" }: AppShellProps) {
+  const { user, loading } = useUser();
+  const authenticated = !loading && !!user;
+
   return (
     <div className={`app-shell ${className}`.trim()}>
       <Sidebar authenticated={authenticated} />

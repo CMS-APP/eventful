@@ -6,7 +6,7 @@
   --background: #ffffff;
   --foreground: #171717;
   --primary: #0a3b2e;
-  --primaryTint: #0a3b2e80;
+  --primaryTint: rgba(10, 59, 46, 0.65);
   --secondary: #feba12;
   --secondaryTint: #feba1280;
 }
@@ -16,15 +16,17 @@
     --background: #0a0a0a;
     --foreground: #ededed;
     --primary: #0a3b2e;
-    --primaryTint: #0a3b2e80;
+    --primaryTint: rgba(10, 59, 46, 0.65);
     --secondary: #feba12;
     --secondaryTint: #feba1280;
   }
 }
 
+html,
 body {
-  background-color: var(--color-gray-100);
+  background-color: var(--primary);
   font-family: var(--font-poppins-bold);
+  min-height: 100%;
 }
 
 h1 {

@@ -1,0 +1,76 @@
+.forgot-password-page {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.forgot-password-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 32px;
+  background-color: white;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.forgot-password-title {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  font-family: var(--font-poppins-bold);
+  color: #171717;
+  text-align: center;
+}
+
+.forgot-password-description {
+  margin: 0 0 24px;
+  font-family: var(--font-poppins-regular);
+  font-size: 1rem;
+  color: #4b5563;
+  text-align: center;
+}
+
+.forgot-password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.forgot-password-recaptcha {
+  display: flex;
+  justify-content: center;
+}
+
+.forgot-password-message {
+  padding: 12px;
+  border-radius: 8px;
+  font-family: var(--font-poppins-medium);
+  font-size: 14px;
+  text-align: center;
+}
+
+.forgot-password-message--error {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.forgot-password-message--success {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.forgot-password-back {
+  border: none;
+  background: transparent;
+  font-family: var(--font-poppins-medium);
+  font-size: 14px;
+  color: var(--primary);
+  cursor: pointer;
+  text-align: center;
+}
+
+.forgot-password-back:hover {
+  text-decoration: underline;
+}
