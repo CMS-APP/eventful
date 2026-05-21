@@ -15,6 +15,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import JSZip from "jszip";
 import Link from "next/link";
+import Loading from "@/components/Loading";
+
 import GalleryImageView from "./GalleryImageView";
 import SelectedImageView from "./SelectedImageView";
 
@@ -133,14 +135,7 @@ export default function Gallery() {
   }
 
   if (isLoading) {
-    return (
-      <main className="gallery-page">
-        <div className="gallery-page-loading">
-          <div className="gallery-page-spinner" aria-hidden />
-          <p>Loading gallery...</p>
-        </div>
-      </main>
-    );
+    return <Loading message="Loading gallery..." />;
   }
 
   if (error) {
@@ -160,6 +155,11 @@ export default function Gallery() {
 
   return (
     <>
+      {isDownloadingAll && (
+        <Loading
+          message={`Creating gallery zip… ${Math.round(downloadProgress)}%`}
+        />
+      )}
       <main className="gallery-page">
         <div className="gallery-page-inner">
           <header className="gallery-page-header">
@@ -249,28 +249,6 @@ export default function Gallery() {
         </div>
       </main>
 
-      {isDownloadingAll && (
-        <div className="gallery-page-overlay">
-          <div className="gallery-page-overlay-card">
-            <div className="gallery-page-spinner" aria-hidden />
-            <h3 className="text-lg font-poppins-bold text-gray-800 mb-2">
-              Creating Gallery Zip
-            </h3>
-            <p className="text-gray-600 font-poppins mb-4">
-              Adding images to zip file...
-            </p>
-            <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-              <div
-                className="bg-[#FEBA12] h-2 rounded-full transition-all duration-300 ease-out"
-                style={{ width: `${downloadProgress}%` }}
-              />
-            </div>
-            <p className="text-sm text-gray-500 font-poppins">
-              {Math.round(downloadProgress)}% complete
-            </p>
-          </div>
-        </div>
-      )}
     </>
   );
 }

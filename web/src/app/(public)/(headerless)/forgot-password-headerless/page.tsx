@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import SimpleButton from "@/components/SimpleButton";
 import SimpleTextInput from "@/components/SimpleTextInput";
 import React, { useState } from "react";
@@ -102,7 +103,9 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--primary)] flex justify-center items-start">
+    <>
+      {isLoading && <Loading message="Sending..." />}
+      <div className="min-h-screen bg-[var(--primary)] flex justify-center items-start">
       <main className="p-4 w-full flex flex-row">
         <div className="flex-1" />
         <div className="flex justify-center max-w-md bg-white rounded-[25px] shadow-md p-8 flex flex-col">
@@ -145,7 +148,7 @@ export default function ForgotPassword() {
 
             <div className="flex flex-col gap-4">
               <SimpleButton type="submit" disabled={isLoading}>
-                {isLoading ? "Sending..." : "Send Reset Link"}
+                Send Reset Link
               </SimpleButton>
             </div>
           </form>
@@ -153,5 +156,6 @@ export default function ForgotPassword() {
         <div className="flex-1" />
       </main>
     </div>
+    </>
   );
 }

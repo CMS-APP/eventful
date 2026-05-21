@@ -10,7 +10,7 @@ import SimpleButton from "@/components/SimpleButton";
 import SimpleTextInput from "@/components/SimpleTextInput";
 import { useUser } from "@/contexts/UserContext";
 
-import Loading from "./components/Loading";
+import Loading from "@/components/Loading";
 import "./page.css";
 
 export default function WebApp() {

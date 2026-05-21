@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import StyledButton from "@/components/StyledButton";
 import StyledButtonFlex from "@/components/StyledButtonFlex";
 import { checkEventLink } from "@/services/FirebaseFunctions";
@@ -190,7 +191,9 @@ export default function EventResponse() {
   }
 
   return (
-    <main className="event-response-page">
+    <>
+      {isLoading && <Loading message="Sending..." />}
+      <main className="event-response-page">
       <div className="event-response-page-inner">
         <div className="event-response-card-outer">
           <div className="event-response-card">
@@ -264,21 +267,12 @@ export default function EventResponse() {
                     sitekey={RECAPTCHA_SITE_KEY}
                     size="invisible"
                   />
-                  {isLoading ? (
-                    <div className="event-response-submit-loading">
-                      <div
-                        className="event-response-spinner"
-                        aria-hidden
-                      />
-                    </div>
-                  ) : (
-                    <StyledButton
-                      color="var(--primary)"
-                      hoverColor="var(--primaryTint)"
-                      text="Submit"
-                      onClickAction={sendResponse}
-                    />
-                  )}
+                  <StyledButton
+                    color="var(--primary)"
+                    hoverColor="var(--primaryTint)"
+                    text="Submit"
+                    onClickAction={sendResponse}
+                  />
                 </div>
               )}
             </form>
@@ -286,5 +280,6 @@ export default function EventResponse() {
         </div>
       </div>
     </main>
+    </>
   );
 }

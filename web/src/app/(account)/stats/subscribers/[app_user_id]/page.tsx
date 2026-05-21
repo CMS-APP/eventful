@@ -1,6 +1,7 @@
 "use client";
 
 import { checkAdmin } from "@/app/account/database/utils";
+import Loading from "@/components/Loading";
 import UnauthorizedAccess from "@/components/UnauthorizedAccess";
 import { useUser } from "@/contexts/UserContext";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
@@ -142,14 +143,7 @@ export default function SubscriberDetailPage() {
   }, [logEvents]);
 
   if (loading || checkingAdmin) {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white font-poppins">Loading...</p>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (!isAdmin) {
@@ -162,7 +156,9 @@ export default function SubscriberDetailPage() {
   }
 
   return (
-    
+    <>
+      {loadingData && <Loading message="Loading subscriber..." />}
+      {loadingHistory && <Loading message="Loading history…" />}
       <main className="flex flex-1 flex-col p-10">
         <div className="subscriber-detail-container">
           <Link
@@ -177,12 +173,7 @@ export default function SubscriberDetailPage() {
             <div className="subscriber-detail-error">
               Invalid subscriber ID.
             </div>
-          ) : loadingData ? (
-            <div className="subscriber-detail-loading">
-              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
-              <p>Loading subscriber...</p>
-            </div>
-          ) : error || !subscription ? (
+          ) : loadingData ? null : error || !subscription ? (
             <div className="subscriber-detail-error">
               {error ?? "Subscriber not found."}
               <button
@@ -325,12 +316,7 @@ export default function SubscriberDetailPage() {
                 <h2 className="subscriber-detail-card-title">
                   Subscription history
                 </h2>
-                {loadingHistory ? (
-                  <div className="subscriber-detail-rc-loading">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-                    <span>Loading history…</span>
-                  </div>
-                ) : historyError ? (
+                {loadingHistory ? null : historyError ? (
                   <div className="subscriber-detail-rc-error">
                     {historyError}
                     <button
@@ -387,6 +373,6 @@ export default function SubscriberDetailPage() {
           )}
         </div>
       </main>
-    
+    </>
   );
 }

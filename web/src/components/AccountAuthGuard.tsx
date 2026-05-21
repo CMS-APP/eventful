@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import { useUser } from "@/contexts/UserContext";
 import { isMobileDevice } from "@/functions/IsMobileDevice.js";
 import { useRouter } from "next/navigation";
@@ -38,7 +39,11 @@ export default function AccountAuthGuard({
     }
   }, [router, isMobile, user, loading]);
 
-  if (isMobile || loading) {
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (isMobile) {
     return null;
   }
 

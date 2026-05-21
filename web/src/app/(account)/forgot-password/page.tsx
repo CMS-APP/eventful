@@ -5,6 +5,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 import React, { useState } from "react";
 
+import Loading from "@/components/Loading";
 import SimpleButton from "@/components/SimpleButton";
 import SimpleTextInput from "@/components/SimpleTextInput";
 
@@ -108,7 +109,9 @@ export default function ForgotPassword() {
   };
 
   return (
-    <main className="forgot-password-page">
+    <>
+      {isLoading && <Loading message="Sending..." />}
+      <main className="forgot-password-page">
         <div className="forgot-password-card">
           <h1 className="forgot-password-title">Reset Your Password</h1>
 
@@ -148,7 +151,7 @@ export default function ForgotPassword() {
             )}
 
             <SimpleButton type="submit" disabled={isLoading}>
-              {isLoading ? "Sending..." : "Send Reset Link"}
+              Send Reset Link
             </SimpleButton>
 
             <button
@@ -161,5 +164,6 @@ export default function ForgotPassword() {
           </form>
         </div>
     </main>
+    </>
   );
 }

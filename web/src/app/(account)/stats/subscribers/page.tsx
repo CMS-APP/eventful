@@ -1,6 +1,7 @@
 "use client";
 
 import { checkAdmin } from "@/app/account/database/utils";
+import Loading from "@/components/Loading";
 import UnauthorizedAccess from "@/components/UnauthorizedAccess";
 import { useUser } from "@/contexts/UserContext";
 import { faArrowLeft, faCreditCard } from "@fortawesome/free-solid-svg-icons";
@@ -108,14 +109,7 @@ export default function SubscribersPage() {
   }, [tab]);
 
   if (loading || checkingAdmin) {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white font-poppins">Loading...</p>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (!isAdmin) {
@@ -128,7 +122,8 @@ export default function SubscribersPage() {
   }
 
   return (
-    
+    <>
+      {loadingData && <Loading message="Loading subscribers..." />}
       <main className="flex flex-1 flex-col p-10">
         <div className="subscribers-page-container">
           <div className="subscribers-page-header">
@@ -155,12 +150,8 @@ export default function SubscribersPage() {
             </div>
           )}
 
-          {loadingData ? (
-            <div className="subscribers-loading">
-              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
-              <p>Loading subscribers...</p>
-            </div>
-          ) : rows.length === 0 ? (
+          {!loadingData &&
+            (rows.length === 0 ? (
             <div className="subscribers-empty">
               <FontAwesomeIcon
                 icon={faCreditCard}
@@ -338,9 +329,9 @@ export default function SubscribersPage() {
                 </>
               )}
             </>
-          )}
+          ))}
         </div>
       </main>
-    
+    </>
   );
 }

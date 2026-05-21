@@ -1,6 +1,7 @@
 "use client";
 
 import { checkAdmin } from "@/app/account/database/utils";
+import Loading from "@/components/Loading";
 import UnauthorizedAccess from "@/components/UnauthorizedAccess";
 import { useUser } from "@/contexts/UserContext";
 import {
@@ -101,14 +102,7 @@ export default function UserStatsPage() {
   }, [rows]);
 
   if (loading || checkingAdmin) {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white font-poppins">Loading...</p>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (!isAdmin) {
@@ -121,7 +115,8 @@ export default function UserStatsPage() {
   }
 
   return (
-    
+    <>
+      {loadingData && <Loading message="Loading user stats..." />}
       <main className="flex flex-1 flex-col p-10">
         <div className="user-stats-container">
           <div className="user-stats-header">
@@ -136,12 +131,7 @@ export default function UserStatsPage() {
             </p>
           </div>
 
-          {loadingData ? (
-            <div className="user-stats-loading">
-              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
-              <p>Loading user stats...</p>
-            </div>
-          ) : (
+          {!loadingData && (
             <div className="user-stats-grid">
               <section className="user-stats-card">
                 <h2 className="user-stats-card-title">
@@ -267,6 +257,6 @@ export default function UserStatsPage() {
           )}
         </div>
       </main>
-    
+    </>
   );
 }

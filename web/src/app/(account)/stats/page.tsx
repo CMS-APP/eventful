@@ -1,6 +1,7 @@
 "use client";
 
 import { checkAdmin } from "@/app/account/database/utils";
+import Loading from "@/components/Loading";
 import UnauthorizedAccess from "@/components/UnauthorizedAccess";
 import { useUser } from "@/contexts/UserContext";
 import {
@@ -76,14 +77,7 @@ export default function Stats() {
 
   // Show loading state while checking
   if (loading || checkingAdmin) {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white font-poppins">Loading...</p>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   // Show unauthorized access page if not admin

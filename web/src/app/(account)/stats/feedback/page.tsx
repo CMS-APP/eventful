@@ -1,6 +1,7 @@
 "use client";
 
 import { checkAdmin } from "@/app/account/database/utils";
+import Loading from "@/components/Loading";
 import UnauthorizedAccess from "@/components/UnauthorizedAccess";
 import { useUser } from "@/contexts/UserContext";
 import {
@@ -88,14 +89,7 @@ export default function FeedbackPage() {
   }, [isAdmin, checkingAdmin]);
 
   if (loading || checkingAdmin) {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white font-poppins">Loading...</p>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (!isAdmin) {
@@ -108,7 +102,8 @@ export default function FeedbackPage() {
   }
 
   return (
-    
+    <>
+      {loadingFeedback && <Loading message="Loading feedback..." />}
       <main className="flex flex-1 flex-col p-10">
         <div className="feedback-page-container">
           <div className="feedback-page-header">
@@ -122,12 +117,8 @@ export default function FeedbackPage() {
             </p>
           </div>
 
-          {loadingFeedback ? (
-            <div className="feedback-loading">
-              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
-              <p>Loading feedback...</p>
-            </div>
-          ) : feedbackList.length === 0 ? (
+          {!loadingFeedback &&
+            (feedbackList.length === 0 ? (
             <div className="feedback-empty">
               <FontAwesomeIcon
                 icon={faCommentDots}
@@ -176,9 +167,9 @@ export default function FeedbackPage() {
                 </article>
               ))}
             </div>
-          )}
+          ))}
         </div>
       </main>
-    
+    </>
   );
 }
