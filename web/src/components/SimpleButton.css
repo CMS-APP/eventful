@@ -1,0 +1,22 @@
+.simple-button {
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--secondary, var(--color-secondary));
+  color: #fff;
+  font-family: var(--font-poppins-medium);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.simple-button:hover:not(:disabled) {
+  background-color: var(--secondaryTint, var(--color-secondary-dark));
+}
+
+.simple-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import "@/components/DeleteAccountModal.css";
 import StyledBigButton from "@/components/StyledBigButton";
-import StyledTextInput from "@/components/StyledTextInput";
+import SimpleTextInput from "@/components/SimpleTextInput";
 
 export default function DeleteAccountModal({
   isOpen,
@@ -53,7 +53,7 @@ export default function DeleteAccountModal({
 
           <form onSubmit={handleSubmit} className="modal-form">
             <div className="modal-input-group">
-              <StyledTextInput
+              <SimpleTextInput
                 id="password"
                 placeholder="Enter your password"
                 value={password}

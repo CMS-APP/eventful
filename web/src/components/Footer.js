@@ -7,7 +7,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./Footer.css";
 
-export default function Footer({ main = false }) {
+export default function Footer() {
   const appleLink =
     "https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=6449842590";
   const googleLink =
@@ -18,9 +18,7 @@ export default function Footer({ main = false }) {
   return (
     <footer>
       <div
-        className={`${
-          main ? "bg-transparent" : "bg-primary"
-        } text-white flex justify-center items-center w-full h-[75px] py-[10px] px-8`}
+        className="bg-primary text-white flex justify-center items-center w-full h-[75px] py-[10px] px-8"
       >
         <div className="flex flex-1 flex-row justify-center items-center">
           <div className="flex flex-1 justify-start items-center gap-[50px]">

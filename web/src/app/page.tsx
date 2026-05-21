@@ -1,19 +1,39 @@
 "use client";
-import Image from "next/image.js";
-import { useEffect, useState } from "react";
 
-import DownloadButton from "@/components/DownloadButton.js";
-import Footer from "@/components/Footer.js";
-import GoogleAnalytics from "@/components/GoogleAnalytics.js";
-import Header from "@/components/Header.js";
-import StatsView from "@/components/StatsView.js";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import Image from "next/image.js";
+import React, { useEffect, useState } from "react";
+
+import { FIREBASE_AUTH } from "@/app/Firebase.js";
+import SimpleButton from "@/components/SimpleButton";
+import SimpleTextInput from "@/components/SimpleTextInput";
 import { isMobileDevice } from "@/functions/IsMobileDevice.js";
 
-export default function Index() {
-  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
+import AppShell from "@/components/AppShell";
+import Footer from "@/components/Footer";
+import { useUser } from "@/contexts/UserContext";
+import { useRouter } from "next/navigation";
+import Loading from "./components/Loading";
+import "./page.css";
+
+export default function WebApp() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const { user } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
-    if (typeof window === "undefined") return; // Ensure it's client-side only
+    if (user) {
+      window.location.href = "/home";
+    } else {
+      setLoading(false);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
 
     const checkDevice = () => setIsMobile(isMobileDevice());
 
@@ -23,59 +43,71 @@ export default function Index() {
     return () => window.removeEventListener("resize", checkDevice);
   }, []);
 
-  return (
-    <div
-      className={`flex flex-col min-h-screen bg-[var(--primary)] transition-all duration-300 ${
-        !isMobile ? "bg-cover bg-center" : ""
-      }`}
-      style={!isMobile ? { backgroundImage: "url(/background.png)" } : {}}
-    >
-      <Header main={true} />
-      <GoogleAnalytics />
+  function handleEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setEmail(event.target.value); // Ensure the value is a string
+  }
 
+  function handlePasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setPassword(event.target.value); // Ensure the value is a string
+  }
+
+  async function checkLogin() {
+    setLoading(true);
+    const auth = FIREBASE_AUTH;
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      router.push("/home");
+    } catch {
+      alert("Invalid email or password");
+      setEmail("");
+      setPassword("");
+      setLoading(false);
+    }
+  }
+
+  return (
+    <AppShell className="bg-[var(--primary)]">
+      {loading && <Loading />}
       <main
-        className={`flex flex-row flex-grow ${isMobile ? "" : "md:m-20"} m-10 gap-5`}
+        className={`${isMobile ? "flex" : "hidden md:flex"} flex flex-1 flex-row grid grid-cols-[2fr_3fr]`}
       >
-        <div
-          className={`flex hidden ${isMobile ? "hidden" : "w-[30%] hidden md:flex"} justify-center items-center ml-10`}
-        >
+        <div className="screenshot-container" onClick={() => {}}>
           <Image
             src="/screenshot.png"
             alt="screenshot"
-            width={250}
-            height={250}
-            className="rounded-2xl drop-shadow-xl"
+            height={350}
+            width={350}
+            className="screenshot"
           />
         </div>
 
-        <div
-          className={`flex flex-col ${isMobile ? "w-full" : "md:justify-center md:w-[40%]"} items-start  text-white`}
-        >
-          <h1>Plan with Ease,</h1>
-          <h1 className="mb-2">Connect with Joy.</h1>
+        <div className="login-container">
+          <main className="login-grid">
+            <h1 className="text-black">Welcome Back</h1>
 
-          <p className="pb-2 w-max-[400px]">
-            The ultimate event planning app that brings joy and ease to your
-            gatherings. Stay organised with to-do lists, shopping lists, outfit
-            planning, playlists, decorations, and more.
-          </p>
+            <SimpleTextInput
+              placeholder="Email"
+              onChange={handleEmailChange}
+              value={email}
+              id="email"
+            />
 
-          <div
-            className={`flex flex-col gap-4 mt-2 mb-5 w-full ${isMobile ? "" : "md:w-max-[400px]"} w-full`}
-          >
-            <DownloadButton type={"ios"} />
-            <DownloadButton type={"android"} />
-          </div>
+            <SimpleTextInput
+              placeholder="Password"
+              onChange={handlePasswordChange}
+              value={password}
+              password
+              id="password"
+            />
 
-          <StatsView />
+            <SimpleButton onClick={checkLogin} disabled={loading}>
+              Login
+            </SimpleButton>
+          </main>
         </div>
-
-        <div className="w-[0%]" />
-
-        {/* Right-side spacing */}
       </main>
 
-      <Footer main={true} />
-    </div>
+      <Footer />
+    </AppShell>
   );
 }

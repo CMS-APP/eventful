@@ -1,12 +1,11 @@
 "use client";
 
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import AppShell from "@/components/AppShell";
 import StyledButton from "@/components/StyledButton";
 import StyledButtonFlex from "@/components/StyledButtonFlex";
 import { checkEventLink } from "@/services/FirebaseFunctions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios, { isAxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
 
 import ReCAPTCHA from "react-google-recaptcha";
@@ -99,9 +98,10 @@ export default function EventResponse() {
     const deviceId = getOrCreateDeviceId();
 
     try {
-      const res = await axios.post(
-        "https://respondtoevent-iuxeocrkta-uc.a.run.app",
-        {
+      const res = await fetch("https://respondtoevent-iuxeocrkta-uc.a.run.app", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           hostId,
           eventName,
           eventId,
@@ -110,25 +110,27 @@ export default function EventResponse() {
           email: email.toLowerCase(),
           recaptchaToken,
           deviceId,
-        },
-        { headers: { "Content-Type": "application/json" } },
-      );
+        }),
+      });
 
-      alert(res.data);
+      const data = await res.text();
+      if (!res.ok) {
+        if (res.status === 429) {
+          console.log(data);
+        } else {
+          alert("Error: " + data);
+        }
+        return;
+      }
+
+      alert(data);
       nameInput.value = "";
       emailInput.value = "";
       setResponse(null);
     } catch (error) {
       console.error("Error sending response:", error);
       if (recaptchaRef.current) recaptchaRef.current.reset();
-
-      if (isAxiosError(error)) {
-        if (error?.response?.headers?.status === 429) {
-          console.log(error.response.data);
-        } else {
-          alert("Error: " + error);
-        }
-      }
+      alert("Error: " + error);
     }
 
     setIsLoading(false);
@@ -188,9 +190,8 @@ export default function EventResponse() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-[--primary]">
-      <Header />
-      <main className="flex-grow p-5 md:p-10">
+    <AppShell className="bg-[var(--primary)]">
+      <main className="flex-1 p-5 md:p-10">
         <div className="flex justify-center">
           <div className="bg-white/80 rounded-3xl p-2 shadow-xl">
             <div className="border-2 border-white rounded-2xl p-6 max-w-3xl w-full mx-auto text-center">
@@ -298,6 +299,6 @@ export default function EventResponse() {
         </div>
       </main>
       <Footer />
-    </div>
+    </AppShell>
   );
 }

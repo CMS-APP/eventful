@@ -1,0 +1,128 @@
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-shell-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar {
+  width: 80px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 12px;
+  gap: 24px;
+  background-color: var(--primary);
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sidebar-logo {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
+  cursor: pointer;
+  border-radius: 16px;
+  transition: transform 0.2s ease;
+}
+
+.sidebar-logo:hover {
+  transform: scale(1.05);
+}
+
+.sidebar-logo-image {
+  border-radius: 14px;
+  object-fit: contain;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.sidebar-icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  color: #fff;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-icon-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-icon-link--active {
+  background-color: var(--secondary);
+  color: var(--primary);
+}
+
+.sidebar-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-family: var(--font-poppins-medium);
+  font-size: 15px;
+  color: #fff;
+  text-decoration: none;
+  text-align: left;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-link--active {
+  background-color: var(--secondary);
+  color: var(--primary);
+  font-family: var(--font-poppins-bold);
+}
+
+.sidebar-link--emphasis {
+  background-color: var(--secondary);
+  color: var(--primary);
+}
+
+.sidebar-link--emphasis:hover {
+  background-color: var(--color-secondary-light, #ffc842);
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 72px;
+    padding: 16px 8px;
+  }
+
+  .sidebar-icon-link {
+    width: 44px;
+    height: 44px;
+  }
+
+  .sidebar-link {
+    font-size: 12px;
+    padding: 10px 6px;
+    text-align: center;
+  }
+}

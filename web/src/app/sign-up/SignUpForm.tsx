@@ -32,8 +32,10 @@ export function SignUpForm() {
       await signUp(email, password);
       window.alert("Verify your email to continue.");
       window.location.href = `/sign-in?email=${encodeURIComponent(email)}`;
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      setError(
+        error instanceof Error ? error.message : "Unable to sign up right now.",
+      );
     } finally {
       setLoading(false);
     }

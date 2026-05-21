@@ -1,12 +1,11 @@
 "use client";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import AppShell from "@/components/AppShell";
 
 export default function PrivacyPolicy() {
   return (
-    <div className="flex flex-col min-h-screen bg-[var(--primary)]">
-      <Header />
-      <main className="flex-grow bg-[var(--primary)] p-10">
+    <AppShell className="bg-[var(--primary)]">
+      <main className="flex-1 bg-[var(--primary)] p-10">
         <h1>Privacy Policy</h1>
 
         <div className="flex flex-col gap-2">
@@ -153,6 +152,6 @@ export default function PrivacyPolicy() {
         </div>
       </main>
       <Footer />
-    </div>
+    </AppShell>
   );
 }

@@ -33,8 +33,10 @@ export function SignInForm({ searchParams }: SignInFormProps) {
       setLoading(true);
       // Sign-in integration can be wired here next.
       console.log("Sign in requested", { email });
-    } catch (err: any) {
-      setError(err.message || "Unable to sign in right now.");
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error ? err.message : "Unable to sign in right now.",
+      );
     } finally {
       setLoading(false);
     }

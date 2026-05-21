@@ -3,16 +3,18 @@ import { SignInForm } from "./SignInForm";
 import "./page.css";
 
 type SignInPageProps = {
-  searchParams?: {
+  searchParams: Promise<{
     email?: string | string[];
-  };
+  }>;
 };
 
-export default function SignInPage({ searchParams }: SignInPageProps) {
+export default async function SignInPage({ searchParams }: SignInPageProps) {
+  const resolvedSearchParams = await searchParams;
+
   return (
     <Page>
       <div className="sign-in-page">
-        <SignInForm searchParams={searchParams} />
+        <SignInForm searchParams={resolvedSearchParams} />
       </div>
     </Page>
   );

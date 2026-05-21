@@ -1,7 +1,7 @@
 "use client";
 
-import StyledButton from "@/components/StyledButton";
-import StyledTextInput from "@/components/StyledTextInput";
+import SimpleButton from "@/components/SimpleButton";
+import SimpleTextInput from "@/components/SimpleTextInput";
 import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 
@@ -114,7 +114,7 @@ export default function ForgotPassword() {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <StyledTextInput
+            <SimpleTextInput
               id="email"
               placeholder="Email Address"
               value={email}
@@ -144,13 +144,9 @@ export default function ForgotPassword() {
             )}
 
             <div className="flex flex-col gap-4">
-              <StyledButton
-                color="var(--primary)"
-                hoverColor="var(--secondary)"
-                text={isLoading ? "Sending..." : "Send Reset Link"}
-                onClickAction={handleSubmit}
-                textAlign="center"
-              />
+              <SimpleButton type="submit" disabled={isLoading}>
+                {isLoading ? "Sending..." : "Send Reset Link"}
+              </SimpleButton>
             </div>
           </form>
         </div>

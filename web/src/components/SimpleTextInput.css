@@ -1,0 +1,25 @@
+.simple-text-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border, #d1d5db);
+  border-radius: 12px;
+  font-family: var(--font-poppins-medium);
+  font-size: 16px;
+  color: var(--color-text-primary, #111);
+  background-color: #fff;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.simple-text-input::placeholder {
+  color: var(--color-text-muted, #9ca3af);
+}
+
+.simple-text-input:focus {
+  border-color: var(--secondary, var(--color-secondary));
+}
+
+.simple-text-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

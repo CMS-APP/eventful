@@ -3,15 +3,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons/faExclamationTriangle";
 
-import Header from "@/components/Header";
+import AppShell from "@/components/AppShell";
 import Footer from "@/components/Footer";
 import StyledButton from "@/components/StyledButton";
 
 export default function Custom404() {
   return (
-    <div className="flex flex-col min-h-screen bg-[--primary]">
-      <Header />
-      <main className="flex flex-grow flex-col p-10 md:p-20 text-white items-center gap-5">
+    <AppShell className="bg-[var(--primary)]">
+      <main className="flex flex-1 flex-col p-10 md:p-20 text-white items-center gap-5">
         <div
           className="flex flex-row justify-center items-center gap-5"
         >
@@ -30,12 +29,12 @@ export default function Custom404() {
         <StyledButton
           color="var(--secondary)"
           hoverColor="var(--secondaryTint)"
-          text="Go Back To Home"
+          text="Go to Account"
           onClickAction={() => (window.location = "/")}
         />
       </main>
 
       <Footer />
-    </div>
+    </AppShell>
   );
 }
