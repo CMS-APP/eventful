@@ -1,4 +1,8 @@
 import Mailjet from "node-mailjet";
+import {
+  feedbackConfirmationEmailSubject,
+  feedbackConfirmationEmailTemplate,
+} from "../templates/feedbackConfirmationEmailTemplate.js";
 import { feedbackEmailTemplate } from "../templates/feedbackEmailTemplate.js";
 import { forgotPasswordTemplate } from "../templates/forgotPasswordTemplate.js";
 import { verifyEmailTemplate } from "../templates/verifyEmailTemplate.js";
@@ -88,5 +92,33 @@ export async function sendFeedbackEmailMailJet(
     ],
     "Subject": "New Feedback Received",
     "Html-part": feedbackEmailTemplate(feedbackData),
+  });
+}
+
+export async function sendFeedbackConfirmationEmailMailJet(
+  MJ_API_KEY,
+  MJ_SECRET,
+  feedbackData,
+) {
+  const { email, name, username, type } = feedbackData;
+  if (!email) {
+    return;
+  }
+
+  const client = Mailjet.apiConnect(MJ_API_KEY.value(), MJ_SECRET.value());
+  const recipientName = name || username || email;
+
+  await client.post("send", { version: "v3" }).request({
+    "FromEmail": "no-reply@eventfulapp.com",
+    "FromName": "Eventful Support",
+    "ReplyTo": "help@eventfulapp.com",
+    "Recipients": [
+      {
+        Email: email,
+        Name: recipientName,
+      },
+    ],
+    "Subject": feedbackConfirmationEmailSubject(type),
+    "Html-part": feedbackConfirmationEmailTemplate(feedbackData),
   });
 }

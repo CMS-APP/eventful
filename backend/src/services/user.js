@@ -13,7 +13,7 @@ export async function getUserInfo(admin, uid) {
   } catch (error) {
     if (error.code === "permission-denied") {
       console.warn(
-        "FirebaseFunctions: Current User does not have user account",
+        "FirebaseFunctions: Current User does not have user account"
       );
       return null;
     } else {
