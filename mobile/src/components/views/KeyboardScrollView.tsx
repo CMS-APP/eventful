@@ -137,6 +137,7 @@ export function KeyboardScrollView({
 
   return (
     <ScrollView
+      keyboardShouldPersistTaps="handled"
       onScroll={onScroll}
       style={scrollViewStyle}
       scrollEventThrottle={16}

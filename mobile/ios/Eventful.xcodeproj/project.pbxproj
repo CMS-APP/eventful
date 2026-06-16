@@ -25,6 +25,7 @@
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 		F21748422D0307B40044C1D9 /* GIDSignInSafeHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = F21748412D0307B40044C1D9 /* GIDSignInSafeHandle.m */; };
 		F94862CA4CA44D36868381EA /* BebasNeue-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21BE929B45EF4EA0AFBCFB9D /* BebasNeue-Regular.ttf */; };
+		890EEDD4576142B2868964B7 /* Playfair-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FCFF2F9DA2B49C393D95D57 /* Playfair-Variable.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		F21748412D0307B40044C1D9 /* GIDSignInSafeHandle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GIDSignInSafeHandle.m; path = Eventful/GIDSignInSafeHandle.m; sourceTree = "<group>"; };
 		F21748432D0307B40044C1D9 /* GIDSignInSafeHandle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GIDSignInSafeHandle.h; path = Eventful/GIDSignInSafeHandle.h; sourceTree = "<group>"; };
 		F5247929F74347E7A161A917 /* Gotham-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Gotham-Bold.otf"; path = "../src/assets/fonts/Gotham-Bold.otf"; sourceTree = "<group>"; };
+		2FCFF2F9DA2B49C393D95D57 /* Playfair-Variable.ttf */ = {isa = PBXFileReference; name = "Playfair-Variable.ttf"; path = "../src/assets/fonts/Playfair-Variable.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +154,7 @@
 				21BE929B45EF4EA0AFBCFB9D /* BebasNeue-Regular.ttf */,
 				D387DDD2B1D7421E8138502E /* Lobster.otf */,
 				6DB93FA85C204266A52F3A75 /* GreatVibes-Regular.ttf */,
+				2FCFF2F9DA2B49C393D95D57 /* Playfair-Variable.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -252,6 +255,7 @@
 				8C04C8C554C8486B85FB3D14 /* Lobster.otf in Resources */,
 				D1C065D17E93475D98E1F43B /* GreatVibes-Regular.ttf in Resources */,
 				4D6B9C0702C2EADA2251F531 /* PrivacyInfo.xcprivacy in Resources */,
+				890EEDD4576142B2868964B7 /* Playfair-Variable.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

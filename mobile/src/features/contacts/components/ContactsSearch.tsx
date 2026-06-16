@@ -14,13 +14,25 @@ interface ContactsSearchProps {
   setSearch?: (search: string) => void;
   buttonAction?: (() => void) | undefined;
   textInputRef?: React.RefObject<TextInput | null>;
+  placeholder?: string;
+  accessoryId?: string;
+  showSeparator?: boolean;
+  inset?: boolean;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 export function ContactsSearch({
   search = "",
   setSearch = () => {},
   buttonAction = undefined,
-  textInputRef = undefined
+  textInputRef = undefined,
+  placeholder = "Search For Users...",
+  accessoryId = "contactSearchInput",
+  showSeparator = true,
+  inset = true,
+  onFocus,
+  onBlur
 }: ContactsSearchProps) {
   const renderSearch = useCallback(
     (disabled: boolean) => {
@@ -30,7 +42,9 @@ export function ContactsSearch({
             styles.searchContainer,
             buttonAction
               ? styles.searchContainerWithButton
-              : styles.searchContainerWithoutButton,
+              : inset
+                ? styles.searchContainerWithoutButton
+                : styles.searchContainerFullWidth,
             {
               backgroundColor: colors.lightGray
             }
@@ -39,7 +53,7 @@ export function ContactsSearch({
           <FontAwesome5 name="search" size={16} color={colors.black} />
           {disabled ? (
             <Text type="body" style={styles.buttonLabel}>
-              Search For Users...
+              {placeholder}
             </Text>
           ) : (
             <>
@@ -49,33 +63,57 @@ export function ContactsSearch({
                 style={styles.textInput}
                 value={search}
                 onChangeText={(text) => setSearch(text)}
-                placeholder="Search For Users..."
+                onFocus={onFocus}
+                onBlur={onBlur}
+                placeholder={placeholder}
                 placeholderTextColor={colors.black}
                 autoCapitalize="none"
-                inputAccessoryViewID="contactSearchInput"
+                inputAccessoryViewID={accessoryId}
               />
+
+              {search !== "" && (
+                <TouchableOpacity
+                  onPress={() => setSearch("")}
+                  hitSlop={getHitSlop("small")}
+                >
+                  <FontAwesome5
+                    name="times-circle"
+                    size={16}
+                    color={colors.black}
+                  />
+                </TouchableOpacity>
+              )}
 
               <InputAccessory
                 value={search}
-                placeholder="Search For Users..."
-                nativeID="contactSearchInput"
+                placeholder={placeholder}
+                nativeID={accessoryId}
               />
             </>
           )}
         </View>
       );
     },
-    [buttonAction, textInputRef, search, setSearch]
+    [
+      buttonAction,
+      textInputRef,
+      search,
+      setSearch,
+      placeholder,
+      accessoryId,
+      onFocus,
+      onBlur
+    ]
   );
 
   const normalSearch = useCallback(() => {
     return (
       <View>
         {renderSearch(false)}
-        <View style={styles.separator} />
+        {showSeparator && <View style={styles.separator} />}
       </View>
     );
-  }, [renderSearch]);
+  }, [renderSearch, showSeparator]);
 
   const buttonSearch = useCallback(() => {
     return (
@@ -102,6 +140,9 @@ const styles = StyleSheet.create({
   },
   searchContainerWithoutButton: {
     marginHorizontal: 24
+  },
+  searchContainerFullWidth: {
+    marginHorizontal: 0
   },
   separator: {
     backgroundColor: colors.lightGray,

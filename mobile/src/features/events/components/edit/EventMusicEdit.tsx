@@ -42,7 +42,6 @@ export function EventMusicEdit({ event, setEvent }: EventMusicEditProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.secondary,
     flex: 1,
     gap: 16,
     paddingHorizontal: 24

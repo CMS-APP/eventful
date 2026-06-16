@@ -25,6 +25,7 @@ import { updateNotificationsForEvent } from "@/utils/notifications";
 
 import { EventDetailsEdit } from "../components/edit/EventDetailsEdit";
 import { EventItineraryEdit } from "../components/edit/EventItineraryEdit";
+import { EventLocationEdit } from "../components/edit/EventLocationEdit";
 import { EventMusicEdit } from "../components/edit/EventMusicEdit";
 import { EventTimelineEdit } from "../components/edit/EventTimelineEdit";
 import { EventToDoShoppingEdit } from "../components/edit/EventToDoShoppingEdit";
@@ -110,6 +111,7 @@ export function EventSectionScreen({
   function getBackgroundColor() {
     if (section === "Details") return colors.primary;
     if (section === "Essentials") return colors.primaryTint;
+    if (section === "Location") return colors.primary;
     if (section === "To Do") return colors.gray;
     if (section === "Music") return colors.secondary;
     if (section === "Timeline") return colors.primaryTint2;
@@ -119,6 +121,7 @@ export function EventSectionScreen({
 
   function getIcon() {
     if (section === "Details") return "edit";
+    if (section === "Location") return "map-marker-alt";
     if (section === "Essentials") return "file";
     if (section === "To Do") return "bars";
     if (section === "Music") return "play-circle";
@@ -151,6 +154,10 @@ export function EventSectionScreen({
 
       {section === "Essentials" && (
         <EventEssentialsEdit event={event} setEvent={setEvent} />
+      )}
+
+      {section === "Location" && (
+        <EventLocationEdit event={event} setEvent={setEvent} />
       )}
 
       {section === "To Do" && (
