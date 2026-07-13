@@ -33,11 +33,45 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
-        "source": "/hello",
+        "source": "/respondToEvent",
+        "function": { "functionId": "respondToEvent", "region": "us-central1" }
+      },
+      {
+        "source": "/appCheckToken",
+        "function": { "functionId": "appCheckToken", "region": "us-central1" }
+      },
+      {
+        "source": "/sendVerificationEmail",
         "function": {
-          "functionId": "pyHello",
+          "functionId": "sendVerificationEmail",
           "region": "us-central1"
         }
+      },
+      {
+        "source": "/forgotPassword",
+        "function": { "functionId": "forgotPassword", "region": "us-central1" }
+      },
+      {
+        "source": "/signUp",
+        "function": { "functionId": "signUp", "region": "us-central1" }
+      },
+      {
+        "source": "/incrementUserCount",
+        "function": {
+          "functionId": "incrementUserCount",
+          "region": "us-central1"
+        }
+      },
+      {
+        "source": "/incrementEventCount",
+        "function": {
+          "functionId": "incrementEventCount",
+          "region": "us-central1"
+        }
+      },
+      {
+        "source": "/searchUsers",
+        "function": { "functionId": "searchUsers", "region": "us-central1" }
       }
     ]
   },
