@@ -1,8 +1,8 @@
 {
   "functions": [
     {
-      "source": ".",
-      "codebase": "default",
+      "source": "node",
+      "codebase": "node",
       "ignore": [
         "node_modules",
         ".git",
@@ -13,6 +13,45 @@
       "predeploy": [
         "npm --prefix \"$RESOURCE_DIR\" run lint"
       ]
+    },
+    {
+      "source": "python",
+      "codebase": "python",
+      "runtime": "python314",
+      "ignore": [
+        "venv",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local",
+        "__pycache__"
+      ]
     }
-  ]
+  ],
+  "hosting": {
+    "public": "hosting/public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "/hello",
+        "function": {
+          "functionId": "pyHello",
+          "region": "us-central1"
+        }
+      }
+    ]
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "hosting": {
+      "port": 5000
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4000
+    },
+    "singleProjectMode": true
+  }
 }
