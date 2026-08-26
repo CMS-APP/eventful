@@ -1,15 +1,11 @@
 #!/bin/bash
 set -e
 
-# ----------------------------
-# Load environment variables
-# ----------------------------
 if [ -f .env ]; then
   echo "🔑 Loading environment variables from .env"
   set -a
   source .env
   set +a
-  # Sentry upload runs during EAS build; token must be available to the build
   if [ -z "$SENTRY_AUTH_TOKEN" ]; then
     echo "❌ SENTRY_AUTH_TOKEN is not set in .env — sourcemaps will not be uploaded to Sentry."
     echo "   Add it to .env (get a token from Sentry: Settings → Auth Tokens)."
@@ -21,9 +17,6 @@ else
   exit 1
 fi
 
-# ios/ and android/ are regenerated from app.config.ts via `expo prebuild` below.
-# Make sure no dev-variant env var leaks in from the calling shell (e.g. left over
-# from ios-dev-build.sh/android-dev-build.sh in the same terminal session).
 unset APP_VARIANT
 
 if [ "$(git branch --show-current)" != "main" ]; then
@@ -31,36 +24,25 @@ if [ "$(git branch --show-current)" != "main" ]; then
   exit 1
 fi
 
-# ----------------------------
-# Error handling with notification
-# ----------------------------
 send_error_notification() {
   local error_message="$1"
   echo ""
   echo "❌ ERROR: ${error_message}"
   echo "📱 Sending error notification..."
-  
-  # Method 1: Use terminal-notifier (most reliable)
+
   if command -v terminal-notifier >/dev/null 2>&1; then
     terminal-notifier -title "Eventful Build Failed" -message "${error_message}" -sound Basso
   else
-    # Method 2: Fallback to osascript
     if osascript -e "display notification \"${error_message}\" with title \"Eventful Build Failed\" sound name \"Basso\"" 2>/dev/null; then
       echo "✅ Error notification sent via osascript!"
     else
-      # Method 3: Fallback to system beep
       echo "🔔 Build failed! ${error_message}"
       printf "\a\a\a"
     fi
   fi
 }
 
-# Trap errors and send notification
 trap 'send_error_notification "Build failed at line $LINENO. Check the output above for details."' ERR
-
-# ----------------------------
-# Run health checks
-# ----------------------------
 
 echo "🔧 Updating CocoaPods repository..."
 pod repo update
@@ -75,20 +57,15 @@ fi
 
 echo ""
 
-# ----------------------------
-# Get current version and prompt user for new version
-# ----------------------------
 CURRENT_VERSION=$(grep -o 'version: "[^"]*"' app.config.ts | grep -o '[0-9.]*')
 echo "Current version: $CURRENT_VERSION"
 echo ""
 read -p "Enter new version number (e.g., $CURRENT_VERSION): " NEW_VERSION
 
-# If blank, use current version
 if [ -z "$NEW_VERSION" ]; then
     NEW_VERSION=$CURRENT_VERSION
 fi
 
-# Validate version format (basic check for semantic versioning)
 if [[ ! $NEW_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
     echo "❌ Invalid version format. Please use format like 5.6.4"
     exit 1
@@ -96,8 +73,6 @@ fi
 
 echo "🔧 Updating version to $NEW_VERSION..."
 
-# Update version and runtimeVersion
-# Escape dots in version numbers for sed
 CURRENT_VERSION_ESCAPED=$(echo "$CURRENT_VERSION" | sed 's/\./\\./g')
 NEW_VERSION_ESCAPED=$(echo "$NEW_VERSION" | sed 's/\./\\./g')
 
@@ -105,9 +80,6 @@ sed -i '' "s/version: \"$CURRENT_VERSION_ESCAPED\"/version: \"$NEW_VERSION\"/" a
 sed -i '' "s/runtimeVersion: \"$CURRENT_VERSION_ESCAPED\"/runtimeVersion: \"$NEW_VERSION\"/" app.config.ts
 echo "✅ Updated version to $NEW_VERSION"
 
-# ----------------------------
-# Platform selection
-# ----------------------------
 echo ""
 echo "Select platform to build:"
 echo "1) iOS"
@@ -139,9 +111,6 @@ case $PLATFORM_CHOICE in
     ;;
 esac
 
-# ----------------------------
-# Increment build numbers
-# ----------------------------
 if [ "$BUILD_IOS" = true ]; then
   echo "🔧 Incrementing iOS build number..."
   CURRENT_IOS_BUILD=$(grep -o 'buildNumber: "[0-9]*"' app.config.ts | grep -o '[0-9]*')
@@ -158,28 +127,30 @@ if [ "$BUILD_ANDROID" = true ]; then
   echo "✅ Updated Android version code to $NEW_ANDROID_BUILD"
 fi
 
-# ----------------------------
-# Regenerate native projects from app.config.ts
-# ----------------------------
-# ios/ and android/ are not committed to git — they're build artifacts. Prebuild
-# here regenerates them from app.config.ts + config plugins so bundle ID, app name,
-# and version numbers can never drift from what's declared in app.config.ts (this is
-# what caused the dev bundle ID to leak into a production build previously: a stray
-# `APP_VARIANT=development expo prebuild` got committed and nothing ever regenerated
-# the native projects to reconcile it).
 if [ "$BUILD_IOS" = true ]; then
-  echo "🔧 Regenerating iOS native project (version $NEW_VERSION, build $NEW_IOS_BUILD)..."
+  echo "🔧 Regenerating iOS native project..."
   npx expo prebuild --clean --platform ios
   echo "✅ iOS native project regenerated"
+
+  echo "🔧 Stamping iOS version $NEW_VERSION, build $NEW_IOS_BUILD..."
+  sed -i '' "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = $NEW_VERSION;/g" ios/Eventful.xcodeproj/project.pbxproj
+  sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = $NEW_IOS_BUILD/g" ios/Eventful.xcodeproj/project.pbxproj
+  sed -i '' "/<key>CFBundleShortVersionString<\/key>/{n;s#<string>.*</string>#<string>$NEW_VERSION</string>#;}" ios/Eventful/Info.plist
+  sed -i '' "/<key>CFBundleVersion<\/key>/{n;s#<string>.*</string>#<string>$NEW_IOS_BUILD</string>#;}" ios/Eventful/Info.plist
+  echo "✅ iOS stamped at version $NEW_VERSION, build $NEW_IOS_BUILD"
 fi
 
 if [ "$BUILD_ANDROID" = true ]; then
-  echo "🔧 Regenerating Android native project (version $NEW_VERSION, versionCode $NEW_ANDROID_BUILD)..."
+  echo "🔧 Regenerating Android native project..."
   npx expo prebuild --clean --platform android
   echo "✅ Android native project regenerated"
+
+  echo "🔧 Stamping Android version $NEW_VERSION, versionCode $NEW_ANDROID_BUILD..."
+  sed -i '' "s/versionCode [0-9]*/versionCode $NEW_ANDROID_BUILD/" android/app/build.gradle
+  sed -i '' "s/versionName \"[^\"]*\"/versionName \"$NEW_VERSION\"/" android/app/build.gradle
+  echo "✅ Android stamped at version $NEW_VERSION, versionCode $NEW_ANDROID_BUILD"
 fi
 
-# Initialize duration variables
 IOS_DURATION=0
 ANDROID_DURATION=0
 IOS_MINUTES=0
@@ -187,9 +158,6 @@ IOS_SECONDS=0
 ANDROID_MINUTES=0
 ANDROID_SECONDS=0
 
-# ----------------------------
-# Build iOS
-# ----------------------------
 if [ "$BUILD_IOS" = true ]; then
   echo "📦 Building iOS app..."
   IOS_START_TIME=$(date +%s)
@@ -201,9 +169,6 @@ if [ "$BUILD_IOS" = true ]; then
   echo "✅ iOS build completed in ${IOS_MINUTES}m ${IOS_SECONDS}s"
 fi
 
-# ----------------------------
-# Build Android
-# ----------------------------
 if [ "$BUILD_ANDROID" = true ]; then
   echo "📦 Building Android app..."
   ANDROID_START_TIME=$(date +%s)
@@ -215,25 +180,17 @@ if [ "$BUILD_ANDROID" = true ]; then
   echo "✅ Android build completed in ${ANDROID_MINUTES}m ${ANDROID_SECONDS}s"
 fi
 
-# ----------------------------
-# Organize build files
-# ----------------------------
 echo "📁 Organising build files..."
 
-# Create build directory if it doesn't exist
 mkdir -p build
 
-# Create a folder with the new version number
 mkdir -p build/$NEW_VERSION
 
-# Get current timestamp for file naming
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 
-# Initialize filename variables
 IOS_FILENAME=""
 ANDROID_FILENAME=""
 
-# Find and move iOS build files (use newest .ipa so we pick the one just built, not an old one)
 if [ "$BUILD_IOS" = true ]; then
   IOS_BUILD_FILE=$(find . -name "*.ipa" -not -path "./build/*" -type f -exec stat -f "%m %N" {} \; 2>/dev/null | sort -rn | head -1 | sed 's/^[0-9]* //')
   if [ -n "$IOS_BUILD_FILE" ]; then
@@ -245,7 +202,6 @@ if [ "$BUILD_IOS" = true ]; then
   fi
 fi
 
-# Find and move Android build files (use newest .aab so we pick the one just built, not an old one)
 if [ "$BUILD_ANDROID" = true ]; then
   ANDROID_BUILD_FILE=$(find . -name "*.aab" -not -path "./build/*" -type f -exec stat -f "%m %N" {} \; 2>/dev/null | sort -rn | head -1 | sed 's/^[0-9]* //')
   if [ -n "$ANDROID_BUILD_FILE" ]; then
@@ -257,9 +213,6 @@ if [ "$BUILD_ANDROID" = true ]; then
   fi
 fi
 
-# ----------------------------
-# Total build time
-# ----------------------------
 TOTAL_DURATION=$((IOS_DURATION + ANDROID_DURATION))
 TOTAL_MINUTES=$((TOTAL_DURATION / 60))
 TOTAL_SECONDS=$((TOTAL_DURATION % 60))
@@ -284,9 +237,6 @@ if [ "$BUILD_IOS" = true ] && [ "$BUILD_ANDROID" = true ]; then
   echo "⏱️ Total: ${TOTAL_MINUTES}m ${TOTAL_SECONDS}s"
 fi
 
-# ----------------------------
-# Upload to App Store Connect
-# ----------------------------
 if [ "$BUILD_IOS" = true ]; then
   echo "📤 Uploading iOS build to App Store Connect..."
 
@@ -310,9 +260,6 @@ if [ "$BUILD_IOS" = true ]; then
   fi
 fi
 
-# ----------------------------
-# Upload to Google Play Console
-# ----------------------------
 if [ "$BUILD_ANDROID" = true ]; then
   echo "📤 Uploading Android build to Google Play Console..."
 
@@ -336,13 +283,9 @@ if [ "$BUILD_ANDROID" = true ]; then
   fi
 fi
 
-# ----------------------------
-# Send desktop notification
-# ----------------------------
 echo ""
 echo "📱 Sending desktop notification..."
 
-# Create notification message based on what was built
 if [ "$BUILD_IOS" = true ] && [ "$BUILD_ANDROID" = true ]; then
   NOTIFICATION_MESSAGE="Eventful v${NEW_VERSION} build completed! iOS: ${IOS_MINUTES}m ${IOS_SECONDS}s, Android: ${ANDROID_MINUTES}m ${ANDROID_SECONDS}s"
 elif [ "$BUILD_IOS" = true ]; then
@@ -351,20 +294,16 @@ elif [ "$BUILD_ANDROID" = true ]; then
   NOTIFICATION_MESSAGE="Eventful v${NEW_VERSION} Android build completed! ${ANDROID_MINUTES}m ${ANDROID_SECONDS}s"
 fi
 
-# Method 1: Use terminal-notifier (most reliable)
 if command -v terminal-notifier >/dev/null 2>&1; then
     terminal-notifier -title "Eventful Build Complete" -message "${NOTIFICATION_MESSAGE}" -sound Glass
 else
     echo "⚠️ terminal-notifier not found, trying osascript..."
-    
-    # Method 2: Fallback to osascript
+
     if osascript -e "display notification \"${NOTIFICATION_MESSAGE}\" with title \"Eventful Build Complete\"" 2>/dev/null; then
         echo "✅ Desktop notification sent via osascript!"
     else
-        # Method 3: Fallback to system beep and echo
         echo "🔔 Build completed! (Notification not available - check Terminal permissions)"
         echo "📱 ${NOTIFICATION_MESSAGE}"
-        # Try to make a system beep
         printf "\a"
     fi
 fi
