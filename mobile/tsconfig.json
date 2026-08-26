@@ -14,9 +14,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-native",
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     },
     "types": ["jest", "react-native", "node"]
   },

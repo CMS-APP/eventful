@@ -21,7 +21,6 @@ import { User } from "@/types/User";
 import { isActiveEvent, parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
-import { log } from "@/utils/logging";
 
 interface EventItemProps {
   index: number;
@@ -37,7 +36,6 @@ export function EventItem({ index, event }: EventItemProps) {
     useNavigation() as StackNavigationProp<AppStackParamList>;
 
   async function fetchUserDetails() {
-    log("Fetching user details", "info");
     const userDetails = await getUserInfo(event.userId);
     setUserDetails(userDetails);
   }
@@ -50,7 +48,6 @@ export function EventItem({ index, event }: EventItemProps) {
 
   async function navigateToEvent() {
     haptics.soft();
-    log("Navigating to event", "info");
     const userDetails = await getUserInfo(event.userId);
     if (event.userId === userId) {
       navigationEvents.reset({

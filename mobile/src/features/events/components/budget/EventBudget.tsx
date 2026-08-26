@@ -9,7 +9,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { AppStackParamList } from "@/features/app/navigationTypes";
 import { SemiCircleProgressBar } from "@/features/home/components/SemiCircleProgressBar";
 import { UserState } from "@/store/UserSlice";
@@ -76,7 +76,7 @@ export function EventBudget({ event }: EventBudgetProps) {
   };
 
   const widgetStyle = [
-    globalStyles.mediumWidget,
+    padding.mediumWidget,
     styles.budgetContainer,
     {
       opacity: premium ? 1 : 0.4

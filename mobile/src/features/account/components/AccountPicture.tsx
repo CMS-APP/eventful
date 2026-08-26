@@ -14,7 +14,6 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { useCameraPermissions } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 
-import { PulsatingCircle } from "@/components/views/PulsatingCircle";
 import {
   ILoadingModalContext,
   useLoadingModal
@@ -49,8 +48,6 @@ export function AccountPicture() {
 
   const { setLoading } = useLoadingModal() as ILoadingModalContext;
   const userId = useSelector((state: UserState) => state.uid);
-  const photoBooth = useSelector((state: UserState) => state.photoBooth);
-  const premium = useSelector((state: UserState) => state.premium);
   const dispatch = useDispatch();
 
   const navigation = useNavigation<StackNavigationProp<AllStackParamList>>();
@@ -219,23 +216,9 @@ export function AccountPicture() {
     return <FontAwesome5 name="camera" size={44} color={colors.primary} />;
   }, [imageLoading, image]);
 
-  const getPulseColor = () => {
-    if (photoBooth) {
-      return colors.white;
-    } else if (premium) {
-      return colors.secondary;
-    }
-    return "transparent";
-  };
-
   return (
     <TouchableOpacity onPress={addPhoto} hitSlop={getHitSlop("medium")}>
       <View style={styles.imageContainer}>
-        <PulsatingCircle
-          size={100}
-          color={getPulseColor()}
-          active={photoBooth || premium}
-        />
         <View style={styles.image}>{renderImage()}</View>
       </View>
     </TouchableOpacity>

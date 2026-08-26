@@ -7,7 +7,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { AppStackParamList } from "@/features/app/navigationTypes";
 import { syncUserPicture } from "@/services/cache";
 import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
@@ -153,7 +153,7 @@ export function EventGuestListInvitedItem({
 
 const styles = StyleSheet.create({
   button: {
-    ...globalStyles.smallWidget,
+    ...padding.smallWidget,
     backgroundColor: colors.primary
   },
   dietaryText: {
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   userContainer: {
-    ...globalStyles.largeWidget,
+    ...padding.largeWidget,
     backgroundColor: colors.lightGray,
     flexDirection: "row",
     gap: 12

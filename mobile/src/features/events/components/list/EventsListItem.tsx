@@ -12,7 +12,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { textFormatter } from "@/design-system/tokens/fonts";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import {
   AppStackParamList,
   EventsStackParamList
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     marginTop: 8
   },
   eventContainer: {
-    ...globalStyles.largeWidget,
+    ...padding.largeWidget,
     alignItems: "flex-start",
     width: "100%"
   },

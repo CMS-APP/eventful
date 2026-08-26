@@ -12,7 +12,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { useSafeAreaStyles } from "@/design-system/tokens/globalStyles";
+import { useSafeAreaStyles } from "@/hooks/useSafeAreaStyles";
 import { log } from "@/utils/logging";
 
 import { SmallButton } from "../buttons/SmallButton";

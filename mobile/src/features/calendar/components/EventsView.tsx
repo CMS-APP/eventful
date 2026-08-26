@@ -55,6 +55,7 @@ export function EventsView({
 
       {currentEvents.length === 0 && (
         <EmptyStateContainer
+          dark
           title="No Events Found"
           description="Create a new event in the Events screen"
           icon="calendar-plus"

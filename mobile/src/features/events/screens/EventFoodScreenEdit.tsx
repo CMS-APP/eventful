@@ -7,10 +7,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AmazonButton } from "@/components/buttons/AmazonButton";
 import { Screen } from "@/components/views/screen/Screen";
+import { Divider } from "@/design-system/components/Divider";
 import { Input } from "@/design-system/components/Input";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
 import {
   AllStackParamList,
   EventsStackParamList
@@ -69,7 +69,7 @@ export function EventFoodScreenEdit({
           }}
         />
 
-        <View style={[globalStyles.divider, styles.divider]} />
+        <Divider dark />
 
         <Text type="subHeader" color={colors.white} center>
           Want some inspiration?
@@ -85,8 +85,5 @@ const styles = StyleSheet.create({
   contentContainer: {
     gap: 16,
     marginHorizontal: 24
-  },
-  divider: {
-    backgroundColor: colors.lightGray
   }
 });

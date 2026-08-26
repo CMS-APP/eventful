@@ -11,7 +11,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { FollowButton } from "@/components/views/FollowButton";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { HomeStackParamList } from "@/features/app/navigationTypes";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
@@ -58,7 +58,7 @@ export function ProfileButton({ uid }: ProfileButtonProps) {
       onPress={handleActionPress}
       hitSlop={getHitSlop("medium")}
     >
-      <View style={[globalStyles.mediumWidget, styles.container]}>
+      <View style={[padding.mediumWidget, styles.container]}>
         <ProfilePicture user={user} size={40} />
         <View style={styles.contentContainer}>
           <Text type="body">{user.name}</Text>

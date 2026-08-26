@@ -5,7 +5,7 @@ import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { InputAccessory } from "@/design-system/components/InputAccessory";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { BudgetItem } from "@/types/BudgetItem";
 import { getCurrencySymbolForDevice } from "@/utils/currency";
 import { haptics } from "@/utils/haptics";
@@ -76,7 +76,7 @@ export function EventBudgetListItem({
         disabled={!premium}
         hitSlop={getHitSlop("medium")}
       >
-        <View style={[globalStyles.smallWidget, styles.removeButton]}>
+        <View style={[padding.smallWidget, styles.removeButton]}>
           <Text type="body" style={styles.removeButtonText}>
             Remove
           </Text>

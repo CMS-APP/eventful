@@ -4,7 +4,7 @@ import { Animated, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { useAppDimensions } from "@/design-system/tokens/globalStyles";
+import { useAppDimensions } from "@/hooks/useAppDimensions";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
 

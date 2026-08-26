@@ -7,11 +7,8 @@ import { Button } from "@/design-system/components/Button";
 import { Text } from "@/design-system/components/Text";
 import { TextButton } from "@/design-system/components/TextButton";
 import { colors } from "@/design-system/tokens/colors";
-import {
-  globalStyles,
-  useSafeAreaStyles
-} from "@/design-system/tokens/globalStyles";
 import { AuthStackParamList } from "@/features/app/navigationTypes";
+import { useSafeAreaStyles } from "@/hooks/useSafeAreaStyles";
 import { log } from "@/utils/logging";
 
 import { AppleLogin } from "../components/AppleLogin";
@@ -33,7 +30,7 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
   };
 
   return (
-    <View style={globalStyles.container}>
+    <View style={styles.container}>
       <Background page="Welcome" image>
         <View style={styles.logoContainer}>
           <View
@@ -95,6 +92,9 @@ const styles = StyleSheet.create({
     flex: 3,
     gap: 12,
     padding: 32
+  },
+  container: {
+    flex: 1
   },
   flexTwo: {
     flex: 2

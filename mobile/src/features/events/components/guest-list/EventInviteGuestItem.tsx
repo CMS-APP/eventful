@@ -9,7 +9,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { AccountStackParamList } from "@/features/app/navigationTypes";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
@@ -134,7 +134,7 @@ export function EventInviteGuestItem({
 
   return (
     <TouchableOpacity onPress={handlePress} hitSlop={getHitSlop("medium")}>
-      <View style={[globalStyles.mediumWidget, styles.container]}>
+      <View style={[padding.mediumWidget, styles.container]}>
         <View style={styles.userRow}>
           <ProfilePicture size={40} user={user} />
           <View style={styles.userInfo}>
@@ -146,7 +146,7 @@ export function EventInviteGuestItem({
             </Text>
           </View>
           <TouchableOpacity onPress={inviteUser} hitSlop={getHitSlop("medium")}>
-            <View style={[globalStyles.smallWidget, styles.inviteButton]}>
+            <View style={[padding.smallWidget, styles.inviteButton]}>
               <Text type="body" color="white">
                 {alreadyInvited ? "Remove" : "Invite"}
               </Text>

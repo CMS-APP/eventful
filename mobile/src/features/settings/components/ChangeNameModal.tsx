@@ -13,7 +13,7 @@ import { Button } from "@/design-system/components/Button";
 import { Input } from "@/design-system/components/Input";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import {
   changeHostname,
   checkUsernameExists,
@@ -239,7 +239,7 @@ export function ChangeNameModal({
       )}
 
       {type === "username" && (
-        <View style={[globalStyles.largeWidget, styles.usernameContainer]}>
+        <View style={[padding.largeWidget, styles.usernameContainer]}>
           <Text
             type="body"
             italic

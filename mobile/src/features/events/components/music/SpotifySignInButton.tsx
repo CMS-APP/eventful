@@ -8,7 +8,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
 import { haptics } from "@/utils/haptics";
@@ -74,7 +74,7 @@ export function SpotifySignInButton({
       onPress={signedIn ? signOutOfSpotifyAlert : signIntoSpotify}
       hitSlop={getHitSlop("medium")}
     >
-      <View style={[globalStyles.largeWidget, styles.container]}>
+      <View style={[padding.largeWidget, styles.container]}>
         <View style={styles.imageContainer}>
           <Image
             source={require("@/assets/logos/spotify-logo-green.png")}

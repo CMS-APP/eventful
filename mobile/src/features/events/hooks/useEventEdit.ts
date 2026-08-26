@@ -15,18 +15,18 @@ export function useEventEdit(
   const [event, setEvent] = useState<Event>(originalEvent);
 
   const fetchData = useCallback(async () => {
-    const eventData = await getEventInfo(event);
+    const eventData = await getEventInfo(originalEvent);
     if (eventData) {
       setEvent(eventData);
     } else {
       new AppError(new Error("Event not found"), "Error fetching event", true);
     }
-  }, [event]);
+  }, [originalEvent]);
 
   useFocusEffect(
     useCallback(() => {
       fetchData();
-    }, [fetchData, navigation])
+    }, [fetchData])
   );
 
   return { event };

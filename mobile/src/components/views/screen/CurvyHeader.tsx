@@ -18,8 +18,6 @@ export function CurvyHeader({ ...props }: CurvyHeaderProps) {
       props?.backAction();
     } else if (props?.backAction && typeof props?.backAction === "boolean") {
       nav.goBack();
-    } else {
-      null;
     }
   }
 

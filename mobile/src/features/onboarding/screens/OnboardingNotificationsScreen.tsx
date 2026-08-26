@@ -1,11 +1,11 @@
 import { arrayUnion } from "@react-native-firebase/firestore";
 import { useSelector } from "react-redux";
 
-import { Alert, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { colors } from "@/design-system/tokens/colors";
 import { AllStackParamList } from "@/features/app/navigationTypes";
 import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
@@ -53,7 +53,7 @@ export function OnboardingNotificationsScreen({
   }
 
   return (
-    <View style={globalStyles.containerPrimary}>
+    <View style={styles.container}>
       <FeatureView
         image={require("@/assets/onboarding/notifications.png")}
         title="Notifications"
@@ -74,3 +74,10 @@ export function OnboardingNotificationsScreen({
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.primary,
+    flex: 1
+  }
+});

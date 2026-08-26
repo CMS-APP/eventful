@@ -123,7 +123,7 @@ export function PaymentProvider({ children }: { children: React.ReactNode }) {
           }
         } else {
           dispatch(setPhotoBooth(false));
-          dispatch(setPremium(false));
+          dispatch(setPremium(__DEV__));
         }
       } catch (error) {
         throw new AppError(error, "Error updating user info");

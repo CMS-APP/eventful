@@ -8,7 +8,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { FollowButton } from "@/components/views/FollowButton";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { AccountStackParamList } from "@/features/app/navigationTypes";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
@@ -48,7 +48,7 @@ export function HomeFollowsItem({ notification }: HomeFollowsItemProps) {
   }
 
   const widgetStyle = [
-    globalStyles.mediumWidget,
+    padding.mediumWidget,
     styles.container,
     {
       borderWidth: notification.read ? 0 : 1,

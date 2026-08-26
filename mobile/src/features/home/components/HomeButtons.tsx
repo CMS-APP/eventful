@@ -6,12 +6,12 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { colors } from "@/design-system/tokens/colors";
-import { useAppDimensions } from "@/design-system/tokens/globalStyles";
 import {
   AppStackParamList,
   EventsStackParamList,
   MainStackParamList
 } from "@/features/app/navigationTypes";
+import { useAppDimensions } from "@/hooks/useAppDimensions";
 import { UserState } from "@/store/UserSlice";
 
 import { HomeNotificationButtons } from "./HomeNotificationButtons";

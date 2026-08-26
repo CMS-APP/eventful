@@ -3,7 +3,7 @@ import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { colors } from "@/design-system/tokens/colors";
-import { useAppDimensions } from "@/design-system/tokens/globalStyles";
+import { useAppDimensions } from "@/hooks/useAppDimensions";
 
 import { useCalenderEvents } from "../hooks/useCalenderEvents";
 import { CalendarView } from "./CalendarView";

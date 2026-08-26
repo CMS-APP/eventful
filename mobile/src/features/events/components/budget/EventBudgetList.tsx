@@ -14,7 +14,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { AppStackParamList } from "@/features/app/navigationTypes";
 import { UserState } from "@/store/UserSlice";
 import { BudgetItem } from "@/types/BudgetItem";
@@ -75,7 +75,7 @@ export function EventBudgetList({
   }, [addItem]);
 
   const widgetStyle = [
-    globalStyles.mediumWidget,
+    padding.mediumWidget,
     styles.container,
     {
       opacity: premium ? 1 : 0.4
@@ -123,7 +123,7 @@ export function EventBudgetList({
             disabled={!premium}
             hitSlop={getHitSlop("medium")}
           >
-            <View style={[globalStyles.smallWidget, styles.addButton]}>
+            <View style={[padding.smallWidget, styles.addButton]}>
               <Text type="body" style={styles.addButtonText}>
                 Add
               </Text>

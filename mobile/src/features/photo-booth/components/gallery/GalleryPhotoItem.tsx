@@ -14,7 +14,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { ImageBackground } from "expo-image";
 
 import { colors } from "@/design-system/tokens/colors";
-import { useAppDimensions } from "@/design-system/tokens/globalStyles";
+import { useAppDimensions } from "@/hooks/useAppDimensions";
 import { GalleryPhoto } from "@/types/photoBoothGallery";
 import { getHitSlop } from "@/utils/hitSlop";
 

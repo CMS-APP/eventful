@@ -10,7 +10,7 @@ import {
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
 
@@ -48,7 +48,7 @@ export function EventEssentialsButton({
 
 const styles = StyleSheet.create({
   button: {
-    ...globalStyles.mediumWidget,
+    ...padding.mediumWidget,
     backgroundColor: colors.lightGray,
     gap: 12,
     padding: 12

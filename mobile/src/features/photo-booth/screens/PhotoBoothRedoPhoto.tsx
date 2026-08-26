@@ -15,7 +15,7 @@ import { CameraView, PhotoResult } from "expo-camera";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 
 import { PhotoBoothButtons } from "../components/camera/PhotoBoothButtons";
 import {
@@ -96,7 +96,7 @@ export function PhotoBoothRedoPhoto() {
 
       <View pointerEvents="box-none" style={styles.overlay}>
         {!isBoothRunning && (
-          <View style={[globalStyles.largeWidget, { top }]}>
+          <View style={[padding.largeWidget, { top }]}>
             <View style={styles.headerContent}>
               <Text type="header" color={colors.white}>
                 Photo Booth

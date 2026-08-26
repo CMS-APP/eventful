@@ -8,7 +8,7 @@ import * as ImagePicker from "expo-image-picker";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { Photo } from "@/types/Photo";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
@@ -190,7 +190,7 @@ export function UploadPhoto({
 
 const styles = StyleSheet.create({
   addButton: {
-    ...globalStyles.mediumWidget,
+    ...padding.mediumWidget,
     alignItems: "center",
     backgroundColor: colors.white,
     borderColor: colors.primary + "33",

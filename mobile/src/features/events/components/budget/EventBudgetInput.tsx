@@ -7,7 +7,7 @@ import {
 
 import { InputAccessory } from "@/design-system/components/InputAccessory";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 
 interface EventBudgetInputProps {
   placeholder: string;
@@ -40,7 +40,7 @@ export function EventBudgetInput({
           placeholder={placeholder}
           placeholderTextColor={colors.lightGray}
           style={[
-            globalStyles.smallWidget,
+            padding.smallWidget,
             styles.textInput,
             {
               backgroundColor: colors.primaryTint,

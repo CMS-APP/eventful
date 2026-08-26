@@ -9,7 +9,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { AccountStackParamList } from "@/features/app/navigationTypes";
 import { syncUserPicture } from "@/services/cache";
 import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
@@ -192,7 +192,7 @@ export function EventInviteUserItem({
               <FontAwesome5 name="user" size={20} color={colors.black} />
             </View>
           )}
-          <View style={[globalStyles.smallWidget, styles.userInfo]}>
+          <View style={[padding.smallWidget, styles.userInfo]}>
             <Text type="subHeader" style={styles.userName}>
               {user.name}
             </Text>

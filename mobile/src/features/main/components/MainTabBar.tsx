@@ -8,8 +8,8 @@ import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { NavigationState, StackActions } from "@react-navigation/native";
 
 import { colors } from "@/design-system/tokens/colors";
-import { useSafeAreaStyles } from "@/design-system/tokens/globalStyles";
 import { MainStackParamList } from "@/features/app/navigationTypes";
+import { useSafeAreaStyles } from "@/hooks/useSafeAreaStyles";
 import { useNotifications } from "@/services/notifications";
 import { UserState } from "@/store/UserSlice";
 import { haptics } from "@/utils/haptics";

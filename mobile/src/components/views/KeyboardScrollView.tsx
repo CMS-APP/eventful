@@ -13,7 +13,7 @@ import {
 } from "react-native";
 
 import { colors } from "@/design-system/tokens/colors";
-import { useSafeAreaStyles } from "@/design-system/tokens/globalStyles";
+import { useSafeAreaStyles } from "@/hooks/useSafeAreaStyles";
 
 export function KeyboardScrollView({
   children,

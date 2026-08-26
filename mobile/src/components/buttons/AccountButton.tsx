@@ -1,19 +1,16 @@
 import { ActivityIndicator } from "react-native-paper";
 import { useSelector } from "react-redux";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 
-import { PulsatingCircle } from "@/components/views/PulsatingCircle";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { syncUserPicture } from "@/services/cache";
-import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { useAccountProfilePicture } from "@/hooks/useAccountProfilePicture";
 import { UserState } from "@/store/UserSlice";
-import { User } from "@/types/User";
 import { AppError } from "@/utils/error";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
@@ -29,38 +26,14 @@ export function AccountButton({
 }: AccountButtonProps) {
   const navigation = useNavigation();
 
-  const userId = useSelector((state: UserState) => state.uid);
   const name = useSelector((state: UserState) => state.name);
   const firstName = useSelector((state: UserState) => state.firstName);
   const lastName = useSelector((state: UserState) => state.lastName);
   const photoBooth = useSelector((state: UserState) => state.photoBooth);
-  const profilePictureHash = useSelector(
-    (state: UserState) => state.profilePictureHash
-  );
   const premium = useSelector((state: UserState) => state.premium);
   const [accountType, setAccountType] = useState<string | null>(null);
 
-  const [image, setImage] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  const syncPicture = useCallback(async () => {
-    setImage(null);
-
-    log("Syncing user picture 1", "info");
-    if (!userId) {
-      setLoading(false);
-      return;
-    }
-
-    const user = await getUserInfo(userId);
-    const imageUri = await syncUserPicture(user as User, true);
-    setImage(imageUri as string);
-    setLoading(false);
-  }, [userId]);
-
-  useEffect(() => {
-    syncPicture();
-  }, [syncPicture, profilePictureHash]);
+  const { image, loading } = useAccountProfilePicture();
 
   function handlePress() {
     navigation.navigate("Account" as never);
@@ -88,11 +61,6 @@ export function AccountButton({
     <View style={styles.container}>
       <TouchableOpacity onPress={handlePress} hitSlop={getHitSlop("medium")}>
         <View style={styles.buttonContainer}>
-          <PulsatingCircle
-            size={40}
-            color={pulseColor}
-            active={photoBooth || premium}
-          />
           <View style={styles.button}>
             {loading ? (
               <ActivityIndicator size="small" color={colors.secondary} />

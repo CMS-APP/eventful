@@ -15,8 +15,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { Button } from "@/design-system/components/Button";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { useAppDimensions } from "@/design-system/tokens/globalStyles";
 import { AppStackParamList } from "@/features/app/navigationTypes";
+import { useAppDimensions } from "@/hooks/useAppDimensions";
 import { haptics } from "@/utils/haptics";
 import { log } from "@/utils/logging";
 

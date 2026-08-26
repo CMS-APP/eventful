@@ -7,7 +7,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { HomeStackParamList } from "@/features/app/navigationTypes";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
@@ -43,7 +43,7 @@ export function HomeUpdateItem({ update }: HomeUpdateItemProps) {
   }
 
   const widgetStyle = [
-    globalStyles.largeWidget,
+    padding.largeWidget,
     styles.container,
     {
       borderWidth: update.read ? 0 : 1

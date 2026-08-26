@@ -5,7 +5,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { AppStackParamList } from "@/features/app/navigationTypes";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
@@ -52,7 +52,7 @@ export function AmazonButton({ type }: AmazonButtonProps) {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    ...globalStyles.largeWidget,
+    ...padding.largeWidget,
     alignItems: "center",
     backgroundColor: colors.lightGray,
     flexDirection: "row",

@@ -2,7 +2,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { Subscription } from "@/types/Subscription";
 import { getHitSlop } from "@/utils/hitSlop";
 
@@ -59,7 +59,7 @@ export function SubscriptionButton({
 
 const styles = StyleSheet.create({
   button: {
-    ...globalStyles.largeWidget,
+    ...padding.largeWidget,
     alignItems: "flex-start",
     borderWidth: 4,
     flex: 1,

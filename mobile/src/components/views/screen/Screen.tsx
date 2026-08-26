@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 import { colors } from "@/design-system/tokens/colors";
-import { useSafeAreaStyles } from "@/design-system/tokens/globalStyles";
+import { useSafeAreaStyles } from "@/hooks/useSafeAreaStyles";
 
 import { AccountButton } from "../../buttons/AccountButton";
 import { FootNote } from "../Footnote";

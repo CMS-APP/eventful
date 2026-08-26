@@ -13,7 +13,7 @@ import { PanSnapScrollHint } from "@/components/views/panSnap/PanSnapScrollHint"
 import { Screen } from "@/components/views/screen/Screen";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { useAppDimensions } from "@/design-system/tokens/globalStyles";
+import { useAppDimensions } from "@/hooks/useAppDimensions";
 
 import { PhotoBoothColumnCollage } from "../components/result/PhotoBoothColumnCollage";
 import { PhotoBoothGridCollage } from "../components/result/PhotoBoothGridCollage";

@@ -5,7 +5,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
 
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start"
   },
   buttonInner: {
-    ...globalStyles.smallWidget,
+    ...padding.smallWidget,
     alignItems: "center",
     backgroundColor: colors.secondary,
     justifyContent: "center"

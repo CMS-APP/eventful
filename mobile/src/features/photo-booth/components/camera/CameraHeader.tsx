@@ -2,10 +2,8 @@ import { StyleSheet, View } from "react-native";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import {
-  globalStyles,
-  useSafeAreaStyles
-} from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
+import { useSafeAreaStyles } from "@/hooks/useSafeAreaStyles";
 
 import { usePhotoBoothSession } from "../../provider/PhotoBoothSessionProvider";
 import { CameraSelectedCollage } from "./CameraSelectedCollage";
@@ -22,7 +20,7 @@ export function CameraHeader({
   return (
     <View
       style={[
-        globalStyles.largeWidget,
+        padding.largeWidget,
         styles.headerContainer,
         {
           backgroundColor: !isBoothRunning ? colors.black : colors.transparent,

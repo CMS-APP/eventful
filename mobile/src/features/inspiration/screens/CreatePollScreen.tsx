@@ -8,10 +8,11 @@ import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { FlatHeader } from "@/components/views/screen/FlatHeader";
 import { FlatHeaderProps } from "@/components/views/screen/props";
 import { Button } from "@/design-system/components/Button";
+import { Divider } from "@/design-system/components/Divider";
 import { Input } from "@/design-system/components/Input";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import {
   AllStackParamList,
   InspirationStackParamList
@@ -95,7 +96,7 @@ export function CreatePollScreen({ navigation }: CreatePollScreenProps) {
             {pollOptions.map((option, index) => (
               <View
                 key={`option-${index}-${option}`}
-                style={[globalStyles.smallWidget, styles.optionContainer]}
+                style={[padding.smallWidget, styles.optionContainer]}
               >
                 <View style={styles.optionContent}>
                   <Text type="body" style={styles.optionLabel}>
@@ -112,7 +113,7 @@ export function CreatePollScreen({ navigation }: CreatePollScreenProps) {
                   }
                   hitSlop={getHitSlop("medium")}
                 >
-                  <View style={[globalStyles.smallWidget, styles.removeButton]}>
+                  <View style={[padding.smallWidget, styles.removeButton]}>
                     <Text type="body" style={styles.removeButtonText}>
                       Remove
                     </Text>
@@ -121,7 +122,7 @@ export function CreatePollScreen({ navigation }: CreatePollScreenProps) {
               </View>
             ))}
 
-            <View style={globalStyles.divider} />
+            <Divider />
 
             <Input
               placeholder="New Poll Option"
@@ -138,7 +139,7 @@ export function CreatePollScreen({ navigation }: CreatePollScreenProps) {
               onPress={addPollOption}
             />
 
-            <View style={globalStyles.divider} />
+            <Divider />
 
             <Button
               text={"Create New Poll"}

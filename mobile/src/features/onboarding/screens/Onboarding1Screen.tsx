@@ -2,11 +2,11 @@ import { getAuth, signOut } from "@react-native-firebase/auth";
 
 import { useEffect } from "react";
 
-import { StatusBar, View } from "react-native";
+import { StatusBar, StyleSheet, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { colors } from "@/design-system/tokens/colors";
 import {
   AllStackParamList,
   AppStackParamList,
@@ -54,7 +54,7 @@ export function Onboarding1Screen({ navigation }: Onboarding1ScreenProps) {
   }, []);
 
   return (
-    <View style={globalStyles.containerPrimary}>
+    <View style={styles.container}>
       <FeatureView
         image={require("@/assets/onboarding/drinks.png")}
         title="Welcome"
@@ -66,3 +66,10 @@ export function Onboarding1Screen({ navigation }: Onboarding1ScreenProps) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.primary,
+    flex: 1
+  }
+});

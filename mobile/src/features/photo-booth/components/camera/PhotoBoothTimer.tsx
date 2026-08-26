@@ -2,7 +2,7 @@ import { forwardRef, useImperativeHandle, useRef } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { useAppDimensions } from "@/design-system/tokens/globalStyles";
+import { useAppDimensions } from "@/hooks/useAppDimensions";
 
 import { TimerRing, TimerRingHandle } from "./TimerRing";
 

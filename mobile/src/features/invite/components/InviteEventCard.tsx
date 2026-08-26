@@ -10,7 +10,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { AppStackParamList } from "@/features/app/navigationTypes";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import {
@@ -195,7 +195,7 @@ export function InviteEventCard({
 
 const styles = StyleSheet.create({
   container: {
-    ...globalStyles.largeWidget,
+    ...padding.largeWidget,
     backgroundColor: colors.lightGray,
     gap: 12
   },

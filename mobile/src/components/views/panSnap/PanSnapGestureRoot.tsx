@@ -1,9 +1,22 @@
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { runOnJS, useSharedValue, withSpring } from "react-native-reanimated";
 
-import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
 
-import { type LayoutChangeEvent, type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
+import {
+  type LayoutChangeEvent,
+  type StyleProp,
+  StyleSheet,
+  View,
+  type ViewStyle
+} from "react-native";
 
 import { PanSnapContext } from "./panSnapContext";
 
@@ -12,7 +25,6 @@ const SPRING = { damping: 22, stiffness: 220, mass: 0.8 };
 type PanSnapGestureRootProps = {
   children?: ReactNode;
   count: number;
-  /** Clamped to `[0, count - 1]`. Syncs pan offset when layout is known or this value changes. */
   initialIndex?: number;
   onIndexChange?: (index: number) => void;
   style?: StyleProp<ViewStyle>;

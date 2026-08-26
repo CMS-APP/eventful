@@ -4,7 +4,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { getHitSlop } from "@/utils/hitSlop";
 
 interface TimelineButtonProps {
@@ -57,7 +57,7 @@ export function TimelineButton({
 
 const styles = StyleSheet.create({
   button: {
-    ...globalStyles.largeWidget,
+    ...padding.largeWidget,
     backgroundColor: colors.lightGray,
     gap: 12,
     width: "75%"

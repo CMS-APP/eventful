@@ -6,7 +6,6 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
 
 import { Button } from "../../design-system/components/Button";
 
@@ -17,7 +16,7 @@ interface ErrorFallbackProps {
 
 export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
   return (
-    <View style={[globalStyles.container, styles.container]}>
+    <View style={styles.container}>
       <View style={styles.content}>
         <FontAwesome5 name="exclamation-circle" size={64} color={colors.red} />
         <Text type="header" color={colors.red} style={styles.title}>
@@ -63,6 +62,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     backgroundColor: colors.white,
+    flex: 1,
     justifyContent: "center",
     padding: 24
   },

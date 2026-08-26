@@ -14,7 +14,6 @@ import { Input } from "@/design-system/components/Input";
 import { Text } from "@/design-system/components/Text";
 import { TextButton } from "@/design-system/components/TextButton";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
 import { AuthStackParamList } from "@/features/app/navigationTypes";
 import { handleSignUp } from "@/services/firebase/firebaseAuth";
 import { sendVerificationEmail } from "@/services/firebase/firebaseBackend";
@@ -107,7 +106,7 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
   }, [email, password, validateForm, setLoading, navigation]);
 
   return (
-    <View style={globalStyles.container}>
+    <View style={styles.container}>
       <Header title="Sign Up" onLayout={handleHeaderLayout} />
       <HeaderArcs headerHeight={headerHeight} />
 
@@ -190,6 +189,9 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   orContainer: {
     alignItems: "center",
     gap: 4,

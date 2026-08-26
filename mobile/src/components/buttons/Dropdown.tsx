@@ -9,12 +9,10 @@ import {
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
+import { Divider } from "@/design-system/components/Divider";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import {
-  globalStyles,
-  useAppDimensions
-} from "@/design-system/tokens/globalStyles";
+import { useAppDimensions } from "@/hooks/useAppDimensions";
 import { getHitSlop } from "@/utils/hitSlop";
 
 interface DropdownProps {
@@ -99,7 +97,7 @@ export function Dropdown({
                     {item}
                   </Text>
                 </TouchableOpacity>
-                <View style={globalStyles.divider} />
+                <Divider />
               </View>
             ))}
           </ScrollView>

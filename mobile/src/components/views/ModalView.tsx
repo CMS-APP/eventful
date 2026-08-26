@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 
 interface ModalViewProps {
   children: React.ReactNode;
@@ -46,7 +46,7 @@ export function ModalView({
 
 const styles = StyleSheet.create({
   modalContent: {
-    ...globalStyles.largeWidget,
+    ...padding.largeWidget,
     alignItems: "stretch",
     alignSelf: "stretch",
     borderWidth: 0.5,

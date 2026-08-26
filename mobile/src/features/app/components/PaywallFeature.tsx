@@ -4,7 +4,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 
 interface PaywallFeatureProps {
   icon: keyof typeof FontAwesome5.glyphMap;
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     textAlign: "left"
   },
   iconContainer: {
-    ...globalStyles.smallWidget,
+    ...padding.smallWidget,
     alignItems: "center",
     backgroundColor: colors.primaryTint,
     borderRadius: 12,

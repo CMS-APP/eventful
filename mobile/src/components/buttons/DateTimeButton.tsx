@@ -2,7 +2,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { formatDate, formatTime } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
@@ -36,7 +36,7 @@ export function DateTimeButton({
       </Text>
 
       <TouchableOpacity onPress={handlePress} hitSlop={getHitSlop("small")}>
-        <View style={[globalStyles.largeWidget, styles.button]}>
+        <View style={[padding.largeWidget, styles.button]}>
           <Text type="body" italic color={textColor}>
             {type === "Time" ? formatTime(date) : formatDate(date)}
           </Text>

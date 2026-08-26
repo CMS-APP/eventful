@@ -13,7 +13,7 @@ import { Button } from "@/design-system/components/Button";
 import { SwitchButton } from "@/design-system/components/SwitchButton";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import {
   AllStackParamList,
   EventsStackParamList
@@ -170,7 +170,7 @@ export function EventInviteGuestLinkScreen({
     >
       <View style={styles.contentContainer}>
         <View style={styles.linkContainer}>
-          <View style={[globalStyles.smallWidget, styles.disclaimerContainer]}>
+          <View style={[padding.smallWidget, styles.disclaimerContainer]}>
             <Text type="footnote" color="black">
               Disclaimer: This link will allow anyone to RSVP to your event and
               view the event details and anyone with the link will be able to

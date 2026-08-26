@@ -5,7 +5,7 @@ import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { colors } from "@/design-system/tokens/colors";
-import { globalStyles } from "@/design-system/tokens/globalStyles";
+import { padding } from "@/design-system/tokens/padding";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
 
@@ -120,12 +120,12 @@ const styles = StyleSheet.create({
     marginRight: 6
   },
   removeButtonContent: {
-    ...globalStyles.smallWidget,
+    ...padding.smallWidget,
     backgroundColor: colors.lightGray,
     justifyContent: "center"
   },
   textInput: {
-    ...globalStyles.smallWidget,
+    ...padding.smallWidget,
     backgroundColor: colors.lightGray,
     flex: 1,
     fontSize: 12,

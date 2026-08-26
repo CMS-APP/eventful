@@ -71,7 +71,7 @@ const userSlice = createSlice({
     usernameCreateDate: null,
     usernameUpdateDate: null,
     spotify: null,
-    premium: false,
+    premium: __DEV__,
     photoBooth: false
   },
   reducers: {
@@ -121,7 +121,7 @@ const userSlice = createSlice({
       state.profilePictureHash = "";
       state.usernameUpdateDate = null;
       state.spotify = null;
-      state.premium = false;
+      state.premium = __DEV__;
       state.photoBooth = false;
     },
     setPremium: (state, action) => {
