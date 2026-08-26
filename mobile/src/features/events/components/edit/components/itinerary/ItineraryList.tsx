@@ -120,8 +120,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase"
   },
   container: {
-    gap: 12,
-    paddingHorizontal: 24
+    gap: 12
   },
   dayHeader: {
     alignItems: "center",

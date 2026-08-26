@@ -69,32 +69,8 @@ mobile/.vscode/launch.json
 # Vercel
 web/.vercel
 
-# Android (mobile/android)
-mobile/android/build/
-mobile/android/.idea
-mobile/android/.gradle
-mobile/android/local.properties
-mobile/android/*.iml
-mobile/android/*.hprof
-mobile/android/.cxx/
-mobile/android/**/.cxx/
-
-# iOS (mobile/ios)
-mobile/ios/build/
-mobile/ios/*.pbxuser
-!mobile/ios/default.pbxuser
-mobile/ios/*.mode1v3
-!mobile/ios/default.mode1v3
-mobile/ios/*.mode2v3
-!mobile/ios/default.mode2v3
-mobile/ios/*.perspectivev3
-!mobile/ios/default.perspectivev3
-mobile/ios/xcuserdata
-mobile/ios/*.xccheckout
-mobile/ios/*.moved-aside
-mobile/ios/DerivedData
-mobile/ios/*.hmap
-mobile/ios/*.xcuserstate
-mobile/ios/project.xcworkspace
-mobile/ios/.xcode.env.local
-mobile/ios/Pods/
+# Android and iOS (mobile/android, mobile/ios) — Continuous Native Generation:
+# these are build artifacts regenerated from mobile/app.config.ts via
+# `expo prebuild`, never committed. See mobile/scripts/deploy.sh.
+mobile/android/
+mobile/ios/

@@ -2,7 +2,7 @@
 set -e
 
 # Prebuild the app (development variant — separate bundle ID/name from production)
-APP_VARIANT=development npx expo prebuild
+APP_VARIANT=development npx expo prebuild --clean
 
 # Create Development Build
 echo "📦 Building iOS Development App..."

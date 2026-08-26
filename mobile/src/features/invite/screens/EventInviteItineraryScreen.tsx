@@ -32,17 +32,17 @@ export function EventInviteItineraryScreen({ route }: Props) {
         _handleScroll={() => {}}
         backgroundColor={colors.primary}
       >
-        <View style={styles.headerContainer}>
+        <View style={styles.contents}>
           <FlatHeader {...headerConfig} />
-        </View>
 
-        <ItineraryList
-          event={event}
-          itinerary={event.itinerary || []}
-          onActivityPress={() => {}}
-          theme="light"
-          disabled={true}
-        />
+          <ItineraryList
+            event={event}
+            itinerary={event.itinerary || []}
+            onActivityPress={() => {}}
+            theme="light"
+            disabled={true}
+          />
+        </View>
       </KeyboardScrollView>
     </View>
   );
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     flex: 1
   },
-  headerContainer: {
-    paddingTop: 24
+  contents: {
+    padding: 24
   }
 });

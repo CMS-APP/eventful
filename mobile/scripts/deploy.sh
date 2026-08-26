@@ -21,6 +21,11 @@ else
   exit 1
 fi
 
+# ios/ and android/ are regenerated from app.config.ts via `expo prebuild` below.
+# Make sure no dev-variant env var leaks in from the calling shell (e.g. left over
+# from ios-dev-build.sh/android-dev-build.sh in the same terminal session).
+unset APP_VARIANT
+
 if [ "$(git branch --show-current)" != "main" ]; then
   echo "❌ Not on the main branch! Please checkout the main branch and try again."
   exit 1
@@ -154,27 +159,24 @@ if [ "$BUILD_ANDROID" = true ]; then
 fi
 
 # ----------------------------
-# Update iOS native version files (if building iOS)
+# Regenerate native projects from app.config.ts
 # ----------------------------
+# ios/ and android/ are not committed to git — they're build artifacts. Prebuild
+# here regenerates them from app.config.ts + config plugins so bundle ID, app name,
+# and version numbers can never drift from what's declared in app.config.ts (this is
+# what caused the dev bundle ID to leak into a production build previously: a stray
+# `APP_VARIANT=development expo prebuild` got committed and nothing ever regenerated
+# the native projects to reconcile it).
 if [ "$BUILD_IOS" = true ]; then
-  echo "🔧 Updating iOS native version files..."
-  # Update MARKETING_VERSION and CURRENT_PROJECT_VERSION in Xcode project (both Debug and Release)
-  sed -i '' "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = $NEW_VERSION;/g" ios/Eventful.xcodeproj/project.pbxproj
-  sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = $NEW_IOS_BUILD/g" ios/Eventful.xcodeproj/project.pbxproj
-  # Update Info.plist (used by the built app)
-  sed -i '' "/<key>CFBundleShortVersionString<\/key>/{n;s#<string>.*</string>#<string>$NEW_VERSION</string>#;}" ios/Eventful/Info.plist
-  sed -i '' "/<key>CFBundleVersion<\/key>/{n;s#<string>.*</string>#<string>$NEW_IOS_BUILD</string>#;}" ios/Eventful/Info.plist
-  echo "✅ Updated iOS to version $NEW_VERSION, build $NEW_IOS_BUILD"
+  echo "🔧 Regenerating iOS native project (version $NEW_VERSION, build $NEW_IOS_BUILD)..."
+  npx expo prebuild --clean --platform ios
+  echo "✅ iOS native project regenerated"
 fi
 
-# ----------------------------
-# Update Android native version files (if building Android)
-# ----------------------------
 if [ "$BUILD_ANDROID" = true ]; then
-  echo "🔧 Updating Android native version files..."
-  sed -i '' "s/versionCode [0-9]*/versionCode $NEW_ANDROID_BUILD/" android/app/build.gradle
-  sed -i '' "s/versionName \"[^\"]*\"/versionName \"$NEW_VERSION\"/" android/app/build.gradle
-  echo "✅ Updated Android to version $NEW_VERSION, versionCode $NEW_ANDROID_BUILD"
+  echo "🔧 Regenerating Android native project (version $NEW_VERSION, versionCode $NEW_ANDROID_BUILD)..."
+  npx expo prebuild --clean --platform android
+  echo "✅ Android native project regenerated"
 fi
 
 # Initialize duration variables
