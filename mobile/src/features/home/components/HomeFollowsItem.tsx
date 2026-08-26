@@ -5,17 +5,18 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Text } from "@/components/text/Text";
 import { FollowButton } from "@/components/views/FollowButton";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import { AccountStackParamList } from "@/features/app/navigationTypes";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { Notification } from "@/types/Notification";
 import { User } from "@/types/User";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
+import { log } from "@/utils/logging";
 
 interface HomeFollowsItemProps {
   notification: Notification;
@@ -27,6 +28,7 @@ export function HomeFollowsItem({ notification }: HomeFollowsItemProps) {
 
   useEffect(() => {
     async function fetchUserDetails() {
+      log("Fetching user details", "info");
       const userDetails = await getUserInfo(notification.senderId);
       setUserDetails(userDetails);
     }

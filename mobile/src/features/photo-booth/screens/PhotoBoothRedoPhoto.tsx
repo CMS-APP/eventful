@@ -13,9 +13,9 @@ import {
 
 import { CameraView, PhotoResult } from "expo-camera";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 
 import { PhotoBoothButtons } from "../components/camera/PhotoBoothButtons";
 import {

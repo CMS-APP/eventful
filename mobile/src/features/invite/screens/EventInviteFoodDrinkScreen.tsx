@@ -4,12 +4,12 @@ import { StyleSheet, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { Input } from "@/components/inputs/Input";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { FlatHeader } from "@/components/views/screen/FlatHeader";
+import { Input } from "@/design-system/components/Input";
+import { colors } from "@/design-system/tokens/colors";
 import { EventInviteStackParamList } from "@/features/app/navigationTypes";
 import { updateResponseInDatabase } from "@/services/firebase/firebaseInviteFunctions";
-import { colors } from "@/styles/colors";
 import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 

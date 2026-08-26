@@ -4,7 +4,7 @@ import { StyleSheet, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
 
 import type { PhotoBoothStackNavigation } from "../../photoBoothStackParams";
 import { usePhotoBoothCamera } from "../../provider/PhotoBoothCameraProvider";

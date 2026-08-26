@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 
+import { colors } from "@/design-system/tokens/colors";
 import { SemiCircleProgressBar } from "@/features/home/components/SemiCircleProgressBar";
-import { colors } from "@/styles/colors";
 
 interface TimelineTopProps {
   percentageComplete: number;

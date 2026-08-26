@@ -12,6 +12,7 @@ export async function getLoginNames() {
     );
   }
 
+  log("Getting user details", "info");
   const userDetails = await getUserInfo(user?.uid);
   if (userDetails?.appleOnboardingName) {
     log("Apple onboarding name found for user " + user?.uid, "info");

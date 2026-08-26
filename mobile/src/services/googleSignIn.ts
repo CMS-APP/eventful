@@ -10,8 +10,7 @@ export function initializeGoogleSignin(): void {
   }
 
   GoogleSignin.configure({
-    webClientId: socialAuthConfig.google.webClientId,
-    iosClientId: socialAuthConfig.google.iosClientId
+    webClientId: socialAuthConfig.google.webClientId
   });
 
   initialized = true;

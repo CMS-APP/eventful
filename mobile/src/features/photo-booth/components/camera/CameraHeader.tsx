@@ -1,8 +1,11 @@
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { globalStyles, useSafeAreaStyles } from "@/styles/globalStyles";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import {
+  globalStyles,
+  useSafeAreaStyles
+} from "@/design-system/tokens/globalStyles";
 
 import { usePhotoBoothSession } from "../../provider/PhotoBoothSessionProvider";
 import { CameraSelectedCollage } from "./CameraSelectedCollage";

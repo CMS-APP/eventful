@@ -2,10 +2,10 @@ import React, { useCallback } from "react";
 
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 
-import { InputAccessory } from "@/components/inputs/InputAccessory";
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
+import { InputAccessory } from "@/design-system/components/InputAccessory";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import { BudgetItem } from "@/types/BudgetItem";
 import { getCurrencySymbolForDevice } from "@/utils/currency";
 import { haptics } from "@/utils/haptics";

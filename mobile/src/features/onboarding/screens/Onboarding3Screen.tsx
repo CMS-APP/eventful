@@ -2,8 +2,8 @@ import { View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import { OnboardingStackParamList } from "@/features/app/navigationTypes";
-import { globalStyles } from "@/styles/globalStyles";
 
 import { FeatureView } from "../components/FeatureView";
 import { OnboardingButtons } from "../components/OnboardingButtons";
@@ -12,9 +12,7 @@ interface Onboarding3ScreenProps {
   navigation: StackNavigationProp<OnboardingStackParamList>;
 }
 
-export function Onboarding3Screen({
-  navigation
-}: Onboarding3ScreenProps) {
+export function Onboarding3Screen({ navigation }: Onboarding3ScreenProps) {
   async function handleNext() {
     navigation.navigate("OnboardingNameInput");
   }

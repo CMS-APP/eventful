@@ -19,6 +19,7 @@ import {
   ILoadingModalContext,
   useLoadingModal
 } from "@/contexts/LoadingProviderContext";
+import { colors } from "@/design-system/tokens/colors";
 import { AllStackParamList } from "@/features/app/navigationTypes";
 import {
   computeImageHash,
@@ -35,7 +36,6 @@ import {
   updateUserInfo
 } from "@/services/firebase/firebaseUserFunctions";
 import { UserState, setProfilePictureHash } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { User } from "@/types/User";
 import { AppError } from "@/utils/error";
 import { haptics } from "@/utils/haptics";
@@ -57,6 +57,14 @@ export function AccountPicture() {
 
   const syncPicture = useCallback(async () => {
     setImage(null);
+
+    log("Syncing user picture 3", "info");
+    if (!userId) {
+      setLoading(false);
+      setImageLoading(false);
+      return;
+    }
+
     const user = (await getUserInfo(userId)) as User;
     const imageUri = await syncUserPicture(user, true);
     setImage(imageUri as string);

@@ -3,9 +3,9 @@ import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Button } from "@/components/buttons/Button";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import { AppStackParamList } from "@/features/app/navigationTypes";
-import { colors } from "@/styles/colors";
 
 import { AllStackParamList } from "../navigationTypes";
 
@@ -35,7 +35,7 @@ export function PaywallButtons({
         textColor={colors.white}
         icon="credit-card"
         disabled={isSubscribing}
-        pulsating={true}
+        loading={isSubscribing}
       />
 
       <View style={styles.buttonContainer}>

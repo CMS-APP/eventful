@@ -2,9 +2,9 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { IconButton } from "@/components/buttons/IconButton";
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
+import { IconButton } from "@/design-system/components/IconButton";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
 

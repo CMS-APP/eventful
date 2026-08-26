@@ -4,13 +4,13 @@ import { useCallback, useState } from "react";
 
 import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
+import { ModalView } from "@/components/views/ModalView";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
 
-import { Button } from "../buttons/Button";
-import { ModalView } from "../views/ModalView";
+import { Button } from "../../design-system/components/Button";
 
 interface DateTimeSelectorProps {
   date: Date;

@@ -7,13 +7,13 @@ import { StyleSheet, TextInput, View } from "react-native";
 
 import { RouteProp } from "@react-navigation/native";
 
-import { Text } from "@/components/text/Text";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { Screen } from "@/components/views/screen/Screen";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { ContactsStackParamList } from "@/features/app/navigationTypes";
 import { ProfileButton } from "@/features/profile/components/ProfileButton";
 import { userSearch } from "@/services/firebase/firebaseBackend";
-import { colors } from "@/styles/colors";
 import { User } from "@/types/User";
 import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";

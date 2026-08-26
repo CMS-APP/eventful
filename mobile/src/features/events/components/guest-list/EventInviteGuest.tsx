@@ -9,16 +9,16 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { Screen } from "@/components/views/screen/Screen";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import {
   AllStackParamList,
   EventsStackParamList,
   MainStackParamList
 } from "@/features/app/navigationTypes";
 import { ContactsSearch } from "@/features/contacts/components/ContactsSearch";
-import { colors } from "@/styles/colors";
 import { User } from "@/types/User";
 
 import { useEventInviteFollowing } from "../../hooks/useEventInviteFollowing";

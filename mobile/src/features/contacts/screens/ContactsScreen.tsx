@@ -3,11 +3,11 @@ import { StyleSheet, View } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { Screen } from "@/components/views/screen/Screen";
+import { colors } from "@/design-system/tokens/colors";
 import {
   AllStackParamList,
   ContactsStackParamList
 } from "@/features/app/navigationTypes";
-import { colors } from "@/styles/colors";
 import { haptics } from "@/utils/haptics";
 import { useScreenStatusBar } from "@/utils/statusBar";
 

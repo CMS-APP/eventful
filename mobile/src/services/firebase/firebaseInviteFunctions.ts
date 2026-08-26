@@ -193,6 +193,7 @@ export async function updateResponseInDatabase(
       data.response === "decline" ||
       data.response === "maybe"
     ) {
+      log("Updating invite response in database", "info");
       const userDetails = await getUserInfo(invite.recipient);
       const eventDetails = await getEventInfo({ id: invite.eventId } as Event);
 
@@ -373,6 +374,7 @@ export async function getRSVPAppUsers(event: Event): Promise<UserInvite[]> {
         }
 
         invite.type = "app";
+        log("Getting user details for invite", "info");
         const userDetails = await getUserInfo(invite.recipient);
 
         if (!userDetails) {
@@ -514,6 +516,7 @@ export async function getEventInvites(event: Event): Promise<UserInvite[]> {
   )) as Invite[];
   const userInvites: UserInvite[] = [];
   for (const invite of invites) {
+    log("Getting user details for invite", "info");
     const user = await getUserInfo(invite.recipient);
     if (user) {
       userInvites.push({ user, invite });
@@ -533,6 +536,7 @@ export async function getEventResponses(event: Event): Promise<UserInvite[]> {
   )) as Invite[];
   const invitePromises = invites.map(async (invite: Invite) => {
     if (invite.response === "accept") {
+      log("Getting user details for invite", "info");
       const user = await getUserInfo(invite.recipient);
       if (user) {
         return { invite, user };

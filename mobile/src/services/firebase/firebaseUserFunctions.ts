@@ -29,6 +29,7 @@ import { PB_CONFIG, PhotoBoothConfig } from "@/types/PhotoBoothConfig";
 import { PollVote } from "@/types/PollVote";
 import { User } from "@/types/User";
 import { AppError } from "@/utils/error";
+import { log } from "@/utils/logging";
 import { sendFollowNotification } from "@/utils/notifications";
 
 import { FIRESTORE_DB } from "./firebase";
@@ -49,6 +50,7 @@ export function convertTimestampsToMillis(user: User) {
 }
 
 export async function getUserInfo(userId: string): Promise<User | null> {
+  log("Getting user info", "info");
   const userData = await getDocument(API_COLLECTIONS.USER, userId);
 
   if (userData) {
@@ -628,6 +630,7 @@ export async function getUsersFromFollowing(
   type: string
 ) {
   try {
+    log("Getting users from following", "info");
     const users = await Promise.all(
       following.map(
         async (follower) =>

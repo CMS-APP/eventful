@@ -16,7 +16,7 @@ ENV['RCT_NEW_ARCH_ENABLED'] ||= '0' if podfile_properties['newArchEnabled'] == '
 ENV['EX_DEV_CLIENT_NETWORK_INSPECTOR'] ||= podfile_properties['EX_DEV_CLIENT_NETWORK_INSPECTOR']
 ENV['RCT_USE_RN_DEP'] ||= '1' if podfile_properties['ios.buildReactNativeFromSource'] != 'true' && podfile_properties['newArchEnabled'] != 'false'
 ENV['RCT_USE_PREBUILT_RNCORE'] ||= '1' if podfile_properties['ios.buildReactNativeFromSource'] != 'true' && podfile_properties['newArchEnabled'] != 'false'
-platform :ios, podfile_properties['ios.deploymentTarget'] || '16.0'
+platform :ios, podfile_properties['ios.deploymentTarget'] || '15.1'
 
 prepare_react_native_project!
 
@@ -27,7 +27,10 @@ target 'Eventful' do
     config_command = ['node', '-e', "process.argv=['', '', 'config'];require('@react-native-community/cli').run()"];
   else
     config_command = [
-      'npx',
+      'node',
+      '--no-warnings',
+      '--eval',
+      'require(\'expo/bin/autolinking\')',
       'expo-modules-autolinking',
       'react-native-config',
       '--json',
@@ -56,27 +59,5 @@ target 'Eventful' do
       :mac_catalyst_enabled => false,
       :ccache_enabled => ccache_enabled?(podfile_properties),
     )
-
-    installer.pods_project.targets.each do |target|
-      next unless target.name == 'fmt'
-
-      target.build_configurations.each do |build_configuration|
-        definitions = build_configuration.build_settings['GCC_PREPROCESSOR_DEFINITIONS']
-        definitions = ['$(inherited)'] if definitions.nil?
-        definitions = [definitions] if definitions.is_a?(String)
-        definitions << 'FMT_USE_CONSTEVAL=0' unless definitions.include?('FMT_USE_CONSTEVAL=0')
-        definitions << 'FMT_USE_CONSTEXPR=0' unless definitions.include?('FMT_USE_CONSTEXPR=0')
-        build_configuration.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = definitions
-
-        cxxflags = build_configuration.build_settings['OTHER_CPLUSPLUSFLAGS']
-        cxxflags = ['$(inherited)'] if cxxflags.nil?
-        cxxflags = [cxxflags] if cxxflags.is_a?(String)
-        cxxflags << '-DFMT_USE_CONSTEVAL=0' unless cxxflags.include?('-DFMT_USE_CONSTEVAL=0')
-        cxxflags << '-DFMT_USE_CONSTEXPR=0' unless cxxflags.include?('-DFMT_USE_CONSTEXPR=0')
-        cxxflags << '-Wno-invalid-constexpr' unless cxxflags.include?('-Wno-invalid-constexpr')
-        build_configuration.build_settings['OTHER_CPLUSPLUSFLAGS'] = cxxflags
-        build_configuration.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'gnu++17'
-      end
-    end
   end
 end

@@ -2,9 +2,9 @@ import { useCallback } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { Input } from "@/components/inputs/Input";
+import { Input } from "@/design-system/components/Input";
+import { colors } from "@/design-system/tokens/colors";
 import { SpotifyPlaylists } from "@/features/events/components/music/SpotifyPlaylists";
-import { colors } from "@/styles/colors";
 import { Event } from "@/types/Event";
 
 interface EventMusicEditProps {

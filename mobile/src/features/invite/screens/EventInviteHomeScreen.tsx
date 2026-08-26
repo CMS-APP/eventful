@@ -8,14 +8,14 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { Entypo } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { textFormatter } from "@/design-system/tokens/fonts";
 import { EventInviteStackParamList } from "@/features/app/navigationTypes";
 import { ResponseButtonIcon } from "@/features/events/components/invite/ResponseButtonIcon";
 import { updateResponseInDatabase } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { textFormatter } from "@/styles/fonts";
 import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 import { updateResponseNotification } from "@/utils/notifications";

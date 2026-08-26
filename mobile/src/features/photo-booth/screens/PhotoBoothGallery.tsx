@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 
 import { Screen } from "@/components/views/screen/Screen";
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
 
 import { GalleryEventList } from "../components/gallery/GalleryEventList";
 

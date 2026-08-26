@@ -7,8 +7,8 @@ import {
   View
 } from "react-native";
 
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 
 interface ModalViewProps {
   children: React.ReactNode;

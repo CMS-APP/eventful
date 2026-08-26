@@ -2,7 +2,7 @@ import { forwardRef, useImperativeHandle, useRef } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { useAppDimensions } from "@/styles/globalStyles";
+import { useAppDimensions } from "@/design-system/tokens/globalStyles";
 
 import { TimerRing, TimerRingHandle } from "./TimerRing";
 
@@ -46,7 +46,7 @@ const PhotoBoothTimer = forwardRef<PhotoBoothTimerHandle, PhotoBoothTimerProps>(
   }
 );
 
-export { PhotoBoothTimer }
+export { PhotoBoothTimer };
 
 const styles = StyleSheet.create({
   wrap: {

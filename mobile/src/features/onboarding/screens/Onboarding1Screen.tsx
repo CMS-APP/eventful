@@ -6,12 +6,12 @@ import { StatusBar, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import {
   AllStackParamList,
   AppStackParamList,
   OnboardingStackParamList
 } from "@/features/app/navigationTypes";
-import { globalStyles } from "@/styles/globalStyles";
 import { AppError } from "@/utils/error";
 
 import { FeatureView } from "../components/FeatureView";
@@ -21,9 +21,7 @@ interface Onboarding1ScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;
 }
 
-export function Onboarding1Screen({
-  navigation
-}: Onboarding1ScreenProps) {
+export function Onboarding1Screen({ navigation }: Onboarding1ScreenProps) {
   async function handleExit() {
     try {
       const auth = getAuth();

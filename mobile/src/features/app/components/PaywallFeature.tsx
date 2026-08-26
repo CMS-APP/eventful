@@ -2,9 +2,9 @@ import { StyleSheet, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 
 interface PaywallFeatureProps {
   icon: keyof typeof FontAwesome5.glyphMap;

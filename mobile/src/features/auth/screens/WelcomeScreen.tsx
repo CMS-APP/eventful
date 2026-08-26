@@ -2,13 +2,16 @@ import { Image, Platform, StyleSheet, View } from "react-native";
 
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { Button } from "@/components/buttons/Button";
-import { TextButton } from "@/components/buttons/TextButton";
-import { Text } from "@/components/text/Text";
 import { Background } from "@/components/views/Background";
+import { Button } from "@/design-system/components/Button";
+import { Text } from "@/design-system/components/Text";
+import { TextButton } from "@/design-system/components/TextButton";
+import { colors } from "@/design-system/tokens/colors";
+import {
+  globalStyles,
+  useSafeAreaStyles
+} from "@/design-system/tokens/globalStyles";
 import { AuthStackParamList } from "@/features/app/navigationTypes";
-import { colors } from "@/styles/colors";
-import { globalStyles, useSafeAreaStyles } from "@/styles/globalStyles";
 import { log } from "@/utils/logging";
 
 import { AppleLogin } from "../components/AppleLogin";

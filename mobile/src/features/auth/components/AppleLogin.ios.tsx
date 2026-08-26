@@ -9,13 +9,13 @@ import { useDispatch } from "react-redux";
 
 import React from "react";
 
-import { Button } from "@/components/buttons/Button";
 import {
   ILoadingModalContext,
   useLoadingModal
 } from "@/contexts/LoadingProviderContext";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import { appInit } from "@/services/initialisation/appInit";
-import { colors } from "@/styles/colors";
 import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 import { navigationRef } from "@/utils/navigation";

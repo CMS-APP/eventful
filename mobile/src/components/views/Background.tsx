@@ -2,7 +2,7 @@ import React from "react";
 
 import { ImageBackground, StyleSheet, View } from "react-native";
 
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
 
 interface BackgroundProps {
   page?: string;

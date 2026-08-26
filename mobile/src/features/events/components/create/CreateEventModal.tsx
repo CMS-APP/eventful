@@ -8,14 +8,14 @@ import { Animated } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Button } from "@/components/buttons/Button";
-import { Input } from "@/components/inputs/Input";
-import { Text } from "@/components/text/Text";
 import { ModalView } from "@/components/views/ModalView";
+import { Button } from "@/design-system/components/Button";
+import { Input } from "@/design-system/components/Input";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { EventsStackParamList } from "@/features/app/navigationTypes";
 import { createEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Event, NewEvent } from "@/types/Event";
 import { AppError } from "@/utils/error";
 
@@ -72,7 +72,9 @@ export function CreateEventModal({
       backgroundColor={colors.primary}
       borderColor={colors.lightGray + "40"}
     >
-      <Text type="header" color="white">Create New Event</Text>
+      <Text type="header" color="white">
+        Create New Event
+      </Text>
 
       <Input
         placeholder="Event Name"

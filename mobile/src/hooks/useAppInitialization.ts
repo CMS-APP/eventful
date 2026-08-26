@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 import { useFonts } from "expo-font";
 
-import { fonts } from "@/styles/fonts";
+import { fonts } from "@/design-system/tokens/fonts";
 import { AppError } from "@/utils/error";
 import { fetchUpdate } from "@/utils/expoUpdate";
 

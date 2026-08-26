@@ -1,9 +1,9 @@
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
 import { Divider } from "@/components/views/Divider";
 import { Screen } from "@/components/views/screen/Screen";
-import { colors } from "@/styles/colors";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 
 import { ColorButton } from "../components/customise/ColorButton";
 import { CustomiseText } from "../components/customise/CustomiseText";

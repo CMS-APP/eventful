@@ -7,11 +7,11 @@ import { Animated, StyleSheet, TouchableOpacity, View } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { NavigationState, StackActions } from "@react-navigation/native";
 
+import { colors } from "@/design-system/tokens/colors";
+import { useSafeAreaStyles } from "@/design-system/tokens/globalStyles";
 import { MainStackParamList } from "@/features/app/navigationTypes";
 import { useNotifications } from "@/services/notifications";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { useSafeAreaStyles } from "@/styles/globalStyles";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
 

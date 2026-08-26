@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { StyleSheet, TextStyle, View } from "react-native";
 
 import { Dropdown } from "@/components/buttons/Dropdown";
-import { fontStyles } from "@/styles/fonts";
+import { fontStyles } from "@/design-system/tokens/fonts";
 
 import { usePhotoBoothSettings } from "../../provider/PhotoBoothSettingsProvider";
 import { CustomiseTextRow } from "./CustomiseTextRow";

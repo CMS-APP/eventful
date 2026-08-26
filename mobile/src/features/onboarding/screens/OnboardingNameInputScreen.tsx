@@ -11,9 +11,11 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Input } from "@/components/inputs/Input";
-import { Text } from "@/components/text/Text";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
+import { Input } from "@/design-system/components/Input";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { useSafeAreaStyles } from "@/design-system/tokens/globalStyles";
 import { OnboardingStackParamList } from "@/features/app/navigationTypes";
 import { API_COLLECTIONS } from "@/services/api/constants";
 import { createDocument } from "@/services/api/create";
@@ -24,8 +26,6 @@ import {
   createUserInfo
 } from "@/services/firebase/firebaseUserFunctions";
 import { UserState, setUserData } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { useSafeAreaStyles } from "@/styles/globalStyles";
 import { User } from "@/types/User";
 import { AppError } from "@/utils/error";
 import { capitalize, checkNames, checkUsernameValid } from "@/utils/regex";

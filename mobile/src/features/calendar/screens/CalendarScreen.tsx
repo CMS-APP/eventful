@@ -1,5 +1,5 @@
 import { Screen } from "@/components/views/screen/Screen";
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
 
 import { Calendar } from "../components/Calendar";
 

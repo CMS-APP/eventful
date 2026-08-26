@@ -9,17 +9,18 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
 import { UserPicture } from "@/components/views/UserPicture";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { AppStackParamList } from "@/features/app/navigationTypes";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { EventInvite } from "@/types/EventInvite";
 import { User } from "@/types/User";
 import { parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
+import { log } from "@/utils/logging";
 
 interface ContactInviteItemProps {
   eventInvite: EventInvite;
@@ -37,6 +38,7 @@ export function ContactInviteItem({ eventInvite }: ContactInviteItemProps) {
       return;
     }
 
+    log("Viewing event", "info");
     const host = (await getUserInfo(event.userId)) as User;
     haptics.soft();
 

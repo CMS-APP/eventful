@@ -10,8 +10,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { AppButtonSwitcher } from "@/components/buttons/AppButtonSwitcher";
-import { Input } from "@/components/inputs/Input";
 import { Screen } from "@/components/views/screen/Screen";
+import { Input } from "@/design-system/components/Input";
+import { colors } from "@/design-system/tokens/colors";
 import {
   AllStackParamList,
   EventsStackParamList
@@ -19,7 +20,6 @@ import {
 import { EventInviteUserItem } from "@/features/events/components/guest-list/EventInviteUserItem";
 import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Event } from "@/types/Event";
 import { Guest } from "@/types/Guest";
 import { Invite } from "@/types/Invite";

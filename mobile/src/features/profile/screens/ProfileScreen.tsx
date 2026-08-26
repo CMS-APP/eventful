@@ -4,12 +4,12 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { Screen } from "@/components/views/screen/Screen";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import {
   AllStackParamList,
   ProfileStackParamList
 } from "@/features/app/navigationTypes";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 
 import { ProfileInvites } from "../components/ProfileInvites";
 import { ProfileTop } from "../components/ProfileTop";

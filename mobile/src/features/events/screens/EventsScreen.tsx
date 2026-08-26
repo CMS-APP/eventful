@@ -6,14 +6,14 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AppButtonSwitcher } from "@/components/buttons/AppButtonSwitcher";
-import { IconButton } from "@/components/buttons/IconButton";
 import { Screen } from "@/components/views/screen/Screen";
+import { IconButton } from "@/design-system/components/IconButton";
+import { colors } from "@/design-system/tokens/colors";
 import {
   AllStackParamList,
   EventsStackParamList
 } from "@/features/app/navigationTypes";
 import { getData, saveData } from "@/services/async";
-import { colors } from "@/styles/colors";
 import { useScreenStatusBar } from "@/utils/statusBar";
 
 import { CreateEventModal } from "../components/create/CreateEventModal";

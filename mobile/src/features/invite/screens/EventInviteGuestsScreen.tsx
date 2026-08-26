@@ -4,9 +4,9 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { FlatHeader } from "@/components/views/screen/FlatHeader";
+import { colors } from "@/design-system/tokens/colors";
 import { EventInviteStackParamList } from "@/features/app/navigationTypes";
 import { EventGuestListInvited } from "@/features/events/components/guest-list/EventGuestListInvited";
-import { colors } from "@/styles/colors";
 
 import { InviteLinkGuests } from "../components/InviteLinkGuests";
 

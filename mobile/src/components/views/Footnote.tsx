@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
 
 interface FootNoteProps {
   icon?: keyof typeof FontAwesome5.glyphMap;

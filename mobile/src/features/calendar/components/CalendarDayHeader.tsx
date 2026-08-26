@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
+import { Text } from "@/design-system/components/Text";
 
 export function CalendarDayHeader() {
   const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];

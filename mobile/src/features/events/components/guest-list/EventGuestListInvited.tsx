@@ -6,8 +6,8 @@ import { StyleSheet, View } from "react-native";
 
 import { useFocusEffect } from "@react-navigation/native";
 
-import { Text } from "@/components/text/Text";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
+import { Text } from "@/design-system/components/Text";
 import { getInvitedGuests } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";

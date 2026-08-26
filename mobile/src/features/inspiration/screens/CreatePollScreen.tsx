@@ -4,19 +4,19 @@ import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Button } from "@/components/buttons/Button";
-import { Input } from "@/components/inputs/Input";
-import { Text } from "@/components/text/Text";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { FlatHeader } from "@/components/views/screen/FlatHeader";
 import { FlatHeaderProps } from "@/components/views/screen/props";
+import { Button } from "@/design-system/components/Button";
+import { Input } from "@/design-system/components/Input";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import {
   AllStackParamList,
   InspirationStackParamList
 } from "@/features/app/navigationTypes";
 import { createPollInDatabase } from "@/services/firebase/firebaseInspirationFunctions";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { getHitSlop } from "@/utils/hitSlop";
 
 interface CreatePollScreenProps {

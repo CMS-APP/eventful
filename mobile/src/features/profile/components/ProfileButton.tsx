@@ -8,15 +8,16 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Text } from "@/components/text/Text";
 import { FollowButton } from "@/components/views/FollowButton";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import { HomeStackParamList } from "@/features/app/navigationTypes";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { User } from "@/types/User";
 import { getHitSlop } from "@/utils/hitSlop";
+import { log } from "@/utils/logging";
 
 import { ProfilePicture } from "./ProfilePicture";
 
@@ -30,6 +31,7 @@ export function ProfileButton({ uid }: ProfileButtonProps) {
   const navigation = useNavigation() as StackNavigationProp<HomeStackParamList>;
 
   async function fetchUser() {
+    log("Fetching user details", "info");
     const user = await getUserInfo(uid);
     setUser(user);
   }

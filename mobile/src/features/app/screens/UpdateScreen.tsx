@@ -2,10 +2,10 @@ import { useEffect, useRef } from "react";
 
 import { Animated, Image, StyleSheet, View } from "react-native";
 
-import { Button } from "@/components/buttons/Button";
-import { Text } from "@/components/text/Text";
 import { Background } from "@/components/views/Background";
-import { colors } from "@/styles/colors";
+import { Button } from "@/design-system/components/Button";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { AppError } from "@/utils/error";
 import { haptics } from "@/utils/haptics";
 import { log } from "@/utils/logging";

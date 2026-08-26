@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 
 import { Screen } from "@/components/views/screen/Screen";
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
 
 import { PhotoBoothColumnCollage } from "../components/result/PhotoBoothColumnCollage";
 import { PhotoBoothGridCollage } from "../components/result/PhotoBoothGridCollage";

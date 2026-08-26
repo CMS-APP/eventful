@@ -7,7 +7,9 @@ import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Text } from "@/components/text/Text";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import { AccountStackParamList } from "@/features/app/navigationTypes";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
@@ -18,8 +20,6 @@ import {
 } from "@/services/firebase/firebaseInviteFunctions";
 import { deleteUpdateNotification } from "@/services/firebase/firebaseNotification";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { Event } from "@/types/Event";
 import { User } from "@/types/User";
 import { AppError } from "@/utils/error";

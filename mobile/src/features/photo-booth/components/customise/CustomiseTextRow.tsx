@@ -1,8 +1,8 @@
 import { StyleSheet, TextStyle, TouchableOpacity, View } from "react-native";
 
-import { Input } from "@/components/inputs/Input";
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
+import { Input } from "@/design-system/components/Input";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/utils/hitSlop";
 
 interface CustomiseTextRowProps {

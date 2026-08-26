@@ -8,9 +8,10 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { SmallButton } from "@/components/buttons/SmallButton";
-import { Text } from "@/components/text/Text";
 import { ArcCutout } from "@/components/views/ArcCutout";
 import { FollowButton } from "@/components/views/FollowButton";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { ProfileStackParamList } from "@/features/app/navigationTypes";
 import {
   getUserFollowers,
@@ -18,7 +19,6 @@ import {
   isFollowingUser
 } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Follower } from "@/types/Follower";
 import { User } from "@/types/User";
 import { getHitSlop } from "@/utils/hitSlop";

@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-# Prebuild the app
-npx expo prebuild
+# Prebuild the app (development variant — separate bundle ID/name from production)
+APP_VARIANT=development npx expo prebuild
 
 # Create Development Build
 echo "📦 Building Android Development App..."

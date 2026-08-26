@@ -55,6 +55,7 @@ export async function appInit(
   };
 
   updateProgress(3, INIT_STEPS[2]);
+  log("Getting current user info", "info");
   const userDetails = await getUserInfo(user.uid);
   if (!userDetails || !userDetails?.firstName || !userDetails?.lastName) {
     dispatch(setUserData(data));

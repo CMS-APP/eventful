@@ -1,10 +1,10 @@
 import { ScrollView, StyleSheet, View } from "react-native";
 
-import { SwitchButton } from "@/components/buttons/SwitchButton";
-import { Text } from "@/components/text/Text";
 import { Divider } from "@/components/views/Divider";
 import { Screen } from "@/components/views/screen/Screen";
-import { colors } from "@/styles/colors";
+import { SwitchButton } from "@/design-system/components/SwitchButton";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 
 import { CustomiseCollage } from "../components/customise/CustomiseCollage";
 import { FilterButton } from "../components/customise/FilterButton";

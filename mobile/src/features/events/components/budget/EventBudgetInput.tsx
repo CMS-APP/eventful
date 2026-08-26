@@ -5,9 +5,9 @@ import {
   TextInput
 } from "react-native";
 
-import { InputAccessory } from "@/components/inputs/InputAccessory";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
+import { InputAccessory } from "@/design-system/components/InputAccessory";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 
 interface EventBudgetInputProps {
   placeholder: string;

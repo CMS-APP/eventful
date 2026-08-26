@@ -8,10 +8,12 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AppButtonSwitcher } from "@/components/buttons/AppButtonSwitcher";
-import { Button } from "@/components/buttons/Button";
-import { SwitchButton } from "@/components/buttons/SwitchButton";
-import { Text } from "@/components/text/Text";
 import { Screen } from "@/components/views/screen/Screen";
+import { Button } from "@/design-system/components/Button";
+import { SwitchButton } from "@/design-system/components/SwitchButton";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import {
   AllStackParamList,
   EventsStackParamList
@@ -26,8 +28,6 @@ import {
   getRSVPWebUsers
 } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { Event } from "@/types/Event";
 import { UserInvite } from "@/types/UserInvite";
 

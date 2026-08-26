@@ -6,12 +6,12 @@ import { useCallback, useState } from "react";
 
 import { Alert, StyleSheet, View } from "react-native";
 
-import { Button } from "@/components/buttons/Button";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import { openSubscriptionManagement } from "@/features/app/utils/update";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
 import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { AppError } from "@/utils/error";
 import { registerForPushNotificationsAsync } from "@/utils/notifications";
 

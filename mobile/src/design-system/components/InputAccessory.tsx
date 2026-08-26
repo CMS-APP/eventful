@@ -7,8 +7,8 @@ import {
   View
 } from "react-native";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/utils/hitSlop";
 
 export function InputAccessory({

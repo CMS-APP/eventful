@@ -5,10 +5,10 @@ import { Alert, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import { AllStackParamList } from "@/features/app/navigationTypes";
 import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { globalStyles } from "@/styles/globalStyles";
 import { registerForPushNotificationsAsync } from "@/utils/notifications";
 
 import { FeatureView } from "../components/FeatureView";

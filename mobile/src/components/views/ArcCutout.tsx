@@ -2,7 +2,7 @@ import Svg, { Path } from "react-native-svg";
 
 import { StyleSheet, View } from "react-native";
 
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
 
 interface ArcCutoutProps {
   color?: string;

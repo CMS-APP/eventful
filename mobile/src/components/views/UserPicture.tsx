@@ -1,12 +1,13 @@
-import { Text } from "@/components/text/Text";
 import { useCallback, useEffect, useState } from "react";
 
 import { Image, StyleSheet, View } from "react-native";
 
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { syncUserPicture } from "@/services/cache";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
-import { colors } from "@/styles/colors";
 import { AppError } from "@/utils/error";
+import { log } from "@/utils/logging";
 
 interface UserPictureProps {
   uid: string;
@@ -20,6 +21,13 @@ export function UserPicture({ uid, size = 50 }: UserPictureProps) {
 
   const syncPicture = useCallback(async () => {
     setImage(null);
+
+    log("Syncing user picture 2", "info");
+    if (!uid) {
+      setLoading(false);
+      return;
+    }
+
     const user = await getUserInfo(uid);
 
     if (!user) {
@@ -63,7 +71,9 @@ export function UserPicture({ uid, size = 50 }: UserPictureProps) {
         />
       ) : (
         <View style={[styles.textBackground, { height, width }]}>
-          <Text type="body" style={{ color: colors.white }}>{name}</Text>
+          <Text type="body" style={{ color: colors.white }}>
+            {name}
+          </Text>
         </View>
       )}
     </View>

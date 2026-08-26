@@ -7,7 +7,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import { AccountStackParamList } from "@/features/app/navigationTypes";
 import { syncUserPicture } from "@/services/cache";
 import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
@@ -17,8 +19,6 @@ import {
   deleteInviteFromDatabase,
   updateEventLinkResponse
 } from "@/services/firebase/firebaseInviteFunctions";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { AlertOptions } from "@/types/AlertOptions";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";

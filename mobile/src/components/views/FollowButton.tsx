@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Alert } from "react-native";
 
+import { colors } from "@/design-system/tokens/colors";
 import {
   followUser,
   getUserFollowers,
@@ -11,7 +12,6 @@ import {
   unFollowUser
 } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Follower } from "@/types/Follower";
 import { User } from "@/types/User";
 import { AppError } from "@/utils/error";

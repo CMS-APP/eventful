@@ -11,9 +11,12 @@ import * as FileSystem from "expo-file-system/legacy";
 import * as MediaLibrary from "expo-media-library";
 
 import { LoadingModal } from "@/components/views/LoadingModal";
+import { colors } from "@/design-system/tokens/colors";
+import {
+  savePhotoDataLocally,
+  sharePhoto
+} from "@/services/photo-booth/localPhotos";
 import { saveIndividualPhoto } from "@/services/photo-booth/photos";
-import { savePhotoDataLocally, sharePhoto } from "@/services/photo-booth/localPhotos";
-import { colors } from "@/styles/colors";
 import { log } from "@/utils/logging";
 
 import type { PhotoBoothStackNavigation } from "../../photoBoothStackParams";

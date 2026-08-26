@@ -9,6 +9,7 @@ import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
 import { AppError } from "@/utils/error";
+import { log } from "@/utils/logging";
 import { generateUUID } from "@/utils/uuid";
 
 import { API_COLLECTIONS } from "../api/constants";
@@ -125,6 +126,7 @@ export async function convertEventGuestList(user: User) {
 
 export async function convertUserFollowingToDatabaseFollowing(userId: string) {
   try {
+    log("Converting user following to database following", "info");
     const user = (await getUserInfo(userId)) as any;
 
     if (user?.following && Array.isArray(user.following)) {

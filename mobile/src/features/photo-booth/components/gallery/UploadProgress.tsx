@@ -7,9 +7,10 @@ import { Alert, Clipboard, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Button } from "@/components/buttons/Button";
-import { Text } from "@/components/text/Text";
 import { LoadingModal } from "@/components/views/LoadingModal";
+import { Button } from "@/design-system/components/Button";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { AppStackParamList } from "@/features/app/navigationTypes";
 import {
   downloadCloudPhotos,
@@ -17,7 +18,6 @@ import {
 } from "@/services/photo-booth/cloudPhotos";
 import { convertEventTitleToHash } from "@/services/photo-booth/utils";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
 import { AppError } from "@/utils/error";
 

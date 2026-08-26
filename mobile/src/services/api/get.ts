@@ -20,8 +20,8 @@ type QueryConstraintType =
 export async function getDocument(
   ...pathSegments: string[]
 ): Promise<DocumentData> {
-  log("Getting document", "debug");
-  log("Path segments: " + pathSegments, "debug");
+  log("Getting document", "info");
+  log("Path segments: " + pathSegments, "info");
   return safeQuery(
     async () => {
       const docRef = doc(FIRESTORE_DB, ...pathSegments);

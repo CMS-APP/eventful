@@ -1,10 +1,10 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { getHitSlop } from "@/utils/hitSlop";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import { Subscription } from "@/types/Subscription";
+import { getHitSlop } from "@/utils/hitSlop";
 
 interface SubscriptionButtonProps {
   subscription: Subscription;
@@ -28,8 +28,8 @@ export function SubscriptionButton({
         setSelectedSubscription(subscription);
       }}
       style={styles.container}
-    
- hitSlop={getHitSlop("large")}>
+      hitSlop={getHitSlop("large")}
+    >
       <View
         style={[
           styles.button,
@@ -45,7 +45,11 @@ export function SubscriptionButton({
         <Text type="body" color={colors.black} style={styles.priceText}>
           {subscription.priceString}
         </Text>
-        <Text type="subHeader" color={colors.primaryTint} style={styles.descriptionText}>
+        <Text
+          type="subHeader"
+          color={colors.primaryTint}
+          style={styles.descriptionText}
+        >
           {subscription.description}
         </Text>
       </View>

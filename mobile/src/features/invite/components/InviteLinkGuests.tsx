@@ -1,10 +1,10 @@
-import { Text } from "@/components/text/Text";
 import { useSelector } from "react-redux";
 
 import { useCallback, useEffect, useState } from "react";
 
 import { View } from "react-native";
 
+import { Text } from "@/design-system/components/Text";
 import { getRSVPWebUsers } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";

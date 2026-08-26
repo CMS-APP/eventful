@@ -4,20 +4,20 @@ import { Alert, LayoutChangeEvent, StyleSheet, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { Button } from "@/components/buttons/Button";
-import { TextButton } from "@/components/buttons/TextButton";
-import { Input } from "@/components/inputs/Input";
-import { Text } from "@/components/text/Text";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import {
   ILoadingModalContext,
   useLoadingModal
 } from "@/contexts/LoadingProviderContext";
+import { Button } from "@/design-system/components/Button";
+import { Input } from "@/design-system/components/Input";
+import { Text } from "@/design-system/components/Text";
+import { TextButton } from "@/design-system/components/TextButton";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import { AuthStackParamList } from "@/features/app/navigationTypes";
 import { handleSignUp } from "@/services/firebase/firebaseAuth";
 import { sendVerificationEmail } from "@/services/firebase/firebaseBackend";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { FormErrors } from "@/types/FormErrors";
 import { AppError } from "@/utils/error";
 import { emailValid, passwordValid } from "@/utils/regex";

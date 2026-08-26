@@ -4,8 +4,8 @@ import { useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { Button } from "@/components/buttons/Button";
-import { colors } from "@/styles/colors";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 
 import { DropdownButton } from "./DropdownButton";
 import { FeedbackModal } from "./FeedbackModal";

@@ -2,7 +2,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
+import { Text } from "@/design-system/components/Text";
 import { getHitSlop } from "@/utils/hitSlop";
 
 interface PhotoBoothResultsButtonProps {

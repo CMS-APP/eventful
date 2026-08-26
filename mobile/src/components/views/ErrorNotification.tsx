@@ -10,9 +10,9 @@ import { Animated, Linking, StyleSheet, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { useSafeAreaStyles } from "@/styles/globalStyles";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { useSafeAreaStyles } from "@/design-system/tokens/globalStyles";
 import { log } from "@/utils/logging";
 
 import { SmallButton } from "../buttons/SmallButton";

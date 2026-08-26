@@ -6,16 +6,16 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AmazonButton } from "@/components/buttons/AmazonButton";
-import { Input } from "@/components/inputs/Input";
-import { Text } from "@/components/text/Text";
 import { Screen } from "@/components/views/screen/Screen";
+import { Input } from "@/design-system/components/Input";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import {
   AllStackParamList,
   EventsStackParamList
 } from "@/features/app/navigationTypes";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 
 import { EventDrinkEdit } from "../components/essentials/EventDrinkEdit";
 import { useEventFieldUpdate } from "../hooks/useEventFieldUpdate";

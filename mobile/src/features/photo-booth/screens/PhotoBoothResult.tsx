@@ -8,12 +8,12 @@ import { useNavigation } from "@react-navigation/native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
 import { PanSnapGestureRoot } from "@/components/views/panSnap/PanSnapGestureRoot";
 import { PanSnapScrollHint } from "@/components/views/panSnap/PanSnapScrollHint";
 import { Screen } from "@/components/views/screen/Screen";
-import { colors } from "@/styles/colors";
-import { useAppDimensions } from "@/styles/globalStyles";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { useAppDimensions } from "@/design-system/tokens/globalStyles";
 
 import { PhotoBoothColumnCollage } from "../components/result/PhotoBoothColumnCollage";
 import { PhotoBoothGridCollage } from "../components/result/PhotoBoothGridCollage";

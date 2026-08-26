@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 
 import { Image, ImageStyle, StyleSheet, View } from "react-native";
 
+import { colors } from "@/design-system/tokens/colors";
 import {
   getImageFromCache,
   saveDatabaseImageToCache,
   saveLocalImageToCache
 } from "@/services/cache";
-import { colors } from "@/styles/colors";
 import { Photo } from "@/types/Photo";
 import { log } from "@/utils/logging";
 

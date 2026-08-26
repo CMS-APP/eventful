@@ -8,13 +8,17 @@ import {
   reauthenticateWithCredential
 } from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { CommonActions, useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { useCallback, useState } from "react";
-import { Alert, Platform, StatusBar } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Button } from "@/components/buttons/Button";
+import { useCallback, useState } from "react";
+
+import { Alert, Platform, StatusBar } from "react-native";
+
+import { CommonActions, useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import { AllStackParamList } from "@/features/app/navigationTypes";
 import {
   getAppleCredentialForReauthentication,
@@ -24,7 +28,6 @@ import { removeAllData } from "@/services/async";
 import { deleteImageAsync } from "@/services/firebase/firebaseStorage";
 import { deleteUserData } from "@/services/firebase/firebaseUserFunctions";
 import { UserState, clearStorage } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 
@@ -144,7 +147,10 @@ export function DeleteAccountButton({ setLoading }: DeleteAccountButtonProps) {
 
       const { identityToken, nonce } =
         await getAppleCredentialForReauthentication();
-      const appleCredential = AppleAuthProvider.credential(identityToken, nonce);
+      const appleCredential = AppleAuthProvider.credential(
+        identityToken,
+        nonce
+      );
       await reauthenticateWithCredential(user, appleCredential);
       await finalizeAccountDeletion(user);
     } catch (error: any) {
@@ -161,7 +167,9 @@ export function DeleteAccountButton({ setLoading }: DeleteAccountButtonProps) {
       return;
     }
 
-    const providerIds = user.providerData.map((provider) => provider.providerId);
+    const providerIds = user.providerData.map(
+      (provider) => provider.providerId
+    );
 
     if (providerIds.includes("password")) {
       setPresentPasswordModal(true);

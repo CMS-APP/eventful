@@ -9,7 +9,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { textFormatter } from "@/design-system/tokens/fonts";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import {
   AppStackParamList,
   EventsStackParamList
@@ -17,9 +20,6 @@ import {
 import { getInviteFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { textFormatter } from "@/styles/fonts";
-import { globalStyles } from "@/styles/globalStyles";
 import { Event } from "@/types/Event";
 import { formatDate, formatTime } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
@@ -69,6 +69,7 @@ export function EventsListItem({
     if (event.userId === userId) {
       navEvents.navigate("EventEdit", { event });
     } else if (isUpcoming || isDecline) {
+      log("Fetching user details", "info");
       const userData = await getUserInfo(event.userId);
       const invite = await getInviteFromDatabase(event, userId);
 
@@ -90,6 +91,7 @@ export function EventsListItem({
   }, [event, userId, navigation, isUpcoming, isDecline]);
 
   async function fetchHostInfo() {
+    log("Fetching host info", "info");
     if (event.userId === userId) {
       setHost("You");
     } else {

@@ -4,10 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Animated, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { voteForOptionInDatabase } from "@/services/firebase/firebaseInspirationFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Poll } from "@/types/Poll";
 import { PollVote } from "@/types/PollVote";
 import { AppError } from "@/utils/error";

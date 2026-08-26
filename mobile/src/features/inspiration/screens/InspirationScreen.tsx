@@ -5,11 +5,11 @@ import { Alert, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { IconButton } from "@/components/buttons/IconButton";
 import { Screen } from "@/components/views/screen/Screen";
+import { IconButton } from "@/design-system/components/IconButton";
+import { colors } from "@/design-system/tokens/colors";
 import { InspirationStackParamList } from "@/features/app/navigationTypes";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { useScreenStatusBar } from "@/utils/statusBar";
 
 import { PollView } from "../components/PollView";

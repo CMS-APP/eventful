@@ -10,12 +10,11 @@ import {
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { fontStyles } from "@/styles/fonts";
+import { InputAccessory } from "@/design-system/components/InputAccessory";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { fontStyles } from "@/design-system/tokens/fonts";
 import { getHitSlop } from "@/utils/hitSlop";
-
-import { InputAccessory } from "./InputAccessory";
 
 interface InputProps {
   placeholder: string;

@@ -10,7 +10,7 @@ import {
 
 import { CameraView } from "expo-camera";
 
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
 
 import { CameraHeader } from "../components/camera/CameraHeader";
 import { CameraPictureRow } from "../components/camera/CameraPictureRow";

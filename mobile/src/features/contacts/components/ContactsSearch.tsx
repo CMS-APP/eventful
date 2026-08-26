@@ -4,9 +4,9 @@ import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { InputAccessory } from "@/components/inputs/InputAccessory";
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
+import { InputAccessory } from "@/design-system/components/InputAccessory";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/utils/hitSlop";
 
 interface ContactsSearchProps {

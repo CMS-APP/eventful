@@ -2,10 +2,16 @@ import "dotenv/config";
 
 import { ConfigContext } from "@expo/config";
 
+const IS_DEV = process.env.APP_VARIANT === "development";
+
+const bundleId = IS_DEV
+  ? "com.hostinghappily.app.dev"
+  : "com.hostinghappily.app";
+
 export default ({ config }: ConfigContext) => {
   return {
     ...config,
-    name: "Eventful",
+    name: IS_DEV ? "Eventful Dev" : "Eventful",
     slug: "Eventful",
     scheme: "eventful",
     owner: "chrissharp",
@@ -20,7 +26,7 @@ export default ({ config }: ConfigContext) => {
       backgroundColor: "#0a3b2e"
     },
     android: {
-      package: "com.hostinghappily.app",
+      package: bundleId,
       icon: "./src/assets/logos/eventful-logo-android.png",
       versionCode: 298,
       softwareKeyboardLayoutMode: "pan",
@@ -30,10 +36,12 @@ export default ({ config }: ConfigContext) => {
         "android.permission.ACCESS_MEDIA_LOCATION",
         "android.permission.CAMERA"
       ],
-      googleServicesFile: "./google-services.json"
+      googleServicesFile: IS_DEV
+        ? "./firebase/google-services-dev.json"
+        : "./firebase/google-services.json"
     },
     ios: {
-      bundleIdentifier: "com.hostinghappily.app",
+      bundleIdentifier: bundleId,
       icon: "./src/assets/logos/eventful-logo.png",
       buildNumber: "297",
       supportsTablet: true,
@@ -49,7 +57,9 @@ export default ({ config }: ConfigContext) => {
       entitlements: {
         "com.apple.developer.applesignin": ["Default"]
       },
-      googleServicesFile: "./GoogleService-Info.plist"
+      googleServicesFile: IS_DEV
+        ? "./firebase/GoogleService-Info-Dev.plist"
+        : "./firebase/GoogleService-Info.plist"
     },
     plugins: [
       "@react-native-firebase/app",
@@ -105,7 +115,23 @@ export default ({ config }: ConfigContext) => {
           organization: "chris-app"
         }
       ],
-      "expo-asset"
+      "expo-asset",
+      [
+        "expo-build-properties",
+        {
+          ios: {
+            useFrameworks: "static",
+            forceStaticLinking: [
+              "RNFBApp",
+              "RNFBAppCheck",
+              "RNFBAuth",
+              "RNFBCrashlytics",
+              "RNFBFirestore",
+              "RNFBStorage"
+            ]
+          }
+        }
+      ]
     ],
     extra: {
       eas: {

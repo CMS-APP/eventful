@@ -8,10 +8,12 @@ import { Alert, StyleSheet, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Button } from "@/components/buttons/Button";
-import { Input } from "@/components/inputs/Input";
-import { Text } from "@/components/text/Text";
 import { ModalView } from "@/components/views/ModalView";
+import { Button } from "@/design-system/components/Button";
+import { Input } from "@/design-system/components/Input";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import {
   changeHostname,
   checkUsernameExists,
@@ -25,8 +27,6 @@ import {
   setUsername,
   setUsernameUpdateDate
 } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { parseDatabaseDate } from "@/utils/date";
 import { AppError } from "@/utils/error";
 import { checkValue as checkValueUtil } from "@/utils/regex";

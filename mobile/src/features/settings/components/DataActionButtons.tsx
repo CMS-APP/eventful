@@ -1,11 +1,15 @@
 import { getAuth } from "@react-native-firebase/auth";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { useCallback } from "react";
-import { Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Button } from "@/components/buttons/Button";
+import { useCallback } from "react";
+
+import { Alert } from "react-native";
+
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import { AllStackParamList } from "@/features/app/navigationTypes";
 import { clearCache as clearImageCache } from "@/services/cache";
 import {
@@ -18,7 +22,6 @@ import {
   clearStorage,
   setUserData
 } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { AppError } from "@/utils/error";
 
 type DataActionButtonsProps = {

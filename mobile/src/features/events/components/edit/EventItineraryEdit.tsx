@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { Button } from "@/components/buttons/Button";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import { Event } from "@/types/Event";
 import { Itinerary } from "@/types/Itinerary";
 import { addMinutes, parseDatabaseDate } from "@/utils/date";

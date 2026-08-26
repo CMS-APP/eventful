@@ -14,7 +14,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { InspirationStackParamList } from "@/features/app/navigationTypes";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import {
@@ -24,13 +25,13 @@ import {
 } from "@/services/firebase/firebaseInspirationFunctions";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Post } from "@/types/Post";
 import { User } from "@/types/User";
 import { calculateTimeAgo } from "@/utils/date";
 import { AppError } from "@/utils/error";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
+import { log } from "@/utils/logging";
 
 import { PostImageCarousel } from "./PostImageCarousel";
 
@@ -62,6 +63,7 @@ export function PostItem({ post }: { post: Post }) {
   };
 
   async function fetchAuthor() {
+    log("Fetching author", "info");
     const user = await getUserInfo(post.authorId);
     setAuthor(user);
   }

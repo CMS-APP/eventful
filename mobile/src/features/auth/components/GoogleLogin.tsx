@@ -4,16 +4,18 @@ import {
   getAuth,
   signInWithCredential
 } from "@react-native-firebase/auth";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import {
+  GoogleSignin,
+  isErrorWithCode,
+  statusCodes
+} from "@react-native-google-signin/google-signin";
 import { useDispatch } from "react-redux";
 
-import { Button } from "@/components/buttons/Button";
-import {
-  ILoadingModalContext,
-  useLoadingModal
-} from "@/contexts/LoadingProviderContext";
+import { useState } from "react";
+
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import { appInit } from "@/services/initialisation/appInit";
-import { colors } from "@/styles/colors";
 import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 import { navigationRef } from "@/utils/navigation";
@@ -21,15 +23,20 @@ import { navigationRef } from "@/utils/navigation";
 import { saveGoogleOnboardingName } from "../utils";
 
 export function GoogleLogin() {
-  const { setLoading } = useLoadingModal() as ILoadingModalContext;
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
 
   async function onGoogleButtonPress() {
+    if (isSubmitting) {
+      return;
+    }
+
     try {
-      setLoading(true);
+      setIsSubmitting(true);
       await GoogleSignin.hasPlayServices();
+
       const signInResult = await GoogleSignin.signIn();
-      let idToken = signInResult.data?.idToken;
+      const idToken = signInResult.data?.idToken;
 
       if (!idToken) {
         throw new Error("No ID token found");
@@ -51,13 +58,17 @@ export function GoogleLogin() {
 
       navigationRef.navigate(result);
     } catch (error) {
-      if (error?.toString() === "Error: No ID token found") {
+      if (
+        (isErrorWithCode(error) &&
+          error.code === statusCodes.SIGN_IN_CANCELLED) ||
+        error?.toString() === "Error: No ID token found"
+      ) {
         log("User cancelled Google authentication", "info");
         return;
       }
       new AppError(error, "Error signing in with Google", true);
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   }
 
@@ -68,6 +79,8 @@ export function GoogleLogin() {
       color={colors.primary}
       textColor={colors.white}
       icon="google"
+      disabled={isSubmitting}
+      loading={isSubmitting}
     />
   );
 }

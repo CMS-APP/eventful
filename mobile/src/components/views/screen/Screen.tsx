@@ -7,8 +7,8 @@ import {
   View
 } from "react-native";
 
-import { colors } from "@/styles/colors";
-import { useSafeAreaStyles } from "@/styles/globalStyles";
+import { colors } from "@/design-system/tokens/colors";
+import { useSafeAreaStyles } from "@/design-system/tokens/globalStyles";
 
 import { AccountButton } from "../../buttons/AccountButton";
 import { FootNote } from "../Footnote";

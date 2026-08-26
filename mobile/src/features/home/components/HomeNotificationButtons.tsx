@@ -7,6 +7,7 @@ import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { colors } from "@/design-system/tokens/colors";
 import {
   HomeStackParamList,
   MainStackParamList
@@ -17,7 +18,6 @@ import {
 } from "@/services/firebase/firebaseNotification";
 import { useNotifications } from "@/services/notifications";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Notification } from "@/types/Notification";
 
 import { HomeNotificationButton } from "./HomeNotificationButton";

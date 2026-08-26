@@ -12,11 +12,11 @@ import {
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Button } from "@/components/buttons/Button";
-import { Text } from "@/components/text/Text";
+import { Button } from "@/design-system/components/Button";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { useAppDimensions } from "@/design-system/tokens/globalStyles";
 import { AppStackParamList } from "@/features/app/navigationTypes";
-import { colors } from "@/styles/colors";
-import { useAppDimensions } from "@/styles/globalStyles";
 import { haptics } from "@/utils/haptics";
 import { log } from "@/utils/logging";
 

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
-import { colors } from "@/styles/colors";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 import { parseDatabaseDate } from "@/utils/date";
 

@@ -6,9 +6,9 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AppButtonSwitcher } from "@/components/buttons/AppButtonSwitcher";
-import { TextButton } from "@/components/buttons/TextButton";
-import { LoadingModal } from "@/components/views/LoadingModal";
 import { Screen } from "@/components/views/screen/Screen";
+import { TextButton } from "@/design-system/components/TextButton";
+import { colors } from "@/design-system/tokens/colors";
 import { AppStackParamList } from "@/features/app/navigationTypes";
 import { openSubscriptionManagement } from "@/features/app/utils/update";
 import {
@@ -20,7 +20,6 @@ import {
   getPremiumProducts,
   subscribeToProduct
 } from "@/services/purchases/payments";
-import { colors } from "@/styles/colors";
 import { Subscription } from "@/types/Subscription";
 import { AppError } from "@/utils/error";
 
@@ -119,8 +118,6 @@ export function PaywallScreen({ navigation, route }: PaywallScreenProps) {
       }}
     >
       <View style={styles.container}>
-        <LoadingModal visible={loading} />
-
         <View style={styles.headerBackground}>
           <AppButtonSwitcher
             selections={["Photo Booth", "Premium"]}

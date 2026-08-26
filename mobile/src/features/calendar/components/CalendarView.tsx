@@ -7,16 +7,17 @@ import { Alert, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { colors } from "@/design-system/tokens/colors";
 import { AppStackParamList } from "@/features/app/navigationTypes";
 import { getInviteFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { CalendarDate } from "@/types/CalendarDate";
 import { Event } from "@/types/Event";
 import { calculateEventActiveDays, getCalendarWeeks } from "@/utils/calendar";
 import { dateIsInEvent, isActiveEvent, parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
+import { log } from "@/utils/logging";
 import { navigateToEventEdit } from "@/utils/navigationHelpers";
 
 import { CalendarDay } from "./CalendarDay";
@@ -113,6 +114,7 @@ export function CalendarView({
       return;
     }
 
+    log("Navigating to event", "info");
     const userDetails = await getUserInfo(event.userId);
     if (isActiveEvent(event)) {
       const invite = await getInviteFromDatabase(event, userId);

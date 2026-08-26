@@ -4,11 +4,11 @@ import { StyleSheet, View } from "react-native";
 
 import { RouteProp } from "@react-navigation/native";
 
-import { Input } from "@/components/inputs/Input";
 import { Screen } from "@/components/views/screen/Screen";
+import { Input } from "@/design-system/components/Input";
+import { colors } from "@/design-system/tokens/colors";
 import { EventsStackParamList } from "@/features/app/navigationTypes";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 
 import { EventOutfitEdit } from "../components/essentials/EventOutfitEdit";
 import { useEventFieldUpdate } from "../hooks/useEventFieldUpdate";

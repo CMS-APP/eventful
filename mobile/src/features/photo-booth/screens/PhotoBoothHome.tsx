@@ -4,11 +4,11 @@ import { StyleSheet, View } from "react-native";
 
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
-import { Button } from "@/components/buttons/Button";
 import { Screen } from "@/components/views/screen/Screen";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import { PhotoBoothLockModal } from "@/features/photo-booth/modals/PhotoBoothLockModal";
 import { PhotoBoothUnlockModal } from "@/features/photo-booth/modals/PhotoBoothUnlockModal";
-import { colors } from "@/styles/colors";
 
 import type { PhotoBoothStackNavigation } from "../photoBoothStackParams";
 import { usePhotoBoothCamera } from "../provider/PhotoBoothCameraProvider";

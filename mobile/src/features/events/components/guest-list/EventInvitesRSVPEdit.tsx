@@ -8,7 +8,8 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AppButtonSwitcher } from "@/components/buttons/AppButtonSwitcher";
-import { Button } from "@/components/buttons/Button";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import { EventsStackParamList } from "@/features/app/navigationTypes";
 import { getEventInfo } from "@/services/firebase/firebaseEventFunctions";
 import {
@@ -17,7 +18,6 @@ import {
   getRSVPWebUsers
 } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Event } from "@/types/Event";
 import { UserInvite } from "@/types/UserInvite";
 import { parseDatabaseDate } from "@/utils/date";

@@ -6,15 +6,16 @@ import { Alert, LayoutChangeEvent, StyleSheet, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { Button } from "@/components/buttons/Button";
-import { TextButton } from "@/components/buttons/TextButton";
-import { Input } from "@/components/inputs/Input";
-import { Text } from "@/components/text/Text";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import {
   ILoadingModalContext,
   useLoadingModal
 } from "@/contexts/LoadingProviderContext";
+import { Button } from "@/design-system/components/Button";
+import { Input } from "@/design-system/components/Input";
+import { Text } from "@/design-system/components/Text";
+import { TextButton } from "@/design-system/components/TextButton";
+import { colors } from "@/design-system/tokens/colors";
 import { AuthStackParamList } from "@/features/app/navigationTypes";
 import { Header } from "@/features/auth/components/Header";
 import { HeaderArcs } from "@/features/auth/components/HeaderArcs";
@@ -22,7 +23,6 @@ import { formStyles } from "@/features/auth/styles/formStyles";
 import { handleSignIn } from "@/services/firebase/firebaseAuth";
 import { sendVerificationEmail } from "@/services/firebase/firebaseBackend";
 import { appInit } from "@/services/initialisation/appInit";
-import { colors } from "@/styles/colors";
 import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 import { navigationRef } from "@/utils/navigation";

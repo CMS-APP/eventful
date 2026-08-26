@@ -9,6 +9,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { Screen } from "@/components/views/screen/Screen";
+import { colors } from "@/design-system/tokens/colors";
 import {
   AllStackParamList,
   ProfileStackParamList
@@ -16,7 +17,6 @@ import {
 import { InviteEventCard } from "@/features/invite/components/InviteEventCard";
 import { getFutureEventsFromDatabase } from "@/services/firebase/firebaseEventFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Event } from "@/types/Event";
 
 interface ProfileInviteScreenProps {

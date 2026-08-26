@@ -2,9 +2,9 @@ import { memo, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { Animated, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { useAppDimensions } from "@/styles/globalStyles";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { useAppDimensions } from "@/design-system/tokens/globalStyles";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
 

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 
 import { Image, StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { syncUserPicture } from "@/services/cache";
-import { colors } from "@/styles/colors";
 import { User } from "@/types/User";
 import { AppError } from "@/utils/error";
 import { getInitials } from "@/utils/regex";

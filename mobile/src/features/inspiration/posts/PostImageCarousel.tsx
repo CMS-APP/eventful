@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
+import { colors } from "@/design-system/tokens/colors";
 import { syncPostImage } from "@/services/cache";
-import { colors } from "@/styles/colors";
 import { Photo } from "@/types/Photo";
 import { AppError } from "@/utils/error";
 
@@ -16,10 +16,7 @@ interface PostImageCarouselProps {
   postId?: string;
 }
 
-export function PostImageCarousel({
-  photos,
-  postId
-}: PostImageCarouselProps) {
+export function PostImageCarousel({ photos, postId }: PostImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentImageUri, setCurrentImageUri] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);

@@ -6,7 +6,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { getHitSlop } from "@/utils/hitSlop";
 
-import { Text } from "../../text/Text";
+import { Text } from "../../../design-system/components/Text";
 import { ArcCutout2 } from "../ArcCutout2";
 import { CurvyHeaderProps } from "./props";
 

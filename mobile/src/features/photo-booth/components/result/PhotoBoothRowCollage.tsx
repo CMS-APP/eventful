@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 
-import { useAppDimensions } from "@/styles/globalStyles";
+import { useAppDimensions } from "@/design-system/tokens/globalStyles";
 
 import { usePhotoBoothCamera } from "../../provider/PhotoBoothCameraProvider";
 import { usePhotoBoothSettings } from "../../provider/PhotoBoothSettingsProvider";

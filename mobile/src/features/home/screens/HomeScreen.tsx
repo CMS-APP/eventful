@@ -10,8 +10,8 @@ import {
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { Screen } from "@/components/views/screen/Screen";
+import { colors } from "@/design-system/tokens/colors";
 import { AllStackParamList } from "@/features/app/navigationTypes";
-import { colors } from "@/styles/colors";
 import { useScreenStatusBar } from "@/utils/statusBar";
 
 import { HomeButtons } from "../components/HomeButtons";

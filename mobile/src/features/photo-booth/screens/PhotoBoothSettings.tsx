@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { SwitchButton } from "@/components/buttons/SwitchButton";
-import { Input } from "@/components/inputs/Input";
 import { Screen } from "@/components/views/screen/Screen";
-import { colors } from "@/styles/colors";
+import { Input } from "@/design-system/components/Input";
+import { SwitchButton } from "@/design-system/components/SwitchButton";
+import { colors } from "@/design-system/tokens/colors";
 
 import { usePhotoBoothSettings } from "../provider/PhotoBoothSettingsProvider";
 

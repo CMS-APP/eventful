@@ -5,6 +5,8 @@ import { getEventInfo } from "@/services/firebase/firebaseEventFunctions";
 import { getInviteInfo } from "@/services/firebase/firebaseInviteFunctions";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 
+import { log } from "./logging";
+
 export const navigationRef = createNavigationContainerRef<AppStackParamList>();
 
 async function handleEventEditNavigation(params: any) {
@@ -23,6 +25,7 @@ async function handleEventEditNavigation(params: any) {
 }
 
 async function handleContactViewNavigation(params: any) {
+  log("Handling contact view navigation", "info");
   const user = await getUserInfo(params.user);
   const type = params.type;
 
@@ -39,6 +42,7 @@ async function handleContactViewNavigation(params: any) {
 }
 
 async function handleEventInviteNavigation(params: any) {
+  log("Handling event invite navigation", "info");
   const event = await getEventInfo(params.event);
   const invite = await getInviteInfo(params.invite);
   const host = await getUserInfo(params.host);

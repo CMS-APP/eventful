@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 
 import { ArcCutout } from "@/components/views/ArcCutout";
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
 
 interface HeaderArcsProps {
   headerHeight: number;

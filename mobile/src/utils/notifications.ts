@@ -4,11 +4,11 @@ import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 
+import { textFormatter } from "@/design-system/tokens/fonts";
 import { Event } from "@/types/Event";
 import { EventInvite } from "@/types/EventInvite";
 import { User } from "@/types/User";
 
-import { textFormatter } from "../styles/fonts";
 import { parseDatabaseDate } from "./date";
 import { AppError } from "./error";
 import { log } from "./logging";

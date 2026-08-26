@@ -103,6 +103,7 @@ export async function convertDateToTimestamp(userId: string) {
 
 export async function convertUserFollowingToDatabaseFollowing(userId: string) {
   try {
+    log("Converting user following to database following", "info");
     const user = (await getUserInfo(userId)) as any;
 
     if (user?.following && Array.isArray(user.following)) {

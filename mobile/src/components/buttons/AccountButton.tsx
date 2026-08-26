@@ -7,12 +7,12 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 
-import { Text } from "@/components/text/Text";
 import { PulsatingCircle } from "@/components/views/PulsatingCircle";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { syncUserPicture } from "@/services/cache";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { User } from "@/types/User";
 import { AppError } from "@/utils/error";
 import { haptics } from "@/utils/haptics";
@@ -45,6 +45,13 @@ export function AccountButton({
 
   const syncPicture = useCallback(async () => {
     setImage(null);
+
+    log("Syncing user picture 1", "info");
+    if (!userId) {
+      setLoading(false);
+      return;
+    }
+
     const user = await getUserInfo(userId);
     const imageUri = await syncUserPicture(user as User, true);
     setImage(imageUri as string);

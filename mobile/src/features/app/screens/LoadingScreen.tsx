@@ -2,8 +2,8 @@ import { StyleSheet, View } from "react-native";
 
 import { LoadingIndicator } from "@/components/views/LoadingIndicator";
 import { LoadingProgressIndicator } from "@/components/views/LoadingProgressIndicator";
+import { colors } from "@/design-system/tokens/colors";
 import { useLoading } from "@/providers/LoadingProvider";
-import { colors } from "@/styles/colors";
 
 export function LoadingScreen() {
   const { isLoading, progress, currentStep, totalSteps } = useLoading();

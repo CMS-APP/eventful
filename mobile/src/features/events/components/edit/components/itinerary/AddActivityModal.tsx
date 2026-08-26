@@ -4,11 +4,11 @@ import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Button } from "@/components/buttons/Button";
-import { Input } from "@/components/inputs/Input";
-import { Text } from "@/components/text/Text";
 import { ModalView } from "@/components/views/ModalView";
-import { colors } from "@/styles/colors";
+import { Button } from "@/design-system/components/Button";
+import { Input } from "@/design-system/components/Input";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 import { Itinerary } from "@/types/Itinerary";
 import { parseDatabaseDate } from "@/utils/date";

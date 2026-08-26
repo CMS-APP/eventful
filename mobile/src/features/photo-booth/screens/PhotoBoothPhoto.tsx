@@ -7,18 +7,21 @@ import { Alert, StyleSheet, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { Button } from "@/components/buttons/Button";
 import { LoadingModal } from "@/components/views/LoadingModal";
 import { Screen } from "@/components/views/screen/Screen";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import { AppStackParamList } from "@/features/app/navigationTypes";
 import {
   deletePhotoCloud,
   downloadCloudPhoto,
   uploadPhotosToCloud
 } from "@/services/photo-booth/cloudPhotos";
-import { deletePhotoLocally, sharePhoto } from "@/services/photo-booth/localPhotos";
+import {
+  deletePhotoLocally,
+  sharePhoto
+} from "@/services/photo-booth/localPhotos";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { AppError } from "@/utils/error";
 
 import { GalleryPhotoItem } from "../components/gallery/GalleryPhotoItem";
@@ -31,7 +34,8 @@ export function PhotoBoothPhoto() {
   const { photo: initialPhoto } =
     useRoute<RouteProp<PhotoBoothStackParamList, "PhotoBoothPhoto">>().params;
   const navigation = useNavigation<PhotoBoothStackNavigation>();
-  const appNavigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>();
+  const appNavigation =
+    useNavigation<NativeStackNavigationProp<AppStackParamList>>();
   const userId = useSelector((state: UserState) => state.uid);
   const premium = useSelector((state: UserState) => state.premium);
 

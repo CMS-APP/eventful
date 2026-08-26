@@ -5,14 +5,14 @@ import { useCallback, useEffect, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
 import { ArcCutout } from "@/components/views/ArcCutout";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { InviteEventCard } from "@/features/invite/components/InviteEventCard";
 import { getFutureEventsFromDatabaseByIds } from "@/services/firebase/firebaseEventFunctions";
 import { getInvitesFromUser } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";

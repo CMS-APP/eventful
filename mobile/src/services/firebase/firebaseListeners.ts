@@ -38,7 +38,6 @@ export function getInvitationsFromDatabaseSnapshot(
               invite.eventId as string
             );
 
-            // Use safe query pattern - don't throw in listener callback
             try {
               const event = await getDoc(eventRef);
               if (event.exists()) {

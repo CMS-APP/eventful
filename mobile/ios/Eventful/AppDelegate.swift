@@ -36,25 +36,13 @@ FirebaseApp.configure()
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
-  // Linking API - Google Sign-In must handle its OAuth callback so sign-in stays in-app (App Store Guideline 4.0).
-  // Only pass the URL to GIDSignIn when it is the Google OAuth callback. Use GIDSignInSafeHandleURL so we don't crash
-  // when the same redirect is delivered twice (Firebase swizzling + our handler, or rapid tap; see GoogleSignIn-iOS #547).
-  private static let googleURLScheme = "com.googleusercontent.apps.165003650822-rjt7mjsqc00dvbt89ga25riri4d4fmit"
-
+  // Linking API
   public override func application(
     _ app: UIApplication,
     open url: URL,
     options: [UIApplication.OpenURLOptionsKey: Any] = [:]
   ) -> Bool {
-    if url.scheme == Self.googleURLScheme {
-      if GIDSignInSafeHandleURL(url) {
-        return true
-      }
-      return super.application(app, open: url, options: options)
-        || RCTLinkingManager.application(app, open: url, options: options)
-    }
-    return super.application(app, open: url, options: options)
-      || RCTLinkingManager.application(app, open: url, options: options)
+    return super.application(app, open: url, options: options) || RCTLinkingManager.application(app, open: url, options: options)
   }
 
   // Universal Links

@@ -11,14 +11,14 @@ import { PhotoResult } from "expo-camera";
 import * as ImageManipulator from "expo-image-manipulator";
 import { CameraType } from "expo-image-picker";
 
-import { Button } from "@/components/buttons/Button";
-import { Text } from "@/components/text/Text";
 import { ModalView } from "@/components/views/ModalView";
+import { Button } from "@/design-system/components/Button";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { computeImageHash, saveLocalImageToCache } from "@/services/cache";
 import { uploadImageAsync } from "@/services/firebase/firebaseStorage";
 import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState, setProfilePictureHash } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { User } from "@/types/User";
 import { showErrorNotification } from "@/utils/appNotifications";
 import { AppError } from "@/utils/error";

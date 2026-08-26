@@ -5,15 +5,16 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Text } from "@/components/text/Text";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { globalStyles } from "@/design-system/tokens/globalStyles";
 import { HomeStackParamList } from "@/features/app/navigationTypes";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { Notification } from "@/types/Notification";
 import { User } from "@/types/User";
 import { getHitSlop } from "@/utils/hitSlop";
+import { log } from "@/utils/logging";
 
 interface HomeUpdateItemProps {
   update: Notification;
@@ -25,6 +26,7 @@ export function HomeUpdateItem({ update }: HomeUpdateItemProps) {
 
   useEffect(() => {
     async function fetchUserDetails() {
+      log("Fetching user details", "info");
       const userDetails = await getUserInfo(update.senderId);
       setUserDetails(userDetails);
     }

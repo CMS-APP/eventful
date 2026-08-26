@@ -7,12 +7,12 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { Screen } from "@/components/views/screen/Screen";
+import { colors } from "@/design-system/tokens/colors";
 import {
   AllStackParamList,
   HomeStackParamList
 } from "@/features/app/navigationTypes";
 import { readUpdateNotification } from "@/services/firebase/firebaseUserFunctions";
-import { colors } from "@/styles/colors";
 import { Notification } from "@/types/Notification";
 
 import { HomeUpdateItem } from "../components/HomeUpdateItem";

@@ -12,9 +12,9 @@ import {
 } from "@react-navigation/native";
 
 import { Screen } from "@/components/views/screen/Screen";
+import { colors } from "@/design-system/tokens/colors";
 import { getEvent } from "@/services/photo-booth/events";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
 import { log } from "@/utils/logging";
 

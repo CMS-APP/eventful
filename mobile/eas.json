@@ -10,6 +10,9 @@
       "channel": "development",
       "ios": {
         "simulator": true
+      },
+      "env": {
+        "APP_VARIANT": "development"
       }
     },
     "development": {
@@ -17,6 +20,7 @@
       "distribution": "internal",
       "channel": "development",
       "env": {
+        "APP_VARIANT": "development",
         "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyCcAHVVo3FIJrSK1FVQ_hPRmQm635jbdlQ",
         "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "eventful-23690.firebaseapp.com",
         "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "eventful-23690",

@@ -2,9 +2,9 @@ import { useCallback } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { Button } from "@/components/buttons/Button";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
-import { colors } from "@/styles/colors";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 
 import { EventsListItem } from "./EventsListItem";

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { AppButtonSwitcher } from "@/components/buttons/AppButtonSwitcher";
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 
 import { EventListEdit } from "./EventListEdit";

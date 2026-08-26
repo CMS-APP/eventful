@@ -2,7 +2,7 @@ import React, { createContext, useState } from "react";
 
 import { Modal, StyleSheet, View } from "react-native";
 
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
 
 import { LoadingIndicator } from "../components/views/LoadingIndicator";
 import { useContextWrapper } from "./utils";

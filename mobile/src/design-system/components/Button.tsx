@@ -1,11 +1,10 @@
 import { ActivityIndicator } from "react-native-paper";
 
-import { Animated, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
-import { usePulsatingScale } from "@/hooks/usePulsatingScale";
+import { Text } from "@/design-system/components/Text";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
 
@@ -18,7 +17,6 @@ interface ButtonProps {
   flex?: number;
   icon?: keyof typeof FontAwesome5.glyphMap;
   disabled?: boolean;
-  pulsating?: boolean;
   loading?: boolean;
 }
 
@@ -31,17 +29,8 @@ export function Button({
   flex = 0,
   icon,
   disabled = false,
-  pulsating = false,
   loading = false
 }: ButtonProps) {
-  const {
-    scaleAnim,
-    progressAnim,
-    shadowStyle: pulsatingShadowStyle
-  } = usePulsatingScale(pulsating && !disabled, {
-    shadowColor: color
-  });
-
   const handlePress = () => {
     onPress();
     haptics.soft();
@@ -49,18 +38,10 @@ export function Button({
 
   const flexContainer = flex ? styles.flexContainer : undefined;
 
-  const animatedOpacity = progressAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [1, 0.9]
-  });
-
   const buttonStyle = [
     styles.button,
     {
-      backgroundColor: color,
-      opacity: pulsating ? animatedOpacity : 1,
-      transform: pulsating ? [{ scale: scaleAnim }] : [],
-      ...(pulsating && pulsatingShadowStyle ? pulsatingShadowStyle : {})
+      backgroundColor: color
     }
   ];
 
@@ -72,7 +53,7 @@ export function Button({
       activeOpacity={0.5}
       hitSlop={getHitSlop("large")}
     >
-      <Animated.View style={buttonStyle}>
+      <View style={buttonStyle}>
         <View style={styles.textContainer}>
           {icon && <FontAwesome5 name={icon} size={20} color={textColor} />}
           <Text type="subHeader" color={textColor} style={styles.text}>
@@ -91,7 +72,7 @@ export function Button({
             {subText}
           </Text>
         )}
-      </Animated.View>
+      </View>
     </TouchableOpacity>
   );
 }

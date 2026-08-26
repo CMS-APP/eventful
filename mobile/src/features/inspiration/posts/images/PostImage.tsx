@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { ActivityIndicator, Image, StyleSheet, View } from "react-native";
 
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
 
 interface PostImageProps {
   currentImageUri: string | null;

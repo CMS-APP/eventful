@@ -8,13 +8,13 @@ import { RouteProp } from "@react-navigation/native";
 
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { Screen } from "@/components/views/screen/Screen";
+import { colors } from "@/design-system/tokens/colors";
 import { ProfileStackParamList } from "@/features/app/navigationTypes";
 import {
   getUserFollowers,
   getUserFollowing,
   getUsersFromFollowing
 } from "@/services/firebase/firebaseUserFunctions";
-import { colors } from "@/styles/colors";
 import { User } from "@/types/User";
 
 import { ProfileButton } from "../components/ProfileButton";

@@ -7,7 +7,8 @@ import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Text } from "@/components/text/Text";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import {
   AppStackParamList,
   MainStackParamList
@@ -15,12 +16,12 @@ import {
 import { getInviteFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Event } from "@/types/Event";
 import { User } from "@/types/User";
 import { isActiveEvent, parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
+import { log } from "@/utils/logging";
 
 interface EventItemProps {
   index: number;
@@ -36,6 +37,7 @@ export function EventItem({ index, event }: EventItemProps) {
     useNavigation() as StackNavigationProp<AppStackParamList>;
 
   async function fetchUserDetails() {
+    log("Fetching user details", "info");
     const userDetails = await getUserInfo(event.userId);
     setUserDetails(userDetails);
   }
@@ -48,6 +50,7 @@ export function EventItem({ index, event }: EventItemProps) {
 
   async function navigateToEvent() {
     haptics.soft();
+    log("Navigating to event", "info");
     const userDetails = await getUserInfo(event.userId);
     if (event.userId === userId) {
       navigationEvents.reset({
