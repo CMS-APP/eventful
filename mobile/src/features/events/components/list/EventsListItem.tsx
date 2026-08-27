@@ -66,7 +66,6 @@ export function EventsListItem({
     if (event.userId === userId) {
       navEvents.navigate("EventEdit", { event });
     } else if (isUpcoming || isDecline) {
-      log("Fetching user details", "info");
       const userData = await getUserInfo(event.userId);
       const invite = await getInviteFromDatabase(event, userId);
 
@@ -88,7 +87,6 @@ export function EventsListItem({
   }, [event, userId, navigation, isUpcoming, isDecline]);
 
   async function fetchHostInfo() {
-    log("Fetching host info", "info");
     if (event.userId === userId) {
       setHost("You");
     } else {

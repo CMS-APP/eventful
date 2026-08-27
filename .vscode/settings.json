@@ -44,7 +44,6 @@
     "mobile/credentials": true,
     "mobile/dsyms": true,
     "mobile/metadata": true,
-    "mobile/screenshots": true,
     "mobile/ios": true,
     "mobile/android": true,
     "web/.next/": true,

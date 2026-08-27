@@ -141,7 +141,7 @@ ANDROID_SECONDS=0
 if [ "$BUILD_IOS" = true ]; then
   echo "📦 Building iOS app..."
   IOS_START_TIME=$(date +%s)
-  eas build --platform ios --local
+  eas build --platform ios --local --profile production --non-interactive
   IOS_END_TIME=$(date +%s)
   IOS_DURATION=$((IOS_END_TIME - IOS_START_TIME))
   IOS_MINUTES=$((IOS_DURATION / 60))
