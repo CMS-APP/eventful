@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { Keyboard, StyleSheet, View } from "react-native";
 
+import { Divider } from "@/design-system/components/Divider";
 import { Input } from "@/design-system/components/Input";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
@@ -29,14 +30,15 @@ import {
   searchPlaces
 } from "@/services/firebase/firebaseBackend";
 import { Event } from "@/types/Event";
+import { EventAddress } from "@/types/EventAddress";
 import { showErrorToast } from "@/utils/toast";
 import { generateUUID } from "@/utils/uuid";
 
 import { AddressFieldsForm } from "./AddressFieldsForm";
-import { Divider } from "@/design-system/components/Divider";
 import { PlaceSuggestionsList } from "./PlaceSuggestionsList";
 
 const SEARCH_DEBOUNCE_MS = 500;
+const FIELD_SAVE_DEBOUNCE_MS = 400;
 
 interface LocationSearchProps {
   event: Event;
@@ -69,6 +71,17 @@ export function LocationSearch({ event, setEvent }: LocationSearchProps) {
   const sessionTokenRef = useRef(generateUUID());
   const eventRef = useRef(event);
   eventRef.current = event;
+  const fieldSaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+
+  useEffect(() => {
+    return () => {
+      if (fieldSaveTimeoutRef.current) {
+        clearTimeout(fieldSaveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (initialAddress.type !== "search") return;
@@ -127,32 +140,57 @@ export function LocationSearch({ event, setEvent }: LocationSearchProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, user?.uid]);
 
-  function saveSearchAddress(
+  function safeFormatAddress(
     nextCountryCode: string,
     nextCountryName: string,
     nextValues: AddressValues
-  ) {
-    setEvent({
-      ...eventRef.current,
-      address: {
-        type: "search",
-        countryCode: nextCountryCode,
-        countryName: nextCountryName,
-        values: nextValues,
-        formattedAddress: formatAddress(
-          nextCountryCode,
-          nextCountryName,
-          nextValues
-        )
-      }
-    });
+  ): string {
+    try {
+      return formatAddress(nextCountryCode, nextCountryName, nextValues);
+    } catch {
+      // formatAddress can throw for a handful of ISO codes (e.g. Antarctica)
+      // that aren't in i18n-postal-address's supported formats table even
+      // though they're in our own country list — fall back to a plain join
+      // so the address still saves instead of silently failing.
+      return [...Object.values(nextValues), nextCountryName]
+        .filter(Boolean)
+        .join(", ");
+    }
   }
 
-  function saveManualAddress(value: string) {
-    setEvent({
-      ...eventRef.current,
-      address: { type: "manual", value }
-    });
+  function buildSearchAddress(
+    nextCountryCode: string,
+    nextCountryName: string,
+    nextValues: AddressValues
+  ): EventAddress {
+    return {
+      type: "search",
+      countryCode: nextCountryCode,
+      countryName: nextCountryName,
+      values: nextValues,
+      formattedAddress: safeFormatAddress(
+        nextCountryCode,
+        nextCountryName,
+        nextValues
+      )
+    };
+  }
+
+  function commitEventUpdate(partial: Partial<Event>) {
+    if (fieldSaveTimeoutRef.current) {
+      clearTimeout(fieldSaveTimeoutRef.current);
+      fieldSaveTimeoutRef.current = null;
+    }
+    setEvent({ ...eventRef.current, ...partial });
+  }
+
+  function scheduleEventUpdate(partial: Partial<Event>) {
+    if (fieldSaveTimeoutRef.current) {
+      clearTimeout(fieldSaveTimeoutRef.current);
+    }
+    fieldSaveTimeoutRef.current = setTimeout(() => {
+      setEvent({ ...eventRef.current, ...partial });
+    }, FIELD_SAVE_DEBOUNCE_MS);
   }
 
   function handleQueryChange(text: string) {
@@ -175,22 +213,26 @@ export function LocationSearch({ event, setEvent }: LocationSearchProps) {
   function handleAddressFieldChange(key: AddressFieldKey, text: string) {
     const nextValues = { ...addressValues, [key]: text };
     setAddressValues(nextValues);
-    saveSearchAddress(countryCode, countryName, nextValues);
+    scheduleEventUpdate({
+      address: buildSearchAddress(countryCode, countryName, nextValues)
+    });
   }
 
   function handleCountryNameChange(text: string) {
     setCountryName(text);
-    saveSearchAddress(countryCode, text, addressValues);
+    scheduleEventUpdate({
+      address: buildSearchAddress(countryCode, text, addressValues)
+    });
   }
 
   function handleManualAddressChange(text: string) {
     setManualAddress(text);
-    saveManualAddress(text);
+    scheduleEventUpdate({ address: { type: "manual", value: text } });
   }
 
   function handleDirectionsChange(text: string) {
     setDirections(text);
-    setEvent({ ...eventRef.current, directions: text });
+    scheduleEventUpdate({ directions: text });
   }
 
   function handleClearAddress() {
@@ -202,7 +244,7 @@ export function LocationSearch({ event, setEvent }: LocationSearchProps) {
     setSuggestions([]);
     setShowResults(false);
     setManualAddress("");
-    saveManualAddress("");
+    commitEventUpdate({ address: { type: "manual", value: "" } });
   }
 
   async function handleSelect(suggestion: PlaceSuggestion) {
@@ -238,7 +280,9 @@ export function LocationSearch({ event, setEvent }: LocationSearchProps) {
       setAddressValues(values);
       setCountryCode(nextCountryCode);
       setCountryName(nextCountryName);
-      saveSearchAddress(nextCountryCode, nextCountryName, values);
+      commitEventUpdate({
+        address: buildSearchAddress(nextCountryCode, nextCountryName, values)
+      });
 
       setQuery("");
       setSuggestions([]);

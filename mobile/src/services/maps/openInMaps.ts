@@ -17,6 +17,13 @@ async function openGoogleMaps(query: string) {
   );
 }
 
+function openOrShowError(action: () => Promise<void>) {
+  action().catch((error) => {
+    showErrorToast("Error Opening Maps");
+    log("Error Opening Maps: " + error, "error");
+  });
+}
+
 export async function openInMaps(address: string) {
   try {
     if (Platform.OS === "android") {
@@ -31,8 +38,14 @@ export async function openInMaps(address: string) {
     }
 
     Alert.alert("Open Directions", "Choose an app", [
-      { text: "Apple Maps", onPress: () => openAppleMaps(address) },
-      { text: "Google Maps", onPress: () => openGoogleMaps(address) },
+      {
+        text: "Apple Maps",
+        onPress: () => openOrShowError(() => openAppleMaps(address))
+      },
+      {
+        text: "Google Maps",
+        onPress: () => openOrShowError(() => openGoogleMaps(address))
+      },
       { text: "Cancel", style: "cancel" }
     ]);
   } catch (error) {
