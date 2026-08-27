@@ -1,6 +1,6 @@
-import { createContext, useContext } from "react";
-
 import type { SharedValue } from "react-native-reanimated";
+
+import { createContext, useContext } from "react";
 
 type PanSnapContextValue = {
   activeIndex: number;
