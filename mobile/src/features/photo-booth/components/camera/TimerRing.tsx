@@ -144,7 +144,7 @@ const TimerRing = forwardRef<TimerRingHandle, TimerRingProps>(
         </Svg>
         {showCountdownLabel && labelSeconds > 0 ? (
           <View style={styles.labelWrap} pointerEvents="none">
-            <Text type="header" color={colors.white}>
+            <Text type="subHeader" color={colors.white}>
               {labelSeconds}
             </Text>
           </View>

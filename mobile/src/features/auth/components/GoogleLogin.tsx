@@ -13,10 +13,13 @@ import { useDispatch } from "react-redux";
 
 import { useState } from "react";
 
+import { CommonActions } from "@react-navigation/native";
+
 import { dataInit } from "@/app/init/data";
 import { navigationRef } from "@/app/navigation";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { saveGoogleOnboardingName } from "../utils";
@@ -55,7 +58,12 @@ export function GoogleLogin() {
         );
       }
 
-      navigationRef.navigate(result);
+      navigationRef.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: result }]
+        })
+      );
     } catch (error) {
       if (
         (isErrorWithCode(error) &&
@@ -65,6 +73,7 @@ export function GoogleLogin() {
         return;
       }
       showErrorToast("Error Signing In");
+      log(error as string, "error");
     } finally {
       setIsSubmitting(false);
     }

@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   iconsContainer: {
+    alignItems: "center",
     gap: 2.5,
     marginLeft: 6
   },

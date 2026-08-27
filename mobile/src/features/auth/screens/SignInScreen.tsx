@@ -4,6 +4,7 @@ import { useCallback, useRef, useState } from "react";
 
 import { Alert, LayoutChangeEvent, StyleSheet, View } from "react-native";
 
+import { CommonActions } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { useLoadingModal } from "@/app/context/loading/LoadingModalContext";
@@ -155,7 +156,12 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
         }
 
         const result = await dataInit(dispatch, () => {});
-        navigationRef.navigate(result);
+        navigationRef.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: result }]
+          })
+        );
       } catch (error) {
         if (error instanceof Error) {
           const errorMessages: Record<string, string> = {

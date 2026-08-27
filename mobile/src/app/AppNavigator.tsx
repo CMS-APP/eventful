@@ -6,6 +6,7 @@ import {
   createNativeStackNavigator
 } from "@react-navigation/native-stack";
 
+import { useBackButtonHandler } from "@/app/hooks/useBackButtonHandler";
 import { useDataInit } from "@/app/init/data";
 import { AppStackParamList, navigationRef } from "@/app/navigation";
 
@@ -33,6 +34,8 @@ const modalOptions: NativeStackNavigationOptions = {
 
 export function AppNavigator() {
   const { initialize } = useDataInit();
+
+  useBackButtonHandler();
 
   return (
     <NavigationContainer ref={navigationRef} onReady={initialize}>

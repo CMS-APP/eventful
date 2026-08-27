@@ -27,7 +27,9 @@ interface HeaderProps {
 
 interface ContentProps {
   tabBarPresent?: boolean;
+  paddingBottom?: number;
   backgroundColor?: string;
+  bottomMargin?: boolean;
 }
 
 interface NonScrollProps {
@@ -47,7 +49,9 @@ export function Screen({
   children,
   headerConfig,
   contentConfig = {
-    tabBarPresent: true
+    tabBarPresent: true,
+    paddingBottom: 12,
+    bottomMargin: true
   },
   nonScrollChildren,
   nonScrollConfig,
@@ -109,6 +113,8 @@ export function Screen({
           handleScroll={handleScroll ?? (() => {})}
           _handleScroll={_handleScroll}
           backgroundColor={contentConfig?.backgroundColor}
+          paddingBottom={contentConfig?.paddingBottom ?? 12}
+          bottomMargin={contentConfig?.bottomMargin ?? true}
         >
           {headerConfig?.type === "flat" && (
             <>

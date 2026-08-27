@@ -5,11 +5,11 @@ import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { colors } from "@/design-system/tokens/colors";
-
-import type { PhotoBoothStackNavigation } from "../../photoBoothStackParams";
 import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
 import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
+
+import type { PhotoBoothStackNavigation } from "../../photoBoothStackParams";
 import { PhotoBoothButton } from "./PhotoBoothButton";
 import { PhotoBoothCaptureButton } from "./PhotoBoothCaptureButton";
 
@@ -32,7 +32,7 @@ export function PhotoBoothButtons({
   }
 
   return (
-    <View style={[styles.buttonsContainer, { marginBottom: bottom }]}>
+    <View style={[styles.buttonsContainer, { marginBottom: bottom + 12 }]}>
       <View style={styles.buttonColumn}>
         <PhotoBoothButton
           onPress={() => setShowCustomiseCollageModal(true)}

@@ -4,50 +4,18 @@
     "appVersionSource": "local"
   },
   "build": {
-    "development:simulator": {
-      "developmentClient": true,
-      "distribution": "internal",
-      "ios": {
-        "simulator": true
-      },
-      "env": {
-        "APP_VARIANT": "development"
-      }
-    },
     "development": {
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "APP_VARIANT": "development",
-        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyCcAHVVo3FIJrSK1FVQ_hPRmQm635jbdlQ",
-        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "eventful-23690.firebaseapp.com",
-        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "eventful-23690",
-        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "eventful-23690.firebasestorage.app",
-        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "165003650822",
-        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:165003650822:web:88a7fa08ae63985891a087"
+        "APP_VARIANT": "development"
       }
     },
     "preview": {
-      "distribution": "internal",
-      "env": {
-        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyCcAHVVo3FIJrSK1FVQ_hPRmQm635jbdlQ",
-        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "eventful-23690.firebaseapp.com",
-        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "eventful-23690",
-        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "eventful-23690.firebasestorage.app",
-        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "165003650822",
-        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:165003650822:web:88a7fa08ae63985891a087"
-      }
+      "distribution": "internal"
     },
     "production": {
-      "developmentClient": false,
-      "env": {
-        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyCcAHVVo3FIJrSK1FVQ_hPRmQm635jbdlQ",
-        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "eventful-23690.firebaseapp.com",
-        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "eventful-23690",
-        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "eventful-23690.firebasestorage.app",
-        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "165003650822",
-        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:165003650822:web:88a7fa08ae63985891a087"
-      }
+      "developmentClient": false
     }
   },
   "submit": {

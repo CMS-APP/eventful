@@ -11,6 +11,8 @@ import React from "react";
 
 import { Platform } from "react-native";
 
+import { CommonActions } from "@react-navigation/native";
+
 import {
   ILoadingModalContext,
   useLoadingModal
@@ -58,7 +60,12 @@ export function AppleLogin() {
         await saveAppleOnboardingName(user.user, fullName);
       }
 
-      navigationRef.navigate(result);
+      navigationRef.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: result }]
+        })
+      );
     } catch (error: any) {
       if (error.code !== "1001") {
         showErrorToast("Error signing in with Apple");

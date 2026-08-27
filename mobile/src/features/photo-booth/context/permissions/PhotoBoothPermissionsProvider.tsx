@@ -3,7 +3,11 @@ import { useCallback } from "react";
 
 import { Alert, Linking } from "react-native";
 
-import { PermissionResponse, PermissionStatus, useCameraPermissions } from "expo-camera";
+import {
+  PermissionResponse,
+  PermissionStatus,
+  useCameraPermissions
+} from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 
 import { PhotoBoothPermissionsContext } from "@/features/photo-booth/context/permissions/PhotoBoothPermissionsContext";
@@ -22,6 +26,19 @@ const defaultLibraryPermission = {
   accessPrivileges: "none"
 } as MediaLibrary.PermissionResponse;
 
+function isPhotoBoothPermissionGranted(
+  camera: PermissionResponse,
+  library: MediaLibrary.PermissionResponse
+) {
+  if (
+    camera.status !== PermissionStatus.GRANTED ||
+    library.status !== PermissionStatus.GRANTED
+  ) {
+    return false;
+  }
+  return library.accessPrivileges === "all";
+}
+
 export function PhotoBoothPermissionsProvider({
   children
 }: {
@@ -35,17 +52,10 @@ export function PhotoBoothPermissionsProvider({
     if (!cameraPermission || !photoLibraryPermission) {
       return false;
     }
-
-    if (
-      cameraPermission.status === PermissionStatus.GRANTED &&
-      photoLibraryPermission.status === PermissionStatus.GRANTED
-    ) {
-      if (photoLibraryPermission.accessPrivileges !== "all") {
-        return false;
-      }
-      return true;
-    }
-    return false;
+    return isPhotoBoothPermissionGranted(
+      cameraPermission,
+      photoLibraryPermission
+    );
   }, [cameraPermission, photoLibraryPermission]);
 
   const photoBoothPermissionAlert = useCallback(() => {
@@ -70,15 +80,24 @@ export function PhotoBoothPermissionsProvider({
       return true;
     }
 
-    if ((cameraPermission ?? defaultCameraPermission).canAskAgain) {
-      await requestCameraPermission();
+    let latestCameraPermission = cameraPermission ?? defaultCameraPermission;
+    let latestLibraryPermission =
+      photoLibraryPermission ?? defaultLibraryPermission;
+
+    if (latestCameraPermission.canAskAgain) {
+      latestCameraPermission = await requestCameraPermission();
     }
 
-    if ((photoLibraryPermission ?? defaultLibraryPermission).canAskAgain) {
-      await requestPhotoLibraryPermission();
+    if (latestLibraryPermission.canAskAgain) {
+      latestLibraryPermission = await requestPhotoLibraryPermission();
     }
 
-    if (checkPhotoBoothPermission()) {
+    if (
+      isPhotoBoothPermissionGranted(
+        latestCameraPermission,
+        latestLibraryPermission
+      )
+    ) {
       return true;
     }
 

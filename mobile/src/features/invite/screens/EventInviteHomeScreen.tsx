@@ -57,12 +57,7 @@ export function EventInviteHomeScreen({
   );
 
   return (
-    <View
-      style={[
-        styles.screenContainer,
-        Platform.OS === "android" && styles.screenContainerAndroid
-      ]}
-    >
+    <View style={styles.screenContainer}>
       <KeyboardScrollView
         tabBarPresent={false}
         handleScroll={() => {}}
@@ -193,19 +188,11 @@ const styles = StyleSheet.create({
     borderColor: colors.secondary,
     borderRadius: 30,
     borderWidth: 3,
-    flex: 1,
     margin: 12,
     padding: 12
   },
   containerAndroid: {
-    backgroundColor: colors.white,
-    elevation: 8,
-    marginHorizontal: 24,
-    marginVertical: 32,
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 12
+    marginVertical: 48
   },
   dateContainer: {
     alignItems: "center",
@@ -249,9 +236,6 @@ const styles = StyleSheet.create({
   screenContainer: {
     backgroundColor: colors.white,
     flex: 1
-  },
-  screenContainerAndroid: {
-    backgroundColor: colors.blackTransparent
   },
   startDateLabel: {
     color: colors.primary,

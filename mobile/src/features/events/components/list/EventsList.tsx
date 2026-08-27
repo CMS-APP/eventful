@@ -15,7 +15,6 @@ interface EventsListProps {
   pastEvents: Event[];
   newEventAction: () => void;
   declineEvents: Event[];
-  viewType: string;
 }
 
 export function EventsList({
@@ -23,42 +22,24 @@ export function EventsList({
   selectedButton,
   pastEvents,
   newEventAction,
-  declineEvents,
-  viewType
+  declineEvents
 }: EventsListProps) {
   const renderEventList = useCallback(
     (events: Event[], isUpcoming: boolean, isDecline: boolean) => {
       return (
         <View style={styles.container}>
           {events.length > 0 ? (
-            viewType === "Grid" ? (
-              <View style={styles.gridContainer}>
-                {events.map((event, index) => (
-                  <View key={event.id} style={styles.gridItem}>
-                    <EventsListItem
-                      index={index}
-                      event={event}
-                      isUpcoming={isUpcoming}
-                      isDecline={isDecline}
-                      isGrid={true}
-                    />
-                  </View>
-                ))}
-              </View>
-            ) : (
-              <View style={styles.listContainer}>
-                {events.map((event, index) => (
-                  <EventsListItem
-                    key={event.id}
-                    index={index}
-                    event={event}
-                    isUpcoming={isUpcoming}
-                    isDecline={isDecline}
-                    isGrid={false}
-                  />
-                ))}
-              </View>
-            )
+            <View style={styles.listContainer}>
+              {events.map((event, index) => (
+                <EventsListItem
+                  key={event.id}
+                  index={index}
+                  event={event}
+                  isUpcoming={isUpcoming}
+                  isDecline={isDecline}
+                />
+              ))}
+            </View>
           ) : (
             <>
               <EmptyStateContainer
@@ -78,7 +59,7 @@ export function EventsList({
         </View>
       );
     },
-    [viewType, selectedButton, newEventAction]
+    [selectedButton, newEventAction]
   );
 
   return (
@@ -97,16 +78,6 @@ const styles = StyleSheet.create({
     gap: 12,
     marginHorizontal: 24,
     marginTop: 12
-  },
-  gridContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 12,
-    justifyContent: "space-between"
-  },
-  gridItem: {
-    aspectRatio: 1,
-    width: "48%"
   },
   listContainer: {
     gap: 12

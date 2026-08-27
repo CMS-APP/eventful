@@ -4,12 +4,14 @@ import { useEffect } from "react";
 
 import { StatusBar, StyleSheet, View } from "react-native";
 
+import { CommonActions } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import {
   AllStackParamList,
   AppStackParamList,
-  OnboardingStackParamList
+  OnboardingStackParamList,
+  navigationRef
 } from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
 import { showErrorToast } from "@/utils/toast";
@@ -45,7 +47,12 @@ export function Onboarding1Screen({ navigation }: Onboarding1ScreenProps) {
     );
 
     setTimeout(() => {
-      (navigation as StackNavigationProp<AppStackParamList>).navigate("Auth");
+      navigationRef.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "Auth" }]
+        })
+      );
     }, 500);
   }
 

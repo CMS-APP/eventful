@@ -21,7 +21,8 @@ export function KeyboardScrollView({
   _handleScroll,
   tabBarPresent,
   backgroundColor = colors.white,
-  paddingBottom = 12
+  paddingBottom = 12,
+  bottomMargin = false
 }: {
   children: React.ReactNode;
   handleScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
@@ -29,6 +30,7 @@ export function KeyboardScrollView({
   tabBarPresent: boolean;
   backgroundColor?: string;
   paddingBottom?: number;
+  bottomMargin?: boolean;
 }) {
   const customEasing = Easing.bezier(0.25, 0.1, 0.25, 1);
   const keyboardMarginBottom = useRef(new Animated.Value(0)).current;
@@ -57,7 +59,7 @@ export function KeyboardScrollView({
   function calculateMarginBottom() {
     if (tabBarPresent) {
       return height;
-    } else if (Platform.OS === "android") {
+    } else if (Platform.OS === "android" && bottomMargin) {
       return safeArea.paddingBottom;
     } else {
       return 0;

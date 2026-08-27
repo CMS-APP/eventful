@@ -17,7 +17,7 @@ import { Alert, Platform, StatusBar } from "react-native";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AllStackParamList } from "@/app/navigation";
+import { AllStackParamList, navigationRef } from "@/app/navigation";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
 import {
@@ -52,7 +52,7 @@ export function DeleteAccountButton() {
     navigation.navigate("LoadingScreen" as never);
 
     setTimeout(() => {
-      navigation.dispatch(
+      navigationRef.dispatch(
         CommonActions.reset({
           index: 0,
           routes: [{ name: "Auth" }]

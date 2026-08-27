@@ -10,7 +10,6 @@ import { Screen } from "@/components/screen/Screen";
 import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
 import { IconButton } from "@/design-system/components/IconButton";
 import { colors } from "@/design-system/tokens/colors";
-import { getData, saveData } from "@/services/local/async";
 
 import { CreateEventModal } from "../components/create/CreateEventModal";
 import { EventsList } from "../components/list/EventsList";
@@ -22,7 +21,6 @@ interface EventsScreenProps {
 }
 
 export function EventsScreen({ navigation, route }: EventsScreenProps) {
-  const [viewType, setViewType] = useState("List");
   const [selectedButton, setSelectedButton] = useState("Upcoming");
   const [showModal, setShowModal] = useState(false);
 
@@ -39,23 +37,6 @@ export function EventsScreen({ navigation, route }: EventsScreenProps) {
     setShowModal(true);
   }
 
-  async function switchView() {
-    setViewType((prev) => (prev === "List" ? "Grid" : "List"));
-    await saveData("eventsViewType", viewType === "List" ? "Grid" : "List");
-  }
-
-  useEffect(() => {
-    async function getViewType() {
-      const viewType = await getData("eventsViewType");
-      if (viewType) {
-        setViewType(viewType);
-      } else {
-        setViewType("List");
-      }
-    }
-    getViewType();
-  }, []);
-
   return (
     <Screen
       headerConfig={{
@@ -71,14 +52,6 @@ export function EventsScreen({ navigation, route }: EventsScreenProps) {
         <>
           <View style={styles.viewSwitcherContainer}>
             <View style={styles.flexSpacer} />
-            <IconButton
-              iconName={viewType === "List" ? "list" : "th-large"}
-              onPress={switchView}
-              size="small"
-              color={colors.primary}
-              marginTop={0}
-              marginBottom={0}
-            />
             <IconButton
               iconName="plus"
               onPress={newEventAction}
@@ -106,7 +79,6 @@ export function EventsScreen({ navigation, route }: EventsScreenProps) {
         declineEvents={declineEvents}
         selectedButton={selectedButton}
         newEventAction={newEventAction}
-        viewType={viewType}
       />
     </Screen>
   );

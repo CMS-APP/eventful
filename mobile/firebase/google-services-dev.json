@@ -66,6 +66,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "165003650822-cqdvn29ubssqe1ls1485kvldrmqf8cse.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hostinghappily.app.dev",
+            "certificate_hash": "010a59f1f2a9ea6eb65b730b86fb8903d24228cc"
+          }
+        },
+        {
           "client_id": "165003650822-4q0g9qgjuhr2rt5747s1hnk0n9d03v41.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -22,27 +22,31 @@ export function LoadingProgressIndicator({
     <View style={styles.container}>
       <LoadingIndicator />
       <View style={styles.progressContainer}>
-        <View style={styles.progressBar}>
-          <View
-            style={[
-              styles.progressFill,
-              { width: `${progressPercentage * 100}%` }
-            ]}
-          />
-        </View>
-        <Text type="body" color="white" style={styles.progressText}>
-          {Math.round(progressPercentage * 100)}%
-        </Text>
+        {progress > 0 && (
+          <>
+            <View style={styles.progressBar}>
+              <View
+                style={[
+                  styles.progressFill,
+                  { width: `${progressPercentage * 100}%` }
+                ]}
+              />
+            </View>
+            <Text type="body" color="white" style={styles.progressText}>
+              {Math.round(progressPercentage * 100)}%
+            </Text>
+          </>
+        )}
       </View>
 
       <View style={styles.stepContainer}>
-        {currentStep && (
+        {currentStep && progress > 0 && (
           <Text type="body" color="white">
             {currentStep}
           </Text>
         )}
 
-        {totalSteps > 0 && (
+        {totalSteps > 0 && progress > 0 && (
           <Text type="body" color="white">
             Step {progress} of {totalSteps}
           </Text>
@@ -67,6 +71,7 @@ const styles = StyleSheet.create({
     overflow: "hidden"
   },
   progressContainer: {
+    height: 50,
     marginVertical: 24,
     width: 300
   },

@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Share from "react-native-share";
 
 import { File, Paths } from "expo-file-system";
+import * as LegacyFileSystem from "expo-file-system/legacy";
 import * as MediaLibrary from "expo-media-library";
 
 import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
@@ -198,6 +199,18 @@ async function copyImageToShareCache(readUri: string): Promise<string> {
   return cacheFile.uri;
 }
 
+async function copyContentUriToShareCache(contentUri: string): Promise<string> {
+  const cacheFile = new File(
+    Paths.cache,
+    `photo-booth-share-${Date.now()}.png`
+  );
+  if (cacheFile.exists) {
+    cacheFile.delete();
+  }
+  await LegacyFileSystem.copyAsync({ from: contentUri, to: cacheFile.uri });
+  return cacheFile.uri;
+}
+
 async function resolveUriForShare(uri: string): Promise<string> {
   const trimmed = uri.trim();
   if (!trimmed) {
@@ -211,6 +224,9 @@ async function resolveUriForShare(uri: string): Promise<string> {
     }
     const readUri = asset.localUri ?? asset.uri;
     return copyImageToShareCache(readUri);
+  }
+  if (trimmed.startsWith("content://")) {
+    return copyContentUriToShareCache(trimmed);
   }
   if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
     return copyImageToShareCache(trimmed);

@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 
 import { useCallback } from "react";
 
+import { CommonActions } from "@react-navigation/native";
+
 import { useBoot } from "@/app/context/loading/BootContext";
 import { checkAuth } from "@/app/init/auth";
 import { getDeviceInfo } from "@/app/init/device";
@@ -79,7 +81,12 @@ export function useDataInit() {
   const initialize = useCallback(async () => {
     startLoading();
     const result = await dataInit(dispatch, nextStep);
-    navigationRef.navigate(result);
+    navigationRef.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: result }]
+      })
+    );
     stopLoading();
   }, [dispatch, startLoading, nextStep, stopLoading]);
 

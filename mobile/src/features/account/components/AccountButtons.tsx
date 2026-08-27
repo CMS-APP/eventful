@@ -9,7 +9,7 @@ import {
   ILoadingModalContext,
   useLoadingModal
 } from "@/app/context/loading/LoadingModalContext";
-import { AllStackParamList } from "@/app/navigation";
+import { AllStackParamList, navigationRef } from "@/app/navigation";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
 import { handleSignOut } from "@/services/firebase/firebaseAuth";
@@ -51,7 +51,7 @@ export function AccountButtons() {
     navigation.navigate("LoadingScreen" as never);
 
     setTimeout(() => {
-      navigation.dispatch(
+      navigationRef.dispatch(
         CommonActions.reset({
           index: 0,
           routes: [{ name: "Auth" }]

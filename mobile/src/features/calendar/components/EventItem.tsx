@@ -114,12 +114,18 @@ export function EventItem({ index, event }: EventItemProps) {
         >
           {getDateString()}
         </Text>
-        <View>
+        <View style={styles.eventInfoContainer}>
           <Text type="body" style={styles.eventNameText} numberOfLines={1}>
             {event.name.trim() || "Event"}
           </Text>
           {event.userId !== userId && userDetails && (
-            <Text type="body" italic style={styles.hostInfoText}>
+            <Text
+              type="body"
+              italic
+              style={styles.hostInfoText}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
               {userDetails.name} ({userDetails.username})
             </Text>
           )}
@@ -140,6 +146,9 @@ const styles = StyleSheet.create({
   },
   eventDayTextWithEndDate: {
     fontSize: 24
+  },
+  eventInfoContainer: {
+    flex: 1
   },
   eventNameText: {
     color: colors.white,

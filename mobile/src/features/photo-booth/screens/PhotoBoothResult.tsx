@@ -79,7 +79,11 @@ export function PhotoBoothResult() {
               backAction: handleBackAction
             }
           }}
-          contentConfig={{ tabBarPresent: false }}
+          contentConfig={{
+            tabBarPresent: false,
+            paddingBottom: 0,
+            bottomMargin: false
+          }}
         >
           <View style={styles.container}>
             <View
@@ -117,7 +121,7 @@ export function PhotoBoothResult() {
         <View
           style={[
             styles.resultsButtonsContainer,
-            { paddingBottom: insets.bottom }
+            { paddingBottom: insets.bottom + 12 }
           ]}
         >
           <PanSnapScrollHint labels={filters} />

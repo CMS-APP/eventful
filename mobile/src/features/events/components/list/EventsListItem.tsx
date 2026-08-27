@@ -27,15 +27,13 @@ interface EventsListItemProps {
   event: Event;
   isUpcoming: boolean;
   isDecline: boolean;
-  isGrid: boolean;
 }
 
 export function EventsListItem({
   index,
   event,
   isUpcoming,
-  isDecline,
-  isGrid
+  isDecline
 }: EventsListItemProps) {
   const userId = useSelector((state: UserState) => state.uid);
   const [host, setHost] = useState("");
@@ -108,19 +106,23 @@ export function EventsListItem({
       <View
         style={[
           styles.eventContainer,
-          { backgroundColor: getBackgroundColor() },
-          isGrid && styles.gridContainer
+          { backgroundColor: getBackgroundColor() }
         ]}
       >
         <Text type="header" color={getTextColor()} numberOfLines={2}>
           {textFormatter(event.name.trim(), 50, "Event")}
         </Text>
-        <View style={[styles.detailsContainer, isGrid && styles.gridDetails]}>
+        <View style={styles.detailsContainer}>
           <View style={styles.detailRow}>
             <FontAwesome5 name="user" size={16} color={getTextColor()} />
             <View style={styles.hostContainer}>
-              <Text type="body" color={getTextColor()} numberOfLines={1}>
-                Host: {host}
+              <Text
+                type="body"
+                color={getTextColor()}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {host}
               </Text>
             </View>
           </View>
@@ -132,20 +134,11 @@ export function EventsListItem({
             />
             <Text type="body" style={{ color: getTextColor() }}>
               {formatDate(event.date)}
+              {event.multiDate && event.endDate
+                ? " - " + formatDate(event.endDate)
+                : ""}
             </Text>
           </View>
-          {event.multiDate && event.endDate && (
-            <View style={styles.detailRow}>
-              <FontAwesome5
-                name="chevron-right"
-                size={16}
-                color={getTextColor()}
-              />
-              <Text type="body" style={{ color: getTextColor() }}>
-                {formatDate(event.endDate)}
-              </Text>
-            </View>
-          )}
           <View style={styles.detailRow}>
             <FontAwesome5 name="clock" size={16} color={getTextColor()} />
             <Text type="body" style={{ color: getTextColor() }}>
@@ -173,19 +166,13 @@ const styles = StyleSheet.create({
   },
   eventContainer: {
     ...padding.largeWidget,
-    alignItems: "flex-start",
+    alignItems: "stretch",
     width: "100%"
-  },
-  gridContainer: {
-    height: "100%",
-    justifyContent: "flex-start"
-  },
-  gridDetails: {
-    flex: 1,
-    justifyContent: "flex-start"
   },
   hostContainer: {
     alignItems: "flex-start",
-    gap: 0
+    flex: 1,
+    gap: 0,
+    minWidth: 0
   }
 });
