@@ -15,9 +15,9 @@ import { UserState } from "@/store/UserSlice";
 import { Follower } from "@/types/Follower";
 import { User } from "@/types/User";
 import { haptics } from "@/utils/haptics";
-
-import { SmallButton } from "../buttons/SmallButton";
 import { log } from "@/utils/logging";
+
+import { SmallButton } from "../../design-system/components/SmallButton";
 
 interface FollowButtonProps {
   user: User;
@@ -58,7 +58,10 @@ export function FollowButton({ user, flex = undefined }: FollowButtonProps) {
         following.filter((follow) => follow.followingId !== user.uid)
       );
     } catch (error) {
-      log(`Error unfollowing user: ${(error as any)?.message ?? error}`, "error");
+      log(
+        `Error unfollowing user: ${(error as any)?.message ?? error}`,
+        "error"
+      );
     }
   }, [userId, user.uid, following]);
 

@@ -7,12 +7,9 @@ import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { AppStackParamList, MainStackParamList } from "@/app/navigationTypes";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import {
-  AppStackParamList,
-  MainStackParamList
-} from "@/features/app/navigationTypes";
 import { getInviteFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";

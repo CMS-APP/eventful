@@ -7,10 +7,10 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { AppStackParamList } from "@/app/navigationTypes";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { padding } from "@/design-system/tokens/padding";
-import { AppStackParamList } from "@/features/app/navigationTypes";
 import { SemiCircleProgressBar } from "@/features/home/components/SemiCircleProgressBar";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";

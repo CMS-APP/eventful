@@ -12,10 +12,10 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { AppStackParamList } from "@/app/navigationTypes";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { padding } from "@/design-system/tokens/padding";
-import { AppStackParamList } from "@/features/app/navigationTypes";
 import { UserState } from "@/store/UserSlice";
 import { BudgetItem } from "@/types/BudgetItem";
 import { getHitSlop } from "@/utils/hitSlop";

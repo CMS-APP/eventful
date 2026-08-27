@@ -1,6 +1,6 @@
 import { Modal, StyleSheet, View } from "react-native";
 
-import { LoadingIndicator } from "@/components/views/LoadingIndicator";
+import { LoadingIndicator } from "@/app/context/loading/LoadingIndicator";
 import { colors } from "@/design-system/tokens/colors";
 
 export function LoadingModal({ visible }: { visible: boolean }) {

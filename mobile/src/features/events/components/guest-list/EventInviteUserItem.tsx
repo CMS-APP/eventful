@@ -7,10 +7,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
+import { AccountStackParamList } from "@/app/navigationTypes";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { padding } from "@/design-system/tokens/padding";
-import { AccountStackParamList } from "@/features/app/navigationTypes";
 import { syncUserPicture } from "@/services/cache";
 import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
 import {
@@ -24,9 +24,9 @@ import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
 import { UserInvite } from "@/types/UserInvite";
+import { showErrorNotification } from "@/utils/appNotifications";
 import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
-import { showErrorNotification } from "@/utils/appNotifications";
 
 interface EventInviteUserItemProps {
   user: User;
@@ -93,7 +93,10 @@ export function EventInviteUserItem({
         await deleteInviteFromDatabase(inviteId ?? "");
         log("User removed from event", "info");
       } catch (error) {
-        log(`Error removing user from event: ${(error as any)?.message ?? error}`, "error");
+        log(
+          `Error removing user from event: ${(error as any)?.message ?? error}`,
+          "error"
+        );
         showErrorNotification("Error Removing User");
       }
     } else if (invite.type === "link") {

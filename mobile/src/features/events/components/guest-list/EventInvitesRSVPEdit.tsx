@@ -7,10 +7,10 @@ import { Alert, StyleSheet, View } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AppButtonSwitcher } from "@/components/buttons/AppButtonSwitcher";
+import { EventsStackParamList } from "@/app/navigationTypes";
+import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
-import { EventsStackParamList } from "@/features/app/navigationTypes";
 import { getEventInfo } from "@/services/firebase/firebaseEventFunctions";
 import {
   getRSVPAppUsers,

@@ -14,9 +14,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome } from "@expo/vector-icons";
 
+import { InspirationStackParamList } from "@/app/navigationTypes";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { InspirationStackParamList } from "@/features/app/navigationTypes";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import {
   getPostLikesCount,
@@ -27,13 +27,13 @@ import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
 import { Post } from "@/types/Post";
 import { User } from "@/types/User";
+import { showErrorNotification } from "@/utils/appNotifications";
 import { calculateTimeAgo } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
 
 import { PostImageCarousel } from "./PostImageCarousel";
-import { showErrorNotification } from "@/utils/appNotifications";
 
 export function PostItem({ post }: { post: Post }) {
   const [author, setAuthor] = useState<User | null>(null);
@@ -48,22 +48,17 @@ export function PostItem({ post }: { post: Post }) {
     useNavigation() as StackNavigationProp<InspirationStackParamList>;
 
   const loadLikeData = async () => {
-    try {
-      const [count, liked] = await Promise.all([
-        getPostLikesCount(post.id),
-        currentUserId
-          ? hasUserLikedPost(post.id, currentUserId)
-          : Promise.resolve(false)
-      ]);
-      setLikesCount(count);
-      setIsLiked(liked);
-    } catch (error) {
-      log(`Error loading like data: ${(error as any)?.message ?? error}`, "error");
-    }
+    const [count, liked] = await Promise.all([
+      getPostLikesCount(post.id),
+      currentUserId
+        ? hasUserLikedPost(post.id, currentUserId)
+        : Promise.resolve(false)
+    ]);
+    setLikesCount(count);
+    setIsLiked(liked);
   };
 
   async function fetchAuthor() {
-    log("Fetching author", "info");
     const user = await getUserInfo(post.authorId);
     setAuthor(user);
   }

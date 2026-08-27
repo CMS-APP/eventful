@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { OnboardingStackParamList } from "@/features/app/navigationTypes";
+import { OnboardingStackParamList } from "@/app/navigationTypes";
 
 import { Onboarding1Screen } from "./screens/Onboarding1Screen";
 import { Onboarding2Screen } from "./screens/Onboarding2Screen";

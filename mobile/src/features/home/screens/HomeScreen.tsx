@@ -9,9 +9,9 @@ import {
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Screen } from "@/components/views/screen/Screen";
+import { AllStackParamList } from "@/app/navigationTypes";
+import { Screen } from "@/components/screen/Screen";
 import { colors } from "@/design-system/tokens/colors";
-import { AllStackParamList } from "@/features/app/navigationTypes";
 import { useScreenStatusBar } from "@/utils/statusBar";
 
 import { HomeButtons } from "../components/HomeButtons";

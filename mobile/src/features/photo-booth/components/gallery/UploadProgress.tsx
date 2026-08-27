@@ -7,10 +7,10 @@ import { Alert, Clipboard, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { AppStackParamList } from "@/app/navigationTypes";
 import { Button } from "@/design-system/components/Button";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { AppStackParamList } from "@/features/app/navigationTypes";
 import {
   downloadCloudPhotos,
   uploadPhotosToCloud
@@ -67,7 +67,10 @@ export function UploadProgress({
       await downloadCloudPhotos(event, photoState.cloud);
       await refreshEvent(event);
     } catch (error) {
-      log(`Error downloading photos: ${(error as any)?.message ?? error}`, "error");
+      log(
+        `Error downloading photos: ${(error as any)?.message ?? error}`,
+        "error"
+      );
       showErrorNotification("Error Downloading Photos");
     } finally {
       setDownloading(false);
@@ -81,7 +84,10 @@ export function UploadProgress({
       await uploadPhotosToCloud(userId, event.eventTitle, photoState.local);
       await refreshEvent(event);
     } catch (error) {
-      log(`Error uploading photos: ${(error as any)?.message ?? error}`, "error");
+      log(
+        `Error uploading photos: ${(error as any)?.message ?? error}`,
+        "error"
+      );
       showErrorNotification("Error Uploading Photos");
     } finally {
       setUploading(false);
@@ -99,7 +105,10 @@ export function UploadProgress({
         "The gallery link has been copied to your clipboard."
       );
     } catch (error) {
-      log(`Error copying photo booth gallery link: ${(error as any)?.message ?? error}`, "error");
+      log(
+        `Error copying photo booth gallery link: ${(error as any)?.message ?? error}`,
+        "error"
+      );
       showErrorNotification("Error Copying Link");
     }
   }, [canCopyWebGalleryLink, event.eventTitle, isSyncing, userId]);

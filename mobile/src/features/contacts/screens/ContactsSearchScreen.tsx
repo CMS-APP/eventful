@@ -7,18 +7,18 @@ import { StyleSheet, TextInput, View } from "react-native";
 
 import { RouteProp } from "@react-navigation/native";
 
+import { ContactsStackParamList } from "@/app/navigationTypes";
+import { Screen } from "@/components/screen/Screen";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
-import { Screen } from "@/components/views/screen/Screen";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { ContactsStackParamList } from "@/features/app/navigationTypes";
 import { ProfileButton } from "@/features/profile/components/ProfileButton";
 import { userSearch } from "@/services/firebase/firebaseBackend";
 import { User } from "@/types/User";
+import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
 
 import { ContactsSearch } from "../components/ContactsSearch";
-import { showErrorNotification } from "@/utils/appNotifications";
 
 interface ContactsSearchScreenProps {
   route: RouteProp<ContactsStackParamList, "ContactSearch">;

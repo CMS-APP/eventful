@@ -1,6 +1,6 @@
 import { createNavigationContainerRef } from "@react-navigation/native";
 
-import { AppStackParamList } from "@/features/app/navigationTypes";
+import { AppStackParamList } from "@/app/navigationTypes";
 import { getEventInfo } from "@/services/firebase/firebaseEventFunctions";
 import { getInviteInfo } from "@/services/firebase/firebaseInviteFunctions";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";

@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { DateTimeButton } from "@/components/buttons/DateTimeButton";
+import { DateTimeButton } from "@/design-system/components/DateTimeButton";
 import { DateTimeSelector } from "@/design-system/components/DateTimeSelector";
 import { Input } from "@/design-system/components/Input";
 import { Text } from "@/design-system/components/Text";

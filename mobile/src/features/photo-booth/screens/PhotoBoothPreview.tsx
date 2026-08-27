@@ -1,12 +1,12 @@
 import { StyleSheet, View } from "react-native";
 
-import { Screen } from "@/components/views/screen/Screen";
+import { Screen } from "@/components/screen/Screen";
 import { colors } from "@/design-system/tokens/colors";
+import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
 import { PhotoBoothColumnCollage } from "../components/result/PhotoBoothColumnCollage";
 import { PhotoBoothGridCollage } from "../components/result/PhotoBoothGridCollage";
 import { PhotoBoothRowCollage } from "../components/result/PhotoBoothRowCollage";
-import { usePhotoBoothSettings } from "../provider/PhotoBoothSettingsProvider";
 
 export function PhotoBoothPreview() {
   const { filter, collageStyle } = usePhotoBoothSettings();

@@ -1,6 +1,6 @@
 import { Timestamp } from "@react-native-firebase/firestore";
 
-import { TIMELINE_TEXT_LIST } from "@/constants/timeline";
+import { TIMELINE_TEXT_LIST } from "@/features/events/constants";
 import { generateUUID } from "@/utils/uuid";
 
 import { BudgetItem } from "./BudgetItem";

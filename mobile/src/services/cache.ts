@@ -10,14 +10,7 @@ import { updateUserInfo } from "./firebase/firebaseUserFunctions";
 
 function getImageCacheDirectory(): FileSystem.Directory {
   const cachePath = FileSystem.Paths.cache;
-  if (!cachePath) {
-    throw new Error("Cache directory path is not available");
-  }
-
   const cacheUri = typeof cachePath === "string" ? cachePath : cachePath.uri;
-  if (!cacheUri) {
-    throw new Error("Cache directory URI is not available");
-  }
   return new FileSystem.Directory(cacheUri, "images");
 }
 
@@ -37,9 +30,8 @@ async function createCacheImageFolder() {
 
 export async function getImageFromCache(filename: string) {
   const imageFile = getCachedImageFile(filename);
-
-  const { exists } = imageFile.info();
-  return exists ? imageFile.uri : null;
+  const imageInfo = imageFile.info();
+  return imageInfo.exists ? imageFile.uri : null;
 }
 
 export async function saveLocalImageToCache(
@@ -61,7 +53,7 @@ export async function saveLocalImageToCache(
       cacheFile.delete();
     }
 
-    await sourceFile.copy(cacheFile);
+    sourceFile.copy(cacheFile);
     return cacheFile.uri;
   } catch (error: any) {
     if (
@@ -139,7 +131,7 @@ export async function deleteCachedImage(filename: string) {
       (error as Error & { code: string }).code ===
       "ERR_FILESYSTEM_CANNOT_DELETE"
     ) {
-      log(`CacheStorage: Image not found in cache: ${filename}`, "warn");
+      log(`Image not found in cache: ${filename}`, "warn");
       return;
     }
     throw error;
@@ -148,11 +140,10 @@ export async function deleteCachedImage(filename: string) {
 
 export async function computeImageHash(imageUri: string) {
   const fileContents = await new FileSystem.File(imageUri).base64();
-  const hash = await Crypto.digestStringAsync(
+  return await Crypto.digestStringAsync(
     Crypto.CryptoDigestAlgorithm.SHA256,
     fileContents
   );
-  return hash;
 }
 
 export async function syncUserPicture(user: User, activeUser = false) {

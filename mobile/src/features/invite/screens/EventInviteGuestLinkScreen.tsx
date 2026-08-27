@@ -7,17 +7,14 @@ import { Alert, Clipboard, StyleSheet, View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AppButtonSwitcher } from "@/components/buttons/AppButtonSwitcher";
-import { Screen } from "@/components/views/screen/Screen";
+import { AllStackParamList, EventsStackParamList } from "@/app/navigationTypes";
+import { Screen } from "@/components/screen/Screen";
+import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
 import { Button } from "@/design-system/components/Button";
 import { SwitchButton } from "@/design-system/components/SwitchButton";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { padding } from "@/design-system/tokens/padding";
-import {
-  AllStackParamList,
-  EventsStackParamList
-} from "@/features/app/navigationTypes";
 import { EventInviteUserItem } from "@/features/events/components/guest-list/EventInviteUserItem";
 import {
   changeEventEnabledStatus,

@@ -52,7 +52,6 @@ export function convertTimestampsToMillis(user: User) {
 }
 
 export async function getUserInfo(userId: string): Promise<User | null> {
-  log("Getting user info", "info");
   const userData = await getDocument(API_COLLECTIONS.USER, userId);
 
   if (userData) {

@@ -7,11 +7,11 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { AccountStackParamList } from "@/app/navigationTypes";
+import { Screen } from "@/components/screen/Screen";
 import { ArcCutout } from "@/components/views/ArcCutout";
-import { Screen } from "@/components/views/screen/Screen";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { AccountStackParamList } from "@/features/app/navigationTypes";
 import {
   getUserFollowers,
   getUserFollowing

@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useCallback } from "react";
 
 import { useBoot } from "@/app/context/loading/BootContext";
+import { checkAuth } from "@/app/init/auth";
 import { getDeviceInfo } from "@/app/init/device";
 import { appDatabaseUpdate } from "@/app/init/migration";
 import { storeInit } from "@/app/init/store";
@@ -12,10 +13,8 @@ import {
   getUserInfo,
   updateUserInfo
 } from "@/services/firebase/firebaseUserFunctions";
-import { checkAuth } from "@/services/initialisation/auth";
 import { setUserData, setUserInSentry } from "@/store/UserSlice";
 import { User } from "@/types/User";
-import { log } from "@/utils/logging";
 import { navigationRef } from "@/utils/navigation";
 
 import { checkIfUpdateRequired } from "./version";
@@ -37,7 +36,6 @@ export async function dataInit(dispatch: Dispatch, nextStep?: () => void) {
 
   nextStep?.();
 
-  log("Getting user info - data", "info");
   const userDetails = await getUserInfo(user.uid);
   if (!userDetails || !userDetails?.firstName || !userDetails?.lastName) {
     dispatch(

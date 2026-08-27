@@ -1,12 +1,12 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { HomeStackParamList } from "@/features/app/navigationTypes";
+import { HomeStackParamList } from "@/app/navigationTypes";
 import { accountNavigatorGestureOptions } from "@/features/account/accountNavigatorScreenOptions";
 import { profileNavigatorGestureOptions } from "@/features/profile/profileNavigatorScreenOptions";
 
 import { AccountNavigator } from "../account/AccountNavigator";
 import { PhotoBoothNavigator } from "../photo-booth/PhotoBoothNavigator";
-import { PhotoBoothProvider } from "../photo-booth/provider/PhotoBoothProvider";
+import { PhotoBoothProvider } from "@/features/photo-booth/context/PhotoBoothProvider";
 import { ProfileNavigator } from "../profile/ProfileNavigator";
 import { HomeFollowsScreen } from "./screens/HomeFollowsScreen";
 import { HomeScreen } from "./screens/HomeScreen";

@@ -6,18 +6,18 @@ import { Alert, LayoutChangeEvent, StyleSheet, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
+import { useLoadingModal } from "@/app/context/loading/LoadingModalContext";
 import { dataInit } from "@/app/init/data";
+import { AuthStackParamList } from "@/app/navigationTypes";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Button } from "@/design-system/components/Button";
 import { Input } from "@/design-system/components/Input";
 import { Text } from "@/design-system/components/Text";
 import { TextButton } from "@/design-system/components/TextButton";
 import { colors } from "@/design-system/tokens/colors";
-import { AuthStackParamList } from "@/features/app/navigationTypes";
 import { Header } from "@/features/auth/components/Header";
 import { HeaderArcs } from "@/features/auth/components/HeaderArcs";
 import { formStyles } from "@/features/auth/styles/formStyles";
-import { useLoadingModal } from "@/app/context/loading/LoadingModalContext";
 import { handleSignIn } from "@/services/firebase/firebaseAuth";
 import { sendVerificationEmail } from "@/services/firebase/firebaseBackend";
 import { showErrorNotification } from "@/utils/appNotifications";

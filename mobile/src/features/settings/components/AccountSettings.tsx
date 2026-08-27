@@ -6,18 +6,18 @@ import { useCallback, useState } from "react";
 
 import { Alert, StyleSheet, View } from "react-native";
 
+import { usePaymentProvider } from "@/app/context/payment/PaymentContext";
+import { openSubscriptionManagement } from "@/app/update";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
-import { openSubscriptionManagement } from "@/features/app/utils/update";
-import { usePaymentProvider } from "@/app/context/payment/PaymentContext";
 import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 import { registerForPushNotificationsAsync } from "@/utils/notifications";
 
 import { ChangeNameModal } from "./ChangeNameModal";
 import { DropdownButton } from "./DropdownButton";
-import { showErrorNotification } from "@/utils/appNotifications";
-import { log } from "@/utils/logging";
 
 export function AccountSettings() {
   const [presentModal, setPresentModal] = useState(false);
@@ -42,7 +42,10 @@ export function AccountSettings() {
         Alert.alert("Success", "You are now registered for notifications.");
       }
     } catch (error) {
-      log(`Error requesting notifications: ${(error as any)?.message ?? error}`, "error");
+      log(
+        `Error requesting notifications: ${(error as any)?.message ?? error}`,
+        "error"
+      );
       showErrorNotification("Error Requesting Notifications");
     }
   }, [userId]);
@@ -81,7 +84,10 @@ export function AccountSettings() {
     try {
       await openSubscriptionManagement();
     } catch (error) {
-      log(`Error opening subscription settings: ${(error as any)?.message ?? error}`, "error");
+      log(
+        `Error opening subscription settings: ${(error as any)?.message ?? error}`,
+        "error"
+      );
       showErrorNotification("Error Opening Settings");
     }
   }, []);

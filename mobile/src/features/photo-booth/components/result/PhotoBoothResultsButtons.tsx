@@ -19,8 +19,8 @@ import { saveIndividualPhoto } from "@/services/photo-booth/photos";
 import { log } from "@/utils/logging";
 
 import type { PhotoBoothStackNavigation } from "../../photoBoothStackParams";
-import { usePhotoBoothCamera } from "../../provider/PhotoBoothCameraProvider";
-import { usePhotoBoothSettings } from "../../provider/PhotoBoothSettingsProvider";
+import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
+import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 import { PhotoBoothResultsButton } from "./PhotoBoothResultsButton";
 
 export function PhotoBoothResultsButtons({

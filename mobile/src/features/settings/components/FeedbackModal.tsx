@@ -4,9 +4,9 @@ import { useCallback, useState } from "react";
 
 import { Alert } from "react-native";
 
-import { ModalView } from "@/components/views/ModalView";
 import { Button } from "@/design-system/components/Button";
 import { Input } from "@/design-system/components/Input";
+import { ModalView } from "@/design-system/components/ModalView";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { sendFeedbackToDatabase } from "@/services/firebase/firebaseUserFunctions";

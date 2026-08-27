@@ -3,7 +3,7 @@ import leoProfanity from "leo-profanity";
 function normalizeObfuscation(input: string): string {
   return input
     .toLowerCase()
-    .replace(/[^a-z0-9]/gi, "") // remove symbols/spaces/punctuation
+    .replace(/[^a-z0-9]/gi, "")
     .replace(/0/g, "o")
     .replace(/1/g, "i")
     .replace(/3/g, "e")

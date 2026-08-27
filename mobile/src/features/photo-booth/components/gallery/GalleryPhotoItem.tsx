@@ -13,8 +13,8 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { ImageBackground } from "expo-image";
 
+import { useAppDimensions } from "@/app/hooks/useAppDimensions";
 import { colors } from "@/design-system/tokens/colors";
-import { useAppDimensions } from "@/hooks/useAppDimensions";
 import { GalleryPhoto } from "@/types/photoBoothGallery";
 import { getHitSlop } from "@/utils/hitSlop";
 

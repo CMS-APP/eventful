@@ -1,14 +1,13 @@
-import { Image, StyleSheet, View } from "react-native";
+import { Image, ImageBackground, StyleSheet, View } from "react-native";
 
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { Background } from "@/components/views/Background";
+import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
+import { AuthStackParamList } from "@/app/navigationTypes";
 import { Button } from "@/design-system/components/Button";
 import { Text } from "@/design-system/components/Text";
 import { TextButton } from "@/design-system/components/TextButton";
 import { colors } from "@/design-system/tokens/colors";
-import { AuthStackParamList } from "@/features/app/navigationTypes";
-import { useSafeAreaStyles } from "@/hooks/useSafeAreaStyles";
 
 import { AppleLogin } from "../components/AppleLogin";
 import { GoogleLogin } from "../components/GoogleLogin";
@@ -30,7 +29,11 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
 
   return (
     <View style={styles.container}>
-      <Background page="Welcome" image>
+      <ImageBackground
+        source={require("@/assets/backgrounds/welcome-background.png")}
+        resizeMode="cover"
+        style={styles.background}
+      >
         <View style={styles.logoContainer}>
           <View
             style={[styles.logoBackground, { marginTop: safeArea.paddingTop }]}
@@ -75,12 +78,15 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
             />
           </View>
         </View>
-      </Background>
+      </ImageBackground>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1
+  },
   bottomContainer: {
     backgroundColor: colors.white,
     borderTopLeftRadius: 40,

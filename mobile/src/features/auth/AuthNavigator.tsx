@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { AuthStackParamList } from "@/features/app/navigationTypes";
+import { AuthStackParamList } from "@/app/navigationTypes";
 
-import { WebViewScreen } from "../app/screens/WebViewScreen";
+import { WebScreen } from "../../app/screens/WebScreen";
 import { SignInScreen } from "./screens/SignInScreen";
 import { SignUpScreen } from "./screens/SignUpScreen";
 import { WelcomeScreen } from "./screens/WelcomeScreen";
@@ -17,7 +17,7 @@ export function AuthNavigator() {
       <Stack.Screen name="SignUp" component={SignUpScreen} />
       <Stack.Screen
         name="ForgotPassword"
-        component={WebViewScreen}
+        component={WebScreen}
         options={{ presentation: "modal" }}
       />
     </Stack.Navigator>

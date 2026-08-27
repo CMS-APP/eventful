@@ -6,11 +6,11 @@ import React from "react";
 
 import { StyleSheet } from "react-native";
 
+import { ErrorBoundary } from "@/app/context/error/ErrorBoundary";
 import { BootProvider } from "@/app/context/loading/BootProvider";
 import { LoadingModalProvider } from "@/app/context/loading/LoadingModalProvider";
 import { PaymentProvider } from "@/app/context/payment/PaymentProvider";
 import { ToastProvider } from "@/app/context/toast/ToastProvider";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { userStore } from "@/store/UserSlice";
 
 export function AppProvider({ children }: { children: React.ReactNode }) {

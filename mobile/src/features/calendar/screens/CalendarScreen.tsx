@@ -1,4 +1,4 @@
-import { Screen } from "@/components/views/screen/Screen";
+import { Screen } from "@/components/screen/Screen";
 import { colors } from "@/design-system/tokens/colors";
 
 import { Calendar } from "../components/Calendar";

@@ -8,11 +8,11 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { HomeStackParamList } from "@/app/navigationTypes";
 import { FollowButton } from "@/components/views/FollowButton";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { padding } from "@/design-system/tokens/padding";
-import { HomeStackParamList } from "@/features/app/navigationTypes";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
 import { User } from "@/types/User";

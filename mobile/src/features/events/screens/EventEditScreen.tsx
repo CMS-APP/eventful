@@ -13,18 +13,15 @@ import {
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Screen } from "@/components/views/screen/Screen";
 import {
   ILoadingModalContext,
   useLoadingModal
 } from "@/app/context/loading/LoadingModalContext";
+import { AllStackParamList, EventsStackParamList } from "@/app/navigationTypes";
+import { Screen } from "@/components/screen/Screen";
 import { IconButton } from "@/design-system/components/IconButton";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import {
-  AllStackParamList,
-  EventsStackParamList
-} from "@/features/app/navigationTypes";
 import { HomeNextEvent } from "@/features/home/components/HomeNextEvent";
 import {
   deleteEventFromDatabase,
@@ -32,14 +29,14 @@ import {
 } from "@/services/firebase/firebaseEventFunctions";
 import { deleteEventInvitesFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";
+import { showErrorNotification } from "@/utils/appNotifications";
 import { formatDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
+import { log } from "@/utils/logging";
 import { createNotificationsForEvents } from "@/utils/notifications";
 
 import { SectionButton } from "../components/edit/SectionButton";
 import { useEventEdit } from "../hooks/useEventEdit";
-import { showErrorNotification } from "@/utils/appNotifications";
-import { log } from "@/utils/logging";
 
 interface EventEditScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;

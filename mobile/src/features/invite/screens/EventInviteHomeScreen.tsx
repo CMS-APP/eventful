@@ -8,21 +8,21 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { Entypo } from "@expo/vector-icons";
 
+import { EventInviteStackParamList } from "@/app/navigationTypes";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { textFormatter } from "@/design-system/tokens/fonts";
-import { EventInviteStackParamList } from "@/features/app/navigationTypes";
 import { ResponseButtonIcon } from "@/features/events/components/invite/ResponseButtonIcon";
 import { updateResponseInDatabase } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";
+import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
 import { updateResponseNotification } from "@/utils/notifications";
 
 import { InviteButtons } from "../components/InviteButtons";
 import { InviteDateView } from "../components/InviteDateView";
 import { InviteDateViewMulti } from "../components/InviteDateViewMulti";
-import { showErrorNotification } from "@/utils/appNotifications";
 
 type EventInviteHomeScreenProps = NativeStackScreenProps<
   EventInviteStackParamList,
@@ -52,7 +52,10 @@ export function EventInviteHomeScreen({
           newResponse
         );
       } catch (error) {
-        log(`Error updating response: ${(error as any)?.message ?? error}`, "error");
+        log(
+          `Error updating response: ${(error as any)?.message ?? error}`,
+          "error"
+        );
         showErrorNotification("Error Updating Response");
       }
     },

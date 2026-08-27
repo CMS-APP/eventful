@@ -6,10 +6,10 @@ import { StyleSheet, View } from "react-native";
 
 import { RouteProp } from "@react-navigation/native";
 
+import { ProfileStackParamList } from "@/app/navigationTypes";
+import { Screen } from "@/components/screen/Screen";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
-import { Screen } from "@/components/views/screen/Screen";
 import { colors } from "@/design-system/tokens/colors";
-import { ProfileStackParamList } from "@/features/app/navigationTypes";
 import {
   getUserFollowers,
   getUserFollowing,

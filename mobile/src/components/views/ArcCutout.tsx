@@ -7,14 +7,21 @@ import { colors } from "@/design-system/tokens/colors";
 interface ArcCutoutProps {
   color?: string;
   rotation?: number;
+  position?: {
+    top?: number;
+    right?: number;
+    bottom?: number;
+    left?: number;
+  };
 }
 
 export function ArcCutout({
   color = colors.white,
-  rotation = 90
+  rotation = 90,
+  position = { top: 0, right: 0 }
 }: ArcCutoutProps) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, position]}>
       <Svg
         height="40"
         width="40"
@@ -30,7 +37,6 @@ const styles = StyleSheet.create({
   container: {
     overflow: "hidden",
     position: "absolute",
-    right: 0,
-    top: 0
+    zIndex: 1000
   }
 });

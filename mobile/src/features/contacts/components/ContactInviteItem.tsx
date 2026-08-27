@@ -9,10 +9,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
+import { AppStackParamList } from "@/app/navigationTypes";
 import { UserPicture } from "@/components/views/UserPicture";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { AppStackParamList } from "@/features/app/navigationTypes";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
 import { EventInvite } from "@/types/EventInvite";

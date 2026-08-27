@@ -4,28 +4,28 @@ import { Alert, LayoutChangeEvent, StyleSheet, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import {
   ILoadingModalContext,
   useLoadingModal
 } from "@/app/context/loading/LoadingModalContext";
+import { AuthStackParamList } from "@/app/navigationTypes";
+import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Button } from "@/design-system/components/Button";
 import { Input } from "@/design-system/components/Input";
 import { Text } from "@/design-system/components/Text";
 import { TextButton } from "@/design-system/components/TextButton";
 import { colors } from "@/design-system/tokens/colors";
-import { AuthStackParamList } from "@/features/app/navigationTypes";
 import { handleSignUp } from "@/services/firebase/firebaseAuth";
 import { sendVerificationEmail } from "@/services/firebase/firebaseBackend";
 import { FormErrors } from "@/types/FormErrors";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 import { emailValid, passwordValid } from "@/utils/regex";
 import { useScreenStatusBar } from "@/utils/statusBar";
 
 import { Header } from "../components/Header";
 import { HeaderArcs } from "../components/HeaderArcs";
 import { formStyles } from "../styles/formStyles";
-import { showErrorNotification } from "@/utils/appNotifications";
-import { log } from "@/utils/logging";
 
 type SignUpScreenProps = NativeStackScreenProps<AuthStackParamList, "SignUp">;
 

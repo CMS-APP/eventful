@@ -12,12 +12,12 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/design-system/components/Text";
-import { colors } from "@/design-system/tokens/colors";
 import {
   EventsStackParamList,
   MainStackParamList
-} from "@/features/app/navigationTypes";
+} from "@/app/navigationTypes";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";

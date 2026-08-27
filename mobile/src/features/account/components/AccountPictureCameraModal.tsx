@@ -11,8 +11,8 @@ import { PhotoResult } from "expo-camera";
 import * as ImageManipulator from "expo-image-manipulator";
 import { CameraType } from "expo-image-picker";
 
-import { ModalView } from "@/components/views/ModalView";
 import { Button } from "@/design-system/components/Button";
+import { ModalView } from "@/design-system/components/ModalView";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { computeImageHash, saveLocalImageToCache } from "@/services/cache";

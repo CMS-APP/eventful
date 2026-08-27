@@ -6,23 +6,23 @@ import { Alert, StyleSheet, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { FlatHeader } from "@/components/views/screen/FlatHeader";
-import { FlatHeaderProps } from "@/components/views/screen/props";
-import { Button } from "@/design-system/components/Button";
-import { Input } from "@/design-system/components/Input";
-import { colors } from "@/design-system/tokens/colors";
 import {
   AllStackParamList,
   InspirationStackParamList
-} from "@/features/app/navigationTypes";
+} from "@/app/navigationTypes";
+import { FlatHeader } from "@/components/screen/FlatHeader";
+import { FlatHeaderProps } from "@/components/screen/props";
+import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
+import { Button } from "@/design-system/components/Button";
+import { Input } from "@/design-system/components/Input";
+import { colors } from "@/design-system/tokens/colors";
 import { createPostInDatabase } from "@/services/firebase/firebaseInspirationFunctions";
 import { UserState } from "@/store/UserSlice";
 import { Photo } from "@/types/Photo";
-
-import { UploadPhoto } from "../components/UploadPhoto";
 import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
+
+import { UploadPhoto } from "../components/UploadPhoto";
 
 interface CreatePostScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;

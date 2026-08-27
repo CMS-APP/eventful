@@ -3,14 +3,16 @@ import { User } from "@/types/User";
 
 import { convertPhotoDataToGalleryPhotoData } from "../../services/firebase/firebaseDataUpdates";
 import {
-  convertDateToTimestamp,
   convertEventEventToEvent,
+  convertLocalEventsToDatabase
+} from "./migrations/1.0.0";
+import {
   convertEventGuestList,
-  convertEventInvites,
-  convertLocalEventsToDatabase,
-  convertPollVotesToDatabasePollVotes,
-  convertUserFollowingToDatabaseFollowing
-} from "../../services/initialisation/updateFunctions";
+  convertEventInvites
+} from "./migrations/1.2.0";
+import { convertUserFollowingToDatabaseFollowing } from "./migrations/1.4.0";
+import { convertPollVotesToDatabasePollVotes } from "./migrations/1.5.0";
+import { convertDateToTimestamp } from "./migrations/1.6.0";
 
 type ConversionFn = (userId: string) => Promise<void>;
 

@@ -17,21 +17,21 @@ import { Alert, Platform, StatusBar } from "react-native";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { AllStackParamList } from "@/app/navigationTypes";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
-import { AllStackParamList } from "@/features/app/navigationTypes";
 import {
   getAppleCredentialForReauthentication,
   revokeSignInWithAppleToken
-} from "@/services/apple/apple";
+} from "@/features/settings/utils/apple";
 import { removeAllData } from "@/services/async";
 import { deleteImageAsync } from "@/services/firebase/firebaseStorage";
 import { deleteUserData } from "@/services/firebase/firebaseUserFunctions";
 import { UserState, clearStorage } from "@/store/UserSlice";
+import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
 
 import { SettingsPasswordModal } from "./SettingsPasswordModal";
-import { showErrorNotification } from "@/utils/appNotifications";
 
 export function DeleteAccountButton() {
   const userId = useSelector((state: UserState) => state.uid);
@@ -127,7 +127,10 @@ export function DeleteAccountButton() {
       await reauthenticateWithCredential(user, googleCredential);
       await finalizeAccountDeletion(user);
     } catch (error: any) {
-      log(`Error deleting account: ${(error as any)?.message ?? error}`, "error");
+      log(
+        `Error deleting account: ${(error as any)?.message ?? error}`,
+        "error"
+      );
       showErrorNotification("Error Deleting Account");
     } finally {
       setDeleting(false);
@@ -152,7 +155,10 @@ export function DeleteAccountButton() {
       await reauthenticateWithCredential(user, appleCredential);
       await finalizeAccountDeletion(user);
     } catch (error: any) {
-      log(`Error deleting account: ${(error as any)?.message ?? error}`, "error");
+      log(
+        `Error deleting account: ${(error as any)?.message ?? error}`,
+        "error"
+      );
       showErrorNotification("Error Deleting Account");
     } finally {
       setDeleting(false);
@@ -227,7 +233,10 @@ export function DeleteAccountButton() {
       ) {
         Alert.alert("Error", "Incorrect password, please try again.");
       } else {
-        log(`Error deleting account: ${(error as any)?.message ?? error}`, "error");
+        log(
+          `Error deleting account: ${(error as any)?.message ?? error}`,
+          "error"
+        );
         showErrorNotification("Error Deleting Account");
       }
     } finally {

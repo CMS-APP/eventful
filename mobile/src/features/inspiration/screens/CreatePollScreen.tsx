@@ -4,19 +4,19 @@ import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import {
+  AllStackParamList,
+  InspirationStackParamList
+} from "@/app/navigationTypes";
+import { FlatHeader } from "@/components/screen/FlatHeader";
+import { FlatHeaderProps } from "@/components/screen/props";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { FlatHeader } from "@/components/views/screen/FlatHeader";
-import { FlatHeaderProps } from "@/components/views/screen/props";
 import { Button } from "@/design-system/components/Button";
 import { Divider } from "@/design-system/components/Divider";
 import { Input } from "@/design-system/components/Input";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { padding } from "@/design-system/tokens/padding";
-import {
-  AllStackParamList,
-  InspirationStackParamList
-} from "@/features/app/navigationTypes";
 import { createPollInDatabase } from "@/services/firebase/firebaseInspirationFunctions";
 import { getHitSlop } from "@/utils/hitSlop";
 

@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 
 import { useBoot } from "@/app/context/loading/BootContext";
-import { LoadingProgressIndicator } from "@/components/views/LoadingProgressIndicator";
+import { LoadingProgressIndicator } from "@/app/context/loading/LoadingProgressIndicator";
 import { colors } from "@/design-system/tokens/colors";
 
 export function LoadingScreen() {

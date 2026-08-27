@@ -5,13 +5,10 @@ import { StyleSheet, View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { AllStackParamList, HomeStackParamList } from "@/app/navigationTypes";
+import { Screen } from "@/components/screen/Screen";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
-import { Screen } from "@/components/views/screen/Screen";
 import { colors } from "@/design-system/tokens/colors";
-import {
-  AllStackParamList,
-  HomeStackParamList
-} from "@/features/app/navigationTypes";
 import { readFollowNotification } from "@/services/firebase/firebaseUserFunctions";
 import { Notification } from "@/types/Notification";
 

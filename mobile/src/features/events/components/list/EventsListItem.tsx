@@ -9,14 +9,11 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
+import { AppStackParamList, EventsStackParamList } from "@/app/navigationTypes";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { textFormatter } from "@/design-system/tokens/fonts";
 import { padding } from "@/design-system/tokens/padding";
-import {
-  AppStackParamList,
-  EventsStackParamList
-} from "@/features/app/navigationTypes";
 import { getInviteFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";

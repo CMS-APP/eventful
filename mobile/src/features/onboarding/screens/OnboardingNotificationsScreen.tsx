@@ -5,8 +5,8 @@ import { Alert, StyleSheet, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { AllStackParamList } from "@/app/navigationTypes";
 import { colors } from "@/design-system/tokens/colors";
-import { AllStackParamList } from "@/features/app/navigationTypes";
 import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
 import { registerForPushNotificationsAsync } from "@/utils/notifications";

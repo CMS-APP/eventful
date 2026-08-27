@@ -5,14 +5,11 @@ import { StyleSheet, View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AppButtonSwitcher } from "@/components/buttons/AppButtonSwitcher";
-import { Screen } from "@/components/views/screen/Screen";
+import { AllStackParamList, EventsStackParamList } from "@/app/navigationTypes";
+import { Screen } from "@/components/screen/Screen";
+import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
 import { IconButton } from "@/design-system/components/IconButton";
 import { colors } from "@/design-system/tokens/colors";
-import {
-  AllStackParamList,
-  EventsStackParamList
-} from "@/features/app/navigationTypes";
 import { getData, saveData } from "@/services/async";
 import { useScreenStatusBar } from "@/utils/statusBar";
 

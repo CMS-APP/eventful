@@ -5,12 +5,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { RouteProp, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Screen } from "@/components/views/screen/Screen";
+import { AllStackParamList, EventsStackParamList } from "@/app/navigationTypes";
+import { Screen } from "@/components/screen/Screen";
 import { colors } from "@/design-system/tokens/colors";
-import {
-  AllStackParamList,
-  EventsStackParamList
-} from "@/features/app/navigationTypes";
 import {
   getEventInfo,
   updateEventInDatabase

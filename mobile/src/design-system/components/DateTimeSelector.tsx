@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 
 import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { ModalView } from "@/components/views/ModalView";
+import { ModalView } from "@/design-system/components/ModalView";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/utils/hitSlop";

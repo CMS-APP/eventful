@@ -18,8 +18,8 @@ import {
   ILoadingModalContext,
   useLoadingModal
 } from "@/app/context/loading/LoadingModalContext";
+import { AllStackParamList } from "@/app/navigationTypes";
 import { colors } from "@/design-system/tokens/colors";
-import { AllStackParamList } from "@/features/app/navigationTypes";
 import {
   computeImageHash,
   deleteCachedImage,

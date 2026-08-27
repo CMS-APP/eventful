@@ -9,9 +9,9 @@ import {
   ILoadingModalContext,
   useLoadingModal
 } from "@/app/context/loading/LoadingModalContext";
+import { AllStackParamList } from "@/app/navigationTypes";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
-import { AllStackParamList } from "@/features/app/navigationTypes";
 import { handleSignOut } from "@/services/firebase/firebaseAuth";
 import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";

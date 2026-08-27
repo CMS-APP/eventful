@@ -7,13 +7,13 @@ import { StyleSheet, View } from "react-native";
 import { RouteProp, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
-import { Screen } from "@/components/views/screen/Screen";
-import { colors } from "@/design-system/tokens/colors";
 import {
   AllStackParamList,
   ProfileStackParamList
-} from "@/features/app/navigationTypes";
+} from "@/app/navigationTypes";
+import { Screen } from "@/components/screen/Screen";
+import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
+import { colors } from "@/design-system/tokens/colors";
 import { InviteEventCard } from "@/features/invite/components/InviteEventCard";
 import { getFutureEventsFromDatabase } from "@/services/firebase/firebaseEventFunctions";
 import { UserState } from "@/store/UserSlice";

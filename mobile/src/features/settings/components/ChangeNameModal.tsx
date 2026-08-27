@@ -8,9 +8,9 @@ import { Alert, StyleSheet, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { ModalView } from "@/components/views/ModalView";
 import { Button } from "@/design-system/components/Button";
 import { Input } from "@/design-system/components/Input";
+import { ModalView } from "@/design-system/components/ModalView";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { padding } from "@/design-system/tokens/padding";
@@ -27,10 +27,10 @@ import {
   setUsername,
   setUsernameUpdateDate
 } from "@/store/UserSlice";
-import { parseDatabaseDate } from "@/utils/date";
-import { checkValue as checkValueUtil } from "@/utils/regex";
 import { showErrorNotification } from "@/utils/appNotifications";
+import { parseDatabaseDate } from "@/utils/date";
 import { log } from "@/utils/logging";
+import { checkValue as checkValueUtil } from "@/utils/regex";
 
 interface ChangeNameModalProps {
   presentModal: boolean;

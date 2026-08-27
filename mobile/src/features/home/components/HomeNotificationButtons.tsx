@@ -7,11 +7,8 @@ import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { HomeStackParamList, MainStackParamList } from "@/app/navigationTypes";
 import { colors } from "@/design-system/tokens/colors";
-import {
-  HomeStackParamList,
-  MainStackParamList
-} from "@/features/app/navigationTypes";
 import {
   listenToFollowNotifications,
   listenToUpdateNotifications

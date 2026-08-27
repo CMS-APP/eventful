@@ -7,10 +7,10 @@ import { Alert, StyleSheet, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { Screen } from "@/components/views/screen/Screen";
+import { AppStackParamList } from "@/app/navigationTypes";
+import { Screen } from "@/components/screen/Screen";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
-import { AppStackParamList } from "@/features/app/navigationTypes";
 import {
   deletePhotoCloud,
   downloadCloudPhoto,
@@ -21,10 +21,10 @@ import {
   sharePhoto
 } from "@/services/photo-booth/localPhotos";
 import { UserState } from "@/store/UserSlice";
-
-import { GalleryPhotoItem } from "../components/gallery/GalleryPhotoItem";
 import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
+
+import { GalleryPhotoItem } from "../components/gallery/GalleryPhotoItem";
 import {
   PhotoBoothStackNavigation,
   PhotoBoothStackParamList
@@ -112,7 +112,10 @@ export function PhotoBoothPhoto() {
       await uploadPhotosToCloud(userId, photo.eventTitle, [photo]);
       setPhoto({ ...photo, type: "both" });
     } catch (error) {
-      log(`Error uploading photos: ${(error as any)?.message ?? error}`, "error");
+      log(
+        `Error uploading photos: ${(error as any)?.message ?? error}`,
+        "error"
+      );
       showErrorNotification("Error Uploading Photos");
     } finally {
       setUploading(false);
@@ -125,7 +128,10 @@ export function PhotoBoothPhoto() {
       await downloadCloudPhoto(photo, userId);
       setPhoto({ ...photo, type: "both" });
     } catch (error) {
-      log(`Error downloading photo: ${(error as any)?.message ?? error}`, "error");
+      log(
+        `Error downloading photo: ${(error as any)?.message ?? error}`,
+        "error"
+      );
       showErrorNotification("Error Downloading Photo");
     } finally {
       setDownloading(false);

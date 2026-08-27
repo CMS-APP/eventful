@@ -9,9 +9,9 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { CameraView, PhotoResult } from "expo-camera";
 import { CameraType } from "expo-image-picker";
 
+import { AccountStackParamList } from "@/app/navigationTypes";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { AccountStackParamList } from "@/features/app/navigationTypes";
 import { getHitSlop } from "@/utils/hitSlop";
 
 import { AccountPictureCameraModal } from "../components/AccountPictureCameraModal";

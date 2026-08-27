@@ -7,11 +7,11 @@ import { StyleSheet, View } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { ContactsStackParamList } from "@/app/navigationTypes";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { Button } from "@/design-system/components/Button";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { ContactsStackParamList } from "@/features/app/navigationTypes";
 import { getInvitationsForUser } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";
 import { EventInvite } from "@/types/EventInvite";

@@ -7,7 +7,7 @@ import { showErrorNotification } from "@/utils/appNotifications";
 import { haptics } from "@/utils/haptics";
 import { log } from "@/utils/logging";
 
-import { openAppStore } from "../../features/app/utils/update";
+import { openAppStore } from "../update";
 
 export function UpdateScreen() {
   const handleUpdateNow = async () => {

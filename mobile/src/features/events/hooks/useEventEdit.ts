@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AllStackParamList } from "@/features/app/navigationTypes";
+import { AllStackParamList } from "@/app/navigationTypes";
 import { getEventInfo } from "@/services/firebase/firebaseEventFunctions";
 import { Event } from "@/types/Event";
 import { showErrorNotification } from "@/utils/appNotifications";

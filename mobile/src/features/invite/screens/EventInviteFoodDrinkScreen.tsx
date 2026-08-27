@@ -4,14 +4,14 @@ import { StyleSheet, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
+import { EventInviteStackParamList } from "@/app/navigationTypes";
+import { FlatHeader } from "@/components/screen/FlatHeader";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { FlatHeader } from "@/components/views/screen/FlatHeader";
 import { Input } from "@/design-system/components/Input";
 import { colors } from "@/design-system/tokens/colors";
-import { EventInviteStackParamList } from "@/features/app/navigationTypes";
 import { updateResponseInDatabase } from "@/services/firebase/firebaseInviteFunctions";
-import { log } from "@/utils/logging";
 import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 
 type Props = NativeStackScreenProps<
   EventInviteStackParamList,
@@ -31,7 +31,10 @@ export function EventInviteFoodDrinkScreen({ navigation, route }: Props) {
           dietary
         });
       } catch (error) {
-        log(`Error updating dietary requirements: ${(error as any)?.message ?? error}`, "error");
+        log(
+          `Error updating dietary requirements: ${(error as any)?.message ?? error}`,
+          "error"
+        );
         showErrorNotification("Error Updating Requirements");
       }
     }

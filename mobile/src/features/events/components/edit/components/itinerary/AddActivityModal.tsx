@@ -4,9 +4,9 @@ import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { ModalView } from "@/components/views/ModalView";
 import { Button } from "@/design-system/components/Button";
 import { Input } from "@/design-system/components/Input";
+import { ModalView } from "@/design-system/components/ModalView";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";

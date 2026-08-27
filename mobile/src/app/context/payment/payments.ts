@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AppStackParamList } from "@/features/app/navigationTypes";
+import { AppStackParamList } from "@/app/navigationTypes";
 import { Subscription } from "@/types/Subscription";
 import { log } from "@/utils/logging";
 

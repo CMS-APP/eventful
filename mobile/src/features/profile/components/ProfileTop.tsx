@@ -7,12 +7,12 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { SmallButton } from "@/components/buttons/SmallButton";
+import { ProfileStackParamList } from "@/app/navigationTypes";
 import { ArcCutout } from "@/components/views/ArcCutout";
 import { FollowButton } from "@/components/views/FollowButton";
+import { SmallButton } from "@/design-system/components/SmallButton";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { ProfileStackParamList } from "@/features/app/navigationTypes";
 import {
   getUserFollowers,
   getUserFollowing,

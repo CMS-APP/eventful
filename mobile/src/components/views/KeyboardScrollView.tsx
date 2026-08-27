@@ -12,8 +12,8 @@ import {
   StyleSheet
 } from "react-native";
 
+import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
 import { colors } from "@/design-system/tokens/colors";
-import { useSafeAreaStyles } from "@/hooks/useSafeAreaStyles";
 
 export function KeyboardScrollView({
   children,

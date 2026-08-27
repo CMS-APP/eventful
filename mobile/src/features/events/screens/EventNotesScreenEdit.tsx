@@ -2,10 +2,10 @@ import { StyleSheet, View } from "react-native";
 
 import { RouteProp } from "@react-navigation/native";
 
-import { Screen } from "@/components/views/screen/Screen";
+import { EventsStackParamList } from "@/app/navigationTypes";
+import { Screen } from "@/components/screen/Screen";
 import { Input } from "@/design-system/components/Input";
 import { colors } from "@/design-system/tokens/colors";
-import { EventsStackParamList } from "@/features/app/navigationTypes";
 
 import { useEventFieldUpdate } from "../hooks/useEventFieldUpdate";
 

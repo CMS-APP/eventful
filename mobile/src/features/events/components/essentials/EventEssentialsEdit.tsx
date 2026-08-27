@@ -5,9 +5,9 @@ import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { EventsStackParamList } from "@/app/navigationTypes";
 import { Input } from "@/design-system/components/Input";
 import { colors } from "@/design-system/tokens/colors";
-import { EventsStackParamList } from "@/features/app/navigationTypes";
 import { EventBudget } from "@/features/events/components/budget/EventBudget";
 import { Event } from "@/types/Event";
 import { getCurrencySymbolForDevice } from "@/utils/currency";

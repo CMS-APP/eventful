@@ -11,12 +11,12 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
+import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
+import { OnboardingStackParamList } from "@/app/navigationTypes";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Input } from "@/design-system/components/Input";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { OnboardingStackParamList } from "@/features/app/navigationTypes";
-import { useSafeAreaStyles } from "@/hooks/useSafeAreaStyles";
 import { API_COLLECTIONS } from "@/services/api/constants";
 import { createDocument } from "@/services/api/create";
 import { FIREBASE_AUTH } from "@/services/firebase/firebase";
@@ -27,12 +27,12 @@ import {
 } from "@/services/firebase/firebaseUserFunctions";
 import { UserState, setUserData } from "@/store/UserSlice";
 import { User } from "@/types/User";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 import { capitalize, checkNames, checkUsernameValid } from "@/utils/regex";
 
 import { OnboardingButtons } from "../components/OnboardingButtons";
 import { getLoginNames } from "../utils";
-import { showErrorNotification } from "@/utils/appNotifications";
-import { log } from "@/utils/logging";
 
 interface OnboardingNameInputScreenProps {
   navigation: StackNavigationProp<OnboardingStackParamList>;

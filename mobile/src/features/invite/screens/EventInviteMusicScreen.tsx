@@ -6,11 +6,11 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
+import { EventInviteStackParamList } from "@/app/navigationTypes";
+import { FlatHeader } from "@/components/screen/FlatHeader";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { FlatHeader } from "@/components/views/screen/FlatHeader";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { EventInviteStackParamList } from "@/features/app/navigationTypes";
 import { SpotifyPlaylistItem } from "@/features/events/components/music/SpotifyPlaylistItem";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
 

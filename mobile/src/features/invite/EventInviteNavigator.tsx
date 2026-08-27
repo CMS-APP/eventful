@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   AppStackParamList,
   EventInviteStackParamList
-} from "../app/navigationTypes";
+} from "../../app/navigationTypes";
 import { EventInviteFoodDrinkScreen } from "./screens/EventInviteFoodDrinkScreen";
 import { EventInviteGuestsScreen } from "./screens/EventInviteGuestsScreen";
 import { EventInviteHomeScreen } from "./screens/EventInviteHomeScreen";

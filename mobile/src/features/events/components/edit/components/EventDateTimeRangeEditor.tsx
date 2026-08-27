@@ -6,7 +6,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { DateTimeButton } from "@/components/buttons/DateTimeButton";
+import { DateTimeButton } from "@/design-system/components/DateTimeButton";
 import { DateTimeSelector } from "@/design-system/components/DateTimeSelector";
 import { SwitchButton } from "@/design-system/components/SwitchButton";
 import { Text } from "@/design-system/components/Text";

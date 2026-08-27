@@ -8,12 +8,12 @@ import { Animated } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { ModalView } from "@/components/views/ModalView";
+import { EventsStackParamList } from "@/app/navigationTypes";
 import { Button } from "@/design-system/components/Button";
 import { Input } from "@/design-system/components/Input";
+import { ModalView } from "@/design-system/components/ModalView";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { EventsStackParamList } from "@/features/app/navigationTypes";
 import { createEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
 import { UserState } from "@/store/UserSlice";
 import { Event, NewEvent } from "@/types/Event";

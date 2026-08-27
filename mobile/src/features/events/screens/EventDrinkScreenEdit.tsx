@@ -5,16 +5,13 @@ import { StyleSheet, View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AmazonButton } from "@/components/buttons/AmazonButton";
-import { Screen } from "@/components/views/screen/Screen";
+import { AllStackParamList, EventsStackParamList } from "@/app/navigationTypes";
+import { Screen } from "@/components/screen/Screen";
 import { Divider } from "@/design-system/components/Divider";
 import { Input } from "@/design-system/components/Input";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import {
-  AllStackParamList,
-  EventsStackParamList
-} from "@/features/app/navigationTypes";
+import { AmazonButton } from "@/features/events/components/misc/AmazonButton";
 import { UserState } from "@/store/UserSlice";
 
 import { EventDrinkEdit } from "../components/essentials/EventDrinkEdit";

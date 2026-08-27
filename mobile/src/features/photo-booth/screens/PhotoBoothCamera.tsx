@@ -20,9 +20,9 @@ import {
   PhotoBoothTimerHandle
 } from "../components/camera/PhotoBoothTimer";
 import type { PhotoBoothStackNavigation } from "../photoBoothStackParams";
-import { usePhotoBoothCamera } from "../provider/PhotoBoothCameraProvider";
-import { usePhotoBoothSession } from "../provider/PhotoBoothSessionProvider";
-import { usePhotoBoothSettings } from "../provider/PhotoBoothSettingsProvider";
+import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
+import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
+import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
 export function PhotoBoothCamera() {
   const navigation = useNavigation<PhotoBoothStackNavigation>();

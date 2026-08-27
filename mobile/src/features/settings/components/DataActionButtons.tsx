@@ -8,9 +8,9 @@ import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { AllStackParamList } from "@/app/navigationTypes";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
-import { AllStackParamList } from "@/features/app/navigationTypes";
 import { clearCache as clearImageCache } from "@/services/cache";
 import {
   deleteUserData,
@@ -88,7 +88,10 @@ export function DataActionButtons() {
           });
         }
       } catch (error) {
-        log(`Error deleting data: ${(error as any)?.message ?? error}`, "error");
+        log(
+          `Error deleting data: ${(error as any)?.message ?? error}`,
+          "error"
+        );
         showErrorNotification("Error Deleting Data");
       } finally {
         setResettingData(false);
@@ -124,7 +127,10 @@ export function DataActionButtons() {
       dispatch(clearSpotifyData());
       Alert.alert("Success", "Your Spotify data has been reset.");
     } catch (error) {
-      log(`Error resetting spotify data: ${(error as any)?.message ?? error}`, "error");
+      log(
+        `Error resetting spotify data: ${(error as any)?.message ?? error}`,
+        "error"
+      );
       showErrorNotification("Error Resetting Spotify Data");
     } finally {
       setResettingSpotify(false);

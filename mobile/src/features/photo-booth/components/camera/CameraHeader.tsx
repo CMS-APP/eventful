@@ -1,11 +1,11 @@
 import { StyleSheet, View } from "react-native";
 
+import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { padding } from "@/design-system/tokens/padding";
-import { useSafeAreaStyles } from "@/hooks/useSafeAreaStyles";
+import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
 
-import { usePhotoBoothSession } from "../../provider/PhotoBoothSessionProvider";
 import { CameraSelectedCollage } from "./CameraSelectedCollage";
 
 export function CameraHeader({

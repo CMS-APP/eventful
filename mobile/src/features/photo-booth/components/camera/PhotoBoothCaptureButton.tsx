@@ -7,8 +7,8 @@ import { colors } from "@/design-system/tokens/colors";
 import { shadows } from "@/design-system/tokens/shadows";
 import { getHitSlop } from "@/utils/hitSlop";
 
-import { usePhotoBoothCamera } from "../../provider/PhotoBoothCameraProvider";
-import { usePhotoBoothSession } from "../../provider/PhotoBoothSessionProvider";
+import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
+import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
 
 interface PhotoBoothCaptureButtonProps {
   disabled?: boolean;

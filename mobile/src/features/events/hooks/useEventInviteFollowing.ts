@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AllStackParamList } from "@/features/app/navigationTypes";
+import { AllStackParamList } from "@/app/navigationTypes";
 import { getInvitedGuests } from "@/services/firebase/firebaseInviteFunctions";
 import {
   getUserFollowing,

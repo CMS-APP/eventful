@@ -6,17 +6,17 @@ import { StatusBar, StyleSheet, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { colors } from "@/design-system/tokens/colors";
 import {
   AllStackParamList,
   AppStackParamList,
   OnboardingStackParamList
-} from "@/features/app/navigationTypes";
+} from "@/app/navigationTypes";
+import { colors } from "@/design-system/tokens/colors";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 
 import { FeatureView } from "../components/FeatureView";
 import { OnboardingButtons } from "../components/OnboardingButtons";
-import { showErrorNotification } from "@/utils/appNotifications";
-import { log } from "@/utils/logging";
 
 interface Onboarding1ScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;

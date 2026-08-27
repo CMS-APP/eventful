@@ -11,7 +11,7 @@ import {
   useRoute
 } from "@react-navigation/native";
 
-import { Screen } from "@/components/views/screen/Screen";
+import { Screen } from "@/components/screen/Screen";
 import { colors } from "@/design-system/tokens/colors";
 import { getEvent } from "@/services/photo-booth/events";
 import { UserState } from "@/store/UserSlice";
