@@ -1,7 +1,7 @@
 import { Dispatch } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 import { CommonActions } from "@react-navigation/native";
 
@@ -18,6 +18,7 @@ import {
 } from "@/services/firebase/firebaseUserFunctions";
 import { setUserData, setUserInSentry } from "@/store/UserSlice";
 import { User } from "@/types/User";
+import { log } from "@/utils/logging";
 
 import { checkIfUpdateRequired } from "./version";
 
@@ -77,18 +78,29 @@ export async function dataInit(dispatch: Dispatch, nextStep?: () => void) {
 export function useDataInit() {
   const dispatch = useDispatch();
   const { startLoading, nextStep, stopLoading } = useBoot();
+  const [bootError, setBootError] = useState<Error | null>(null);
 
   const initialize = useCallback(async () => {
+    setBootError(null);
     startLoading();
-    const result = await dataInit(dispatch, nextStep);
-    navigationRef.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: result }]
-      })
-    );
-    stopLoading();
+
+    try {
+      const result = await dataInit(dispatch, nextStep);
+      navigationRef.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: result }]
+        })
+      );
+      stopLoading();
+    } catch (error) {
+      log(
+        `Error initialising app: ${(error as any)?.message ?? error}`,
+        "error"
+      );
+      setBootError(error instanceof Error ? error : new Error(String(error)));
+    }
   }, [dispatch, startLoading, nextStep, stopLoading]);
 
-  return { initialize };
+  return { initialize, bootError };
 }

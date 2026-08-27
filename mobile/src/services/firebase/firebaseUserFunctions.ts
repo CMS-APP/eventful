@@ -511,11 +511,15 @@ async function deleteOrphanedNotifications(userId: string) {
 }
 
 export async function cleanupOrphanedData(userId: string) {
-  await Promise.all([
-    deleteOrphanedFollowing(userId),
-    deleteOrphanedFollowers(userId),
-    deleteOrphanedNotifications(userId)
-  ]);
+  try {
+    await Promise.all([
+      deleteOrphanedFollowing(userId),
+      deleteOrphanedFollowers(userId),
+      deleteOrphanedNotifications(userId)
+    ]);
+  } catch (error) {
+    log(`Error cleaning up orphaned data: ${error}`, "error");
+  }
 }
 
 export async function getPhotoBoothConfig(
