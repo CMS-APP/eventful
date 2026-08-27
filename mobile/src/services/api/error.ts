@@ -1,5 +1,5 @@
-import { showErrorNotification } from "./appNotifications";
-import { log } from "./logging";
+import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 export async function safeQuery<T>(
   operation: () => Promise<T>,
@@ -14,22 +14,7 @@ export async function safeQuery<T>(
   }
 }
 
-export async function safeMutation(
-  operation: () => Promise<void>,
-  context: string,
-  showUserNotification = false
-): Promise<void> {
-  try {
-    await operation();
-  } catch (error) {
-    if (showUserNotification) {
-      showErrorNotification(`Error: ${context}`);
-    }
-    throw error;
-  }
-}
-
-export async function safeMutationWithReturn<T>(
+export async function safeMutation<T = void>(
   operation: () => Promise<T>,
   context: string,
   showUserNotification = false
@@ -38,7 +23,7 @@ export async function safeMutationWithReturn<T>(
     return await operation();
   } catch (error) {
     if (showUserNotification) {
-      showErrorNotification(`Error: ${context}`);
+      showErrorToast(`Error: ${context}`);
     }
     throw error;
   }

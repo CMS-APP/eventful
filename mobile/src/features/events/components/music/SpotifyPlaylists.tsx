@@ -14,13 +14,13 @@ import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
 import { haptics } from "@/utils/haptics";
+import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 import { SpotifyPlaylistItem } from "./SpotifyPlaylistItem";
 import { viewSpotifyPlaylist } from "./SpotifyService";
 import { SpotifySignInButton } from "./SpotifySignInButton";
 import { useSpotifyPlaylists } from "./functions/useSpotifyPlaylists";
-import { showErrorNotification } from "@/utils/appNotifications";
-import { log } from "@/utils/logging";
 
 interface SpotifyPlaylistsProps {
   event: Event;
@@ -61,8 +61,11 @@ export function SpotifyPlaylists({ event, setEvent }: SpotifyPlaylistsProps) {
         setLoading(true);
         await viewSpotifyPlaylist(playlist);
       } catch (error) {
-        log(`Error opening Spotify playlist: ${(error as any)?.message ?? error}`, "error");
-        showErrorNotification("Error Opening Playlist");
+        log(
+          `Error opening Spotify playlist: ${(error as any)?.message ?? error}`,
+          "error"
+        );
+        showErrorToast("Error Opening Playlist");
       } finally {
         setLoading(false);
       }

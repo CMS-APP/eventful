@@ -3,7 +3,7 @@ import { where } from "@react-native-firebase/firestore";
 import { API_COLLECTIONS } from "@/services/api/constants";
 import { getDocument, getDocumentsByQuery } from "@/services/api/get";
 import { setDocument, updateDocument } from "@/services/api/update";
-import { getData, removeData } from "@/services/async";
+import { getData, removeData } from "@/services/local/async";
 import { Event } from "@/types/Event";
 
 export async function convertLocalEventsToDatabase(userId: string) {

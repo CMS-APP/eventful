@@ -7,8 +7,8 @@ import {
   query
 } from "@react-native-firebase/firestore";
 
+import { safeQuery } from "@/services/api/error";
 import { FIRESTORE_DB } from "@/services/firebase/firebase";
-import { safeQuery } from "@/utils/errorHandling";
 import { log } from "@/utils/logging";
 
 type DocumentData = FirebaseFirestoreTypes.DocumentData | undefined;

@@ -15,13 +15,16 @@ import { Button } from "@/design-system/components/Button";
 import { ModalView } from "@/design-system/components/ModalView";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { computeImageHash, saveLocalImageToCache } from "@/services/cache";
 import { uploadImageAsync } from "@/services/firebase/firebaseStorage";
 import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import {
+  computeImageHash,
+  saveLocalImageToCache
+} from "@/services/local/cache";
 import { UserState, setProfilePictureHash } from "@/store/UserSlice";
 import { User } from "@/types/User";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 interface AccountPictureCameraModalProps {
   presentModal: boolean;
@@ -44,7 +47,7 @@ export function AccountPictureCameraModal({
   async function savePhoto() {
     if (!photo?.uri) return;
     if (!userId || userId === "null") {
-      showErrorNotification("You're not signed in. Please sign in again.");
+      showErrorToast("You're not signed in. Please sign in again.");
       return;
     }
 
@@ -80,7 +83,7 @@ export function AccountPictureCameraModal({
       navigation.goBack();
     } catch (error) {
       log(`Error saving picture: ${(error as any)?.message ?? error}`, "error");
-      showErrorNotification("Error Saving Photo");
+      showErrorToast("Error Saving Photo");
     } finally {
       setIsLoading(false);
       setPresentModal(false);

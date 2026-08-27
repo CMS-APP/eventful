@@ -1,5 +1,5 @@
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
-import { showErrorNotification } from "@/utils/appNotifications";
+import { showErrorToast } from "@/utils/toast";
 
 /**
  * Fetches the user's Spotify playlists
@@ -25,7 +25,7 @@ export async function fetchSpotifyPlaylists(
 
     return playlistData;
   } catch (error) {
-    showErrorNotification("Error Loading Playlists");
+    showErrorToast("Error Loading Playlists");
     throw error;
   }
 }

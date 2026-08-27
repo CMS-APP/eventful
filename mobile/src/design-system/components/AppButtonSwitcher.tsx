@@ -5,8 +5,8 @@ import { Animated, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useAppDimensions } from "@/app/hooks/useAppDimensions";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
 
 interface AppButtonSwitcherProps {
   selections: string[];

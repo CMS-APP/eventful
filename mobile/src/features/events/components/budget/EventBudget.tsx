@@ -7,16 +7,16 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AppStackParamList } from "@/app/navigationTypes";
+import { AppStackParamList } from "@/app/navigation";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
 import { SemiCircleProgressBar } from "@/features/home/components/SemiCircleProgressBar";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { getCurrencySymbolForDevice } from "@/utils/currency";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
 
 interface EventBudgetProps {

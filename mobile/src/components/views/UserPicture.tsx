@@ -4,8 +4,8 @@ import { Image, StyleSheet, View } from "react-native";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { syncUserPicture } from "@/services/cache";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { syncUserPicture } from "@/services/local/cache";
 import { log } from "@/utils/logging";
 
 interface UserPictureProps {

@@ -11,8 +11,8 @@ import {
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/Text";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
 
 interface HomePageButtonProps {
   icon: keyof typeof FontAwesome5.glyphMap;

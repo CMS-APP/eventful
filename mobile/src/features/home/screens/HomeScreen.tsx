@@ -9,10 +9,9 @@ import {
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AllStackParamList } from "@/app/navigationTypes";
+import { AllStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { colors } from "@/design-system/tokens/colors";
-import { useScreenStatusBar } from "@/utils/statusBar";
 
 import { HomeButtons } from "../components/HomeButtons";
 import { HomeNextEvent } from "../components/HomeNextEvent";
@@ -23,7 +22,6 @@ interface HomeScreenProps {
 
 export function HomeScreen(_: HomeScreenProps) {
   const [scrollY, setScrollY] = useState(0);
-  useScreenStatusBar(true);
 
   function handleScroll(event: NativeSyntheticEvent<NativeScrollEvent>) {
     const yOffset = event.nativeEvent.contentOffset.y;

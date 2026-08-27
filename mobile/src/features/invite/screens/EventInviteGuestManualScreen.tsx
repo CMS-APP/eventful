@@ -9,11 +9,12 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { AllStackParamList, EventsStackParamList } from "@/app/navigationTypes";
+import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
 import { Input } from "@/design-system/components/Input";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { EventInviteUserItem } from "@/features/events/components/guest-list/EventInviteUserItem";
 import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
 import { UserState } from "@/store/UserSlice";
@@ -22,7 +23,6 @@ import { Guest } from "@/types/Guest";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
 import { UserInvite } from "@/types/UserInvite";
-import { getHitSlop } from "@/utils/hitSlop";
 import { generateUUID } from "@/utils/uuid";
 
 interface EventInviteGuestManualScreenProps {

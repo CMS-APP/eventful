@@ -5,20 +5,20 @@ import { Alert, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AppStackParamList } from "@/app/navigationTypes";
+import { AppStackParamList } from "@/app/navigation";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
-import { syncUserPicture } from "@/services/cache";
 import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
 import { deleteInviteFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
+import { syncUserPicture } from "@/services/local/cache";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 interface EventGuestListInvitedItemProps {
   user: User;
@@ -80,7 +80,7 @@ export function EventGuestListInvitedItem({
         `Error removing user from event: ${(error as any)?.message ?? error}`,
         "error"
       );
-      showErrorNotification("Error Removing User");
+      showErrorToast("Error Removing User");
     }
   }, [invite, user, event]);
 

@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { getHitSlop } from "@/utils/hitSlop";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 
 import { Text } from "../../design-system/components/Text";
 import { ArcCutout } from "../views/ArcCutout";

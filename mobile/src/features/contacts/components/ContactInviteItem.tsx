@@ -9,17 +9,17 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { AppStackParamList } from "@/app/navigationTypes";
+import { AppStackParamList } from "@/app/navigation";
 import { UserPicture } from "@/components/views/UserPicture";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
 import { EventInvite } from "@/types/EventInvite";
 import { User } from "@/types/User";
 import { parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
 
 interface ContactInviteItemProps {

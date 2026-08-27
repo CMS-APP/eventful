@@ -9,13 +9,13 @@ import { useNavigation } from "@react-navigation/native";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { useAccountProfilePicture } from "@/features/account/useAccountProfilePicture";
 import { UserState } from "@/store/UserSlice";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
-import { getInitials } from "@/utils/regex";
+import { showErrorToast } from "@/utils/toast";
+import { getInitials } from "@/utils/validation";
 
 interface AccountButtonProps {
   textColor?: string;
@@ -75,7 +75,7 @@ export function AccountButton({
                         `Profile picture load error: ${(error as any)?.message ?? error}`,
                         "error"
                       );
-                      showErrorNotification("Error Loading Photo");
+                      showErrorToast("Error Loading Photo");
                     }}
                     onLoad={() =>
                       log("Account: Profile image loaded successfully", "debug")

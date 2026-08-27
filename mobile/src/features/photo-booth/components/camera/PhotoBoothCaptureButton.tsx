@@ -4,9 +4,8 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { shadows } from "@/design-system/tokens/shadows";
-import { getHitSlop } from "@/utils/hitSlop";
-
 import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
 import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
 

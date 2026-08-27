@@ -17,7 +17,7 @@ import {
   ILoadingModalContext,
   useLoadingModal
 } from "@/app/context/loading/LoadingModalContext";
-import { AllStackParamList, EventsStackParamList } from "@/app/navigationTypes";
+import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { IconButton } from "@/design-system/components/IconButton";
 import { Text } from "@/design-system/components/Text";
@@ -28,12 +28,12 @@ import {
   getEventsFromDatabase
 } from "@/services/firebase/firebaseEventFunctions";
 import { deleteEventInvitesFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
+import { createNotificationsForEvents } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { formatDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
 import { log } from "@/utils/logging";
-import { createNotificationsForEvents } from "@/utils/notifications";
+import { showErrorToast } from "@/utils/toast";
 
 import { SectionButton } from "../components/edit/SectionButton";
 import { useEventEdit } from "../hooks/useEventEdit";
@@ -74,7 +74,7 @@ export function EventEditScreen({ navigation, route }: EventEditScreenProps) {
       await createNotificationsForEvents(upcomingEvents);
     } catch (error) {
       log(`Error deleting event: ${(error as any)?.message ?? error}`, "error");
-      showErrorNotification("Error Deleting Event");
+      showErrorToast("Error Deleting Event");
     } finally {
       setLoading(false);
     }

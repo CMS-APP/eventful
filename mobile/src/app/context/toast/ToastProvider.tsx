@@ -9,7 +9,7 @@ import {
 import { Toast } from "@/app/context/toast/Toast";
 import { ToastContext } from "@/app/context/toast/ToastContext";
 import type { ToastType } from "@/app/context/toast/const";
-import { setGlobalToastFunction } from "@/utils/appNotifications";
+import { setGlobalToastFunction } from "@/utils/toast";
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [message, setMessage] = useState("");

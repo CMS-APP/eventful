@@ -1,11 +1,15 @@
+import { useCallback, useEffect } from "react";
+
 import { createNavigationContainerRef } from "@react-navigation/native";
 
-import { AppStackParamList } from "@/app/navigationTypes";
+import * as Notifications from "expo-notifications";
+import { NotificationResponse } from "expo-notifications";
+
+import { AppStackParamList } from "@/app/navigation";
 import { getEventInfo } from "@/services/firebase/firebaseEventFunctions";
 import { getInviteInfo } from "@/services/firebase/firebaseInviteFunctions";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
-
-import { log } from "./logging";
+import { log } from "@/utils/logging";
 
 export const navigationRef = createNavigationContainerRef<AppStackParamList>();
 
@@ -79,4 +83,21 @@ export async function navigateToScreenFromNotification(response: any) {
   } else if (screen === "EventInvite") {
     await handleEventInviteNavigation(params);
   }
+}
+
+export function usePushNotificationHandler() {
+  const handleNotificationResponse = useCallback(
+    (response: NotificationResponse) => {
+      navigateToScreenFromNotification(response);
+    },
+    []
+  );
+
+  useEffect(() => {
+    const subscription = Notifications.addNotificationResponseReceivedListener(
+      handleNotificationResponse
+    );
+
+    return () => subscription.remove();
+  }, [handleNotificationResponse]);
 }

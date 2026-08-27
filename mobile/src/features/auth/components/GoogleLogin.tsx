@@ -14,11 +14,11 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 
 import { dataInit } from "@/app/init/data";
+import { navigationRef } from "@/app/navigation";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
-import { navigationRef } from "@/utils/navigation";
+import { showErrorToast } from "@/utils/toast";
 
 import { saveGoogleOnboardingName } from "../utils";
 
@@ -70,7 +70,7 @@ export function GoogleLogin() {
         `Error signing in with Google: ${(error as any)?.message ?? error}`,
         "error"
       );
-      showErrorNotification("Error Signing In");
+      showErrorToast("Error Signing In");
     } finally {
       setIsSubmitting(false);
     }

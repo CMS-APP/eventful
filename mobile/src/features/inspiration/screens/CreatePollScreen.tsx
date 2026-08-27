@@ -4,10 +4,7 @@ import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import {
-  AllStackParamList,
-  InspirationStackParamList
-} from "@/app/navigationTypes";
+import { AllStackParamList, InspirationStackParamList } from "@/app/navigation";
 import { FlatHeader } from "@/components/screen/FlatHeader";
 import { FlatHeaderProps } from "@/components/screen/props";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
@@ -16,9 +13,9 @@ import { Divider } from "@/design-system/components/Divider";
 import { Input } from "@/design-system/components/Input";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
 import { createPollInDatabase } from "@/services/firebase/firebaseInspirationFunctions";
-import { getHitSlop } from "@/utils/hitSlop";
 
 interface CreatePollScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;

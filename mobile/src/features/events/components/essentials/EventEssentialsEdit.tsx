@@ -5,7 +5,7 @@ import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { EventsStackParamList } from "@/app/navigationTypes";
+import { EventsStackParamList } from "@/app/navigation";
 import { Input } from "@/design-system/components/Input";
 import { colors } from "@/design-system/tokens/colors";
 import { EventBudget } from "@/features/events/components/budget/EventBudget";

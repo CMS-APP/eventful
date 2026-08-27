@@ -7,7 +7,7 @@ import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 import { ModalView } from "@/design-system/components/ModalView";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { getHitSlop } from "@/utils/hitSlop";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { log } from "@/utils/logging";
 
 import { Button } from "../../design-system/components/Button";

@@ -13,13 +13,13 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { useAppDimensions } from "@/app/hooks/useAppDimensions";
-import { AppStackParamList } from "@/app/navigationTypes";
+import { AppStackParamList } from "@/app/navigation";
 import { Button } from "@/design-system/components/Button";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { haptics } from "@/utils/haptics";
 
-import { AllStackParamList } from "../navigationTypes";
+import { AllStackParamList } from "../navigation";
 
 interface CelebrationScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;

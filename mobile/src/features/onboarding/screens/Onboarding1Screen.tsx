@@ -10,10 +10,10 @@ import {
   AllStackParamList,
   AppStackParamList,
   OnboardingStackParamList
-} from "@/app/navigationTypes";
+} from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 import { FeatureView } from "../components/FeatureView";
 import { OnboardingButtons } from "../components/OnboardingButtons";
@@ -30,7 +30,7 @@ export function Onboarding1Screen({ navigation }: Onboarding1ScreenProps) {
       await signOutNavigation();
     } catch (error) {
       log(`Error Signing out: ${(error as any)?.message ?? error}`, "error");
-      showErrorNotification("Error Signing Out");
+      showErrorToast("Error Signing Out");
     }
   }
 

@@ -3,14 +3,14 @@ import { limit, orderBy, where } from "@react-native-firebase/firestore";
 import { API_COLLECTIONS } from "@/services/api/constants";
 import { getDocument, getDocumentsByQuery } from "@/services/api/get";
 import { setDocument, updateDocument } from "@/services/api/update";
+import { createNotificationForEvent } from "@/services/pushNotifications";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { isActiveEvent, parseDatabaseDate } from "@/utils/date";
-import { createNotificationForEvent } from "@/utils/notifications";
+import { log } from "@/utils/logging";
 
 import { deleteDocument } from "../api/delete";
 import { incrementEventCount } from "./firebaseBackend";
-import { log } from "@/utils/logging";
 
 export async function getEventInfo(event: Event): Promise<Event | null> {
   const eventData = await getDocument(API_COLLECTIONS.EVENT, event.id || "");
@@ -21,17 +21,14 @@ export async function createEventInDatabase(data: Event, user: any) {
   await setDocument(data, API_COLLECTIONS.EVENT, data.id);
   await createNotificationForEvent(data);
   incrementEventCount(user);
-
 }
 
 export async function updateEventInDatabase(event: Partial<Event>) {
   await updateDocument(event, API_COLLECTIONS.EVENT, event?.id || "");
-
 }
 
 export async function deleteEventFromDatabase(eventId: string) {
   await deleteDocument(API_COLLECTIONS.EVENT, eventId);
-
 }
 
 export async function getEventsFromDatabase(userId: string) {
@@ -61,7 +58,10 @@ export async function getEventsFromDatabase(userId: string) {
 
     return { upcomingEvents, pastEvents };
   } catch (error) {
-    log(`FirebaseFunctions: Error getting events: ${(error as any)?.message ?? error}`, "error");
+    log(
+      `FirebaseFunctions: Error getting events: ${(error as any)?.message ?? error}`,
+      "error"
+    );
     return { upcomingEvents: [], pastEvents: [] };
   }
 }
@@ -125,7 +125,6 @@ export async function changeEventEnabledStatus(
     API_COLLECTIONS.EVENT_LINKS,
     eventId
   );
-
 }
 
 export async function getFutureEventsFromDatabase(userId: string) {

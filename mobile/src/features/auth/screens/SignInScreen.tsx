@@ -8,7 +8,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { useLoadingModal } from "@/app/context/loading/LoadingModalContext";
 import { dataInit } from "@/app/init/data";
-import { AuthStackParamList } from "@/app/navigationTypes";
+import { AuthStackParamList, navigationRef } from "@/app/navigation";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Button } from "@/design-system/components/Button";
 import { Input } from "@/design-system/components/Input";
@@ -20,9 +20,8 @@ import { HeaderArcs } from "@/features/auth/components/HeaderArcs";
 import { formStyles } from "@/features/auth/styles/formStyles";
 import { handleSignIn } from "@/services/firebase/firebaseAuth";
 import { sendVerificationEmail } from "@/services/firebase/firebaseBackend";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
-import { navigationRef } from "@/utils/navigation";
+import { showErrorToast } from "@/utils/toast";
 
 interface FormErrors {
   email?: string;
@@ -104,7 +103,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
         `Error sending verification email: ${(error as any)?.message ?? error}`,
         "error"
       );
-      showErrorNotification("Error Sending Email");
+      showErrorToast("Error Sending Email");
       Alert.alert(
         "Error",
         "We encountered an issue sending the verification email. Please try again later."
@@ -184,7 +183,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
               `Error logging In: ${(error as any)?.message ?? error}`,
               "error"
             );
-            showErrorNotification("Error Logging In");
+            showErrorToast("Error Logging In");
           }
         }
       } finally {

@@ -7,7 +7,7 @@ import { StyleSheet, View } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { ContactsStackParamList } from "@/app/navigationTypes";
+import { ContactsStackParamList } from "@/app/navigation";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { Button } from "@/design-system/components/Button";
 import { Text } from "@/design-system/components/Text";

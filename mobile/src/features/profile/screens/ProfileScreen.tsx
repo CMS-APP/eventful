@@ -3,10 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import {
-  AllStackParamList,
-  ProfileStackParamList
-} from "@/app/navigationTypes";
+import { AllStackParamList, ProfileStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { colors } from "@/design-system/tokens/colors";
 

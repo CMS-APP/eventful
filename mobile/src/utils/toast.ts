@@ -19,7 +19,7 @@ export function setGlobalToastFunction(
   }
 }
 
-export function showErrorNotification(message: string) {
+export function showErrorToast(message: string) {
   if (globalShowToast) {
     globalShowToast(message, "error");
   } else {

@@ -11,16 +11,16 @@ import React from "react";
 
 import { Platform } from "react-native";
 
-import { dataInit } from "@/app/init/data";
-import { Button } from "@/design-system/components/Button";
-import { colors } from "@/design-system/tokens/colors";
 import {
   ILoadingModalContext,
   useLoadingModal
 } from "@/app/context/loading/LoadingModalContext";
-import { showErrorNotification } from "@/utils/appNotifications";
+import { dataInit } from "@/app/init/data";
+import { navigationRef } from "@/app/navigation";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import { log } from "@/utils/logging";
-import { navigationRef } from "@/utils/navigation";
+import { showErrorToast } from "@/utils/toast";
 
 import { saveAppleOnboardingName } from "../utils";
 
@@ -65,7 +65,7 @@ export function AppleLogin() {
         log("User cancelled authentication", "info");
       } else {
         log(error, "error");
-        showErrorNotification("Error signing in with Apple");
+        showErrorToast("Error signing in with Apple");
       }
     } finally {
       setLoading(false);

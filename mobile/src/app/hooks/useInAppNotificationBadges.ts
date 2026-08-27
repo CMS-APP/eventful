@@ -7,7 +7,7 @@ import { setBadgeCountAsync } from "expo-notifications";
 import { getInvitationsFromDatabaseSnapshot } from "@/services/firebase/firebaseListeners";
 import { Invites } from "@/types/Invites";
 
-export function useNotifications(userId: string | null | undefined) {
+export function useInAppNotificationBadges(userId: string | null | undefined) {
   const [notifications, setNotifications] = useState({
     Home: 0,
     Contacts: 0,

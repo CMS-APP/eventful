@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { OnboardingStackParamList } from "@/app/navigationTypes";
+import { OnboardingStackParamList } from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
 
 import { FeatureView } from "../components/FeatureView";

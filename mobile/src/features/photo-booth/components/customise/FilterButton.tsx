@@ -4,8 +4,8 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { FilterWrapper } from "@/features/photo-booth/components/customise/FilterWrapper";
-import { getHitSlop } from "@/utils/hitSlop";
 
 interface FilterButtonProps {
   filter: string;

@@ -9,10 +9,10 @@ import { Input } from "@/design-system/components/Input";
 import { ModalView } from "@/design-system/components/ModalView";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { Event } from "@/types/Event";
 import { Itinerary } from "@/types/Itinerary";
 import { parseDatabaseDate } from "@/utils/date";
-import { getHitSlop } from "@/utils/hitSlop";
 import { generateUUID } from "@/utils/uuid";
 
 import { AddActivityDate } from "./AddActivityDate";

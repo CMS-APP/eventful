@@ -7,7 +7,7 @@ import { Alert, Clipboard, StyleSheet, View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AllStackParamList, EventsStackParamList } from "@/app/navigationTypes";
+import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
 import { Button } from "@/design-system/components/Button";

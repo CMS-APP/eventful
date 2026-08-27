@@ -3,7 +3,7 @@ import { Image, ImageBackground, StyleSheet, View } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
-import { AuthStackParamList } from "@/app/navigationTypes";
+import { AuthStackParamList } from "@/app/navigation";
 import { Button } from "@/design-system/components/Button";
 import { Text } from "@/design-system/components/Text";
 import { TextButton } from "@/design-system/components/TextButton";

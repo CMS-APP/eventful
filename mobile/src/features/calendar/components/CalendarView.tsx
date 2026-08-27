@@ -7,18 +7,20 @@ import { Alert, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AppStackParamList } from "@/app/navigationTypes";
+import { AppStackParamList, navigationRef } from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
+import {
+  calculateEventActiveDays,
+  getCalendarWeeks
+} from "@/features/calendar/utils/calendar";
 import { getInviteFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
 import { CalendarDate } from "@/types/CalendarDate";
 import { Event } from "@/types/Event";
-import { calculateEventActiveDays, getCalendarWeeks } from "@/utils/calendar";
 import { dateIsInEvent, isActiveEvent, parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
 import { log } from "@/utils/logging";
-import { navigationRef } from "@/utils/navigation";
 
 import { CalendarDay } from "./CalendarDay";
 import { CalendarDayHeader } from "./CalendarDayHeader";

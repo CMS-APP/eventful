@@ -5,7 +5,7 @@ import { StyleSheet, View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AllStackParamList, EventsStackParamList } from "@/app/navigationTypes";
+import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { Divider } from "@/design-system/components/Divider";
 import { Input } from "@/design-system/components/Input";

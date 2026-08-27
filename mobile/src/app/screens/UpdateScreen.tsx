@@ -3,9 +3,9 @@ import { Image, StyleSheet, View } from "react-native";
 import { Button } from "@/design-system/components/Button";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { haptics } from "@/utils/haptics";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 import { openAppStore } from "../update";
 
@@ -19,7 +19,7 @@ export function UpdateScreen() {
         `Error opening app store: ${(error as any)?.message ?? error}`,
         "error"
       );
-      showErrorNotification("Error Opening App Store");
+      showErrorToast("Error Opening App Store");
     }
   };
 

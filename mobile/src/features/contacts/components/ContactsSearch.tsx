@@ -7,7 +7,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { InputAccessory } from "@/design-system/components/InputAccessory";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { getHitSlop } from "@/utils/hitSlop";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 
 interface ContactsSearchProps {
   search?: string;

@@ -9,12 +9,12 @@ import {
   ILoadingModalContext,
   useLoadingModal
 } from "@/app/context/loading/LoadingModalContext";
-import { AllStackParamList } from "@/app/navigationTypes";
+import { AllStackParamList } from "@/app/navigation";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
 import { handleSignOut } from "@/services/firebase/firebaseAuth";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 export function AccountButtons() {
   const { setLoading } = useLoadingModal() as ILoadingModalContext;
@@ -28,7 +28,7 @@ export function AccountButtons() {
       signOutNavigation();
     } catch (error) {
       log(`Error signing out: ${(error as any)?.message ?? error}`, "error");
-      showErrorNotification("Error Signing Out");
+      showErrorToast("Error Signing Out");
     } finally {
       setLoading(false);
     }

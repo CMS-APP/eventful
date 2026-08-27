@@ -8,6 +8,7 @@ import { checkAuth } from "@/app/init/auth";
 import { getDeviceInfo } from "@/app/init/device";
 import { appDatabaseUpdate } from "@/app/init/migration";
 import { storeInit } from "@/app/init/store";
+import { navigationRef } from "@/app/navigation";
 import {
   cleanupOrphanedData,
   getUserInfo,
@@ -15,7 +16,6 @@ import {
 } from "@/services/firebase/firebaseUserFunctions";
 import { setUserData, setUserInSentry } from "@/store/UserSlice";
 import { User } from "@/types/User";
-import { navigationRef } from "@/utils/navigation";
 
 import { checkIfUpdateRequired } from "./version";
 

@@ -2,12 +2,12 @@ import { useSelector } from "react-redux";
 
 import { useEffect, useState } from "react";
 
-import { syncUserPicture } from "@/services/cache";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { syncUserPicture } from "@/services/local/cache";
 import { UserState } from "@/store/UserSlice";
 import { User } from "@/types/User";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 interface ProfilePictureCacheEntry {
   userId: string;
@@ -64,8 +64,11 @@ export function useAccountProfilePicture() {
       })
       .catch((error) => {
         if (!cancelled) {
-          log(`Error syncing profile picture: ${(error as any)?.message ?? error}`, "error");
-          showErrorNotification("Error Loading Photo");
+          log(
+            `Error syncing profile picture: ${(error as any)?.message ?? error}`,
+            "error"
+          );
+          showErrorToast("Error Loading Photo");
           setImage(null);
           setLoading(false);
         }

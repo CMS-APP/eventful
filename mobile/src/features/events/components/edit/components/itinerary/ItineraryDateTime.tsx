@@ -7,6 +7,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Divider } from "@/design-system/components/Divider";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { Event } from "@/types/Event";
 import {
   calculateTimeDifferenceBetweenDates,
@@ -14,7 +15,6 @@ import {
   formatTime,
   parseDatabaseDate
 } from "@/utils/date";
-import { getHitSlop } from "@/utils/hitSlop";
 
 import { EventDateTimeRangeEditor } from "../EventDateTimeRangeEditor";
 

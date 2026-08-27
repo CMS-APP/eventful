@@ -12,13 +12,13 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AppStackParamList } from "@/app/navigationTypes";
+import { AppStackParamList } from "@/app/navigation";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
 import { UserState } from "@/store/UserSlice";
 import { BudgetItem } from "@/types/BudgetItem";
-import { getHitSlop } from "@/utils/hitSlop";
 
 import { EventBudgetInput } from "./EventBudgetInput";
 import { EventBudgetListItem } from "./EventBudgetListItem";

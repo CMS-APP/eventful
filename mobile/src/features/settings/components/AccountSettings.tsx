@@ -11,10 +11,10 @@ import { openSubscriptionManagement } from "@/app/update";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
 import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { registerForPushNotificationsAsync } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
-import { registerForPushNotificationsAsync } from "@/utils/notifications";
+import { showErrorToast } from "@/utils/toast";
 
 import { ChangeNameModal } from "./ChangeNameModal";
 import { DropdownButton } from "./DropdownButton";
@@ -46,7 +46,7 @@ export function AccountSettings() {
         `Error requesting notifications: ${(error as any)?.message ?? error}`,
         "error"
       );
-      showErrorNotification("Error Requesting Notifications");
+      showErrorToast("Error Requesting Notifications");
     }
   }, [userId]);
 
@@ -88,7 +88,7 @@ export function AccountSettings() {
         `Error opening subscription settings: ${(error as any)?.message ?? error}`,
         "error"
       );
-      showErrorNotification("Error Opening Settings");
+      showErrorToast("Error Opening Settings");
     }
   }, []);
 

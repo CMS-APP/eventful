@@ -10,7 +10,7 @@ import {
   AppStackParamList,
   EventsStackParamList,
   MainStackParamList
-} from "@/app/navigationTypes";
+} from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
 import { UserState } from "@/store/UserSlice";
 

@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { CalendarStackParamList } from "@/app/navigationTypes";
+import { CalendarStackParamList } from "@/app/navigation";
 import { accountNavigatorGestureOptions } from "@/features/account/accountNavigatorScreenOptions";
 
 import { AccountNavigator } from "../account/AccountNavigator";

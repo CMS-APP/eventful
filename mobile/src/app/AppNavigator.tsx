@@ -7,8 +7,7 @@ import {
 } from "@react-navigation/native-stack";
 
 import { useDataInit } from "@/app/init/data";
-import { AppStackParamList } from "@/app/navigationTypes";
-import { navigationRef } from "@/utils/navigation";
+import { AppStackParamList, navigationRef } from "@/app/navigation";
 
 import { AuthNavigator } from "../features/auth/AuthNavigator";
 import { EventInviteNavigator } from "../features/invite/EventInviteNavigator";

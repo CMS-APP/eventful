@@ -17,19 +17,19 @@ import { Alert, Platform, StatusBar } from "react-native";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AllStackParamList } from "@/app/navigationTypes";
+import { AllStackParamList } from "@/app/navigation";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
 import {
   getAppleCredentialForReauthentication,
   revokeSignInWithAppleToken
 } from "@/features/settings/utils/apple";
-import { removeAllData } from "@/services/async";
 import { deleteImageAsync } from "@/services/firebase/firebaseStorage";
 import { deleteUserData } from "@/services/firebase/firebaseUserFunctions";
+import { removeAllData } from "@/services/local/async";
 import { UserState, clearStorage } from "@/store/UserSlice";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 import { SettingsPasswordModal } from "./SettingsPasswordModal";
 
@@ -131,7 +131,7 @@ export function DeleteAccountButton() {
         `Error deleting account: ${(error as any)?.message ?? error}`,
         "error"
       );
-      showErrorNotification("Error Deleting Account");
+      showErrorToast("Error Deleting Account");
     } finally {
       setDeleting(false);
     }
@@ -159,7 +159,7 @@ export function DeleteAccountButton() {
         `Error deleting account: ${(error as any)?.message ?? error}`,
         "error"
       );
-      showErrorNotification("Error Deleting Account");
+      showErrorToast("Error Deleting Account");
     } finally {
       setDeleting(false);
     }
@@ -237,7 +237,7 @@ export function DeleteAccountButton() {
           `Error deleting account: ${(error as any)?.message ?? error}`,
           "error"
         );
-        showErrorNotification("Error Deleting Account");
+        showErrorToast("Error Deleting Account");
       }
     } finally {
       setDeleting(false);

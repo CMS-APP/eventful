@@ -8,22 +8,22 @@ import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AllStackParamList } from "@/app/navigationTypes";
+import { AllStackParamList } from "@/app/navigation";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
-import { clearCache as clearImageCache } from "@/services/cache";
 import {
   deleteUserData,
   updateUserInfo
 } from "@/services/firebase/firebaseUserFunctions";
+import { clearCache as clearImageCache } from "@/services/local/cache";
 import {
   UserState,
   clearSpotifyData,
   clearStorage,
   setUserData
 } from "@/store/UserSlice";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 export function DataActionButtons() {
   const userId = useSelector((state: UserState) => state.uid);
@@ -41,7 +41,7 @@ export function DataActionButtons() {
       Alert.alert("Success", "The cache has been cleared.");
     } catch (error) {
       log(`Error clearing cache: ${(error as any)?.message ?? error}`, "error");
-      showErrorNotification("Error Clearing Cache");
+      showErrorToast("Error Clearing Cache");
     } finally {
       setClearingCache(false);
     }
@@ -92,7 +92,7 @@ export function DataActionButtons() {
           `Error deleting data: ${(error as any)?.message ?? error}`,
           "error"
         );
-        showErrorNotification("Error Deleting Data");
+        showErrorToast("Error Deleting Data");
       } finally {
         setResettingData(false);
       }
@@ -131,7 +131,7 @@ export function DataActionButtons() {
         `Error resetting spotify data: ${(error as any)?.message ?? error}`,
         "error"
       );
-      showErrorNotification("Error Resetting Spotify Data");
+      showErrorToast("Error Resetting Spotify Data");
     } finally {
       setResettingSpotify(false);
     }

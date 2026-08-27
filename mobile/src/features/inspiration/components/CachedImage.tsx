@@ -9,7 +9,7 @@ import {
   getImageFromCache,
   saveDatabaseImageToCache,
   saveLocalImageToCache
-} from "@/services/cache";
+} from "@/services/local/cache";
 import { Photo } from "@/types/Photo";
 import { log } from "@/utils/logging";
 

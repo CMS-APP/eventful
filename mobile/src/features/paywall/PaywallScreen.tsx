@@ -14,17 +14,17 @@ import {
   getPremiumProducts,
   subscribeToProduct
 } from "@/app/context/payment/payments";
-import { AppStackParamList } from "@/app/navigationTypes";
+import { AppStackParamList } from "@/app/navigation";
 import { openSubscriptionManagement } from "@/app/update";
 import { Screen } from "@/components/screen/Screen";
 import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
 import { TextButton } from "@/design-system/components/TextButton";
 import { colors } from "@/design-system/tokens/colors";
 import { Subscription } from "@/types/Subscription";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
-import { AllStackParamList } from "../../app/navigationTypes";
+import { AllStackParamList } from "../../app/navigation";
 import { PaywallButtons } from "./PaywallButtons";
 import { PaywallFeatures } from "./PaywallFeatures";
 import { SubscriptionButton } from "./SubscriptionButton";
@@ -92,7 +92,7 @@ export function PaywallScreen({ navigation, route }: PaywallScreenProps) {
         `Error subscribing to product: ${(error as any)?.message ?? error}`,
         "error"
       );
-      showErrorNotification("Error Subscribing");
+      showErrorToast("Error Subscribing");
     } finally {
       setLoading(false);
     }

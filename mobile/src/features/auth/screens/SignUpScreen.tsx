@@ -8,7 +8,7 @@ import {
   ILoadingModalContext,
   useLoadingModal
 } from "@/app/context/loading/LoadingModalContext";
-import { AuthStackParamList } from "@/app/navigationTypes";
+import { AuthStackParamList } from "@/app/navigation";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Button } from "@/design-system/components/Button";
 import { Input } from "@/design-system/components/Input";
@@ -18,10 +18,9 @@ import { colors } from "@/design-system/tokens/colors";
 import { handleSignUp } from "@/services/firebase/firebaseAuth";
 import { sendVerificationEmail } from "@/services/firebase/firebaseBackend";
 import { FormErrors } from "@/types/FormErrors";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
-import { emailValid, passwordValid } from "@/utils/regex";
-import { useScreenStatusBar } from "@/utils/statusBar";
+import { showErrorToast } from "@/utils/toast";
+import { emailValid, passwordValid } from "@/utils/validation";
 
 import { Header } from "../components/Header";
 import { HeaderArcs } from "../components/HeaderArcs";
@@ -37,8 +36,6 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
   const [headerHeight, setHeaderHeight] = useState(0);
 
   const { setLoading } = useLoadingModal() as ILoadingModalContext;
-
-  useScreenStatusBar(true);
 
   const validateForm = useCallback((): boolean => {
     const newErrors: FormErrors = {};
@@ -95,7 +92,7 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
           setErrors({ email: "Email already in use." });
         } else {
           log(`Error signing up: ${(error as any)?.message ?? error}`, "error");
-          showErrorNotification("Error Signing Up");
+          showErrorToast("Error Signing Up");
           Alert.alert(
             "Error",
             "An unexpected error occurred. Please try again."

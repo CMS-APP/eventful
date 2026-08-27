@@ -5,19 +5,19 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { HomeStackParamList } from "@/app/navigationTypes";
+import { HomeStackParamList } from "@/app/navigation";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
-import { Notification } from "@/types/Notification";
+import { InAppNotification } from "@/types/InAppNotification";
 import { User } from "@/types/User";
-import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
 
 interface HomeUpdateItemProps {
-  update: Notification;
+  update: InAppNotification;
 }
 
 export function HomeUpdateItem({ update }: HomeUpdateItemProps) {

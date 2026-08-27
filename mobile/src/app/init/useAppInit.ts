@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useFonts } from "expo-font";
 
 import { useBackButtonHandler } from "@/app/hooks/useBackButtonHandler";
-import { useNotificationHandler } from "@/app/hooks/useNotificationHandler";
+import { usePushNotificationHandler } from "@/app/hooks/usePushNotificationHandler";
 import { googleInit } from "@/app/init/google";
 import { fonts } from "@/design-system/tokens/fonts";
 
@@ -11,7 +11,7 @@ export function useAppInit() {
   const [loaded, error] = useFonts(fonts);
 
   useBackButtonHandler();
-  useNotificationHandler();
+  usePushNotificationHandler();
 
   useEffect(() => {
     googleInit();

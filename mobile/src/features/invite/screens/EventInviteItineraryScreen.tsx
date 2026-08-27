@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { EventInviteStackParamList } from "@/app/navigationTypes";
+import { EventInviteStackParamList } from "@/app/navigation";
 import { FlatHeader } from "@/components/screen/FlatHeader";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { colors } from "@/design-system/tokens/colors";

@@ -4,9 +4,9 @@ import * as FileSystem from "expo-file-system";
 import { Photo } from "@/types/Photo";
 import { User } from "@/types/User";
 
-import { log } from "../utils/logging";
-import { downloadImageAsync } from "./firebase/firebaseStorage";
-import { updateUserInfo } from "./firebase/firebaseUserFunctions";
+import { log } from "../../utils/logging";
+import { downloadImageAsync } from "../firebase/firebaseStorage";
+import { updateUserInfo } from "../firebase/firebaseUserFunctions";
 
 function getImageCacheDirectory(): FileSystem.Directory {
   const cachePath = FileSystem.Paths.cache;

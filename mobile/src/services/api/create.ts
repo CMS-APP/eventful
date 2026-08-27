@@ -6,7 +6,7 @@ import {
 } from "@react-native-firebase/firestore";
 
 import { FIRESTORE_DB } from "@/services/firebase/firebase";
-import { safeMutationWithReturn } from "@/utils/errorHandling";
+import { safeMutation } from "@/services/api/error";
 import { log } from "@/utils/logging";
 
 export async function createDocument(
@@ -15,7 +15,7 @@ export async function createDocument(
 ): Promise<string> {
   log("Creating document", "info");
   log("Path segments: " + pathSegments.join("/"), "debug");
-  return safeMutationWithReturn(async () => {
+  return safeMutation(async () => {
     if (pathSegments.length % 2 === 1) {
       const docRef = await addDoc(
         collection(FIRESTORE_DB, ...(pathSegments as [string, ...string[]])),

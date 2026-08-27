@@ -1,6 +1,6 @@
 import { deleteDoc, doc } from "@react-native-firebase/firestore";
 
-import { safeMutation } from "@/utils/errorHandling";
+import { safeMutation } from "@/services/api/error";
 import { log } from "@/utils/logging";
 
 import { FIRESTORE_DB } from "../firebase/firebase";

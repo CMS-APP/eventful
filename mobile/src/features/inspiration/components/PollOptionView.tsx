@@ -6,14 +6,14 @@ import { Animated, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { voteForOptionInDatabase } from "@/services/firebase/firebaseInspirationFunctions";
 import { UserState } from "@/store/UserSlice";
 import { Poll } from "@/types/Poll";
 import { PollVote } from "@/types/PollVote";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
+import { showErrorToast } from "@/utils/toast";
 import { generateUUID } from "@/utils/uuid";
-import { showErrorNotification } from "@/utils/appNotifications";
 
 interface PollOptionViewProps {
   poll: Poll;
@@ -91,7 +91,7 @@ export function PollOptionView({
     try {
       await voteForOptionInDatabase(poll, userId, option);
     } catch (error) {
-      showErrorNotification("Error Voting");
+      showErrorToast("Error Voting");
       throw error;
     }
   }, [poll, userId, option, votes, setVotes, setUserVote]);

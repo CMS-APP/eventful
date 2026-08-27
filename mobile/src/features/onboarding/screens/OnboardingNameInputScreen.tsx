@@ -12,7 +12,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
-import { OnboardingStackParamList } from "@/app/navigationTypes";
+import { OnboardingStackParamList } from "@/app/navigation";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Input } from "@/design-system/components/Input";
 import { Text } from "@/design-system/components/Text";
@@ -27,9 +27,9 @@ import {
 } from "@/services/firebase/firebaseUserFunctions";
 import { UserState, setUserData } from "@/store/UserSlice";
 import { User } from "@/types/User";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
-import { capitalize, checkNames, checkUsernameValid } from "@/utils/regex";
+import { showErrorToast } from "@/utils/toast";
+import { capitalize, checkNames, checkUsernameValid } from "@/utils/validation";
 
 import { OnboardingButtons } from "../components/OnboardingButtons";
 import { getLoginNames } from "../utils";
@@ -106,7 +106,7 @@ export function OnboardingNameInputScreen({
       navigation.navigate("OnboardingNotifications");
     } catch (error) {
       log(`Error creating user: ${(error as any)?.message ?? error}`, "error");
-      showErrorNotification("Error Creating Account");
+      showErrorToast("Error Creating Account");
     }
   }, [firstName, lastName, username, userId, dispatch, navigation, email]);
 

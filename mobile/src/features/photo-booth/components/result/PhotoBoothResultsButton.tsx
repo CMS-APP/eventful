@@ -5,7 +5,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/Text";
-import { getHitSlop } from "@/utils/hitSlop";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 
 interface PhotoBoothResultsButtonProps {
   onPress: () => void;

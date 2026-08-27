@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { RouteProp, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AllStackParamList, EventsStackParamList } from "@/app/navigationTypes";
+import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { colors } from "@/design-system/tokens/colors";
 import {
@@ -13,12 +13,12 @@ import {
   updateEventInDatabase
 } from "@/services/firebase/firebaseEventFunctions";
 import { updateEventLinkInDatabase } from "@/services/firebase/firebaseInviteFunctions";
+import { updateNotificationsForEvent } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
 import type { Event } from "@/types/Event";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { parseDatabaseDate } from "@/utils/date";
 import { log } from "@/utils/logging";
-import { updateNotificationsForEvent } from "@/utils/notifications";
+import { showErrorToast } from "@/utils/toast";
 
 import { EventDetailsEdit } from "../components/edit/EventDetailsEdit";
 import { EventItineraryEdit } from "../components/edit/EventItineraryEdit";
@@ -55,7 +55,7 @@ export function EventSectionScreen({
           setEvent(eventData);
         } else {
           log("Error fetching event: Event not found", "error");
-          showErrorNotification("Error Loading Event");
+          showErrorToast("Error Loading Event");
         }
       }
 

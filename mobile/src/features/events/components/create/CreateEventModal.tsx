@@ -8,7 +8,7 @@ import { Animated } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { EventsStackParamList } from "@/app/navigationTypes";
+import { EventsStackParamList } from "@/app/navigation";
 import { Button } from "@/design-system/components/Button";
 import { Input } from "@/design-system/components/Input";
 import { ModalView } from "@/design-system/components/ModalView";
@@ -17,8 +17,8 @@ import { colors } from "@/design-system/tokens/colors";
 import { createEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
 import { UserState } from "@/store/UserSlice";
 import { Event, NewEvent } from "@/types/Event";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 interface CreateEventModalProps {
   showModal: boolean;
@@ -52,7 +52,7 @@ export function CreateEventModal({
       navigation.navigate("EventEdit", { event });
     } catch (error) {
       log(`Error creating event: ${(error as any)?.message ?? error}`, "error");
-      showErrorNotification("Error Creating Event");
+      showErrorToast("Error Creating Event");
     }
   }, [eventName, userId, navigation, setShowModal]);
 

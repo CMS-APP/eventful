@@ -1,10 +1,14 @@
+import { createNavigationContainerRef } from "@react-navigation/native";
+
 import { Event } from "@/types/Event";
+import { InAppNotification } from "@/types/InAppNotification";
 import { Invite } from "@/types/Invite";
 import { Invites } from "@/types/Invites";
-import { Notification } from "@/types/Notification";
 import { Photo } from "@/types/Photo";
 import { User } from "@/types/User";
 import { UserInvite } from "@/types/UserInvite";
+
+export const navigationRef = createNavigationContainerRef<AppStackParamList>();
 
 export type AppStackParamList = {
   LoadingScreen: undefined;
@@ -103,8 +107,8 @@ export type EventsStackParamList = {
 
 export type HomeStackParamList = {
   HomeView: undefined;
-  HomeUpdates: { updates: Notification[] };
-  HomeFollows: { follows: Notification[] };
+  HomeUpdates: { updates: InAppNotification[] };
+  HomeFollows: { follows: InAppNotification[] };
   Profile: {
     screen: "ProfileView";
     params: { user: User };

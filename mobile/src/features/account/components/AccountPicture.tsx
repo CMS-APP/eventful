@@ -18,14 +18,9 @@ import {
   ILoadingModalContext,
   useLoadingModal
 } from "@/app/context/loading/LoadingModalContext";
-import { AllStackParamList } from "@/app/navigationTypes";
+import { AllStackParamList } from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
-import {
-  computeImageHash,
-  deleteCachedImage,
-  saveLocalImageToCache,
-  syncUserPicture
-} from "@/services/cache";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import {
   deleteImageAsync,
   uploadImageAsync
@@ -34,12 +29,17 @@ import {
   getUserInfo,
   updateUserInfo
 } from "@/services/firebase/firebaseUserFunctions";
+import {
+  computeImageHash,
+  deleteCachedImage,
+  saveLocalImageToCache,
+  syncUserPicture
+} from "@/services/local/cache";
 import { UserState, setProfilePictureHash } from "@/store/UserSlice";
 import { User } from "@/types/User";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 export function AccountPicture() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -108,7 +108,7 @@ export function AccountPicture() {
         `Error opening image picker: ${(error as any)?.message ?? error}`,
         "error"
       );
-      showErrorNotification("Error Opening Photos");
+      showErrorToast("Error Opening Photos");
     } finally {
       setLoading(false);
       setImageLoading(false);
@@ -143,7 +143,7 @@ export function AccountPicture() {
         `Error deleting profile picture: ${(error as any)?.message ?? error}`,
         "error"
       );
-      showErrorNotification("Error Deleting Photo");
+      showErrorToast("Error Deleting Photo");
     } finally {
       setLoading(false);
     }
@@ -217,7 +217,7 @@ export function AccountPicture() {
               `Profile picture loading error: ${(error as any)?.message ?? error}`,
               "error"
             );
-            showErrorNotification("Error Loading Photo");
+            showErrorToast("Error Loading Photo");
           }}
           onLoad={() =>
             log("Account: Profile image loaded successfully", "debug")

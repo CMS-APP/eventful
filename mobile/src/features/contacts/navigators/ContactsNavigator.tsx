@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { ContactsStackParamList } from "@/app/navigationTypes";
+import { ContactsStackParamList } from "@/app/navigation";
 import { AccountNavigator } from "@/features/account/AccountNavigator";
 import { accountNavigatorGestureOptions } from "@/features/account/accountNavigatorScreenOptions";
 import { ProfileNavigator } from "@/features/profile/ProfileNavigator";

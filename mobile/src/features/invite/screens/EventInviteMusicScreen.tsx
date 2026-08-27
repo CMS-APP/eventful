@@ -6,7 +6,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { EventInviteStackParamList } from "@/app/navigationTypes";
+import { EventInviteStackParamList } from "@/app/navigation";
 import { FlatHeader } from "@/components/screen/FlatHeader";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Text } from "@/design-system/components/Text";

@@ -12,7 +12,7 @@ import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { Invites } from "@/types/Invites";
 import { isActiveEvent } from "@/utils/date";
-import { safeListener } from "@/utils/errorHandling";
+import { safeListener } from "@/services/api/error";
 
 import { FIRESTORE_DB } from "./firebase";
 import { log } from "@/utils/logging";

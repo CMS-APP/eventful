@@ -6,10 +6,7 @@ import { Alert, StyleSheet, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import {
-  AllStackParamList,
-  InspirationStackParamList
-} from "@/app/navigationTypes";
+import { AllStackParamList, InspirationStackParamList } from "@/app/navigation";
 import { FlatHeader } from "@/components/screen/FlatHeader";
 import { FlatHeaderProps } from "@/components/screen/props";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
@@ -19,8 +16,8 @@ import { colors } from "@/design-system/tokens/colors";
 import { createPostInDatabase } from "@/services/firebase/firebaseInspirationFunctions";
 import { UserState } from "@/store/UserSlice";
 import { Photo } from "@/types/Photo";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 import { UploadPhoto } from "../components/UploadPhoto";
 
@@ -47,7 +44,7 @@ export function CreatePostScreen({ navigation }: CreatePostScreenProps) {
       (navigation as StackNavigationProp<InspirationStackParamList>).goBack();
     } catch (error) {
       log(`Error creating post: ${(error as any)?.message ?? error}`, "error");
-      showErrorNotification("Error Creating Post");
+      showErrorToast("Error Creating Post");
     } finally {
       setLoading(false);
     }

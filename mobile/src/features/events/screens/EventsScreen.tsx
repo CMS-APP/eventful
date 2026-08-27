@@ -5,13 +5,12 @@ import { StyleSheet, View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AllStackParamList, EventsStackParamList } from "@/app/navigationTypes";
+import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
 import { IconButton } from "@/design-system/components/IconButton";
 import { colors } from "@/design-system/tokens/colors";
-import { getData, saveData } from "@/services/async";
-import { useScreenStatusBar } from "@/utils/statusBar";
+import { getData, saveData } from "@/services/local/async";
 
 import { CreateEventModal } from "../components/create/CreateEventModal";
 import { EventsList } from "../components/list/EventsList";
@@ -29,7 +28,6 @@ export function EventsScreen({ navigation, route }: EventsScreenProps) {
 
   const { upcomingEvents, pastEvents, declineEvents } =
     useEventList(navigation);
-  useScreenStatusBar(true);
 
   useEffect(() => {
     if (route.params?.newEvent) {

@@ -6,7 +6,7 @@ import { StyleSheet, View } from "react-native";
 
 import { RouteProp } from "@react-navigation/native";
 
-import { ProfileStackParamList } from "@/app/navigationTypes";
+import { ProfileStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { colors } from "@/design-system/tokens/colors";

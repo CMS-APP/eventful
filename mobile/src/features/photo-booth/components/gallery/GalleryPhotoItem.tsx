@@ -15,8 +15,8 @@ import { ImageBackground } from "expo-image";
 
 import { useAppDimensions } from "@/app/hooks/useAppDimensions";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { GalleryPhoto } from "@/types/photoBoothGallery";
-import { getHitSlop } from "@/utils/hitSlop";
 
 export function GalleryPhotoItem({
   photo,

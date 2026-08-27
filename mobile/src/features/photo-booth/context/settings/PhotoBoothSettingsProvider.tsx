@@ -11,8 +11,8 @@ import {
 } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
 import { PB_CONFIG, PhotoBoothConfig } from "@/types/PhotoBoothConfig";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 type ConfigState = {
   title: string;
@@ -119,8 +119,11 @@ export function PhotoBoothSettingsProvider({
       const appliedConfig = applyConfigWithDefaults(fetchedConfig, premium);
       setConfig(appliedConfig);
     } catch (error) {
-      log(`Error loading photo booth config: ${(error as any)?.message ?? error}`, "error");
-      showErrorNotification("Error Loading Settings");
+      log(
+        `Error loading photo booth config: ${(error as any)?.message ?? error}`,
+        "error"
+      );
+      showErrorToast("Error Loading Settings");
       const defaultConfig = getDefaultConfig();
       setConfig(defaultConfig);
     } finally {

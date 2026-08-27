@@ -5,7 +5,7 @@ import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { EventInviteStackParamList } from "@/app/navigationTypes";
+import { EventInviteStackParamList } from "@/app/navigation";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
 import { getEventInvites } from "@/services/firebase/firebaseInviteFunctions";

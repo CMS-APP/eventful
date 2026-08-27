@@ -1,8 +1,8 @@
 import { Linking } from "react-native";
 
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 export async function viewSpotifyPlaylist(playlist: SpotifyPlaylist) {
   const spotifyUri = `spotify:playlist:${playlist.id}`;
@@ -18,7 +18,10 @@ export async function viewSpotifyPlaylist(playlist: SpotifyPlaylist) {
       await Linking.openURL(fallbackUrl);
     }
   } catch (error) {
-    log(`Error opening Spotify playlist: ${(error as any)?.message ?? error}`, "error");
-    showErrorNotification("Error Opening Playlist");
+    log(
+      `Error opening Spotify playlist: ${(error as any)?.message ?? error}`,
+      "error"
+    );
+    showErrorToast("Error Opening Playlist");
   }
 }

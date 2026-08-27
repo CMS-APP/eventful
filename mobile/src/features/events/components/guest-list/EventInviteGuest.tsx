@@ -13,7 +13,7 @@ import {
   AllStackParamList,
   EventsStackParamList,
   MainStackParamList
-} from "@/app/navigationTypes";
+} from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { Text } from "@/design-system/components/Text";

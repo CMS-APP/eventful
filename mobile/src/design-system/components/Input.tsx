@@ -13,7 +13,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { fontStyles } from "@/design-system/tokens/fonts";
-import { getHitSlop } from "@/utils/hitSlop";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 
 import { InputAccessory } from "./InputAccessory";
 

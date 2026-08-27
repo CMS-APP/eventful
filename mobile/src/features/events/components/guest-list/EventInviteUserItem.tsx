@@ -7,11 +7,11 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { AccountStackParamList } from "@/app/navigationTypes";
+import { AccountStackParamList } from "@/app/navigation";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
-import { syncUserPicture } from "@/services/cache";
 import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
 import {
   checkInvitedToEvent,
@@ -19,14 +19,14 @@ import {
   deleteInviteFromDatabase,
   updateEventLinkResponse
 } from "@/services/firebase/firebaseInviteFunctions";
+import { syncUserPicture } from "@/services/local/cache";
 import { AlertOptions } from "@/types/AlertOptions";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
 import { UserInvite } from "@/types/UserInvite";
-import { showErrorNotification } from "@/utils/appNotifications";
-import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 interface EventInviteUserItemProps {
   user: User;
@@ -97,7 +97,7 @@ export function EventInviteUserItem({
           `Error removing user from event: ${(error as any)?.message ?? error}`,
           "error"
         );
-        showErrorNotification("Error Removing User");
+        showErrorToast("Error Removing User");
       }
     } else if (invite.type === "link") {
       await deleteEventLinkResponse(invite.id);

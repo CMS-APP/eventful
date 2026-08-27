@@ -8,9 +8,10 @@ import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AppStackParamList } from "@/app/navigationTypes";
+import { AppStackParamList } from "@/app/navigation";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import {
@@ -22,10 +23,9 @@ import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { formatDate, formatTime, parseDatabaseDate } from "@/utils/date";
-import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 import { InviteEventCardResponse } from "./InviteEventCardResponse";
 import { InviteProfilePictures } from "./InviteProfilePictures";
@@ -93,7 +93,7 @@ export function InviteEventCard({
         `Error inviting user to event: ${(error as any)?.message ?? error}`,
         "error"
       );
-      showErrorNotification("Error Inviting User");
+      showErrorToast("Error Inviting User");
     }
   }, [host?.uid, host?.name, host?.username, user, event]);
 

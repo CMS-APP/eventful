@@ -11,14 +11,14 @@ import { createDocument } from "@/services/api/create";
 import { deleteDocument } from "@/services/api/delete";
 import { getDocumentsByQuery } from "@/services/api/get";
 import { updateDocument } from "@/services/api/update";
-import { Notification } from "@/types/Notification";
-import { safeListener } from "@/utils/errorHandling";
+import { InAppNotification } from "@/types/InAppNotification";
+import { safeListener } from "@/services/api/error";
 
 import { FIRESTORE_DB } from "./firebase";
 
 export function listenToFollowNotifications(
   userId: string,
-  callback: (notifications: Notification[]) => void
+  callback: (notifications: InAppNotification[]) => void
 ) {
   return safeListener(() => {
     const notificationCollection = collection(FIRESTORE_DB, "notifications");
@@ -37,7 +37,7 @@ export function listenToFollowNotifications(
             id: doc.id,
             ...doc.data()
           })
-        ) as Notification[];
+        ) as InAppNotification[];
 
         notifications?.sort(
           (a, b) =>
@@ -51,7 +51,7 @@ export function listenToFollowNotifications(
 
 export function listenToUpdateNotifications(
   userId: string,
-  callback: (notifications: Notification[]) => void
+  callback: (notifications: InAppNotification[]) => void
 ) {
   return safeListener(() => {
     const notificationCollection = collection(FIRESTORE_DB, "notifications");
@@ -70,7 +70,7 @@ export function listenToUpdateNotifications(
             id: doc?.id,
             ...doc?.data()
           })
-        ) as Notification[];
+        ) as InAppNotification[];
 
         notifications?.sort(
           (a, b) =>
@@ -87,7 +87,7 @@ async function getExistingNotification(
   userId: string,
   subType: string,
   eventId: string
-): Promise<Notification | null> {
+): Promise<InAppNotification | null> {
   const notifications = await getDocumentsByQuery(
     [
       where("senderId", "==", senderId),
@@ -97,7 +97,9 @@ async function getExistingNotification(
     ],
     API_COLLECTIONS.NOTIFICATIONS
   );
-  return notifications.length > 0 ? (notifications[0] as Notification) : null;
+  return notifications.length > 0
+    ? (notifications[0] as InAppNotification)
+    : null;
 }
 
 export async function createUpdateNotification(

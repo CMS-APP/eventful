@@ -13,7 +13,7 @@ import { useAppDimensions } from "@/app/hooks/useAppDimensions";
 import { Divider } from "@/design-system/components/Divider";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { getHitSlop } from "@/utils/hitSlop";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 
 interface DropdownProps {
   data: string[];

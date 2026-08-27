@@ -3,11 +3,11 @@ import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AppStackParamList } from "@/app/navigationTypes";
+import { AppStackParamList } from "@/app/navigation";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
 
-import { AllStackParamList } from "../../app/navigationTypes";
+import { AllStackParamList } from "../../app/navigation";
 
 interface PaywallButtonsProps {
   subscribeToProduct: () => void;

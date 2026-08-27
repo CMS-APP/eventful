@@ -1,4 +1,5 @@
 import { Alert } from "react-native";
+
 import { containsProfanity } from "./profanity";
 
 export function emailValid(email: string) {
@@ -79,7 +80,11 @@ export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
-export function checkNames(firstName: string, lastName: string, username: string) {
+export function checkNames(
+  firstName: string,
+  lastName: string,
+  username: string
+) {
   const firstNameCheck = checkValue(firstName, "first name");
   const lastNameCheck = checkValue(lastName, "last name");
   const usernameCheck = checkValue(username, "username");

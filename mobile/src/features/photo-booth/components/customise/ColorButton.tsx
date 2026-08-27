@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { getHitSlop } from "@/utils/hitSlop";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 
 import { PhotoBoothStackNavigation } from "../../photoBoothStackParams";
 

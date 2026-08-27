@@ -7,13 +7,13 @@ import { Animated, StyleSheet, TouchableOpacity, View } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { NavigationState, StackActions } from "@react-navigation/native";
 
+import { useInAppNotificationBadges } from "@/app/hooks/useInAppNotificationBadges";
 import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
-import { MainStackParamList } from "@/app/navigationTypes";
+import { MainStackParamList } from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
-import { useNotifications } from "@/services/notifications";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { UserState } from "@/store/UserSlice";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
 
 import { MainTabBarIcon } from "./MainTabBarIcon";
 
@@ -24,7 +24,7 @@ interface MainTabBarProps {
 
 export function MainTabBar({ state, navigation }: MainTabBarProps) {
   const userId = useSelector((state: UserState) => state.uid);
-  const notifications = useNotifications(userId);
+  const notifications = useInAppNotificationBadges(userId);
   const safeArea = useSafeAreaStyles().safeArea;
 
   const isPhotoBoothActive = state.routes.some((route) =>

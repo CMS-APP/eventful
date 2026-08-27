@@ -6,12 +6,12 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { Notification } from "@/types/Notification";
-import { getHitSlop } from "@/utils/hitSlop";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { InAppNotification } from "@/types/InAppNotification";
 
 interface HomeNotificationButtonProps {
-  onPress: (notifications: Notification[]) => void;
-  notifications: Notification[];
+  onPress: (notifications: InAppNotification[]) => void;
+  notifications: InAppNotification[];
   icon: keyof typeof FontAwesome5.glyphMap;
   text: string;
   unreadNotifications: number;

@@ -7,25 +7,25 @@ import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { HomeStackParamList, MainStackParamList } from "@/app/navigationTypes";
+import { useInAppNotificationBadges } from "@/app/hooks/useInAppNotificationBadges";
+import { HomeStackParamList, MainStackParamList } from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
 import {
   listenToFollowNotifications,
   listenToUpdateNotifications
-} from "@/services/firebase/firebaseNotification";
-import { useNotifications } from "@/services/notifications";
+} from "@/services/firebase/firebaseInAppNotifications";
 import { UserState } from "@/store/UserSlice";
-import { Notification } from "@/types/Notification";
+import { InAppNotification } from "@/types/InAppNotification";
 
 import { HomeNotificationButton } from "./HomeNotificationButton";
 
 export function HomeNotificationButtons() {
   const userId = useSelector((state: UserState) => state.uid);
-  const [updates, setUpdates] = useState<Notification[]>([]);
-  const [follows, setFollows] = useState<Notification[]>([]);
+  const [updates, setUpdates] = useState<InAppNotification[]>([]);
+  const [follows, setFollows] = useState<InAppNotification[]>([]);
   const [unreadFollows, setUnreadFollows] = useState(0);
   const [unreadUpdates, setUnreadUpdates] = useState(0);
-  const notifications = useNotifications(userId);
+  const notifications = useInAppNotificationBadges(userId);
   const navigation = useNavigation() as StackNavigationProp<HomeStackParamList>;
   const navMain = useNavigation() as StackNavigationProp<MainStackParamList>;
 
@@ -34,7 +34,7 @@ export function HomeNotificationButtons() {
 
     const unsubscribeFollows = listenToFollowNotifications(
       userId,
-      (notifications: Notification[]) => {
+      (notifications: InAppNotification[]) => {
         setFollows(notifications);
         setUnreadFollows(
           notifications?.filter((notification) => !notification?.read).length ??
@@ -45,7 +45,7 @@ export function HomeNotificationButtons() {
 
     const unsubscribeUpdates = listenToUpdateNotifications(
       userId,
-      (updates: Notification[]) => {
+      (updates: InAppNotification[]) => {
         setUpdates(updates);
         setUnreadUpdates(
           updates?.filter((notification) => !notification?.read).length ?? 0

@@ -8,17 +8,17 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { Entypo } from "@expo/vector-icons";
 
-import { EventInviteStackParamList } from "@/app/navigationTypes";
+import { EventInviteStackParamList } from "@/app/navigation";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { textFormatter } from "@/design-system/tokens/fonts";
 import { ResponseButtonIcon } from "@/features/events/components/invite/ResponseButtonIcon";
 import { updateResponseInDatabase } from "@/services/firebase/firebaseInviteFunctions";
+import { updateResponseNotification } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
-import { updateResponseNotification } from "@/utils/notifications";
+import { showErrorToast } from "@/utils/toast";
 
 import { InviteButtons } from "../components/InviteButtons";
 import { InviteDateView } from "../components/InviteDateView";
@@ -56,7 +56,7 @@ export function EventInviteHomeScreen({
           `Error updating response: ${(error as any)?.message ?? error}`,
           "error"
         );
-        showErrorNotification("Error Updating Response");
+        showErrorToast("Error Updating Response");
       }
     },
     [invite, host, name, username, event]

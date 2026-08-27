@@ -1,7 +1,6 @@
 import { CalendarDate } from "@/types/CalendarDate";
 import { Event } from "@/types/Event";
-
-import { getMonthLength, parseDatabaseDate } from "./date";
+import { getMonthLength, parseDatabaseDate } from "@/utils/date";
 
 function getCalendarPreviousMonthDays(
   currentMonth: number,
@@ -29,10 +28,7 @@ function getCalendarPreviousMonthDays(
   return week;
 }
 
-function getCalendarFirstWeekDays(
-  currentMonth: number,
-  currentYear: number
-) {
+function getCalendarFirstWeekDays(currentMonth: number, currentYear: number) {
   const firstDayOfTheMonth = new Date(currentYear, currentMonth, 1);
   const weekIndex =
     firstDayOfTheMonth.getDay() === 0 ? 6 : firstDayOfTheMonth.getDay() - 1;

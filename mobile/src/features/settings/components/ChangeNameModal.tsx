@@ -27,10 +27,10 @@ import {
   setUsername,
   setUsernameUpdateDate
 } from "@/store/UserSlice";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { parseDatabaseDate } from "@/utils/date";
 import { log } from "@/utils/logging";
-import { checkValue as checkValueUtil } from "@/utils/regex";
+import { showErrorToast } from "@/utils/toast";
+import { checkValue as checkValueUtil } from "@/utils/validation";
 
 interface ChangeNameModalProps {
   presentModal: boolean;
@@ -199,7 +199,7 @@ export function ChangeNameModal({
       Alert.alert("Success", `Your ${type} has been updated.`);
     } catch (error) {
       log(`Error changing name: ${(error as any)?.message ?? error}`, "error");
-      showErrorNotification("Error Changing Name");
+      showErrorToast("Error Changing Name");
     }
   }, [
     type,

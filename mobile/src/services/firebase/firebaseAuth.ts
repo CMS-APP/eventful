@@ -12,13 +12,13 @@ import { Platform } from "react-native";
 
 import { setBadgeCountAsync } from "expo-notifications";
 
-import { removeAllData } from "@/services/async";
-import { clearCache } from "@/services/cache";
+import { removeAllData } from "@/services/local/async";
+import { clearCache } from "@/services/local/cache";
+import { clearNotifications } from "@/services/pushNotifications";
 import { clearStorage } from "@/store/UserSlice";
-import { clearNotifications } from "@/utils/notifications";
+import { log } from "@/utils/logging";
 
 import { incrementUserCount } from "./firebaseBackend";
-import { log } from "@/utils/logging";
 
 export async function handleSignIn(
   email: string,
@@ -53,11 +53,13 @@ export async function handleSignOut(dispatch: Dispatch<Action>) {
   try {
     await GoogleSignin.signOut();
   } catch (error) {
-    log(`Error signing out from Google Sign-In: ${(error as any)?.message ?? error}`, "error");
+    log(
+      `Error signing out from Google Sign-In: ${(error as any)?.message ?? error}`,
+      "error"
+    );
   }
 
   await signOut(auth);
-
 }
 
 export async function handleSignUp(

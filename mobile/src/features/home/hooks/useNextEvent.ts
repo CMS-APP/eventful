@@ -5,7 +5,7 @@ import { useCallback, useState } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { MainStackParamList } from "@/app/navigationTypes";
+import { MainStackParamList } from "@/app/navigation";
 import { getNextEvent } from "@/services/firebase/firebaseEventFunctions";
 import { getEventResponses } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";

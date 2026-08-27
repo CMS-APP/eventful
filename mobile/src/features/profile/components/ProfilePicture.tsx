@@ -4,10 +4,10 @@ import { Image, StyleSheet, View } from "react-native";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { syncUserPicture } from "@/services/cache";
+import { syncUserPicture } from "@/services/local/cache";
 import { User } from "@/types/User";
 import { log } from "@/utils/logging";
-import { getInitials } from "@/utils/regex";
+import { getInitials } from "@/utils/validation";
 
 interface ProfilePictureProps {
   user: User;
@@ -41,7 +41,10 @@ export function ProfilePicture({
       setImage(imageUri || null);
       setLoading(false);
     } catch (error) {
-      log(`Profile: Profile image load error: ${(error as any)?.message ?? error}`, "error");
+      log(
+        `Profile: Profile image load error: ${(error as any)?.message ?? error}`,
+        "error"
+      );
     }
   }
 

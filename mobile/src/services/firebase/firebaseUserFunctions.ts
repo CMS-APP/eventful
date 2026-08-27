@@ -19,17 +19,17 @@ import {
   getDocumentsByQuery
 } from "@/services/api/get";
 import { setDocument, updateDocument } from "@/services/api/update";
-import { removeData } from "@/services/async";
+import { removeData } from "@/services/local/async";
+import { sendFollowNotification } from "@/services/pushNotifications";
 import { Event } from "@/types/Event";
 import { EventLinkResponse } from "@/types/EventLinkResponse";
 import { Follower } from "@/types/Follower";
+import { InAppNotification } from "@/types/InAppNotification";
 import { Invite } from "@/types/Invite";
-import { Notification } from "@/types/Notification";
 import { PB_CONFIG, PhotoBoothConfig } from "@/types/PhotoBoothConfig";
 import { PollVote } from "@/types/PollVote";
 import { User } from "@/types/User";
 import { log } from "@/utils/logging";
-import { sendFollowNotification } from "@/utils/notifications";
 
 import { FIRESTORE_DB } from "./firebase";
 
@@ -163,11 +163,11 @@ async function deleteUserNotifications(userId: string) {
   const userNotifications = (await getDocumentsByQuery(
     [where("userId", "==", userId)],
     API_COLLECTIONS.NOTIFICATIONS
-  )) as Notification[];
+  )) as InAppNotification[];
   const senderNotifications = (await getDocumentsByQuery(
     [where("senderId", "==", userId)],
     API_COLLECTIONS.NOTIFICATIONS
-  )) as Notification[];
+  )) as InAppNotification[];
 
   const deletePromises = [
     ...userNotifications.map((notification) =>

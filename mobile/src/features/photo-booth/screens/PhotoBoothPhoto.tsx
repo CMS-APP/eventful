@@ -7,7 +7,7 @@ import { Alert, StyleSheet, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { AppStackParamList } from "@/app/navigationTypes";
+import { AppStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
@@ -21,8 +21,8 @@ import {
   sharePhoto
 } from "@/services/photo-booth/localPhotos";
 import { UserState } from "@/store/UserSlice";
-import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 import { GalleryPhotoItem } from "../components/gallery/GalleryPhotoItem";
 import {
@@ -75,7 +75,7 @@ export function PhotoBoothPhoto() {
       navigation.navigate("PhotoBoothHome");
     } catch (error) {
       log(`Error deleting photo: ${(error as any)?.message ?? error}`, "error");
-      showErrorNotification("Error Deleting Photo");
+      showErrorToast("Error Deleting Photo");
     }
   }, [navigation, userId, photo]);
 
@@ -116,7 +116,7 @@ export function PhotoBoothPhoto() {
         `Error uploading photos: ${(error as any)?.message ?? error}`,
         "error"
       );
-      showErrorNotification("Error Uploading Photos");
+      showErrorToast("Error Uploading Photos");
     } finally {
       setUploading(false);
     }
@@ -132,7 +132,7 @@ export function PhotoBoothPhoto() {
         `Error downloading photo: ${(error as any)?.message ?? error}`,
         "error"
       );
-      showErrorNotification("Error Downloading Photo");
+      showErrorToast("Error Downloading Photo");
     } finally {
       setDownloading(false);
     }

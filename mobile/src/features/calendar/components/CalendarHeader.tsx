@@ -5,8 +5,8 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { IconButton } from "@/design-system/components/IconButton";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
 
 interface CalendarHeaderProps {
   currentMonth: number;

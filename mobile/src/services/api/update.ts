@@ -1,6 +1,6 @@
 import { doc, setDoc, updateDoc } from "@react-native-firebase/firestore";
 
-import { safeMutation } from "@/utils/errorHandling";
+import { safeMutation } from "@/services/api/error";
 import { log } from "@/utils/logging";
 
 import { FIRESTORE_DB } from "../firebase/firebase";
@@ -23,7 +23,7 @@ export async function setDocument(
   data: any,
   ...pathSegments: string[]
 ): Promise<void> {
-  log("Setting document", "info");
+  log("Setting document", "debug");
   log("Path segments: " + pathSegments.join("/"), "debug");
   await safeMutation(async () => {
     await setDoc(

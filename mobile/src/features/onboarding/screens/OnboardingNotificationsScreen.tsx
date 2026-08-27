@@ -5,11 +5,11 @@ import { Alert, StyleSheet, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AllStackParamList } from "@/app/navigationTypes";
+import { AllStackParamList } from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
 import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { registerForPushNotificationsAsync } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
-import { registerForPushNotificationsAsync } from "@/utils/notifications";
 
 import { FeatureView } from "../components/FeatureView";
 import { OnboardingButtons } from "../components/OnboardingButtons";

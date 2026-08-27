@@ -3,8 +3,8 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { shadows } from "@/design-system/tokens/shadows";
-import { getHitSlop } from "@/utils/hitSlop";
 
 interface PhotoBoothButtonProps {
   onPress: () => void;
