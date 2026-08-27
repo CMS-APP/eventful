@@ -5,15 +5,12 @@ import { StyleSheet, View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { AllStackParamList, HomeStackParamList } from "@/app/navigation";
+import { Screen } from "@/components/screen/Screen";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
-import { Screen } from "@/components/views/screen/Screen";
-import {
-  AllStackParamList,
-  HomeStackParamList
-} from "@/features/app/navigationTypes";
+import { colors } from "@/design-system/tokens/colors";
 import { readFollowNotification } from "@/services/firebase/firebaseUserFunctions";
-import { colors } from "@/styles/colors";
-import { Notification } from "@/types/Notification";
+import { InAppNotification } from "@/types/InAppNotification";
 
 import { HomeFollowsItem } from "../components/HomeFollowsItem";
 
@@ -58,7 +55,7 @@ export function HomeFollowsScreen({
     >
       <View style={styles.container}>
         {follows.length !== 0 ? (
-          follows.map((not: Notification) => (
+          follows.map((not: InAppNotification) => (
             <HomeFollowsItem key={not.id} notification={not} />
           ))
         ) : (

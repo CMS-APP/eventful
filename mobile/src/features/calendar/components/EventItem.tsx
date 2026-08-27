@@ -1,26 +1,23 @@
 import { useSelector } from "react-redux";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Text } from "@/components/text/Text";
-import {
-  AppStackParamList,
-  MainStackParamList
-} from "@/features/app/navigationTypes";
+import { AppStackParamList, MainStackParamList } from "@/app/navigation";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { getInviteFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Event } from "@/types/Event";
 import { User } from "@/types/User";
 import { isActiveEvent, parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
 
 interface EventItemProps {
   index: number;
@@ -35,13 +32,13 @@ export function EventItem({ index, event }: EventItemProps) {
   const navigationApp =
     useNavigation() as StackNavigationProp<AppStackParamList>;
 
-  async function fetchUserDetails() {
+  const fetchUserDetails = useCallback(async () => {
     const userDetails = await getUserInfo(event.userId);
     setUserDetails(userDetails);
-  }
+  }, [event.userId]);
 
   useEffect(() => {
-    if (event.userId !== userId) {
+    if (userId && event.userId !== userId) {
       fetchUserDetails();
     }
   }, [event, userId]);
@@ -117,12 +114,18 @@ export function EventItem({ index, event }: EventItemProps) {
         >
           {getDateString()}
         </Text>
-        <View>
+        <View style={styles.eventInfoContainer}>
           <Text type="body" style={styles.eventNameText} numberOfLines={1}>
             {event.name.trim() || "Event"}
           </Text>
           {event.userId !== userId && userDetails && (
-            <Text type="body" italic style={styles.hostInfoText}>
+            <Text
+              type="body"
+              italic
+              style={styles.hostInfoText}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
               {userDetails.name} ({userDetails.username})
             </Text>
           )}
@@ -143,6 +146,9 @@ const styles = StyleSheet.create({
   },
   eventDayTextWithEndDate: {
     fontSize: 24
+  },
+  eventInfoContainer: {
+    flex: 1
   },
   eventNameText: {
     color: colors.white,

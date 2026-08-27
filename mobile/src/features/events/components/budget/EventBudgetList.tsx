@@ -12,13 +12,13 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Text } from "@/components/text/Text";
-import { AppStackParamList } from "@/features/app/navigationTypes";
+import { AppStackParamList } from "@/app/navigation";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { padding } from "@/design-system/tokens/padding";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { BudgetItem } from "@/types/BudgetItem";
-import { getHitSlop } from "@/utils/hitSlop";
 
 import { EventBudgetInput } from "./EventBudgetInput";
 import { EventBudgetListItem } from "./EventBudgetListItem";
@@ -75,7 +75,7 @@ export function EventBudgetList({
   }, [addItem]);
 
   const widgetStyle = [
-    globalStyles.mediumWidget,
+    padding.mediumWidget,
     styles.container,
     {
       opacity: premium ? 1 : 0.4
@@ -123,7 +123,7 @@ export function EventBudgetList({
             disabled={!premium}
             hitSlop={getHitSlop("medium")}
           >
-            <View style={[globalStyles.smallWidget, styles.addButton]}>
+            <View style={[padding.smallWidget, styles.addButton]}>
               <Text type="body" style={styles.addButtonText}>
                 Add
               </Text>

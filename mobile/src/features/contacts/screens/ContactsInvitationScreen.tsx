@@ -2,11 +2,11 @@ import { useState } from "react";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AppButtonSwitcher } from "@/components/buttons/AppButtonSwitcher";
-import { Screen } from "@/components/views/screen/Screen";
-import { AllStackParamList } from "@/features/app/navigationTypes";
+import { AllStackParamList } from "@/app/navigation";
+import { Screen } from "@/components/screen/Screen";
+import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
+import { colors } from "@/design-system/tokens/colors";
 import { InvitesView } from "@/features/events/components/invite/InvitesView";
-import { colors } from "@/styles/colors";
 
 import { useEventInvites } from "../hooks/useEventInvites";
 

@@ -11,18 +11,19 @@ import { PhotoResult } from "expo-camera";
 import * as ImageManipulator from "expo-image-manipulator";
 import { CameraType } from "expo-image-picker";
 
-import { Button } from "@/components/buttons/Button";
-import { Text } from "@/components/text/Text";
-import { ModalView } from "@/components/views/ModalView";
-import { computeImageHash, saveLocalImageToCache } from "@/services/cache";
+import { Button } from "@/design-system/components/Button";
+import { ModalView } from "@/design-system/components/ModalView";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { uploadImageAsync } from "@/services/firebase/firebaseStorage";
 import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import {
+  computeImageHash,
+  saveLocalImageToCache
+} from "@/services/local/cache";
 import { UserState, setProfilePictureHash } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { User } from "@/types/User";
-import { showErrorNotification } from "@/utils/appNotifications";
-import { AppError } from "@/utils/error";
-import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 interface AccountPictureCameraModalProps {
   presentModal: boolean;
@@ -45,13 +46,12 @@ export function AccountPictureCameraModal({
   async function savePhoto() {
     if (!photo?.uri) return;
     if (!userId || userId === "null") {
-      showErrorNotification("You're not signed in. Please sign in again.");
+      showErrorToast("You're not signed in. Please sign in again.");
       return;
     }
 
     try {
       setIsLoading(true);
-      log(`Selected Image URI: ${photo.uri}`, "info");
 
       // Flip the image if using front camera
       let processedImage = photo;
@@ -63,29 +63,20 @@ export function AccountPictureCameraModal({
         );
       }
 
-      log("Uploading profile picture to storage...", "info");
       await uploadImageAsync(processedImage.uri, `${userId}/profilePicture`, 0);
 
-      log("Computing image hash...", "info");
       const imageHash = await computeImageHash(processedImage.uri);
 
-      log("Updating user profilePictureHash in Firestore...", "info");
       await updateUserInfo(userId, {
         profilePictureHash: imageHash
       } as User);
 
-      log("Saving image to local cache...", "info");
       await saveLocalImageToCache(processedImage.uri, "profilePicture", true);
       dispatch(setProfilePictureHash(imageHash));
 
       navigation.goBack();
-    } catch (error) {
-      // Some errors (e.g. permission-denied) are treated as "handled" by AppError and won't
-      // show a user notification. Show a generic message here so the failure is visible.
-      showErrorNotification(
-        "Failed to save profile picture. Please try again."
-      );
-      new AppError(error, "Error saving picture", true);
+    } catch {
+      showErrorToast("Error Saving Photo");
     } finally {
       setIsLoading(false);
       setPresentModal(false);

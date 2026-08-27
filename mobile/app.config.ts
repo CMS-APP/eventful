@@ -2,15 +2,21 @@ import "dotenv/config";
 
 import { ConfigContext } from "@expo/config";
 
+const IS_DEV = process.env.APP_VARIANT === "development";
+
+const bundleId = IS_DEV
+  ? "com.hostinghappily.app.dev"
+  : "com.hostinghappily.app";
+
 export default ({ config }: ConfigContext) => {
   return {
     ...config,
-    name: "Eventful",
+    name: IS_DEV ? "Eventful Dev" : "Eventful",
     slug: "Eventful",
     scheme: "eventful",
     owner: "chrissharp",
-    version: "6.1.0",
-    runtimeVersion: "6.1.0",
+    version: "6.3.0",
+    runtimeVersion: "6.3.0",
     orientation: "portrait",
     icon: "./src/assets/logos/eventful-logo.png",
     userInterfaceStyle: "light",
@@ -20,9 +26,9 @@ export default ({ config }: ConfigContext) => {
       backgroundColor: "#0a3b2e"
     },
     android: {
-      package: "com.hostinghappily.app",
+      package: bundleId,
       icon: "./src/assets/logos/eventful-logo-android.png",
-      versionCode: 297,
+      versionCode: 310,
       softwareKeyboardLayoutMode: "pan",
       permissions: [
         "android.permission.READ_EXTERNAL_STORAGE",
@@ -30,14 +36,15 @@ export default ({ config }: ConfigContext) => {
         "android.permission.ACCESS_MEDIA_LOCATION",
         "android.permission.CAMERA"
       ],
-      googleServicesFile: "./google-services.json"
+      googleServicesFile: IS_DEV
+        ? "./firebase/google-services-dev.json"
+        : "./firebase/google-services.json"
     },
     ios: {
-      bundleIdentifier: "com.hostinghappily.app",
+      bundleIdentifier: bundleId,
       icon: "./src/assets/logos/eventful-logo.png",
-      buildNumber: "296",
+      buildNumber: "314",
       supportsTablet: true,
-      usesAppleSignIn: true,
       infoPlist: {
         NSPhotoLibraryUsageDescription:
           "This app needs access to your photo library to upload photos to your account and events.",
@@ -49,7 +56,9 @@ export default ({ config }: ConfigContext) => {
       entitlements: {
         "com.apple.developer.applesignin": ["Default"]
       },
-      googleServicesFile: "./GoogleService-Info.plist"
+      googleServicesFile: IS_DEV
+        ? "./firebase/GoogleService-Info-Dev.plist"
+        : "./firebase/GoogleService-Info.plist"
     },
     plugins: [
       "@react-native-firebase/app",
@@ -105,7 +114,23 @@ export default ({ config }: ConfigContext) => {
           organization: "chris-app"
         }
       ],
-      "expo-asset"
+      "expo-asset",
+      [
+        "expo-build-properties",
+        {
+          ios: {
+            useFrameworks: "static",
+            forceStaticLinking: [
+              "RNFBApp",
+              "RNFBAppCheck",
+              "RNFBAuth",
+              "RNFBCrashlytics",
+              "RNFBFirestore",
+              "RNFBStorage"
+            ]
+          }
+        }
+      ]
     ],
     extra: {
       eas: {
@@ -113,9 +138,7 @@ export default ({ config }: ConfigContext) => {
       }
     },
     updates: {
-      url: "https://u.expo.dev/8a843ae2-e39e-46ef-8eea-47724de6edf0",
-      enabled: true,
-      fallbackToCacheTimeout: 0
+      enabled: false
     }
   };
 };

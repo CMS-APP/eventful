@@ -2,11 +2,11 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { padding } from "@/design-system/tokens/padding";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
-import { getHitSlop } from "@/utils/hitSlop";
 
 interface SpotifyPlaylistItemProps {
   playlist:
@@ -25,7 +25,7 @@ export function SpotifyPlaylistItem({
 
   return (
     <TouchableOpacity onPress={onPress} hitSlop={getHitSlop("medium")}>
-      <View style={[globalStyles.largeWidget, styles.container]}>
+      <View style={[padding.largeWidget, styles.container]}>
         {playlist?.icon ? (
           <Image
             source={{ uri: playlist?.icon }}

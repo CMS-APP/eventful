@@ -1,10 +1,10 @@
 import { StyleSheet, View } from "react-native";
 
-import { Button } from "@/components/buttons/Button";
-import { Input } from "@/components/inputs/Input";
-import { Text } from "@/components/text/Text";
-import { ModalView } from "@/components/views/ModalView";
-import { colors } from "@/styles/colors";
+import { Button } from "@/design-system/components/Button";
+import { Input } from "@/design-system/components/Input";
+import { ModalView } from "@/design-system/components/ModalView";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 
 interface SettingsPasswordModalProps {
   presentPasswordModal: boolean;

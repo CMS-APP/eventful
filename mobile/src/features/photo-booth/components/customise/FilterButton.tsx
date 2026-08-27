@@ -2,10 +2,10 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { FilterWrapper } from "@/components/filters/FilterWrapper";
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { getHitSlop } from "@/utils/hitSlop";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { FilterWrapper } from "@/features/photo-booth/components/customise/FilterWrapper";
 
 interface FilterButtonProps {
   filter: string;

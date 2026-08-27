@@ -5,15 +5,12 @@ import { StyleSheet, View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { AllStackParamList, HomeStackParamList } from "@/app/navigation";
+import { Screen } from "@/components/screen/Screen";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
-import { Screen } from "@/components/views/screen/Screen";
-import {
-  AllStackParamList,
-  HomeStackParamList
-} from "@/features/app/navigationTypes";
+import { colors } from "@/design-system/tokens/colors";
 import { readUpdateNotification } from "@/services/firebase/firebaseUserFunctions";
-import { colors } from "@/styles/colors";
-import { Notification } from "@/types/Notification";
+import { InAppNotification } from "@/types/InAppNotification";
 
 import { HomeUpdateItem } from "../components/HomeUpdateItem";
 
@@ -58,7 +55,7 @@ export function HomeUpdatesScreen({
     >
       <View style={styles.container}>
         {updates && updates.length !== 0 ? (
-          updates.map((update: Notification) => (
+          updates.map((update: InAppNotification) => (
             <HomeUpdateItem key={update.id} update={update} />
           ))
         ) : (

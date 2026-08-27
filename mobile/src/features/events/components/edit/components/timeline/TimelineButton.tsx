@@ -2,10 +2,10 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
-import { getHitSlop } from "@/utils/hitSlop";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { padding } from "@/design-system/tokens/padding";
 
 interface TimelineButtonProps {
   index: number;
@@ -57,7 +57,7 @@ export function TimelineButton({
 
 const styles = StyleSheet.create({
   button: {
-    ...globalStyles.largeWidget,
+    ...padding.largeWidget,
     backgroundColor: colors.lightGray,
     gap: 12,
     width: "75%"

@@ -3,7 +3,7 @@ import {
   createBottomTabNavigator
 } from "@react-navigation/bottom-tabs";
 
-import { MainStackParamList } from "@/features/app/navigationTypes";
+import { MainStackParamList } from "@/app/navigation";
 
 import { CalendarNavigator } from "../calendar/CalendarNavigator";
 import { ContactsNavigator } from "../contacts/navigators/ContactsNavigator";

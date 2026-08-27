@@ -13,9 +13,9 @@ import {
 
 import { CameraView, PhotoResult } from "expo-camera";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { padding } from "@/design-system/tokens/padding";
 
 import { PhotoBoothButtons } from "../components/camera/PhotoBoothButtons";
 import {
@@ -26,9 +26,9 @@ import type {
   PhotoBoothStackNavigation,
   PhotoBoothStackParamList
 } from "../photoBoothStackParams";
-import { usePhotoBoothCamera } from "../provider/PhotoBoothCameraProvider";
-import { usePhotoBoothSession } from "../provider/PhotoBoothSessionProvider";
-import { usePhotoBoothSettings } from "../provider/PhotoBoothSettingsProvider";
+import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
+import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
+import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
 type RedoPhotoRoute = RouteProp<
   PhotoBoothStackParamList,
@@ -96,7 +96,7 @@ export function PhotoBoothRedoPhoto() {
 
       <View pointerEvents="box-none" style={styles.overlay}>
         {!isBoothRunning && (
-          <View style={[globalStyles.largeWidget, { top }]}>
+          <View style={[padding.largeWidget, { top }]}>
             <View style={styles.headerContent}>
               <Text type="header" color={colors.white}>
                 Photo Booth

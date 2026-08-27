@@ -6,13 +6,13 @@ import { Alert, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { padding } from "@/design-system/tokens/padding";
 import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
 
 import { useSpotifyAuth } from "./functions/useSpotifyAuth";
 
@@ -74,7 +74,7 @@ export function SpotifySignInButton({
       onPress={signedIn ? signOutOfSpotifyAlert : signIntoSpotify}
       hitSlop={getHitSlop("medium")}
     >
-      <View style={[globalStyles.largeWidget, styles.container]}>
+      <View style={[padding.largeWidget, styles.container]}>
         <View style={styles.imageContainer}>
           <Image
             source={require("@/assets/logos/spotify-logo-green.png")}

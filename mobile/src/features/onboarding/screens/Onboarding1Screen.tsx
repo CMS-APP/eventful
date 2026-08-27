@@ -2,17 +2,19 @@ import { getAuth, signOut } from "@react-native-firebase/auth";
 
 import { useEffect } from "react";
 
-import { StatusBar, View } from "react-native";
+import { StatusBar, StyleSheet, View } from "react-native";
 
+import { CommonActions } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import {
   AllStackParamList,
   AppStackParamList,
-  OnboardingStackParamList
-} from "@/features/app/navigationTypes";
-import { globalStyles } from "@/styles/globalStyles";
-import { AppError } from "@/utils/error";
+  OnboardingStackParamList,
+  navigationRef
+} from "@/app/navigation";
+import { colors } from "@/design-system/tokens/colors";
+import { showErrorToast } from "@/utils/toast";
 
 import { FeatureView } from "../components/FeatureView";
 import { OnboardingButtons } from "../components/OnboardingButtons";
@@ -21,16 +23,14 @@ interface Onboarding1ScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;
 }
 
-export function Onboarding1Screen({
-  navigation
-}: Onboarding1ScreenProps) {
+export function Onboarding1Screen({ navigation }: Onboarding1ScreenProps) {
   async function handleExit() {
     try {
       const auth = getAuth();
       await signOut(auth);
       await signOutNavigation();
-    } catch (error) {
-      new AppError(error, "Error Signing out", true);
+    } catch {
+      showErrorToast("Error Signing Out");
     }
   }
 
@@ -47,7 +47,12 @@ export function Onboarding1Screen({
     );
 
     setTimeout(() => {
-      (navigation as StackNavigationProp<AppStackParamList>).navigate("Auth");
+      navigationRef.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "Auth" }]
+        })
+      );
     }, 500);
   }
 
@@ -56,7 +61,7 @@ export function Onboarding1Screen({
   }, []);
 
   return (
-    <View style={globalStyles.containerPrimary}>
+    <View style={styles.container}>
       <FeatureView
         image={require("@/assets/onboarding/drinks.png")}
         title="Welcome"
@@ -68,3 +73,10 @@ export function Onboarding1Screen({
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.primary,
+    flex: 1
+  }
+});

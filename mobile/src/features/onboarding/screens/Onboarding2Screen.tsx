@@ -1,9 +1,9 @@
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { OnboardingStackParamList } from "@/features/app/navigationTypes";
-import { globalStyles } from "@/styles/globalStyles";
+import { OnboardingStackParamList } from "@/app/navigation";
+import { colors } from "@/design-system/tokens/colors";
 
 import { FeatureView } from "../components/FeatureView";
 import { OnboardingButtons } from "../components/OnboardingButtons";
@@ -12,9 +12,7 @@ interface Onboarding2ScreenProps {
   navigation: StackNavigationProp<OnboardingStackParamList>;
 }
 
-export function Onboarding2Screen({
-  navigation
-}: Onboarding2ScreenProps) {
+export function Onboarding2Screen({ navigation }: Onboarding2ScreenProps) {
   async function handleBack() {
     navigation.goBack();
   }
@@ -24,7 +22,7 @@ export function Onboarding2Screen({
   }
 
   return (
-    <View style={globalStyles.containerPrimary}>
+    <View style={styles.container}>
       <FeatureView
         image={require("@/assets/onboarding/celebrate.png")}
         title="Connect with Your People"
@@ -36,3 +34,10 @@ export function Onboarding2Screen({
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.primary,
+    flex: 1
+  }
+});

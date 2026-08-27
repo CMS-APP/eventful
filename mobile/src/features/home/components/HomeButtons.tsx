@@ -5,14 +5,14 @@ import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { useAppDimensions } from "@/app/hooks/useAppDimensions";
 import {
   AppStackParamList,
   EventsStackParamList,
   MainStackParamList
-} from "@/features/app/navigationTypes";
+} from "@/app/navigation";
+import { colors } from "@/design-system/tokens/colors";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { useAppDimensions } from "@/styles/globalStyles";
 
 import { HomeNotificationButtons } from "./HomeNotificationButtons";
 import { HomePageButton } from "./HomePageButton";

@@ -14,8 +14,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
-import { InspirationStackParamList } from "@/features/app/navigationTypes";
+import { InspirationStackParamList } from "@/app/navigation";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import {
   getPostLikesCount,
@@ -24,13 +26,11 @@ import {
 } from "@/services/firebase/firebaseInspirationFunctions";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Post } from "@/types/Post";
 import { User } from "@/types/User";
 import { calculateTimeAgo } from "@/utils/date";
-import { AppError } from "@/utils/error";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
+import { showErrorToast } from "@/utils/toast";
 
 import { PostImageCarousel } from "./PostImageCarousel";
 
@@ -47,18 +47,14 @@ export function PostItem({ post }: { post: Post }) {
     useNavigation() as StackNavigationProp<InspirationStackParamList>;
 
   const loadLikeData = async () => {
-    try {
-      const [count, liked] = await Promise.all([
-        getPostLikesCount(post.id),
-        currentUserId
-          ? hasUserLikedPost(post.id, currentUserId)
-          : Promise.resolve(false)
-      ]);
-      setLikesCount(count);
-      setIsLiked(liked);
-    } catch (error) {
-      new AppError(error, "Error loading like data");
-    }
+    const [count, liked] = await Promise.all([
+      getPostLikesCount(post.id),
+      currentUserId
+        ? hasUserLikedPost(post.id, currentUserId)
+        : Promise.resolve(false)
+    ]);
+    setLikesCount(count);
+    setIsLiked(liked);
   };
 
   async function fetchAuthor() {
@@ -98,8 +94,8 @@ export function PostItem({ post }: { post: Post }) {
         await togglePostLike(post.id, currentUserId);
         setIsLiked(true);
         setLikesCount((prev) => prev + 1);
-      } catch (error) {
-        new AppError(error, "Error liking post", true);
+      } catch {
+        showErrorToast("Error Liking Post");
       }
     } else {
       tapTimeoutRef.current = setTimeout(() => {
@@ -125,8 +121,8 @@ export function PostItem({ post }: { post: Post }) {
 
     try {
       await togglePostLike(post.id, currentUserId);
-    } catch (error) {
-      new AppError(error, "Error toggling like");
+    } catch {
+      // ignore
     }
   };
 

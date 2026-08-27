@@ -8,7 +8,6 @@ import {
 import * as ImageManipulator from "expo-image-manipulator";
 import { SaveFormat } from "expo-image-manipulator";
 
-import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 
 import { FIREBASE_STORAGE } from "./firebase";
@@ -50,30 +49,24 @@ export async function uploadImageAsync(
     });
   }
 
-  try {
-    let compressedUri = uri;
+  let compressedUri = uri;
 
-    // Skip compression for small images (e.g., < 1MB)
-    const blob = (await getBlob(uri)) as Blob;
-    const sizeInMB = blob.size / (1024 * 1024);
+  // Skip compression for small images (e.g., < 1MB)
+  const blob = (await getBlob(uri)) as Blob;
+  const sizeInMB = blob.size / (1024 * 1024);
 
-    if (sizeInMB > 1) {
-      compressedUri = await compressImage(uri);
-    }
-
-    const compressedBlob = (await getBlob(compressedUri)) as Blob;
-    const storageRef = ref(FIREBASE_STORAGE, storageString + ".jpg");
-    await uploadBytesResumable(storageRef, compressedBlob);
-  } catch (error) {
-    throw new AppError(error, "Firestore Storage: Error uploading image");
+  if (sizeInMB > 1) {
+    compressedUri = await compressImage(uri);
   }
+
+  const compressedBlob = (await getBlob(compressedUri)) as Blob;
+  const storageRef = ref(FIREBASE_STORAGE, storageString + ".jpg");
+  await uploadBytesResumable(storageRef, compressedBlob);
+
 }
 
 export async function deleteImageAsync(storageString: string) {
-  try {
-    const storageRef = ref(FIREBASE_STORAGE, storageString + ".jpg");
-    await deleteObject(storageRef);
-  } catch (error) {
-    throw new AppError(error, "Firestore Storage: Error deleting image");
-  }
+  const storageRef = ref(FIREBASE_STORAGE, storageString + ".jpg");
+  await deleteObject(storageRef);
+
 }

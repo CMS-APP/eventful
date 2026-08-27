@@ -6,8 +6,8 @@ import { StyleSheet, View } from "react-native";
 
 import { useFocusEffect } from "@react-navigation/native";
 
-import { Text } from "@/components/text/Text";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
+import { Text } from "@/design-system/components/Text";
 import { getInvitedGuests } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
@@ -90,7 +90,7 @@ export function EventGuestListInvited({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 24,
-    gap: 12
+    gap: 12,
+    paddingHorizontal: 24
   }
 });

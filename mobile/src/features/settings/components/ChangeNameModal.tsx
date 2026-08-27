@@ -8,10 +8,12 @@ import { Alert, StyleSheet, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Button } from "@/components/buttons/Button";
-import { Input } from "@/components/inputs/Input";
-import { Text } from "@/components/text/Text";
-import { ModalView } from "@/components/views/ModalView";
+import { Button } from "@/design-system/components/Button";
+import { Input } from "@/design-system/components/Input";
+import { ModalView } from "@/design-system/components/ModalView";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { padding } from "@/design-system/tokens/padding";
 import {
   changeHostname,
   checkUsernameExists,
@@ -25,11 +27,9 @@ import {
   setUsername,
   setUsernameUpdateDate
 } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { parseDatabaseDate } from "@/utils/date";
-import { AppError } from "@/utils/error";
-import { checkValue as checkValueUtil } from "@/utils/regex";
+import { showErrorToast } from "@/utils/toast";
+import { checkValue as checkValueUtil } from "@/utils/validation";
 
 interface ChangeNameModalProps {
   presentModal: boolean;
@@ -196,8 +196,8 @@ export function ChangeNameModal({
       setNewSecondName("");
       setUsernameExists(null);
       Alert.alert("Success", `Your ${type} has been updated.`);
-    } catch (error) {
-      new AppError(error, "Error changing name", true);
+    } catch {
+      showErrorToast("Error Changing Name");
     }
   }, [
     type,
@@ -239,7 +239,7 @@ export function ChangeNameModal({
       )}
 
       {type === "username" && (
-        <View style={[globalStyles.largeWidget, styles.usernameContainer]}>
+        <View style={[padding.largeWidget, styles.usernameContainer]}>
           <Text
             type="body"
             italic

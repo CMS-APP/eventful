@@ -1,9 +1,9 @@
 import { StyleSheet, View } from "react-native";
 
-import { useAppDimensions } from "@/styles/globalStyles";
+import { useAppDimensions } from "@/app/hooks/useAppDimensions";
+import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
+import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
-import { usePhotoBoothCamera } from "../../provider/PhotoBoothCameraProvider";
-import { usePhotoBoothSettings } from "../../provider/PhotoBoothSettingsProvider";
 import { PhotoBoothText } from "./PhotoBoothText";
 import { ResultImage } from "./ResultImage";
 import { previewPlaceholderPhoto } from "./previewPlaceholderPhoto";

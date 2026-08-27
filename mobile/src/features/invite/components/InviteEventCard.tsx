@@ -8,8 +8,11 @@ import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Text } from "@/components/text/Text";
-import { AppStackParamList } from "@/features/app/navigationTypes";
+import { AppStackParamList } from "@/app/navigation";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { padding } from "@/design-system/tokens/padding";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import {
   getInviteFromDatabase,
@@ -17,15 +20,11 @@ import {
 } from "@/services/firebase/firebaseInviteFunctions";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
 import { formatDate, formatTime, parseDatabaseDate } from "@/utils/date";
-import { AppError } from "@/utils/error";
-import { getHitSlop } from "@/utils/hitSlop";
-import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 import { InviteEventCardResponse } from "./InviteEventCardResponse";
 import { InviteProfilePictures } from "./InviteProfilePictures";
@@ -59,13 +58,11 @@ export function InviteEventCard({
   }
 
   const fetchHost = useCallback(async () => {
-    log(`Fetching host for event: ${event.id}`, "info");
     const host = await getUserInfo(event.userId);
     setHost(host);
   }, [event]);
 
   const fetchInvite = useCallback(async () => {
-    log(`Fetching invite for event: ${event.id}`, "info");
     const invite = await getInviteFromDatabase(event, userId);
     setInvite(invite);
   }, [event, userId]);
@@ -77,7 +74,6 @@ export function InviteEventCard({
 
   const handleInvite = useCallback(async () => {
     try {
-      log("Inviting user to event", "info");
       const { refresh } = await sendInvite(
         host?.uid || "",
         host?.name || "",
@@ -88,8 +84,8 @@ export function InviteEventCard({
       if (refresh) {
         setRefreshKey((prev: number) => prev + 1);
       }
-    } catch (error) {
-      new AppError(error, "Error inviting user to event", true);
+    } catch {
+      showErrorToast("Error Inviting User");
     }
   }, [host?.uid, host?.name, host?.username, user, event]);
 
@@ -195,7 +191,7 @@ export function InviteEventCard({
 
 const styles = StyleSheet.create({
   container: {
-    ...globalStyles.largeWidget,
+    ...padding.largeWidget,
     backgroundColor: colors.lightGray,
     gap: 12
   },

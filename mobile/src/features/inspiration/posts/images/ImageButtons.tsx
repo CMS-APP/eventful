@@ -2,9 +2,9 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { Photo } from "@/types/Photo";
-import { getHitSlop } from "@/utils/hitSlop";
 
 export function ImageButtons({
   currentIndex,

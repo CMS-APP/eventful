@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { TIMELINE_TEXT_LIST } from "@/constants/timeline";
-import { colors } from "@/styles/colors";
+import { TIMELINE_TEXT_LIST } from "@/features/events/constants";
+import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 import { haptics } from "@/utils/haptics";
 

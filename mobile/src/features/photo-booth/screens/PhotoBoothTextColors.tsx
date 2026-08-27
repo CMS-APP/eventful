@@ -1,13 +1,13 @@
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
-import { Divider } from "@/components/views/Divider";
-import { Screen } from "@/components/views/screen/Screen";
-import { colors } from "@/styles/colors";
+import { Screen } from "@/components/screen/Screen";
+import { Divider } from "@/design-system/components/Divider";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
 import { ColorButton } from "../components/customise/ColorButton";
 import { CustomiseText } from "../components/customise/CustomiseText";
-import { usePhotoBoothSettings } from "../provider/PhotoBoothSettingsProvider";
 
 export function PhotoBoothTextColors() {
   const { frameColor, textColor } = usePhotoBoothSettings();

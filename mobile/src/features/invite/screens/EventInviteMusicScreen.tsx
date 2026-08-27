@@ -6,12 +6,12 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
+import { EventInviteStackParamList } from "@/app/navigation";
+import { FlatHeader } from "@/components/screen/FlatHeader";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { FlatHeader } from "@/components/views/screen/FlatHeader";
-import { EventInviteStackParamList } from "@/features/app/navigationTypes";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { SpotifyPlaylistItem } from "@/features/events/components/music/SpotifyPlaylistItem";
-import { colors } from "@/styles/colors";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
 
 type Props = NativeStackScreenProps<

@@ -1,10 +1,11 @@
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { globalStyles, useSafeAreaStyles } from "@/styles/globalStyles";
+import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { padding } from "@/design-system/tokens/padding";
+import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
 
-import { usePhotoBoothSession } from "../../provider/PhotoBoothSessionProvider";
 import { CameraSelectedCollage } from "./CameraSelectedCollage";
 
 export function CameraHeader({
@@ -19,7 +20,7 @@ export function CameraHeader({
   return (
     <View
       style={[
-        globalStyles.largeWidget,
+        padding.largeWidget,
         styles.headerContainer,
         {
           backgroundColor: !isBoothRunning ? colors.black : colors.transparent,

@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 import { Itinerary } from "@/types/Itinerary";
 import {
@@ -120,8 +120,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase"
   },
   container: {
-    gap: 12,
-    paddingHorizontal: 24
+    gap: 12
   },
   dayHeader: {
     alignItems: "center",

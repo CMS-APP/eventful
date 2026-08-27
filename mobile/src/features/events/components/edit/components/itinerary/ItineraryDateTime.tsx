@@ -4,9 +4,10 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
+import { Divider } from "@/design-system/components/Divider";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { Event } from "@/types/Event";
 import {
   calculateTimeDifferenceBetweenDates,
@@ -14,7 +15,6 @@ import {
   formatTime,
   parseDatabaseDate
 } from "@/utils/date";
-import { getHitSlop } from "@/utils/hitSlop";
 
 import { EventDateTimeRangeEditor } from "../EventDateTimeRangeEditor";
 
@@ -145,7 +145,7 @@ export function ItineraryDateTime({
         </TouchableOpacity>
       </View>
 
-      <View style={globalStyles.divider} />
+      <Divider />
     </View>
   );
 }

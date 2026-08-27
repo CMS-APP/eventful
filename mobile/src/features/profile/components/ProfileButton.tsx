@@ -8,15 +8,15 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Text } from "@/components/text/Text";
+import { HomeStackParamList } from "@/app/navigation";
 import { FollowButton } from "@/components/views/FollowButton";
-import { HomeStackParamList } from "@/features/app/navigationTypes";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { padding } from "@/design-system/tokens/padding";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { User } from "@/types/User";
-import { getHitSlop } from "@/utils/hitSlop";
 
 import { ProfilePicture } from "./ProfilePicture";
 
@@ -56,7 +56,7 @@ export function ProfileButton({ uid }: ProfileButtonProps) {
       onPress={handleActionPress}
       hitSlop={getHitSlop("medium")}
     >
-      <View style={[globalStyles.mediumWidget, styles.container]}>
+      <View style={[padding.mediumWidget, styles.container]}>
         <ProfilePicture user={user} size={40} />
         <View style={styles.contentContainer}>
           <Text type="body">{user.name}</Text>

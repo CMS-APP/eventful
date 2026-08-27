@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
+import { Text } from "@/design-system/components/Text";
 import { InviteEventCard } from "@/features/invite/components/InviteEventCard";
 import { Event } from "@/types/Event";
 

@@ -2,9 +2,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Image, StyleSheet, View } from "react-native";
 
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
 
-import { usePhotoBoothCamera } from "../../provider/PhotoBoothCameraProvider";
+import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
 
 const THUMB_WIDTH = 80;
 const FALLBACK_RATIO = 7 / 10;

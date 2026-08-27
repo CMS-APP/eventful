@@ -1,9 +1,9 @@
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 
-import { usePhotoBoothSettings } from "../../provider/PhotoBoothSettingsProvider";
+import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 import { CustomiseCollageItem } from "./CustomiseCollageItem";
 
 export function CustomiseCollage() {

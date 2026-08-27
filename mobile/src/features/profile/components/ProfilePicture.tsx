@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 
 import { Image, StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
-import { syncUserPicture } from "@/services/cache";
-import { colors } from "@/styles/colors";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { syncUserPicture } from "@/services/local/cache";
 import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
-import { getInitials } from "@/utils/regex";
+import { getInitials } from "@/utils/validation";
 
 interface ProfilePictureProps {
   user: User;
@@ -40,8 +39,8 @@ export function ProfilePicture({
       const imageUri = await syncUserPicture(user, false);
       setImage(imageUri || null);
       setLoading(false);
-    } catch (error) {
-      new AppError(error, "Profile: Profile image load error");
+    } catch {
+      // ignore
     }
   }
 
@@ -64,9 +63,6 @@ export function ProfilePicture({
         <Image
           source={{ uri: image }}
           style={[styles.image, { height: size, width: size }]}
-          onError={(error) =>
-            new AppError(error, "Profile: Profile image load error")
-          }
         />
       ) : (
         <View

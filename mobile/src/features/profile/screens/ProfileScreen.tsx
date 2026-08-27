@@ -1,15 +1,11 @@
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Screen } from "@/components/views/screen/Screen";
-import {
-  AllStackParamList,
-  ProfileStackParamList
-} from "@/features/app/navigationTypes";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
+import { AllStackParamList, ProfileStackParamList } from "@/app/navigation";
+import { Screen } from "@/components/screen/Screen";
+import { colors } from "@/design-system/tokens/colors";
 
 import { ProfileInvites } from "../components/ProfileInvites";
 import { ProfileTop } from "../components/ProfileTop";
@@ -41,10 +37,17 @@ export function ProfileScreen({ route }: ProfileScreenProps) {
         tabBarPresent: false
       }}
     >
-      <View style={globalStyles.containerPrimary}>
+      <View style={styles.container}>
         <ProfileTop user={user} />
         <ProfileInvites user={user} />
       </View>
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.primary,
+    flex: 1
+  }
+});

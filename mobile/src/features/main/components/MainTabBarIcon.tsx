@@ -2,8 +2,8 @@ import { StyleSheet, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 
 const iconNames = {
   Home: "home",

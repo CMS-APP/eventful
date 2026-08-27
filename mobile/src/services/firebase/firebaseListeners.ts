@@ -12,8 +12,7 @@ import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { Invites } from "@/types/Invites";
 import { isActiveEvent } from "@/utils/date";
-import { AppError } from "@/utils/error";
-import { safeListener } from "@/utils/errorHandling";
+import { log } from "@/utils/logging";
 
 import { FIRESTORE_DB } from "./firebase";
 
@@ -21,55 +20,54 @@ export function getInvitationsFromDatabaseSnapshot(
   userId: string,
   callback: (events: Invites) => void
 ) {
-  return safeListener(() => {
-    const inviteRef = collection(FIRESTORE_DB, "invite");
-    const queryRef = query(inviteRef, where("recipient", "==", userId));
+  const inviteRef = collection(FIRESTORE_DB, "invite");
+  const queryRef = query(inviteRef, where("recipient", "==", userId));
 
-    return onSnapshot(
-      queryRef,
-      async (querySnapshot: FirebaseFirestoreTypes.QuerySnapshot) => {
-        const events: Invites = { respond: [], noRespond: [] };
-        const eventPromises = querySnapshot.docs.map(
-          async (document: FirebaseFirestoreTypes.QueryDocumentSnapshot) => {
-            const invite = { ...document.data(), id: document.id } as Invite;
-            const eventRef = doc(
-              FIRESTORE_DB,
-              "event",
-              invite.eventId as string
-            );
+  return onSnapshot(
+    queryRef,
+    async (querySnapshot: FirebaseFirestoreTypes.QuerySnapshot) => {
+      const events: Invites = { respond: [], noRespond: [] };
+      const eventPromises = querySnapshot.docs.map(
+        async (document: FirebaseFirestoreTypes.QueryDocumentSnapshot) => {
+          const invite = { ...document.data(), id: document.id } as Invite;
+          const eventRef = doc(FIRESTORE_DB, "event", invite.eventId as string);
 
-            // Use safe query pattern - don't throw in listener callback
-            try {
-              const event = await getDoc(eventRef);
-              if (event.exists()) {
-                const eventData = event.data() as Event;
+          try {
+            const event = await getDoc(eventRef);
+            if (event.exists()) {
+              const eventData = event.data() as Event;
 
-                if (isActiveEvent(eventData)) {
-                  if (
-                    invite.response === "pending" ||
-                    invite.response === "maybe"
-                  ) {
-                    events.noRespond.push({ invite, event: eventData });
-                  } else if (
-                    invite.response === "accept" ||
-                    invite.response === "decline"
-                  ) {
-                    events.respond.push({ invite, event: eventData });
-                  }
+              if (isActiveEvent(eventData)) {
+                if (
+                  invite.response === "pending" ||
+                  invite.response === "maybe"
+                ) {
+                  events.noRespond.push({ invite, event: eventData });
+                } else if (
+                  invite.response === "accept" ||
+                  invite.response === "decline"
+                ) {
+                  events.respond.push({ invite, event: eventData });
                 }
               }
-            } catch (error) {
-              new AppError(error, "Error getting event in listener");
             }
+          } catch (error) {
+            log(
+              `Error getting event in listener: ${(error as any)?.message ?? error}`,
+              "error"
+            );
           }
-        );
+        }
+      );
 
-        await Promise.all(eventPromises);
-        callback(events);
-      },
-      (error) => {
-        new AppError(error, "Error in invitations listener");
-      }
-    );
-  }, "FirebaseFunctions: Error setting up invitations listener");
+      await Promise.all(eventPromises);
+      callback(events);
+    },
+    (error) => {
+      log(
+        `Error in invitations listener: ${(error as any)?.message ?? error}`,
+        "error"
+      );
+    }
+  );
 }

@@ -8,17 +8,16 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { Entypo } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
+import { EventInviteStackParamList } from "@/app/navigation";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { EventInviteStackParamList } from "@/features/app/navigationTypes";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { textFormatter } from "@/design-system/tokens/fonts";
 import { ResponseButtonIcon } from "@/features/events/components/invite/ResponseButtonIcon";
 import { updateResponseInDatabase } from "@/services/firebase/firebaseInviteFunctions";
+import { updateResponseNotification } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { textFormatter } from "@/styles/fonts";
-import { AppError } from "@/utils/error";
-import { log } from "@/utils/logging";
-import { updateResponseNotification } from "@/utils/notifications";
+import { showErrorToast } from "@/utils/toast";
 
 import { InviteButtons } from "../components/InviteButtons";
 import { InviteDateView } from "../components/InviteDateView";
@@ -41,7 +40,6 @@ export function EventInviteHomeScreen({
   const handleUpdateResponse = useCallback(
     async (newResponse: string) => {
       try {
-        log(`Updating response to: ${newResponse}`, "info");
         setResponse(newResponse);
         await updateResponseInDatabase(invite, { response: newResponse });
         await updateResponseNotification(
@@ -51,20 +49,15 @@ export function EventInviteHomeScreen({
           event,
           newResponse
         );
-      } catch (error) {
-        new AppError(error, "Error updating response", true);
+      } catch {
+        showErrorToast("Error Updating Response");
       }
     },
     [invite, host, name, username, event]
   );
 
   return (
-    <View
-      style={[
-        styles.screenContainer,
-        Platform.OS === "android" && styles.screenContainerAndroid
-      ]}
-    >
+    <View style={styles.screenContainer}>
       <KeyboardScrollView
         tabBarPresent={false}
         handleScroll={() => {}}
@@ -195,19 +188,11 @@ const styles = StyleSheet.create({
     borderColor: colors.secondary,
     borderRadius: 30,
     borderWidth: 3,
-    flex: 1,
     margin: 12,
     padding: 12
   },
   containerAndroid: {
-    backgroundColor: colors.white,
-    elevation: 8,
-    marginHorizontal: 24,
-    marginVertical: 32,
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 12
+    marginVertical: 48
   },
   dateContainer: {
     alignItems: "center",
@@ -251,9 +236,6 @@ const styles = StyleSheet.create({
   screenContainer: {
     backgroundColor: colors.white,
     flex: 1
-  },
-  screenContainerAndroid: {
-    backgroundColor: colors.blackTransparent
   },
   startDateLabel: {
     color: colors.primary,

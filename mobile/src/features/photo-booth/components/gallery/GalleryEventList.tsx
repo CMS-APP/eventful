@@ -6,11 +6,10 @@ import { StyleSheet, View } from "react-native";
 
 import { useFocusEffect } from "@react-navigation/native";
 
-import { Text } from "@/components/text/Text";
+import { Text } from "@/design-system/components/Text";
 import { getEvents } from "@/services/photo-booth/events";
 import { UserState } from "@/store/UserSlice";
 import { GalleryEvent } from "@/types/photoBoothGallery";
-import { AppError } from "@/utils/error";
 
 import { GalleryEventListItem } from "./GalleryEventListItem";
 
@@ -22,8 +21,8 @@ export function GalleryEventList() {
     try {
       const events = await getEvents(userId!);
       setEvents(events);
-    } catch (error) {
-      new AppError(error, "Error getting local events");
+    } catch {
+      // ignore
     }
   }, []);
 

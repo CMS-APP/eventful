@@ -4,7 +4,7 @@ import { useCallback } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 import { UserInvite } from "@/types/UserInvite";
 

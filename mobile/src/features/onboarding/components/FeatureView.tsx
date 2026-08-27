@@ -1,8 +1,8 @@
 import { Image, ImageSourcePropType, StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { useAppDimensions } from "@/styles/globalStyles";
+import { useAppDimensions } from "@/app/hooks/useAppDimensions";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 
 interface FeatureViewProps {
   image: ImageSourcePropType;

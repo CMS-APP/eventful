@@ -1,3 +1,5 @@
+const path = require("path");
+
 module.exports = {
   root: true,
   extends: [
@@ -9,8 +11,7 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    es6: true,
-    jest: true
+    es6: true
   },
   plugins: ["react", "react-native"],
   rules: {
@@ -20,13 +21,16 @@ module.exports = {
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-require-imports": "off"
   },
-  ignorePatterns: ["/dist/*", "node_modules/"],
-  overrides: [
-    {
-      files: ["**/*.test.{ts,tsx}", "**/__tests__/**/*.{ts,tsx}"],
-      env: {
-        jest: true
+  settings: {
+    "import/resolver": {
+      typescript: {
+        project: path.join(__dirname, "tsconfig.json"),
+        alwaysTryTypes: true
+      },
+      node: {
+        extensions: [".js", ".jsx", ".ts", ".tsx", ".json"]
       }
     }
-  ]
+  },
+  ignorePatterns: ["/dist/*", "node_modules/"]
 };

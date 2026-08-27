@@ -6,21 +6,17 @@ import { Alert, StyleSheet, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Button } from "@/components/buttons/Button";
-import { Input } from "@/components/inputs/Input";
+import { AllStackParamList, InspirationStackParamList } from "@/app/navigation";
+import { FlatHeader } from "@/components/screen/FlatHeader";
+import { FlatHeaderProps } from "@/components/screen/props";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { LoadingModal } from "@/components/views/LoadingModal";
-import { FlatHeader } from "@/components/views/screen/FlatHeader";
-import { FlatHeaderProps } from "@/components/views/screen/props";
-import {
-  AllStackParamList,
-  InspirationStackParamList
-} from "@/features/app/navigationTypes";
+import { Button } from "@/design-system/components/Button";
+import { Input } from "@/design-system/components/Input";
+import { colors } from "@/design-system/tokens/colors";
 import { createPostInDatabase } from "@/services/firebase/firebaseInspirationFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Photo } from "@/types/Photo";
-import { AppError } from "@/utils/error";
+import { showErrorToast } from "@/utils/toast";
 
 import { UploadPhoto } from "../components/UploadPhoto";
 
@@ -45,8 +41,8 @@ export function CreatePostScreen({ navigation }: CreatePostScreenProps) {
       });
       setLoading(false);
       (navigation as StackNavigationProp<InspirationStackParamList>).goBack();
-    } catch (error) {
-      new AppError(error, "Error creating post", true);
+    } catch {
+      showErrorToast("Error Creating Post");
     } finally {
       setLoading(false);
     }
@@ -77,8 +73,6 @@ export function CreatePostScreen({ navigation }: CreatePostScreenProps) {
 
   return (
     <View style={styles.container}>
-      <LoadingModal visible={loading} />
-
       <KeyboardScrollView
         tabBarPresent={false}
         handleScroll={() => {}}
@@ -117,6 +111,7 @@ export function CreatePostScreen({ navigation }: CreatePostScreenProps) {
               color={colors.primary}
               textColor={colors.white}
               onPress={createNewPostAlert}
+              loading={loading}
             />
           </View>
         </View>

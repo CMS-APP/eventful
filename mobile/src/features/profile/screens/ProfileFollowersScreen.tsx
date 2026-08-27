@@ -6,15 +6,15 @@ import { StyleSheet, View } from "react-native";
 
 import { RouteProp } from "@react-navigation/native";
 
+import { ProfileStackParamList } from "@/app/navigation";
+import { Screen } from "@/components/screen/Screen";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
-import { Screen } from "@/components/views/screen/Screen";
-import { ProfileStackParamList } from "@/features/app/navigationTypes";
+import { colors } from "@/design-system/tokens/colors";
 import {
   getUserFollowers,
   getUserFollowing,
   getUsersFromFollowing
 } from "@/services/firebase/firebaseUserFunctions";
-import { colors } from "@/styles/colors";
 import { User } from "@/types/User";
 
 import { ProfileButton } from "../components/ProfileButton";

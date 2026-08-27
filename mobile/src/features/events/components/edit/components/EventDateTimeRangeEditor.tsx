@@ -6,15 +6,15 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { DateTimeButton } from "@/components/buttons/DateTimeButton";
-import { SwitchButton } from "@/components/buttons/SwitchButton";
-import { DateTimeSelector } from "@/components/inputs/DateTimeSelector";
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
+import { DateTimeButton } from "@/design-system/components/DateTimeButton";
+import { DateTimeSelector } from "@/design-system/components/DateTimeSelector";
+import { SwitchButton } from "@/design-system/components/SwitchButton";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { Event } from "@/types/Event";
 import { parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
 
 type PickerType = "start" | "end";
 type PickerMode = "date" | "time";

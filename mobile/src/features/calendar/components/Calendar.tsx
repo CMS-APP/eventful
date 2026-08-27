@@ -2,8 +2,8 @@ import { useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { colors } from "@/styles/colors";
-import { useAppDimensions } from "@/styles/globalStyles";
+import { useAppDimensions } from "@/app/hooks/useAppDimensions";
+import { colors } from "@/design-system/tokens/colors";
 
 import { useCalenderEvents } from "../hooks/useCalenderEvents";
 import { CalendarView } from "./CalendarView";

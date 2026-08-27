@@ -2,8 +2,8 @@ import { Timestamp } from "@react-native-firebase/firestore";
 
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { parseDatabaseDate } from "@/utils/date";
 
 interface InviteDateViewProps {

@@ -4,30 +4,22 @@ import { StyleSheet, View } from "react-native";
 
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
-import { Button } from "@/components/buttons/Button";
-import { Screen } from "@/components/views/screen/Screen";
+import { Screen } from "@/components/screen/Screen";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
+import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
+import { usePhotoBoothPermissions } from "@/features/photo-booth/context/permissions/PhotoBoothPermissionsContext";
+import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
 import { PhotoBoothLockModal } from "@/features/photo-booth/modals/PhotoBoothLockModal";
 import { PhotoBoothUnlockModal } from "@/features/photo-booth/modals/PhotoBoothUnlockModal";
-import { colors } from "@/styles/colors";
 
 import type { PhotoBoothStackNavigation } from "../photoBoothStackParams";
-import { usePhotoBoothCamera } from "../provider/PhotoBoothCameraProvider";
-import { usePhotoBoothPermissions } from "../provider/PhotoBoothPermissionsProvider";
-import { usePhotoBoothSession } from "../provider/PhotoBoothSessionProvider";
-import { ensurePhotoBoothPermissions } from "../utils/ensurePhotoBoothPermissions";
 
 export function PhotoBoothHome() {
   const navigation = useNavigation<PhotoBoothStackNavigation>();
   const { setPhotos } = usePhotoBoothCamera();
   const { locked, setLocked, lockPin, setLockPin } = usePhotoBoothSession();
-  const {
-    cameraPermission,
-    photoLibraryPermission,
-    checkPhotoBoothPermission,
-    photoBoothPermissionAlert,
-    requestCameraPermission,
-    requestPhotoLibraryPermission
-  } = usePhotoBoothPermissions();
+  const { ensurePermissions } = usePhotoBoothPermissions();
 
   const [presentLockModal, setPresentLockModal] = useState(false);
   const [presentUnlockModal, setPresentUnlockModal] = useState(false);
@@ -39,24 +31,6 @@ export function PhotoBoothHome() {
       };
     }, [setPhotos])
   );
-
-  const ensurePermissions = useCallback(async () => {
-    return ensurePhotoBoothPermissions({
-      cameraPermission,
-      photoLibraryPermission,
-      checkPhotoBoothPermission,
-      requestCameraPermission,
-      requestPhotoLibraryPermission,
-      photoBoothPermissionAlert
-    });
-  }, [
-    cameraPermission,
-    photoLibraryPermission,
-    checkPhotoBoothPermission,
-    requestCameraPermission,
-    requestPhotoLibraryPermission,
-    photoBoothPermissionAlert
-  ]);
 
   function backAction() {
     if (locked) {

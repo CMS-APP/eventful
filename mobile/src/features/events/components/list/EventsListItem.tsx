@@ -9,37 +9,31 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
-import {
-  AppStackParamList,
-  EventsStackParamList
-} from "@/features/app/navigationTypes";
+import { AppStackParamList, EventsStackParamList } from "@/app/navigation";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { textFormatter } from "@/design-system/tokens/fonts";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { padding } from "@/design-system/tokens/padding";
 import { getInviteFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { textFormatter } from "@/styles/fonts";
-import { globalStyles } from "@/styles/globalStyles";
 import { Event } from "@/types/Event";
 import { formatDate, formatTime } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
-import { log } from "@/utils/logging";
 
 interface EventsListItemProps {
   index: number;
   event: Event;
   isUpcoming: boolean;
   isDecline: boolean;
-  isGrid: boolean;
 }
 
 export function EventsListItem({
   index,
   event,
   isUpcoming,
-  isDecline,
-  isGrid
+  isDecline
 }: EventsListItemProps) {
   const userId = useSelector((state: UserState) => state.uid);
   const [host, setHost] = useState("");
@@ -64,7 +58,6 @@ export function EventsListItem({
 
   const onPress = useCallback(async () => {
     haptics.soft();
-    log(`Event: ${JSON.stringify(event, null, 2)}`, "debug");
 
     if (event.userId === userId) {
       navEvents.navigate("EventEdit", { event });
@@ -103,7 +96,9 @@ export function EventsListItem({
   }
 
   useEffect(() => {
-    fetchHostInfo();
+    if (userId) {
+      fetchHostInfo();
+    }
   }, [event, isUpcoming, userId, isDecline]);
 
   return (
@@ -111,19 +106,23 @@ export function EventsListItem({
       <View
         style={[
           styles.eventContainer,
-          { backgroundColor: getBackgroundColor() },
-          isGrid && styles.gridContainer
+          { backgroundColor: getBackgroundColor() }
         ]}
       >
         <Text type="header" color={getTextColor()} numberOfLines={2}>
           {textFormatter(event.name.trim(), 50, "Event")}
         </Text>
-        <View style={[styles.detailsContainer, isGrid && styles.gridDetails]}>
+        <View style={styles.detailsContainer}>
           <View style={styles.detailRow}>
             <FontAwesome5 name="user" size={16} color={getTextColor()} />
             <View style={styles.hostContainer}>
-              <Text type="body" color={getTextColor()} numberOfLines={1}>
-                Host: {host}
+              <Text
+                type="body"
+                color={getTextColor()}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {host}
               </Text>
             </View>
           </View>
@@ -135,20 +134,11 @@ export function EventsListItem({
             />
             <Text type="body" style={{ color: getTextColor() }}>
               {formatDate(event.date)}
+              {event.multiDate && event.endDate
+                ? " - " + formatDate(event.endDate)
+                : ""}
             </Text>
           </View>
-          {event.multiDate && event.endDate && (
-            <View style={styles.detailRow}>
-              <FontAwesome5
-                name="chevron-right"
-                size={16}
-                color={getTextColor()}
-              />
-              <Text type="body" style={{ color: getTextColor() }}>
-                {formatDate(event.endDate)}
-              </Text>
-            </View>
-          )}
           <View style={styles.detailRow}>
             <FontAwesome5 name="clock" size={16} color={getTextColor()} />
             <Text type="body" style={{ color: getTextColor() }}>
@@ -175,20 +165,14 @@ const styles = StyleSheet.create({
     marginTop: 8
   },
   eventContainer: {
-    ...globalStyles.largeWidget,
-    alignItems: "flex-start",
+    ...padding.largeWidget,
+    alignItems: "stretch",
     width: "100%"
-  },
-  gridContainer: {
-    height: "100%",
-    justifyContent: "flex-start"
-  },
-  gridDetails: {
-    flex: 1,
-    justifyContent: "flex-start"
   },
   hostContainer: {
     alignItems: "flex-start",
-    gap: 0
+    flex: 1,
+    gap: 0,
+    minWidth: 0
   }
 });

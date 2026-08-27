@@ -2,14 +2,14 @@ import React, { useCallback } from "react";
 
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 
-import { InputAccessory } from "@/components/inputs/InputAccessory";
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
+import { InputAccessory } from "@/design-system/components/InputAccessory";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { padding } from "@/design-system/tokens/padding";
 import { BudgetItem } from "@/types/BudgetItem";
 import { getCurrencySymbolForDevice } from "@/utils/currency";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
 
 interface EventBudgetListItemProps {
   id: string;
@@ -76,7 +76,7 @@ export function EventBudgetListItem({
         disabled={!premium}
         hitSlop={getHitSlop("medium")}
       >
-        <View style={[globalStyles.smallWidget, styles.removeButton]}>
+        <View style={[padding.smallWidget, styles.removeButton]}>
           <Text type="body" style={styles.removeButtonText}>
             Remove
           </Text>

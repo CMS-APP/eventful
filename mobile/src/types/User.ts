@@ -19,7 +19,6 @@ export interface User {
   osVersion?: string;
   deviceModel?: string;
   deviceType?: string;
-  lastLaunchedAt?: Timestamp | number;
   isPhysicalDevice?: boolean;
   region?: string;
   locale?: string;

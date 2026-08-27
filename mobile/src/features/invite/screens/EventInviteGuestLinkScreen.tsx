@@ -7,15 +7,14 @@ import { Alert, Clipboard, StyleSheet, View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AppButtonSwitcher } from "@/components/buttons/AppButtonSwitcher";
-import { Button } from "@/components/buttons/Button";
-import { SwitchButton } from "@/components/buttons/SwitchButton";
-import { Text } from "@/components/text/Text";
-import { Screen } from "@/components/views/screen/Screen";
-import {
-  AllStackParamList,
-  EventsStackParamList
-} from "@/features/app/navigationTypes";
+import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
+import { Screen } from "@/components/screen/Screen";
+import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
+import { Button } from "@/design-system/components/Button";
+import { SwitchButton } from "@/design-system/components/SwitchButton";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { padding } from "@/design-system/tokens/padding";
 import { EventInviteUserItem } from "@/features/events/components/guest-list/EventInviteUserItem";
 import {
   changeEventEnabledStatus,
@@ -26,8 +25,6 @@ import {
   getRSVPWebUsers
 } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { Event } from "@/types/Event";
 import { UserInvite } from "@/types/UserInvite";
 
@@ -170,7 +167,7 @@ export function EventInviteGuestLinkScreen({
     >
       <View style={styles.contentContainer}>
         <View style={styles.linkContainer}>
-          <View style={[globalStyles.smallWidget, styles.disclaimerContainer]}>
+          <View style={[padding.smallWidget, styles.disclaimerContainer]}>
             <Text type="footnote" color="black">
               Disclaimer: This link will allow anyone to RSVP to your event and
               view the event details and anyone with the link will be able to

@@ -7,17 +7,19 @@ import { Alert, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AppStackParamList } from "@/features/app/navigationTypes";
+import { AppStackParamList, navigationRef } from "@/app/navigation";
+import { colors } from "@/design-system/tokens/colors";
+import {
+  calculateEventActiveDays,
+  getCalendarWeeks
+} from "@/features/calendar/utils/calendar";
 import { getInviteFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { CalendarDate } from "@/types/CalendarDate";
 import { Event } from "@/types/Event";
-import { calculateEventActiveDays, getCalendarWeeks } from "@/utils/calendar";
 import { dateIsInEvent, isActiveEvent, parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
-import { navigateToEventEdit } from "@/utils/navigationHelpers";
 
 import { CalendarDay } from "./CalendarDay";
 import { CalendarDayHeader } from "./CalendarDayHeader";
@@ -77,7 +79,6 @@ export function CalendarView({
       return;
     }
 
-    // Find all events for the selected date
     const selectedEvents = allEvents.filter((event: Event) => {
       const eventDate = parseDatabaseDate(event.date);
       const endDate = event.endDate ? parseDatabaseDate(event.endDate) : null;
@@ -109,7 +110,13 @@ export function CalendarView({
   async function navigateToEvent(event: Event) {
     haptics.soft();
     if (event.userId === userId) {
-      navigateToEventEdit(event);
+      navigationRef.navigate("Main", {
+        screen: "Events",
+        params: {
+          screen: "EventEdit",
+          params: { event }
+        }
+      });
       return;
     }
 

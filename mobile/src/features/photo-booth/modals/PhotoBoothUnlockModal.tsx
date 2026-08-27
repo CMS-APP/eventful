@@ -1,12 +1,12 @@
-import { Text } from "@/components/text/Text";
 import { useCallback, useEffect, useState } from "react";
 
 import { Keyboard } from "react-native";
 
-import { Button } from "@/components/buttons/Button";
-import { Input } from "@/components/inputs/Input";
-import { ModalView } from "@/components/views/ModalView";
-import { colors } from "@/styles/colors";
+import { Button } from "@/design-system/components/Button";
+import { Input } from "@/design-system/components/Input";
+import { ModalView } from "@/design-system/components/ModalView";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 
 interface PhotoBoothUnlockModalProps {
   locked: boolean;
@@ -64,7 +64,9 @@ export function PhotoBoothUnlockModal({
       backgroundColor={colors.primary}
       borderColor={colors.lightGray + "40"}
     >
-      <Text type="header" color="white">Unlock</Text>
+      <Text type="header" color="white">
+        Unlock
+      </Text>
 
       <Input
         placeholder="Enter Pin"

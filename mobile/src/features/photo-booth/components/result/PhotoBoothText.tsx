@@ -2,10 +2,10 @@ import { useCallback } from "react";
 
 import { Image, StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
-import { fontStyles } from "@/styles/fonts";
+import { Text } from "@/design-system/components/Text";
+import { fontStyles } from "@/design-system/tokens/fonts";
 
-import { usePhotoBoothSettings } from "../../provider/PhotoBoothSettingsProvider";
+import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
 export function PhotoBoothText({
   collage

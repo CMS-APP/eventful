@@ -37,18 +37,12 @@ export interface UserState {
   appleOnboardingName: AppleOnboardingName | null;
 }
 
-const sentryReduxMiddleware = (store: any) => (next: any) => (action: any) => {
+const sentryReduxMiddleware = (_store: any) => (next: any) => (action: any) => {
   try {
-    const state = store.getState();
-
     Sentry.addBreadcrumb({
       category: "redux",
       message: `Action dispatched: ${action.type}`,
-      level: "info",
-      data: {
-        action,
-        state
-      }
+      level: "info"
     });
   } catch {
     // Silently handle Sentry breadcrumb errors to avoid breaking the app
@@ -71,7 +65,7 @@ const userSlice = createSlice({
     usernameCreateDate: null,
     usernameUpdateDate: null,
     spotify: null,
-    premium: false,
+    premium: __DEV__,
     photoBooth: false
   },
   reducers: {
@@ -116,12 +110,12 @@ const userSlice = createSlice({
       state.firstName = "";
       state.lastName = "";
       state.email = "";
-      state.uid = "null";
+      state.uid = "";
       state.username = "";
       state.profilePictureHash = "";
       state.usernameUpdateDate = null;
       state.spotify = null;
-      state.premium = false;
+      state.premium = __DEV__;
       state.photoBooth = false;
     },
     setPremium: (state, action) => {

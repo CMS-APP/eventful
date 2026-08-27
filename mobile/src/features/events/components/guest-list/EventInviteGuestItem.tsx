@@ -7,24 +7,23 @@ import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Text } from "@/components/text/Text";
-import { AccountStackParamList } from "@/features/app/navigationTypes";
+import { AccountStackParamList } from "@/app/navigation";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { padding } from "@/design-system/tokens/padding";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
+import { deleteUpdateNotification } from "@/services/firebase/firebaseInAppNotifications";
 import {
   checkInvitedToEvent,
   deleteInviteFromDatabase,
   sendInvite
 } from "@/services/firebase/firebaseInviteFunctions";
-import { deleteUpdateNotification } from "@/services/firebase/firebaseNotification";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { Event } from "@/types/Event";
 import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
-import { getHitSlop } from "@/utils/hitSlop";
-import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 interface EventInviteGuestItemProps {
   user: User;
@@ -52,7 +51,6 @@ export function EventInviteGuestItem({
 
   const removeUserFromEvent = useCallback(async () => {
     try {
-      log("Removing user from event", "info");
       event.invited = event.invited.filter(
         (invited: string) => invited !== guestId
       );
@@ -61,8 +59,8 @@ export function EventInviteGuestItem({
       await deleteInviteFromDatabase(inviteId ?? "");
       await deleteUpdateNotification(userId, guestId, event.id);
       refreshInvites();
-    } catch (error) {
-      new AppError(error, "Error removing user from event", true);
+    } catch {
+      showErrorToast("Error Removing User");
     }
   }, [event, guestId, inviteId, userId]);
 
@@ -134,7 +132,7 @@ export function EventInviteGuestItem({
 
   return (
     <TouchableOpacity onPress={handlePress} hitSlop={getHitSlop("medium")}>
-      <View style={[globalStyles.mediumWidget, styles.container]}>
+      <View style={[padding.mediumWidget, styles.container]}>
         <View style={styles.userRow}>
           <ProfilePicture size={40} user={user} />
           <View style={styles.userInfo}>
@@ -146,7 +144,7 @@ export function EventInviteGuestItem({
             </Text>
           </View>
           <TouchableOpacity onPress={inviteUser} hitSlop={getHitSlop("medium")}>
-            <View style={[globalStyles.smallWidget, styles.inviteButton]}>
+            <View style={[padding.smallWidget, styles.inviteButton]}>
               <Text type="body" color="white">
                 {alreadyInvited ? "Remove" : "Invite"}
               </Text>

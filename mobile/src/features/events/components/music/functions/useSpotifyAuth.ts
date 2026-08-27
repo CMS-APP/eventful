@@ -6,8 +6,8 @@ import * as AuthSession from "expo-auth-session";
 
 import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { setSpotifyData } from "@/store/UserSlice";
-import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 import {
   SPOTIFY_CLIENT_ID,
@@ -60,14 +60,17 @@ export function useSpotifyAuth({ userId, onSuccess }: UseSpotifyAuthOptions) {
 
           dispatch(setSpotifyData(data));
           onSuccess(tokenData.accessToken);
-          log("Spotify sign in success", "info");
         }
       } catch (error) {
         // Reset processed ref on error
         if (response?.type === "success" && response.params?.code) {
           processedResponseRef.current = null;
         }
-        new AppError(error, "Error signing into Spotify", true);
+        log(
+          `Error signing into Spotify: ${(error as any)?.message ?? error}`,
+          "error"
+        );
+        showErrorToast("Error Connecting Spotify");
       }
     };
 

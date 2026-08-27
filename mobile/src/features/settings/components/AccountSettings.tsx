@@ -6,14 +6,14 @@ import { useCallback, useState } from "react";
 
 import { Alert, StyleSheet, View } from "react-native";
 
-import { Button } from "@/components/buttons/Button";
-import { openSubscriptionManagement } from "@/features/app/utils/update";
-import { usePaymentProvider } from "@/providers/PaymentProvider";
+import { usePaymentProvider } from "@/app/context/payment/PaymentContext";
+import { openSubscriptionManagement } from "@/app/update";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { registerForPushNotificationsAsync } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { AppError } from "@/utils/error";
-import { registerForPushNotificationsAsync } from "@/utils/notifications";
+import { showErrorToast } from "@/utils/toast";
 
 import { ChangeNameModal } from "./ChangeNameModal";
 import { DropdownButton } from "./DropdownButton";
@@ -40,8 +40,8 @@ export function AccountSettings() {
         });
         Alert.alert("Success", "You are now registered for notifications.");
       }
-    } catch (error) {
-      new AppError(error, "Error requesting notifications", true);
+    } catch {
+      showErrorToast("Error Requesting Notifications");
     }
   }, [userId]);
 
@@ -78,8 +78,8 @@ export function AccountSettings() {
   const handleManageSubscriptionPress = useCallback(async () => {
     try {
       await openSubscriptionManagement();
-    } catch (error) {
-      new AppError(error, "Error opening subscription settings", true);
+    } catch {
+      showErrorToast("Error Opening Settings");
     }
   }, []);
 

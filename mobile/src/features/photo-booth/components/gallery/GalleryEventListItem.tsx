@@ -6,11 +6,11 @@ import { useNavigation } from "@react-navigation/native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { GalleryEvent } from "@/types/photoBoothGallery";
 import { formatDate } from "@/utils/date";
-import { getHitSlop } from "@/utils/hitSlop";
 
 import { PhotoBoothStackNavigation } from "../../photoBoothStackParams";
 

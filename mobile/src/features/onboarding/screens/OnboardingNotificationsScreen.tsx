@@ -1,15 +1,15 @@
 import { arrayUnion } from "@react-native-firebase/firestore";
 import { useSelector } from "react-redux";
 
-import { Alert, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AllStackParamList } from "@/features/app/navigationTypes";
+import { AllStackParamList } from "@/app/navigation";
+import { colors } from "@/design-system/tokens/colors";
 import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { registerForPushNotificationsAsync } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
-import { globalStyles } from "@/styles/globalStyles";
-import { registerForPushNotificationsAsync } from "@/utils/notifications";
 
 import { FeatureView } from "../components/FeatureView";
 import { OnboardingButtons } from "../components/OnboardingButtons";
@@ -53,7 +53,7 @@ export function OnboardingNotificationsScreen({
   }
 
   return (
-    <View style={globalStyles.containerPrimary}>
+    <View style={styles.container}>
       <FeatureView
         image={require("@/assets/onboarding/notifications.png")}
         title="Notifications"
@@ -74,3 +74,10 @@ export function OnboardingNotificationsScreen({
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.primary,
+    flex: 1
+  }
+});

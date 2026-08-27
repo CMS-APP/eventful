@@ -1,7 +1,7 @@
 import * as Crypto from "expo-crypto";
 
 import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
-import { AppError } from "@/utils/error";
+import { log } from "@/utils/logging";
 
 export function getPhotoIdSplit(photo: GalleryPhoto) {
   const photoId = photo.photoId;
@@ -20,9 +20,9 @@ export function checkIfPhotoExistsInLocalEvent(
 export async function convertEventTitleToHash(eventTitle: string) {
   try {
     if (!eventTitle || typeof eventTitle !== "string") {
-      new AppError(
-        "Event title must be a non-empty string",
-        "PhotoBooth: Error converting event title to hash"
+      log(
+        "PhotoBooth: Error converting event title to hash: Event title must be a non-empty string",
+        "error"
       );
       return "";
     }
@@ -42,7 +42,7 @@ export async function convertEventTitleToHash(eventTitle: string) {
 
     return shortHash;
   } catch (error) {
-    new AppError(error, "PhotoBooth: Error converting event title to hash");
+    log(`PhotoBooth: Error converting event title to hash: ${(error as any)?.message ?? error}`, "error");
     throw error;
   }
 }

@@ -24,7 +24,6 @@ export function log(
 
   const formattedMessage = formatMessage(message);
 
-  // Handle Sentry logging based on level
   switch (level) {
     case "error":
       Sentry.captureMessage(formattedMessage, "error");

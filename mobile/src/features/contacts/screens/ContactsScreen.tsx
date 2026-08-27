@@ -2,14 +2,10 @@ import { StyleSheet, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Screen } from "@/components/views/screen/Screen";
-import {
-  AllStackParamList,
-  ContactsStackParamList
-} from "@/features/app/navigationTypes";
-import { colors } from "@/styles/colors";
+import { AllStackParamList, ContactsStackParamList } from "@/app/navigation";
+import { Screen } from "@/components/screen/Screen";
+import { colors } from "@/design-system/tokens/colors";
 import { haptics } from "@/utils/haptics";
-import { useScreenStatusBar } from "@/utils/statusBar";
 
 import { ContactsInviteInfo } from "../components/ContactsInviteInfo";
 import { ContactsSearch } from "../components/ContactsSearch";
@@ -19,8 +15,6 @@ interface ContactsScreenProps {
 }
 
 export function ContactsScreen({ navigation }: ContactsScreenProps) {
-  useScreenStatusBar(true);
-
   function openSearch() {
     haptics.soft();
     (navigation as StackNavigationProp<ContactsStackParamList>).navigate(

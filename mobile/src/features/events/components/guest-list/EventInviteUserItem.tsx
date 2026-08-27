@@ -7,9 +7,11 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
-import { AccountStackParamList } from "@/features/app/navigationTypes";
-import { syncUserPicture } from "@/services/cache";
+import { AccountStackParamList } from "@/app/navigation";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { padding } from "@/design-system/tokens/padding";
 import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
 import {
   checkInvitedToEvent,
@@ -17,16 +19,13 @@ import {
   deleteInviteFromDatabase,
   updateEventLinkResponse
 } from "@/services/firebase/firebaseInviteFunctions";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
+import { syncUserPicture } from "@/services/local/cache";
 import { AlertOptions } from "@/types/AlertOptions";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
 import { UserInvite } from "@/types/UserInvite";
-import { AppError } from "@/utils/error";
-import { getHitSlop } from "@/utils/hitSlop";
-import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 interface EventInviteUserItemProps {
   user: User;
@@ -55,8 +54,6 @@ export function EventInviteUserItem({
     const invite = await checkInvitedToEvent(event, user.uid);
     if (invite) {
       setInviteId(invite.id);
-    } else {
-      log("User is not invited to the event, inviteId is null", "warn");
     }
   }, [user, event]);
 
@@ -85,15 +82,13 @@ export function EventInviteUserItem({
   const deleteGuest = useCallback(async () => {
     if (invite.type === "app") {
       try {
-        log("Removing user from event", "info");
         event.invited = event.invited.filter(
           (invited: string) => invited !== user.uid
         );
         await updateEventInDatabase(event);
         await deleteInviteFromDatabase(inviteId ?? "");
-        log("User removed from event", "info");
-      } catch (error) {
-        new AppError(error, "Error removing user from event", true);
+      } catch {
+        showErrorToast("Error Removing User");
       }
     } else if (invite.type === "link") {
       await deleteEventLinkResponse(invite.id);
@@ -192,7 +187,7 @@ export function EventInviteUserItem({
               <FontAwesome5 name="user" size={20} color={colors.black} />
             </View>
           )}
-          <View style={[globalStyles.smallWidget, styles.userInfo]}>
+          <View style={[padding.smallWidget, styles.userInfo]}>
             <Text type="subHeader" style={styles.userName}>
               {user.name}
             </Text>

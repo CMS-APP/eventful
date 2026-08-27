@@ -8,12 +8,14 @@ import { useNavigation } from "@react-navigation/native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
-import { PanSnapGestureRoot } from "@/components/views/panSnap/PanSnapGestureRoot";
-import { PanSnapScrollHint } from "@/components/views/panSnap/PanSnapScrollHint";
-import { Screen } from "@/components/views/screen/Screen";
-import { colors } from "@/styles/colors";
-import { useAppDimensions } from "@/styles/globalStyles";
+import { PanSnapGestureRoot } from "@/app/context/panSnap/PanSnapGestureRoot";
+import { PanSnapScrollHint } from "@/app/context/panSnap/PanSnapScrollHint";
+import { useAppDimensions } from "@/app/hooks/useAppDimensions";
+import { Screen } from "@/components/screen/Screen";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
+import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
 import { PhotoBoothColumnCollage } from "../components/result/PhotoBoothColumnCollage";
 import { PhotoBoothGridCollage } from "../components/result/PhotoBoothGridCollage";
@@ -21,8 +23,6 @@ import { PhotoBoothResultsButtons } from "../components/result/PhotoBoothResults
 import { PhotoBoothRowCollage } from "../components/result/PhotoBoothRowCollage";
 import { filters } from "../filters";
 import type { PhotoBoothStackNavigation } from "../photoBoothStackParams";
-import { usePhotoBoothCamera } from "../provider/PhotoBoothCameraProvider";
-import { usePhotoBoothSettings } from "../provider/PhotoBoothSettingsProvider";
 
 export function PhotoBoothResult() {
   const { setPhotos } = usePhotoBoothCamera();
@@ -79,7 +79,11 @@ export function PhotoBoothResult() {
               backAction: handleBackAction
             }
           }}
-          contentConfig={{ tabBarPresent: false }}
+          contentConfig={{
+            tabBarPresent: false,
+            paddingBottom: 0,
+            bottomMargin: false
+          }}
         >
           <View style={styles.container}>
             <View
@@ -117,7 +121,7 @@ export function PhotoBoothResult() {
         <View
           style={[
             styles.resultsButtonsContainer,
-            { paddingBottom: insets.bottom }
+            { paddingBottom: insets.bottom + 12 }
           ]}
         >
           <PanSnapScrollHint labels={filters} />

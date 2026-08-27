@@ -1,46 +1,49 @@
 import { getAuth } from "@react-native-firebase/auth";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { useCallback } from "react";
-import { Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Button } from "@/components/buttons/Button";
-import { AllStackParamList } from "@/features/app/navigationTypes";
-import { clearCache as clearImageCache } from "@/services/cache";
+import { useCallback, useState } from "react";
+
+import { Alert } from "react-native";
+
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+import { AllStackParamList } from "@/app/navigation";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import {
   deleteUserData,
   updateUserInfo
 } from "@/services/firebase/firebaseUserFunctions";
+import { clearCache as clearImageCache } from "@/services/local/cache";
 import {
   UserState,
   clearSpotifyData,
   clearStorage,
   setUserData
 } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { AppError } from "@/utils/error";
+import { showErrorToast } from "@/utils/toast";
 
-type DataActionButtonsProps = {
-  setLoading: (isLoading: boolean) => void;
-};
-
-export function DataActionButtons({ setLoading }: DataActionButtonsProps) {
+export function DataActionButtons() {
   const userId = useSelector((state: UserState) => state.uid);
   const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<AllStackParamList>>();
 
+  const [clearingCache, setClearingCache] = useState(false);
+  const [resettingData, setResettingData] = useState(false);
+  const [resettingSpotify, setResettingSpotify] = useState(false);
+
   const handleClearCache = useCallback(async () => {
     try {
-      setLoading(true);
+      setClearingCache(true);
       await clearImageCache();
       Alert.alert("Success", "The cache has been cleared.");
-    } catch (error) {
-      new AppError(error, "Error clearing cache", true);
+    } catch {
+      showErrorToast("Error Clearing Cache");
     } finally {
-      setLoading(false);
+      setClearingCache(false);
     }
-  }, [setLoading]);
+  }, []);
 
   const clearCacheAlert = useCallback(() => {
     Alert.alert(
@@ -60,7 +63,7 @@ export function DataActionButtons({ setLoading }: DataActionButtonsProps) {
   const deleteAllUserData = useCallback(
     async (move = true) => {
       try {
-        setLoading(true);
+        setResettingData(true);
         await deleteUserData(userId);
         dispatch(clearStorage());
 
@@ -82,13 +85,13 @@ export function DataActionButtons({ setLoading }: DataActionButtonsProps) {
             routes: [{ name: "Onboarding" }] as never
           });
         }
-      } catch (error) {
-        new AppError(error, "Error deleting data", true);
+      } catch {
+        showErrorToast("Error Deleting Data");
       } finally {
-        setLoading(false);
+        setResettingData(false);
       }
     },
-    [dispatch, navigation, setLoading, userId]
+    [dispatch, navigation, userId]
   );
 
   const deleteDataAlert = useCallback(() => {
@@ -108,7 +111,7 @@ export function DataActionButtons({ setLoading }: DataActionButtonsProps) {
 
   const resetSpotifyData = useCallback(async () => {
     try {
-      setLoading(true);
+      setResettingSpotify(true);
       await updateUserInfo(userId, {
         spotifyData: {
           spotifyAccessToken: "",
@@ -117,12 +120,12 @@ export function DataActionButtons({ setLoading }: DataActionButtonsProps) {
       });
       dispatch(clearSpotifyData());
       Alert.alert("Success", "Your Spotify data has been reset.");
-    } catch (error) {
-      new AppError(error, "Error resetting spotify data", true);
+    } catch {
+      showErrorToast("Error Resetting Spotify Data");
     } finally {
-      setLoading(false);
+      setResettingSpotify(false);
     }
-  }, [dispatch, setLoading, userId]);
+  }, [dispatch, userId]);
 
   const resetSpotifyDataAlert = useCallback(() => {
     Alert.alert(
@@ -147,6 +150,7 @@ export function DataActionButtons({ setLoading }: DataActionButtonsProps) {
         textColor={colors.white}
         onPress={resetSpotifyDataAlert}
         icon="spotify"
+        loading={resettingSpotify}
       />
 
       <Button
@@ -155,6 +159,7 @@ export function DataActionButtons({ setLoading }: DataActionButtonsProps) {
         textColor={colors.white}
         onPress={clearCacheAlert}
         icon="database"
+        loading={clearingCache}
       />
 
       <Button
@@ -163,6 +168,7 @@ export function DataActionButtons({ setLoading }: DataActionButtonsProps) {
         textColor={colors.white}
         onPress={deleteDataAlert}
         icon="sync"
+        loading={resettingData}
       />
     </>
   );

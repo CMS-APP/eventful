@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 
-import { Screen } from "@/components/views/screen/Screen";
-import { colors } from "@/styles/colors";
+import { Screen } from "@/components/screen/Screen";
+import { colors } from "@/design-system/tokens/colors";
 
 import { AccountSettings } from "../components/AccountSettings";
 import { DataSettings } from "../components/DataSettings";

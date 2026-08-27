@@ -7,16 +7,15 @@ import { StyleSheet, TextInput, View } from "react-native";
 
 import { RouteProp } from "@react-navigation/native";
 
-import { Text } from "@/components/text/Text";
+import { ContactsStackParamList } from "@/app/navigation";
+import { Screen } from "@/components/screen/Screen";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
-import { Screen } from "@/components/views/screen/Screen";
-import { ContactsStackParamList } from "@/features/app/navigationTypes";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { ProfileButton } from "@/features/profile/components/ProfileButton";
 import { userSearch } from "@/services/firebase/firebaseBackend";
-import { colors } from "@/styles/colors";
 import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
-import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 import { ContactsSearch } from "../components/ContactsSearch";
 
@@ -40,12 +39,11 @@ export function ContactsSearchScreen({ route }: ContactsSearchScreenProps) {
   }, [route.params]);
 
   async function getUsers() {
-    log("Contact Search: Getting users", "info");
     try {
       const users = await userSearch(search, user as FirebaseAuthTypes.User);
       setUsers(users);
-    } catch (error) {
-      new AppError(error, "Error getting users", true);
+    } catch {
+      showErrorToast("Error Loading Users");
     } finally {
       setLoading(false);
     }

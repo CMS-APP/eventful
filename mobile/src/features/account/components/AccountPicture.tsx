@@ -14,18 +14,13 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { useCameraPermissions } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 
-import { PulsatingCircle } from "@/components/views/PulsatingCircle";
 import {
   ILoadingModalContext,
   useLoadingModal
-} from "@/contexts/LoadingProviderContext";
-import { AllStackParamList } from "@/features/app/navigationTypes";
-import {
-  computeImageHash,
-  deleteCachedImage,
-  saveLocalImageToCache,
-  syncUserPicture
-} from "@/services/cache";
+} from "@/app/context/loading/LoadingModalContext";
+import { AllStackParamList } from "@/app/navigation";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import {
   deleteImageAsync,
   uploadImageAsync
@@ -34,13 +29,16 @@ import {
   getUserInfo,
   updateUserInfo
 } from "@/services/firebase/firebaseUserFunctions";
+import {
+  computeImageHash,
+  deleteCachedImage,
+  saveLocalImageToCache,
+  syncUserPicture
+} from "@/services/local/cache";
 import { UserState, setProfilePictureHash } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
-import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 export function AccountPicture() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -49,20 +47,25 @@ export function AccountPicture() {
 
   const { setLoading } = useLoadingModal() as ILoadingModalContext;
   const userId = useSelector((state: UserState) => state.uid);
-  const photoBooth = useSelector((state: UserState) => state.photoBooth);
-  const premium = useSelector((state: UserState) => state.premium);
   const dispatch = useDispatch();
 
   const navigation = useNavigation<StackNavigationProp<AllStackParamList>>();
 
   const syncPicture = useCallback(async () => {
     setImage(null);
+
+    if (!userId) {
+      setLoading(false);
+      setImageLoading(false);
+      return;
+    }
+
     const user = (await getUserInfo(userId)) as User;
     const imageUri = await syncUserPicture(user, true);
     setImage(imageUri as string);
     setLoading(false);
     setImageLoading(false);
-  }, [userId]);
+  }, [userId, setLoading, setImageLoading]);
 
   useFocusEffect(
     useCallback(() => {
@@ -74,7 +77,6 @@ export function AccountPicture() {
     try {
       setLoading(true);
       setImageLoading(true);
-      log("Opening Image Picker", "debug");
 
       setTimeout(async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
@@ -85,7 +87,6 @@ export function AccountPicture() {
 
         if (!result.canceled) {
           const uri = result.assets[0].uri;
-          log("Selected Image URI: " + uri, "debug");
 
           await saveLocalImageToCache(uri, "profilePicture", true);
           setImage(uri);
@@ -98,8 +99,8 @@ export function AccountPicture() {
           dispatch(setProfilePictureHash(imageHash));
         }
       }, 10);
-    } catch (error) {
-      new AppError(error, "Error opening image picker", true);
+    } catch {
+      showErrorToast("Error Opening Photos");
     } finally {
       setLoading(false);
       setImageLoading(false);
@@ -109,7 +110,6 @@ export function AccountPicture() {
   const requestPermissions = useCallback(async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status === "granted") {
-      log("Media Library permissions granted", "debug");
       openImagePicker();
     } else {
       Alert.alert(
@@ -129,8 +129,8 @@ export function AccountPicture() {
       });
       await deleteImageAsync(`${userId}/profilePicture`);
       dispatch(setProfilePictureHash(undefined));
-    } catch (error) {
-      new AppError(error, "Error deleting profile picture", true);
+    } catch {
+      showErrorToast("Error Deleting Photo");
     } finally {
       setLoading(false);
     }
@@ -199,35 +199,18 @@ export function AccountPicture() {
         <Image
           source={{ uri: image }}
           style={styles.image}
-          onError={(error) =>
-            new AppError(error, "Profile picture loading error", true)
-          }
-          onLoad={() =>
-            log("Account: Profile image loaded successfully", "debug")
-          }
+          onError={() => {
+            showErrorToast("Error Loading Photo");
+          }}
         />
       );
     }
     return <FontAwesome5 name="camera" size={44} color={colors.primary} />;
   }, [imageLoading, image]);
 
-  const getPulseColor = () => {
-    if (photoBooth) {
-      return colors.white;
-    } else if (premium) {
-      return colors.secondary;
-    }
-    return "transparent";
-  };
-
   return (
     <TouchableOpacity onPress={addPhoto} hitSlop={getHitSlop("medium")}>
       <View style={styles.imageContainer}>
-        <PulsatingCircle
-          size={100}
-          color={getPulseColor()}
-          active={photoBooth || premium}
-        />
         <View style={styles.image}>{renderImage()}</View>
       </View>
     </TouchableOpacity>

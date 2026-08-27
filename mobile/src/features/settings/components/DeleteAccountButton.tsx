@@ -8,39 +8,38 @@ import {
   reauthenticateWithCredential
 } from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { CommonActions, useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { useCallback, useState } from "react";
-import { Alert, Platform, StatusBar } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Button } from "@/components/buttons/Button";
-import { AllStackParamList } from "@/features/app/navigationTypes";
+import { useCallback, useState } from "react";
+
+import { Alert, Platform, StatusBar } from "react-native";
+
+import { CommonActions, useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+import { AllStackParamList, navigationRef } from "@/app/navigation";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import {
   getAppleCredentialForReauthentication,
   revokeSignInWithAppleToken
-} from "@/services/apple/apple";
-import { removeAllData } from "@/services/async";
+} from "@/features/settings/utils/apple";
 import { deleteImageAsync } from "@/services/firebase/firebaseStorage";
 import { deleteUserData } from "@/services/firebase/firebaseUserFunctions";
+import { removeAllData } from "@/services/local/async";
 import { UserState, clearStorage } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { AppError } from "@/utils/error";
-import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 import { SettingsPasswordModal } from "./SettingsPasswordModal";
 
-type DeleteAccountButtonProps = {
-  setLoading: (isLoading: boolean) => void;
-};
-
-export function DeleteAccountButton({ setLoading }: DeleteAccountButtonProps) {
+export function DeleteAccountButton() {
   const userId = useSelector((state: UserState) => state.uid);
   const navigation = useNavigation<StackNavigationProp<AllStackParamList>>();
   const dispatch = useDispatch();
 
   const [presentPasswordModal, setPresentPasswordModal] = useState(false);
   const [inputText, setInputText] = useState("");
+  const [deleting, setDeleting] = useState(false);
 
   const deleteAllUserData = useCallback(async () => {
     await deleteUserData(userId);
@@ -53,7 +52,7 @@ export function DeleteAccountButton({ setLoading }: DeleteAccountButtonProps) {
     navigation.navigate("LoadingScreen" as never);
 
     setTimeout(() => {
-      navigation.dispatch(
+      navigationRef.dispatch(
         CommonActions.reset({
           index: 0,
           routes: [{ name: "Auth" }]
@@ -69,7 +68,7 @@ export function DeleteAccountButton({ setLoading }: DeleteAccountButtonProps) {
       try {
         await deleteImageAsync(storageString);
       } catch {
-        log("No profile picture to delete", "info");
+        // ignore
       }
       await removeAllData();
       await deleteAllUserData();
@@ -91,7 +90,7 @@ export function DeleteAccountButton({ setLoading }: DeleteAccountButtonProps) {
         try {
           await revokeSignInWithAppleToken();
         } catch {
-          log("Error revoking Apple token", "error");
+          // ignore
         }
       }
 
@@ -110,7 +109,7 @@ export function DeleteAccountButton({ setLoading }: DeleteAccountButtonProps) {
 
   const deleteAccountWithGoogle = useCallback(async () => {
     try {
-      setLoading(true);
+      setDeleting(true);
       const auth = getAuth();
       const user = auth.currentUser;
       if (!user) {
@@ -126,16 +125,16 @@ export function DeleteAccountButton({ setLoading }: DeleteAccountButtonProps) {
       const googleCredential = GoogleAuthProvider.credential(idToken);
       await reauthenticateWithCredential(user, googleCredential);
       await finalizeAccountDeletion(user);
-    } catch (error: any) {
-      new AppError(error, "Error deleting account", true);
+    } catch {
+      showErrorToast("Error Deleting Account");
     } finally {
-      setLoading(false);
+      setDeleting(false);
     }
-  }, [finalizeAccountDeletion, setLoading]);
+  }, [finalizeAccountDeletion]);
 
   const deleteAccountWithApple = useCallback(async () => {
     try {
-      setLoading(true);
+      setDeleting(true);
       const auth = getAuth();
       const user = auth.currentUser;
       if (!user) {
@@ -144,15 +143,18 @@ export function DeleteAccountButton({ setLoading }: DeleteAccountButtonProps) {
 
       const { identityToken, nonce } =
         await getAppleCredentialForReauthentication();
-      const appleCredential = AppleAuthProvider.credential(identityToken, nonce);
+      const appleCredential = AppleAuthProvider.credential(
+        identityToken,
+        nonce
+      );
       await reauthenticateWithCredential(user, appleCredential);
       await finalizeAccountDeletion(user);
-    } catch (error: any) {
-      new AppError(error, "Error deleting account", true);
+    } catch {
+      showErrorToast("Error Deleting Account");
     } finally {
-      setLoading(false);
+      setDeleting(false);
     }
-  }, [finalizeAccountDeletion, setLoading]);
+  }, [finalizeAccountDeletion]);
 
   const handleDeleteAccount = useCallback(() => {
     const auth = getAuth();
@@ -161,7 +163,9 @@ export function DeleteAccountButton({ setLoading }: DeleteAccountButtonProps) {
       return;
     }
 
-    const providerIds = user.providerData.map((provider) => provider.providerId);
+    const providerIds = user.providerData.map(
+      (provider) => provider.providerId
+    );
 
     if (providerIds.includes("password")) {
       setPresentPasswordModal(true);
@@ -200,7 +204,7 @@ export function DeleteAccountButton({ setLoading }: DeleteAccountButtonProps) {
 
   const deleteAccount = useCallback(async () => {
     try {
-      setLoading(true);
+      setDeleting(true);
       const auth = getAuth();
       const user = auth.currentUser;
       if (!user) {
@@ -220,12 +224,12 @@ export function DeleteAccountButton({ setLoading }: DeleteAccountButtonProps) {
       ) {
         Alert.alert("Error", "Incorrect password, please try again.");
       } else {
-        new AppError(error, "Error deleting account", true);
+        showErrorToast("Error Deleting Account");
       }
     } finally {
-      setLoading(false);
+      setDeleting(false);
     }
-  }, [finalizeAccountDeletion, inputText, setLoading]);
+  }, [finalizeAccountDeletion, inputText]);
 
   return (
     <>
@@ -243,6 +247,7 @@ export function DeleteAccountButton({ setLoading }: DeleteAccountButtonProps) {
         textColor={colors.white}
         onPress={handleDeleteAccount}
         icon="trash-alt"
+        loading={deleting}
       />
     </>
   );

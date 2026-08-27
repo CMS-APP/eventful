@@ -10,9 +10,7 @@ export async function saveIndividualPhoto(photo: PhotoResult): Promise<void> {
       return;
     }
 
-    log("Saving photo: " + photo.uri, "info");
-    const asset = await MediaLibrary.createAssetAsync(photo.uri);
-    log("Photo saved: " + asset.id, "info");
+    await MediaLibrary.createAssetAsync(photo.uri);
   } catch (error) {
     log("Error saving photo: " + error, "error");
   }

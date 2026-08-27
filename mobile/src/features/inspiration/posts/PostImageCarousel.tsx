@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { syncPostImage } from "@/services/cache";
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
+import { syncPostImage } from "@/services/local/cache";
 import { Photo } from "@/types/Photo";
-import { AppError } from "@/utils/error";
+import { showErrorToast } from "@/utils/toast";
 
 import { ImageButtons } from "./images/ImageButtons";
 import { ImageDots } from "./images/ImageDots";
@@ -16,10 +16,7 @@ interface PostImageCarouselProps {
   postId?: string;
 }
 
-export function PostImageCarousel({
-  photos,
-  postId
-}: PostImageCarouselProps) {
+export function PostImageCarousel({ photos, postId }: PostImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentImageUri, setCurrentImageUri] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -35,12 +32,8 @@ export function PostImageCarousel({
       );
 
       setCurrentImageUri(cachedImageUri);
-    } catch (error) {
-      new AppError(
-        error,
-        "PostImageCarousel: Error loading cached image",
-        true
-      );
+    } catch {
+      showErrorToast("Error Loading Image");
       setCurrentImageUri(currentPhoto.uri);
     } finally {
       setLoading(false);

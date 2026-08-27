@@ -7,19 +7,21 @@ import { Alert, StyleSheet, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { Button } from "@/components/buttons/Button";
-import { LoadingModal } from "@/components/views/LoadingModal";
-import { Screen } from "@/components/views/screen/Screen";
-import { AppStackParamList } from "@/features/app/navigationTypes";
+import { AppStackParamList } from "@/app/navigation";
+import { Screen } from "@/components/screen/Screen";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import {
   deletePhotoCloud,
   downloadCloudPhoto,
   uploadPhotosToCloud
 } from "@/services/photo-booth/cloudPhotos";
-import { deletePhotoLocally, sharePhoto } from "@/services/photo-booth/localPhotos";
+import {
+  deletePhotoLocally,
+  sharePhoto
+} from "@/services/photo-booth/localPhotos";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { AppError } from "@/utils/error";
+import { showErrorToast } from "@/utils/toast";
 
 import { GalleryPhotoItem } from "../components/gallery/GalleryPhotoItem";
 import {
@@ -31,12 +33,12 @@ export function PhotoBoothPhoto() {
   const { photo: initialPhoto } =
     useRoute<RouteProp<PhotoBoothStackParamList, "PhotoBoothPhoto">>().params;
   const navigation = useNavigation<PhotoBoothStackNavigation>();
-  const appNavigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>();
+  const appNavigation =
+    useNavigation<NativeStackNavigationProp<AppStackParamList>>();
   const userId = useSelector((state: UserState) => state.uid);
   const premium = useSelector((state: UserState) => state.premium);
 
   const [photo, setPhoto] = useState(initialPhoto);
-  const [deleting, setDeleting] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [downloading, setDownloading] = useState(false);
 
@@ -63,7 +65,6 @@ export function PhotoBoothPhoto() {
 
   const handleDelete = useCallback(async () => {
     try {
-      setDeleting(true);
       if (photo.type === "cloud" || photo.type === "both") {
         await deletePhotoCloud(photo, userId);
       }
@@ -71,10 +72,8 @@ export function PhotoBoothPhoto() {
         await deletePhotoLocally(photo);
       }
       navigation.navigate("PhotoBoothHome");
-    } catch (error) {
-      new AppError(error, "Error deleting photo", true);
-    } finally {
-      setDeleting(false);
+    } catch {
+      showErrorToast("Error Deleting Photo");
     }
   }, [navigation, userId, photo]);
 
@@ -110,8 +109,8 @@ export function PhotoBoothPhoto() {
       setUploading(true);
       await uploadPhotosToCloud(userId, photo.eventTitle, [photo]);
       setPhoto({ ...photo, type: "both" });
-    } catch (error) {
-      new AppError(error, "Error uploading photos", true);
+    } catch {
+      showErrorToast("Error Uploading Photos");
     } finally {
       setUploading(false);
     }
@@ -122,8 +121,8 @@ export function PhotoBoothPhoto() {
       setDownloading(true);
       await downloadCloudPhoto(photo, userId);
       setPhoto({ ...photo, type: "both" });
-    } catch (error) {
-      new AppError(error, "Error downloading photo", true);
+    } catch {
+      showErrorToast("Error Downloading Photo");
     } finally {
       setDownloading(false);
     }
@@ -145,8 +144,6 @@ export function PhotoBoothPhoto() {
         }
       }}
     >
-      <LoadingModal visible={deleting || uploading || downloading} />
-
       <View style={styles.container}>
         <GalleryPhotoItem photo={photo} onPhotoPress={handlePhotoPress} />
 

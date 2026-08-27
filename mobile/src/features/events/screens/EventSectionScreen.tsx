@@ -5,23 +5,19 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { RouteProp, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Screen } from "@/components/views/screen/Screen";
-import {
-  AllStackParamList,
-  EventsStackParamList
-} from "@/features/app/navigationTypes";
+import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
+import { Screen } from "@/components/screen/Screen";
+import { colors } from "@/design-system/tokens/colors";
 import {
   getEventInfo,
   updateEventInDatabase
 } from "@/services/firebase/firebaseEventFunctions";
 import { updateEventLinkInDatabase } from "@/services/firebase/firebaseInviteFunctions";
+import { updateNotificationsForEvent } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import type { Event } from "@/types/Event";
 import { parseDatabaseDate } from "@/utils/date";
-import { AppError } from "@/utils/error";
-import { log } from "@/utils/logging";
-import { updateNotificationsForEvent } from "@/utils/notifications";
+import { showErrorToast } from "@/utils/toast";
 
 import { EventDetailsEdit } from "../components/edit/EventDetailsEdit";
 import { EventItineraryEdit } from "../components/edit/EventItineraryEdit";
@@ -58,11 +54,7 @@ export function EventSectionScreen({
         if (eventData) {
           setEvent(eventData);
         } else {
-          new AppError(
-            new Error("Event not found"),
-            "Error fetching event",
-            true
-          );
+          showErrorToast("Error Loading Event");
         }
       }
 
@@ -80,7 +72,6 @@ export function EventSectionScreen({
 
     debounceTimeout.current = setTimeout(async () => {
       if (JSON.stringify(event) === JSON.stringify(originalEvent)) {
-        log("Event has not changed", "info");
         return;
       }
 

@@ -2,11 +2,11 @@ import { StyleSheet, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
+import { EventInviteStackParamList } from "@/app/navigation";
+import { FlatHeader } from "@/components/screen/FlatHeader";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { FlatHeader } from "@/components/views/screen/FlatHeader";
-import { EventInviteStackParamList } from "@/features/app/navigationTypes";
+import { colors } from "@/design-system/tokens/colors";
 import { ItineraryList } from "@/features/events/components/edit/components/itinerary/ItineraryList";
-import { colors } from "@/styles/colors";
 
 type Props = NativeStackScreenProps<
   EventInviteStackParamList,
@@ -32,17 +32,17 @@ export function EventInviteItineraryScreen({ route }: Props) {
         _handleScroll={() => {}}
         backgroundColor={colors.primary}
       >
-        <View style={styles.headerContainer}>
+        <View style={styles.contents}>
           <FlatHeader {...headerConfig} />
-        </View>
 
-        <ItineraryList
-          event={event}
-          itinerary={event.itinerary || []}
-          onActivityPress={() => {}}
-          theme="light"
-          disabled={true}
-        />
+          <ItineraryList
+            event={event}
+            itinerary={event.itinerary || []}
+            onActivityPress={() => {}}
+            theme="light"
+            disabled={true}
+          />
+        </View>
       </KeyboardScrollView>
     </View>
   );
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     flex: 1
   },
-  headerContainer: {
-    paddingTop: 24
+  contents: {
+    padding: 24
   }
 });

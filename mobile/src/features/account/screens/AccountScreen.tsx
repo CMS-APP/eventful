@@ -7,19 +7,19 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Text } from "@/components/text/Text";
+import { AccountStackParamList } from "@/app/navigation";
+import { Screen } from "@/components/screen/Screen";
 import { ArcCutout } from "@/components/views/ArcCutout";
-import { Screen } from "@/components/views/screen/Screen";
-import { AccountStackParamList } from "@/features/app/navigationTypes";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import {
   getUserFollowers,
   getUserFollowing
 } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { User } from "@/types/User";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
 
 import { AccountButtons } from "../components/AccountButtons";
 import { AccountPicture } from "../components/AccountPicture";

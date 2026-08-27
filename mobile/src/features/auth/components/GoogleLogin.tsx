@@ -4,32 +4,41 @@ import {
   getAuth,
   signInWithCredential
 } from "@react-native-firebase/auth";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import {
+  GoogleSignin,
+  isErrorWithCode,
+  statusCodes
+} from "@react-native-google-signin/google-signin";
 import { useDispatch } from "react-redux";
 
-import { Button } from "@/components/buttons/Button";
-import {
-  ILoadingModalContext,
-  useLoadingModal
-} from "@/contexts/LoadingProviderContext";
-import { appInit } from "@/services/initialisation/appInit";
-import { colors } from "@/styles/colors";
-import { AppError } from "@/utils/error";
+import { useState } from "react";
+
+import { CommonActions } from "@react-navigation/native";
+
+import { dataInit } from "@/app/init/data";
+import { navigationRef } from "@/app/navigation";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import { log } from "@/utils/logging";
-import { navigationRef } from "@/utils/navigation";
+import { showErrorToast } from "@/utils/toast";
 
 import { saveGoogleOnboardingName } from "../utils";
 
 export function GoogleLogin() {
-  const { setLoading } = useLoadingModal() as ILoadingModalContext;
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
 
   async function onGoogleButtonPress() {
+    if (isSubmitting) {
+      return;
+    }
+
     try {
-      setLoading(true);
+      setIsSubmitting(true);
       await GoogleSignin.hasPlayServices();
+
       const signInResult = await GoogleSignin.signIn();
-      let idToken = signInResult.data?.idToken;
+      const idToken = signInResult.data?.idToken;
 
       if (!idToken) {
         throw new Error("No ID token found");
@@ -40,7 +49,7 @@ export function GoogleLogin() {
       );
 
       const user = await signInWithCredential(getAuth(), googleCredential);
-      const result = await appInit(dispatch);
+      const result = await dataInit(dispatch);
 
       if (user.additionalUserInfo?.profile) {
         await saveGoogleOnboardingName(
@@ -49,15 +58,24 @@ export function GoogleLogin() {
         );
       }
 
-      navigationRef.navigate(result);
+      navigationRef.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: result }]
+        })
+      );
     } catch (error) {
-      if (error?.toString() === "Error: No ID token found") {
-        log("User cancelled Google authentication", "info");
+      if (
+        (isErrorWithCode(error) &&
+          error.code === statusCodes.SIGN_IN_CANCELLED) ||
+        error?.toString() === "Error: No ID token found"
+      ) {
         return;
       }
-      new AppError(error, "Error signing in with Google", true);
+      showErrorToast("Error Signing In");
+      log(error as string, "error");
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   }
 
@@ -68,6 +86,8 @@ export function GoogleLogin() {
       color={colors.primary}
       textColor={colors.white}
       icon="google"
+      disabled={isSubmitting}
+      loading={isSubmitting}
     />
   );
 }

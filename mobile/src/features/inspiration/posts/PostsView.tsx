@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 
 import { useFocusEffect } from "@react-navigation/native";
 
-import { Text } from "@/components/text/Text";
+import { Text } from "@/design-system/components/Text";
 import { getPostsFromDatabase } from "@/services/firebase/firebaseInspirationFunctions";
 import { Post } from "@/types/Post";
 

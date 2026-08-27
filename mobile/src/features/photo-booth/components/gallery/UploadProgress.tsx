@@ -7,19 +7,18 @@ import { Alert, Clipboard, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Button } from "@/components/buttons/Button";
-import { Text } from "@/components/text/Text";
-import { LoadingModal } from "@/components/views/LoadingModal";
-import { AppStackParamList } from "@/features/app/navigationTypes";
+import { AppStackParamList } from "@/app/navigation";
+import { Button } from "@/design-system/components/Button";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import {
   downloadCloudPhotos,
   uploadPhotosToCloud
 } from "@/services/photo-booth/cloudPhotos";
 import { convertEventTitleToHash } from "@/services/photo-booth/utils";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
-import { AppError } from "@/utils/error";
+import { showErrorToast } from "@/utils/toast";
 
 type PhotoState = {
   local: GalleryPhoto[];
@@ -66,8 +65,8 @@ export function UploadProgress({
       setDownloading(true);
       await downloadCloudPhotos(event, photoState.cloud);
       await refreshEvent(event);
-    } catch (error) {
-      new AppError(error, "Error downloading photos", true);
+    } catch {
+      showErrorToast("Error Downloading Photos");
     } finally {
       setDownloading(false);
     }
@@ -79,8 +78,8 @@ export function UploadProgress({
       setUploading(true);
       await uploadPhotosToCloud(userId, event.eventTitle, photoState.local);
       await refreshEvent(event);
-    } catch (error) {
-      new AppError(error, "Error uploading photos", true);
+    } catch {
+      showErrorToast("Error Uploading Photos");
     } finally {
       setUploading(false);
     }
@@ -96,8 +95,8 @@ export function UploadProgress({
         "Link copied",
         "The gallery link has been copied to your clipboard."
       );
-    } catch (error) {
-      new AppError(error, "Error copying photo booth gallery link", true);
+    } catch {
+      showErrorToast("Error Copying Link");
     }
   }, [canCopyWebGalleryLink, event.eventTitle, isSyncing, userId]);
 
@@ -189,7 +188,6 @@ export function UploadProgress({
 
   return (
     <View style={styles.container}>
-      <LoadingModal visible={isSyncing} />
       <Text type="subHeader">Sync status</Text>
 
       {statusSection}

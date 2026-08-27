@@ -9,10 +9,10 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { CameraView, PhotoResult } from "expo-camera";
 import { CameraType } from "expo-image-picker";
 
-import { Text } from "@/components/text/Text";
-import { AccountStackParamList } from "@/features/app/navigationTypes";
-import { colors } from "@/styles/colors";
-import { getHitSlop } from "@/utils/hitSlop";
+import { AccountStackParamList } from "@/app/navigation";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 
 import { AccountPictureCameraModal } from "../components/AccountPictureCameraModal";
 

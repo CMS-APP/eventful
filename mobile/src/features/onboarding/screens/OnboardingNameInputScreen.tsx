@@ -11,10 +11,12 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Input } from "@/components/inputs/Input";
-import { Text } from "@/components/text/Text";
+import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
+import { OnboardingStackParamList } from "@/app/navigation";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { OnboardingStackParamList } from "@/features/app/navigationTypes";
+import { Input } from "@/design-system/components/Input";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { API_COLLECTIONS } from "@/services/api/constants";
 import { createDocument } from "@/services/api/create";
 import { FIREBASE_AUTH } from "@/services/firebase/firebase";
@@ -24,11 +26,9 @@ import {
   createUserInfo
 } from "@/services/firebase/firebaseUserFunctions";
 import { UserState, setUserData } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
-import { useSafeAreaStyles } from "@/styles/globalStyles";
 import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
-import { capitalize, checkNames, checkUsernameValid } from "@/utils/regex";
+import { showErrorToast } from "@/utils/toast";
+import { capitalize, checkNames, checkUsernameValid } from "@/utils/validation";
 
 import { OnboardingButtons } from "../components/OnboardingButtons";
 import { getLoginNames } from "../utils";
@@ -81,11 +81,7 @@ export function OnboardingNameInputScreen({
       // Ensure the token is fresh and emailVerified is reflected
       const currentUser = FIREBASE_AUTH.currentUser;
       if (!currentUser) {
-        throw new AppError(
-          "No authenticated user found",
-          "Error creating user",
-          true
-        );
+        throw new Error("No authenticated user found");
       }
       await reload(currentUser);
       await getIdToken(currentUser, true);
@@ -107,8 +103,8 @@ export function OnboardingNameInputScreen({
       const dataWithMillis = convertTimestampsToMillis(data as User);
       dispatch(setUserData(dataWithMillis));
       navigation.navigate("OnboardingNotifications");
-    } catch (error) {
-      new AppError(error, "Error creating user", true);
+    } catch {
+      showErrorToast("Error Creating Account");
     }
   }, [firstName, lastName, username, userId, dispatch, navigation, email]);
 

@@ -4,24 +4,22 @@ import { Alert, LayoutChangeEvent, StyleSheet, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { Button } from "@/components/buttons/Button";
-import { TextButton } from "@/components/buttons/TextButton";
-import { Input } from "@/components/inputs/Input";
-import { Text } from "@/components/text/Text";
-import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import {
   ILoadingModalContext,
   useLoadingModal
-} from "@/contexts/LoadingProviderContext";
-import { AuthStackParamList } from "@/features/app/navigationTypes";
+} from "@/app/context/loading/LoadingModalContext";
+import { AuthStackParamList } from "@/app/navigation";
+import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
+import { Button } from "@/design-system/components/Button";
+import { Input } from "@/design-system/components/Input";
+import { Text } from "@/design-system/components/Text";
+import { TextButton } from "@/design-system/components/TextButton";
+import { colors } from "@/design-system/tokens/colors";
 import { handleSignUp } from "@/services/firebase/firebaseAuth";
 import { sendVerificationEmail } from "@/services/firebase/firebaseBackend";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
 import { FormErrors } from "@/types/FormErrors";
-import { AppError } from "@/utils/error";
-import { emailValid, passwordValid } from "@/utils/regex";
-import { useScreenStatusBar } from "@/utils/statusBar";
+import { showErrorToast } from "@/utils/toast";
+import { emailValid, passwordValid } from "@/utils/validation";
 
 import { Header } from "../components/Header";
 import { HeaderArcs } from "../components/HeaderArcs";
@@ -37,8 +35,6 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
   const [headerHeight, setHeaderHeight] = useState(0);
 
   const { setLoading } = useLoadingModal() as ILoadingModalContext;
-
-  useScreenStatusBar(true);
 
   const validateForm = useCallback((): boolean => {
     const newErrors: FormErrors = {};
@@ -94,7 +90,7 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
         if (error.message.includes("auth/email-already-in-use")) {
           setErrors({ email: "Email already in use." });
         } else {
-          new AppError(error, "Error signing up", true);
+          showErrorToast("Error Signing Up");
           Alert.alert(
             "Error",
             "An unexpected error occurred. Please try again."
@@ -107,7 +103,7 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
   }, [email, password, validateForm, setLoading, navigation]);
 
   return (
-    <View style={globalStyles.container}>
+    <View style={styles.container}>
       <Header title="Sign Up" onLayout={handleHeaderLayout} />
       <HeaderArcs headerHeight={headerHeight} />
 
@@ -190,6 +186,9 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   orContainer: {
     alignItems: "center",
     gap: 4,

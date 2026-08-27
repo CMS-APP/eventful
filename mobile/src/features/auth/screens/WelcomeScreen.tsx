@@ -1,15 +1,13 @@
-import { Image, Platform, StyleSheet, View } from "react-native";
+import { Image, ImageBackground, StyleSheet, View } from "react-native";
 
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { Button } from "@/components/buttons/Button";
-import { TextButton } from "@/components/buttons/TextButton";
-import { Text } from "@/components/text/Text";
-import { Background } from "@/components/views/Background";
-import { AuthStackParamList } from "@/features/app/navigationTypes";
-import { colors } from "@/styles/colors";
-import { globalStyles, useSafeAreaStyles } from "@/styles/globalStyles";
-import { log } from "@/utils/logging";
+import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
+import { AuthStackParamList } from "@/app/navigation";
+import { Button } from "@/design-system/components/Button";
+import { Text } from "@/design-system/components/Text";
+import { TextButton } from "@/design-system/components/TextButton";
+import { colors } from "@/design-system/tokens/colors";
 
 import { AppleLogin } from "../components/AppleLogin";
 import { GoogleLogin } from "../components/GoogleLogin";
@@ -19,25 +17,26 @@ interface WelcomeScreenProps {
 }
 
 export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
+  const { safeArea } = useSafeAreaStyles();
+
   const handleSignIn = () => {
-    log("Navigation: Sign In", "info");
     navigation.navigate("SignIn", { email: "", password: "" });
   };
 
   const handleSignUp = () => {
-    log("Navigation: Sign Up", "info");
     navigation.navigate("SignUp");
   };
 
   return (
-    <View style={globalStyles.container}>
-      <Background page="Welcome" image>
+    <View style={styles.container}>
+      <ImageBackground
+        source={require("@/assets/backgrounds/welcome-background.png")}
+        resizeMode="cover"
+        style={styles.background}
+      >
         <View style={styles.logoContainer}>
           <View
-            style={[
-              styles.logoBackground,
-              { marginTop: useSafeAreaStyles().safeArea.paddingTop }
-            ]}
+            style={[styles.logoBackground, { marginTop: safeArea.paddingTop }]}
           >
             <Image
               source={require("@/assets/logos/eventful-logo.png")}
@@ -62,7 +61,7 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
             icon="envelope"
           />
 
-          {Platform.OS === "ios" && <AppleLogin />}
+          <AppleLogin />
           <GoogleLogin />
 
           <View style={styles.orContainer}>
@@ -79,12 +78,15 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
             />
           </View>
         </View>
-      </Background>
+      </ImageBackground>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1
+  },
   bottomContainer: {
     backgroundColor: colors.white,
     borderTopLeftRadius: 40,
@@ -92,6 +94,9 @@ const styles = StyleSheet.create({
     flex: 3,
     gap: 12,
     padding: 32
+  },
+  container: {
+    flex: 1
   },
   flexTwo: {
     flex: 2

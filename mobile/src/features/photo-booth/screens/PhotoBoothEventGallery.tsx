@@ -11,12 +11,11 @@ import {
   useRoute
 } from "@react-navigation/native";
 
-import { Screen } from "@/components/views/screen/Screen";
+import { Screen } from "@/components/screen/Screen";
+import { colors } from "@/design-system/tokens/colors";
 import { getEvent } from "@/services/photo-booth/events";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
-import { log } from "@/utils/logging";
 
 import { GalleryPhotoItem } from "../components/gallery/GalleryPhotoItem";
 import { UploadProgress } from "../components/gallery/UploadProgress";
@@ -36,7 +35,6 @@ export function PhotoBoothEventGallery() {
 
   const refreshEvent = useCallback(
     async (event: GalleryEvent) => {
-      log("Refreshing event", "info");
       const newEvent = await getEvent(userId, event.eventTitle);
       if (!newEvent) {
         return;

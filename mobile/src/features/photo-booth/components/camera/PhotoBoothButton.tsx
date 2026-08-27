@@ -1,10 +1,10 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { getHitSlop } from "@/utils/hitSlop";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { colors } from "@/styles/colors";
-import { shadows } from "@/styles/shadows";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { shadows } from "@/design-system/tokens/shadows";
 
 interface PhotoBoothButtonProps {
   onPress: () => void;
@@ -27,7 +27,11 @@ export function PhotoBoothButton({
   ];
 
   return (
-    <TouchableOpacity onPress={onPress} hitSlop={getHitSlop("small")} disabled={disabled}>
+    <TouchableOpacity
+      onPress={onPress}
+      hitSlop={getHitSlop("small")}
+      disabled={disabled}
+    >
       <View style={buttonStyle}>
         <FontAwesome5 name={icon} size={20} color={textColor} />
       </View>

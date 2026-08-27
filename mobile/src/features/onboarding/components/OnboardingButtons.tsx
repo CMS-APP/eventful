@@ -1,9 +1,9 @@
 import { StyleSheet, View } from "react-native";
 
-import { colors } from "@/styles/colors";
+import { colors } from "@/design-system/tokens/colors";
 
-import { Button } from "../../../components/buttons/Button";
-import { TextButton } from "../../../components/buttons/TextButton";
+import { Button } from "../../../design-system/components/Button";
+import { TextButton } from "../../../design-system/components/TextButton";
 
 interface OnboardingButtonsProps {
   exit: () => void;

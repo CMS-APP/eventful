@@ -4,14 +4,13 @@ import { StyleSheet, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { Input } from "@/components/inputs/Input";
+import { EventInviteStackParamList } from "@/app/navigation";
+import { FlatHeader } from "@/components/screen/FlatHeader";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { FlatHeader } from "@/components/views/screen/FlatHeader";
-import { EventInviteStackParamList } from "@/features/app/navigationTypes";
+import { Input } from "@/design-system/components/Input";
+import { colors } from "@/design-system/tokens/colors";
 import { updateResponseInDatabase } from "@/services/firebase/firebaseInviteFunctions";
-import { colors } from "@/styles/colors";
-import { AppError } from "@/utils/error";
-import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 type Props = NativeStackScreenProps<
   EventInviteStackParamList,
@@ -25,13 +24,12 @@ export function EventInviteFoodDrinkScreen({ navigation, route }: Props) {
   useEffect(() => {
     if (invite.dietary !== dietary) {
       try {
-        log(`Updating dietary requirements to: ${dietary}`, "info");
         updateResponseInDatabase(invite, {
           response: invite.response,
           dietary
         });
-      } catch (error) {
-        new AppError(error, "Error updating dietary requirements", true);
+      } catch {
+        showErrorToast("Error Updating Requirements");
       }
     }
   }, [dietary, invite]);

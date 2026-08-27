@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { EventsStackParamList } from "@/features/app/navigationTypes";
+import { EventsStackParamList } from "@/app/navigation";
 import { accountNavigatorGestureOptions } from "@/features/account/accountNavigatorScreenOptions";
 import { profileNavigatorGestureOptions } from "@/features/profile/profileNavigatorScreenOptions";
 

@@ -9,17 +9,17 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
+import { AppStackParamList } from "@/app/navigation";
 import { UserPicture } from "@/components/views/UserPicture";
-import { AppStackParamList } from "@/features/app/navigationTypes";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { EventInvite } from "@/types/EventInvite";
 import { User } from "@/types/User";
 import { parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
 
 interface ContactInviteItemProps {
   eventInvite: EventInvite;
@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   iconsContainer: {
+    alignItems: "center",
     gap: 2.5,
     marginLeft: 6
   },

@@ -10,8 +10,8 @@ import {
 
 import { Animated, Easing, StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -144,7 +144,7 @@ const TimerRing = forwardRef<TimerRingHandle, TimerRingProps>(
         </Svg>
         {showCountdownLabel && labelSeconds > 0 ? (
           <View style={styles.labelWrap} pointerEvents="none">
-            <Text type="header" color={colors.white}>
+            <Text type="subHeader" color={colors.white}>
               {labelSeconds}
             </Text>
           </View>

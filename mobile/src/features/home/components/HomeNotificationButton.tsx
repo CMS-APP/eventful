@@ -4,14 +4,14 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { Notification } from "@/types/Notification";
-import { getHitSlop } from "@/utils/hitSlop";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { InAppNotification } from "@/types/InAppNotification";
 
 interface HomeNotificationButtonProps {
-  onPress: (notifications: Notification[]) => void;
-  notifications: Notification[];
+  onPress: (notifications: InAppNotification[]) => void;
+  notifications: InAppNotification[];
   icon: keyof typeof FontAwesome5.glyphMap;
   text: string;
   unreadNotifications: number;
@@ -66,6 +66,10 @@ const styles = StyleSheet.create({
     right: -4,
     top: -4
   },
+  badgeText: {
+    color: colors.white,
+    fontSize: 12
+  },
   container: {
     alignItems: "center",
     gap: 6,
@@ -78,9 +82,5 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: "center",
     width: 50
-  },
-  badgeText: {
-    color: colors.white,
-    fontSize: 12
   }
 });

@@ -1,7 +1,7 @@
 import { Linking } from "react-native";
 
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
-import { AppError } from "@/utils/error";
+import { showErrorToast } from "@/utils/toast";
 
 export async function viewSpotifyPlaylist(playlist: SpotifyPlaylist) {
   const spotifyUri = `spotify:playlist:${playlist.id}`;
@@ -16,7 +16,7 @@ export async function viewSpotifyPlaylist(playlist: SpotifyPlaylist) {
       // Fallback to web URL
       await Linking.openURL(fallbackUrl);
     }
-  } catch (error) {
-    new AppError(error, "Error opening Spotify playlist", true);
+  } catch {
+    showErrorToast("Error Opening Playlist");
   }
 }

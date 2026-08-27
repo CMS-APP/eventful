@@ -7,21 +7,21 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { SmallButton } from "@/components/buttons/SmallButton";
-import { Text } from "@/components/text/Text";
+import { ProfileStackParamList } from "@/app/navigation";
 import { ArcCutout } from "@/components/views/ArcCutout";
 import { FollowButton } from "@/components/views/FollowButton";
-import { ProfileStackParamList } from "@/features/app/navigationTypes";
+import { SmallButton } from "@/design-system/components/SmallButton";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import {
   getUserFollowers,
   getUserFollowing,
   isFollowingUser
 } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Follower } from "@/types/Follower";
 import { User } from "@/types/User";
-import { getHitSlop } from "@/utils/hitSlop";
 
 import { ProfilePicture } from "./ProfilePicture";
 

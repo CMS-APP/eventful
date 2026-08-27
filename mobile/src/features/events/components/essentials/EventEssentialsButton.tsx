@@ -8,11 +8,11 @@ import {
   View
 } from "react-native";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { padding } from "@/design-system/tokens/padding";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
 
 interface EventEssentialsButtonProps {
   title: string;
@@ -48,7 +48,7 @@ export function EventEssentialsButton({
 
 const styles = StyleSheet.create({
   button: {
-    ...globalStyles.mediumWidget,
+    ...padding.mediumWidget,
     backgroundColor: colors.lightGray,
     gap: 12,
     padding: 12

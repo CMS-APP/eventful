@@ -5,20 +5,19 @@ import { Alert, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Text } from "@/components/text/Text";
-import { AppStackParamList } from "@/features/app/navigationTypes";
-import { syncUserPicture } from "@/services/cache";
+import { AppStackParamList } from "@/app/navigation";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { padding } from "@/design-system/tokens/padding";
 import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
 import { deleteInviteFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
+import { syncUserPicture } from "@/services/local/cache";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
-import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 interface EventGuestListInvitedItemProps {
   user: User;
@@ -65,18 +64,14 @@ export function EventGuestListInvitedItem({
 
   const removeUserFromEvent = useCallback(async () => {
     try {
-      log("Removing user from event", "info");
-      log("Invite: " + JSON.stringify(invite, null, 2), "debug");
-
       await deleteInviteFromDatabase(invite.id);
 
       event.invited = event.invited.filter(
         (invited: string) => invited !== user.uid
       );
       await updateEventInDatabase(event);
-      log("User removed from event", "info");
-    } catch (error) {
-      new AppError(error, "Error removing user from event", true);
+    } catch {
+      showErrorToast("Error Removing User");
     }
   }, [invite, user, event]);
 
@@ -153,7 +148,7 @@ export function EventGuestListInvitedItem({
 
 const styles = StyleSheet.create({
   button: {
-    ...globalStyles.smallWidget,
+    ...padding.smallWidget,
     backgroundColor: colors.primary
   },
   dietaryText: {
@@ -184,7 +179,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   userContainer: {
-    ...globalStyles.largeWidget,
+    ...padding.largeWidget,
     backgroundColor: colors.lightGray,
     flexDirection: "row",
     gap: 12

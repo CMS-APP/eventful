@@ -2,13 +2,12 @@ import { useCallback } from "react";
 
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { shadows } from "@/styles/shadows";
-import { getHitSlop } from "@/utils/hitSlop";
-
-import { usePhotoBoothCamera } from "../../provider/PhotoBoothCameraProvider";
-import { usePhotoBoothSession } from "../../provider/PhotoBoothSessionProvider";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { shadows } from "@/design-system/tokens/shadows";
+import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
+import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
 
 interface PhotoBoothCaptureButtonProps {
   disabled?: boolean;

@@ -4,17 +4,17 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Alert, StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/text/Text";
 import {
   ILoadingModalContext,
   useLoadingModal
-} from "@/contexts/LoadingProviderContext";
+} from "@/app/context/loading/LoadingModalContext";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Event } from "@/types/Event";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
-import { AppError } from "@/utils/error";
 import { haptics } from "@/utils/haptics";
+import { showErrorToast } from "@/utils/toast";
 
 import { SpotifyPlaylistItem } from "./SpotifyPlaylistItem";
 import { viewSpotifyPlaylist } from "./SpotifyService";
@@ -59,8 +59,8 @@ export function SpotifyPlaylists({ event, setEvent }: SpotifyPlaylistsProps) {
       try {
         setLoading(true);
         await viewSpotifyPlaylist(playlist);
-      } catch (error) {
-        new AppError(error, "Error opening Spotify playlist", true);
+      } catch {
+        showErrorToast("Error Opening Playlist");
       } finally {
         setLoading(false);
       }

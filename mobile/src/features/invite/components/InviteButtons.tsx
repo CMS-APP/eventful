@@ -5,10 +5,10 @@ import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Button } from "@/components/buttons/Button";
-import { EventInviteStackParamList } from "@/features/app/navigationTypes";
+import { EventInviteStackParamList } from "@/app/navigation";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import { getEventInvites } from "@/services/firebase/firebaseInviteFunctions";
-import { colors } from "@/styles/colors";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";

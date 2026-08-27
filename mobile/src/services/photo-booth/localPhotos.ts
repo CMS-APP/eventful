@@ -1,12 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { File, Paths } from "expo-file-system";
-import * as MediaLibrary from "expo-media-library";
 import Share from "react-native-share";
+
+import { File, Paths } from "expo-file-system";
+import * as LegacyFileSystem from "expo-file-system/legacy";
+import * as MediaLibrary from "expo-media-library";
 
 import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
 import { formatDate, parseDatabaseDate } from "@/utils/date";
-import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 import { getPhotoIdSplit } from "./utils";
 
@@ -28,16 +30,17 @@ function mediaLibraryAssetRef(
 
 export async function getPhotosDataLocally() {
   try {
-    log("Getting photo data locally", "info");
     const photoData = await AsyncStorage.getItem("photosData");
     if (!photoData) {
-      log("No photo data found locally", "info");
       return [];
     }
 
     return JSON.parse(photoData);
   } catch (error) {
-    new AppError(error, "Error getting photo data");
+    log(
+      `Error getting photo data: ${(error as any)?.message ?? error}`,
+      "error"
+    );
     return [];
   }
 }
@@ -67,10 +70,12 @@ export async function savePhotoDataLocally(
       url: uri
     });
 
-    log("Photo data saved: " + JSON.stringify(photoData), "info");
     await AsyncStorage.setItem("photosData", JSON.stringify(photoData));
   } catch (error) {
-    new AppError(error, "Error saving photo data");
+    log(
+      `Error saving photo data: ${(error as any)?.message ?? error}`,
+      "error"
+    );
   }
 }
 
@@ -84,7 +89,10 @@ export async function deletePhotoLocally(photo: GalleryPhoto): Promise<void> {
     await MediaLibrary.deleteAssetsAsync([mediaLibraryAssetRef(photo)]);
     await AsyncStorage.setItem("photosData", JSON.stringify(filteredPhotoData));
   } catch (error) {
-    new AppError(error, "Error deleting photo data");
+    log(
+      `Error deleting photo data: ${(error as any)?.message ?? error}`,
+      "error"
+    );
   }
 }
 
@@ -102,7 +110,7 @@ export async function getLocalEvents(): Promise<GalleryEvent[]> {
       photosData.map((photo: GalleryPhoto & { id?: string; uri?: string }) => {
         const ref = mediaLibraryAssetRef(photo);
         if (!ref) {
-          console.warn("no ref found for photo", photo.photoId);
+          log("No ref found for photo: " + photo.photoId, "warn");
           return Promise.resolve(null);
         }
         return MediaLibrary.getAssetInfoAsync(ref);
@@ -115,7 +123,7 @@ export async function getLocalEvents(): Promise<GalleryEvent[]> {
       const assetResult = assetChecks[i];
 
       if (assetResult.status === "rejected" || !assetResult.value) {
-        console.warn("no asset found for photo", photo);
+        log("No asset found for photo: " + JSON.stringify(photo), "warn");
         continue;
       }
 
@@ -134,7 +142,9 @@ export async function getLocalEvents(): Promise<GalleryEvent[]> {
         eventsData[photo.eventTitle].photos.push(photo);
       }
 
-      const storedEventDate = parseDatabaseDate(eventsData[photo.eventTitle].date);
+      const storedEventDate = parseDatabaseDate(
+        eventsData[photo.eventTitle].date
+      );
 
       const photoTime =
         photo.createdAt ??
@@ -154,7 +164,10 @@ export async function getLocalEvents(): Promise<GalleryEvent[]> {
     await AsyncStorage.setItem("photosData", JSON.stringify(newPhotosData));
     return Object.values(eventsData);
   } catch (error) {
-    new AppError(error, "Error getting events data");
+    log(
+      `Error getting events data: ${(error as any)?.message ?? error}`,
+      "error"
+    );
     return [];
   }
 }
@@ -175,11 +188,26 @@ async function copyImageToShareCache(readUri: string): Promise<string> {
   const response = await fetch(readUri);
   const blob = await response.blob();
   const base64data = await blobToBase64(blob);
-  const cacheFile = new File(Paths.cache, `photo-booth-share-${Date.now()}.png`);
+  const cacheFile = new File(
+    Paths.cache,
+    `photo-booth-share-${Date.now()}.png`
+  );
   if (cacheFile.exists) {
     cacheFile.delete();
   }
   cacheFile.write(base64data, { encoding: "base64" });
+  return cacheFile.uri;
+}
+
+async function copyContentUriToShareCache(contentUri: string): Promise<string> {
+  const cacheFile = new File(
+    Paths.cache,
+    `photo-booth-share-${Date.now()}.png`
+  );
+  if (cacheFile.exists) {
+    cacheFile.delete();
+  }
+  await LegacyFileSystem.copyAsync({ from: contentUri, to: cacheFile.uri });
   return cacheFile.uri;
 }
 
@@ -196,6 +224,9 @@ async function resolveUriForShare(uri: string): Promise<string> {
     }
     const readUri = asset.localUri ?? asset.uri;
     return copyImageToShareCache(readUri);
+  }
+  if (trimmed.startsWith("content://")) {
+    return copyContentUriToShareCache(trimmed);
   }
   if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
     return copyImageToShareCache(trimmed);
@@ -219,7 +250,8 @@ export async function sharePhoto(uri: string): Promise<void> {
   } catch (error) {
     const message = (error as Error)?.message ?? "";
     if (message !== "User did not share") {
-      new AppError(error, "Error sharing photo", true);
+      log(`Error sharing photo: ${(error as any)?.message ?? error}`, "error");
+      showErrorToast("Error Sharing Photo");
     }
   }
 }

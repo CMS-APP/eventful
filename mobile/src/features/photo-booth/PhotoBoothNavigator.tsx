@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import type { PhotoBoothStackParamList } from "./photoBoothStackParams";
-import { usePhotoBoothSession } from "./provider/PhotoBoothSessionProvider";
+import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
 import { PhotoBoothCamera } from "./screens/PhotoBoothCamera";
 import { PhotoBoothColorPicker } from "./screens/PhotoBoothColorPicker";
 import { PhotoBoothCustomise } from "./screens/PhotoBoothCustomise";

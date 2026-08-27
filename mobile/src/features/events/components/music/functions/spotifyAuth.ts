@@ -2,8 +2,8 @@ import type { RefObject } from "react";
 
 import * as AuthSession from "expo-auth-session";
 
-import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 export const SPOTIFY_CLIENT_ID = "5ac26743c8154bf781d819ef92f34245";
 export const SPOTIFY_SCOPES = [
@@ -96,7 +96,6 @@ export async function processAuthResponse(
     // Prevent duplicate processing
     const responseKey = `${code}-${response.type}`;
     if (processedResponseRef.current === responseKey) {
-      log("Already processed this Spotify authorization code", "info");
       return null;
     }
 
@@ -118,13 +117,13 @@ export async function processAuthResponse(
   }
 
   if (response.type === "cancel") {
-    log("Spotify sign in cancelled", "info");
     return null;
   }
 
   if (response.type === "error") {
     log(`Spotify sign in error: ${response.error?.message}`, "error");
-    throw new AppError(response.error, "Error signing into Spotify", true);
+    showErrorToast("Error Connecting Spotify");
+    throw new Error(response.error?.message ?? "Error signing into Spotify");
   }
 
   return null;

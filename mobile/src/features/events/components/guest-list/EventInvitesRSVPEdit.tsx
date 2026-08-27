@@ -7,9 +7,10 @@ import { Alert, StyleSheet, View } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AppButtonSwitcher } from "@/components/buttons/AppButtonSwitcher";
-import { Button } from "@/components/buttons/Button";
-import { EventsStackParamList } from "@/features/app/navigationTypes";
+import { EventsStackParamList } from "@/app/navigation";
+import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import { getEventInfo } from "@/services/firebase/firebaseEventFunctions";
 import {
   getRSVPAppUsers,
@@ -17,11 +18,9 @@ import {
   getRSVPWebUsers
 } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { Event } from "@/types/Event";
 import { UserInvite } from "@/types/UserInvite";
 import { parseDatabaseDate } from "@/utils/date";
-import { log } from "@/utils/logging";
 
 import { EventInvitesRSVPUserList } from "./EventInvitesRSVPUserList";
 
@@ -74,7 +73,6 @@ export function EventInvitesRSVPEdit({
   );
 
   const fetchData = useCallback(async () => {
-    log("Fetching data for event invites", "info");
     setFetchingData(true);
     const eventData = await getEventInfo({ id: event.id } as Event);
     const appUsers = await getRSVPAppUsers(eventData as Event);
@@ -97,7 +95,6 @@ export function EventInvitesRSVPEdit({
 
   useFocusEffect(
     useCallback(() => {
-      log("Focusing on EventInvitesRSVPEdit", "info");
       fetchData();
     }, [fetchData])
   );

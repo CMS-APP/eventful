@@ -5,15 +5,15 @@ import { Alert, StatusBar, StyleSheet, View } from "react-native";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Button } from "@/components/buttons/Button";
 import {
   ILoadingModalContext,
   useLoadingModal
-} from "@/contexts/LoadingProviderContext";
-import { AllStackParamList } from "@/features/app/navigationTypes";
+} from "@/app/context/loading/LoadingModalContext";
+import { AllStackParamList, navigationRef } from "@/app/navigation";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
 import { handleSignOut } from "@/services/firebase/firebaseAuth";
-import { colors } from "@/styles/colors";
-import { AppError } from "@/utils/error";
+import { showErrorToast } from "@/utils/toast";
 
 export function AccountButtons() {
   const { setLoading } = useLoadingModal() as ILoadingModalContext;
@@ -25,8 +25,8 @@ export function AccountButtons() {
       setLoading(true);
       handleSignOut(dispatch);
       signOutNavigation();
-    } catch (error) {
-      new AppError(error, "Error signing out", true);
+    } catch {
+      showErrorToast("Error Signing Out");
     } finally {
       setLoading(false);
     }
@@ -51,7 +51,7 @@ export function AccountButtons() {
     navigation.navigate("LoadingScreen" as never);
 
     setTimeout(() => {
-      navigation.dispatch(
+      navigationRef.dispatch(
         CommonActions.reset({
           index: 0,
           routes: [{ name: "Auth" }]
@@ -71,7 +71,6 @@ export function AccountButtons() {
         onPress={() => {
           navigation.navigate("Paywall" as never);
         }}
-        pulsating={true}
       />
 
       <Button

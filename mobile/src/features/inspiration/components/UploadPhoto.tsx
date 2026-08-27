@@ -6,13 +6,12 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker";
 
-import { Text } from "@/components/text/Text";
-import { colors } from "@/styles/colors";
-import { globalStyles } from "@/styles/globalStyles";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { padding } from "@/design-system/tokens/padding";
 import { Photo } from "@/types/Photo";
 import { haptics } from "@/utils/haptics";
-import { getHitSlop } from "@/utils/hitSlop";
-import { log } from "@/utils/logging";
 
 interface UploadPhotoProps {
   photos: Photo[];
@@ -81,11 +80,8 @@ export function UploadPhoto({
         } else {
           setPhotos([...photos, ...newPhotos]);
         }
-
-        log(`Added ${newPhotos.length} photos`, "info");
       }
-    } catch (error) {
-      log("Error picking images: " + error, "error");
+    } catch {
       Alert.alert("Error", "Failed to pick images. Please try again.");
     } finally {
       setLoading(false);
@@ -97,7 +93,6 @@ export function UploadPhoto({
       haptics.soft();
       const updatedPhotos = photos.filter((photo) => photo.id !== photoId);
       setPhotos(updatedPhotos);
-      log("Removed photo", "info");
     },
     [photos, setPhotos]
   );
@@ -190,7 +185,7 @@ export function UploadPhoto({
 
 const styles = StyleSheet.create({
   addButton: {
-    ...globalStyles.mediumWidget,
+    ...padding.mediumWidget,
     alignItems: "center",
     backgroundColor: colors.white,
     borderColor: colors.primary + "33",

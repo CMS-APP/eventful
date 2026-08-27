@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { ProfileStackParamList } from "@/features/app/navigationTypes";
+import { ProfileStackParamList } from "@/app/navigation";
 
 import { ProfileFollowersScreen } from "./screens/ProfileFollowersScreen";
 import { ProfileInviteScreen } from "./screens/ProfileInviteScreen";

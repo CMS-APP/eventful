@@ -4,28 +4,24 @@ import { useCallback, useRef, useState } from "react";
 
 import { Alert, LayoutChangeEvent, StyleSheet, View } from "react-native";
 
+import { CommonActions } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { Button } from "@/components/buttons/Button";
-import { TextButton } from "@/components/buttons/TextButton";
-import { Input } from "@/components/inputs/Input";
-import { Text } from "@/components/text/Text";
+import { useLoadingModal } from "@/app/context/loading/LoadingModalContext";
+import { dataInit } from "@/app/init/data";
+import { AuthStackParamList, navigationRef } from "@/app/navigation";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import {
-  ILoadingModalContext,
-  useLoadingModal
-} from "@/contexts/LoadingProviderContext";
-import { AuthStackParamList } from "@/features/app/navigationTypes";
+import { Button } from "@/design-system/components/Button";
+import { Input } from "@/design-system/components/Input";
+import { Text } from "@/design-system/components/Text";
+import { TextButton } from "@/design-system/components/TextButton";
+import { colors } from "@/design-system/tokens/colors";
 import { Header } from "@/features/auth/components/Header";
 import { HeaderArcs } from "@/features/auth/components/HeaderArcs";
 import { formStyles } from "@/features/auth/styles/formStyles";
 import { handleSignIn } from "@/services/firebase/firebaseAuth";
 import { sendVerificationEmail } from "@/services/firebase/firebaseBackend";
-import { appInit } from "@/services/initialisation/appInit";
-import { colors } from "@/styles/colors";
-import { AppError } from "@/utils/error";
-import { log } from "@/utils/logging";
-import { navigationRef } from "@/utils/navigation";
+import { showErrorToast } from "@/utils/toast";
 
 interface FormErrors {
   email?: string;
@@ -48,7 +44,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
   const [headerHeight, setHeaderHeight] = useState(0);
 
   const dispatch = useDispatch();
-  const { setLoading } = useLoadingModal() as ILoadingModalContext;
+  const { setLoading } = useLoadingModal();
 
   const validateForm = useCallback((): boolean => {
     const newErrors: FormErrors = {};
@@ -102,8 +98,8 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
           );
         }
       }
-    } catch (error) {
-      new AppError(error, "Error sending verification email", true);
+    } catch {
+      showErrorToast("Error Sending Email");
       Alert.alert(
         "Error",
         "We encountered an issue sending the verification email. Please try again later."
@@ -159,8 +155,13 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
           return;
         }
 
-        const result = await appInit(dispatch);
-        navigationRef.navigate(result);
+        const result = await dataInit(dispatch, () => {});
+        navigationRef.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: result }]
+          })
+        );
       } catch (error) {
         if (error instanceof Error) {
           const errorMessages: Record<string, string> = {
@@ -178,8 +179,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
           if (errorMessage) {
             setErrors({ password: errorMessage });
           } else {
-            log("Error logging in: " + error.message, "error");
-            new AppError(error, "Error logging In", true);
+            showErrorToast("Error Logging In");
           }
         }
       } finally {

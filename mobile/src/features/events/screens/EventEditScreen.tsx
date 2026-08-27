@@ -13,29 +13,26 @@ import {
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { IconButton } from "@/components/buttons/IconButton";
-import { Text } from "@/components/text/Text";
-import { Screen } from "@/components/views/screen/Screen";
 import {
   ILoadingModalContext,
   useLoadingModal
-} from "@/contexts/LoadingProviderContext";
-import {
-  AllStackParamList,
-  EventsStackParamList
-} from "@/features/app/navigationTypes";
+} from "@/app/context/loading/LoadingModalContext";
+import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
+import { Screen } from "@/components/screen/Screen";
+import { IconButton } from "@/design-system/components/IconButton";
+import { Text } from "@/design-system/components/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { HomeNextEvent } from "@/features/home/components/HomeNextEvent";
 import {
   deleteEventFromDatabase,
   getEventsFromDatabase
 } from "@/services/firebase/firebaseEventFunctions";
 import { deleteEventInvitesFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
+import { createNotificationsForEvents } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
-import { colors } from "@/styles/colors";
 import { formatDate } from "@/utils/date";
-import { AppError } from "@/utils/error";
 import { haptics } from "@/utils/haptics";
-import { createNotificationsForEvents } from "@/utils/notifications";
+import { showErrorToast } from "@/utils/toast";
 
 import { SectionButton } from "../components/edit/SectionButton";
 import { useEventEdit } from "../hooks/useEventEdit";
@@ -74,8 +71,8 @@ export function EventEditScreen({ navigation, route }: EventEditScreenProps) {
       await deleteEventInvitesFromDatabase(event.id);
       const { upcomingEvents } = await getEventsFromDatabase(userId);
       await createNotificationsForEvents(upcomingEvents);
-    } catch (error) {
-      new AppError(error, "Error deleting event", true);
+    } catch {
+      showErrorToast("Error Deleting Event");
     } finally {
       setLoading(false);
     }

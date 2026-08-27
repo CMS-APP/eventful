@@ -7,8 +7,6 @@ import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
 import { GalleryPhoto } from "@/types/photoBoothGallery";
 import { parseDatabaseDate } from "@/utils/date";
-import { AppError } from "@/utils/error";
-import { log } from "@/utils/logging";
 import { generateUUID } from "@/utils/uuid";
 
 import { FIRESTORE_DB } from "./firebase";
@@ -102,48 +100,34 @@ export async function convertDateToTimestamp(userId: string) {
 }
 
 export async function convertUserFollowingToDatabaseFollowing(userId: string) {
-  try {
-    const user = (await getUserInfo(userId)) as any;
+  const user = (await getUserInfo(userId)) as any;
 
-    if (user?.following && Array.isArray(user.following)) {
-      await Promise.all(
-        user.following.map((following: string) =>
-          followUser(userId, following, false)
-        )
-      );
-    }
-  } catch (error) {
-    throw new AppError(
-      error,
-      "DatabaseUpdates: Error converting user following to database following"
+  if (user?.following && Array.isArray(user.following)) {
+    await Promise.all(
+      user.following.map((following: string) =>
+        followUser(userId, following, false)
+      )
     );
   }
 }
 
 export async function convertPollVotesToDatabasePollVotes(userId: string) {
-  try {
-    const poll = await getPollInDatabase();
+  const poll = await getPollInDatabase();
 
-    if (!poll) {
-      return;
-    }
-
-    const pollVote = await getVoteForUserInDatabase(poll, userId);
-
-    if (!pollVote) {
-      return;
-    }
-
-    const docRef = doc(FIRESTORE_DB, "pollVote", pollVote.pollId);
-    updateDoc(docRef, {
-      userId: userId
-    });
-  } catch (error) {
-    throw new AppError(
-      error,
-      "DatabaseUpdates: Error converting poll votes to database poll votes"
-    );
+  if (!poll) {
+    return;
   }
+
+  const pollVote = await getVoteForUserInDatabase(poll, userId);
+
+  if (!pollVote) {
+    return;
+  }
+
+  const docRef = doc(FIRESTORE_DB, "pollVote", pollVote.pollId);
+  updateDoc(docRef, {
+    userId: userId
+  });
 }
 
 export async function convertPhotoDataToGalleryPhotoData(userId: string) {
@@ -165,8 +149,5 @@ export async function convertPhotoDataToGalleryPhotoData(userId: string) {
     }
   }
 
-  // log("New photo data: " + JSON.stringify(newPhotoData), "info");
-
   await AsyncStorage.setItem("photosData", JSON.stringify(newPhotoData));
-  log("Photo data updated to gallery photo data", "info");
 }

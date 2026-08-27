@@ -4,8 +4,8 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { colors } from "@/styles/colors";
-import { getHitSlop } from "@/utils/hitSlop";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 
 export function CustomiseCollageItem({
   children,
