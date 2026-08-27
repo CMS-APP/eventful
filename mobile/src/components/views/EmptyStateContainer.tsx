@@ -20,7 +20,7 @@ export function EmptyStateContainer({
   dark = false
 }: EmptyStateContainerProps) {
   const textColor = dark ? colors.white : colors.black;
-  const backgroundColor = dark ? colors.primaryTint : colors.lightGray;
+  const backgroundColor = dark ? colors.primaryTint3 : colors.lightGray;
 
   return (
     <View style={[styles.container, { backgroundColor }]}>

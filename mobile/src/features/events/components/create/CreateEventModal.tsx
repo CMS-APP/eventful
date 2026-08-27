@@ -88,7 +88,7 @@ export function CreateEventModal({
         onPress={createEvent}
         color={colors.primaryTint}
         textColor={colors.white}
-        icon="plus"
+        leadingIcon="plus"
       />
     </ModalView>
   );

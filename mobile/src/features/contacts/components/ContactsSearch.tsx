@@ -20,6 +20,7 @@ interface ContactsSearchProps {
   inset?: boolean;
   onFocus?: () => void;
   onBlur?: () => void;
+  dark?: boolean;
 }
 
 export function ContactsSearch({
@@ -32,8 +33,11 @@ export function ContactsSearch({
   showSeparator = true,
   inset = true,
   onFocus,
-  onBlur
+  onBlur,
+  dark = false
 }: ContactsSearchProps) {
+  const textColor = dark ? colors.white : colors.black;
+
   const renderSearch = useCallback(
     (disabled: boolean) => {
       return (
@@ -46,13 +50,13 @@ export function ContactsSearch({
                 ? styles.searchContainerWithoutButton
                 : styles.searchContainerFullWidth,
             {
-              backgroundColor: colors.lightGray
+              backgroundColor: dark ? colors.primaryTint3 : colors.lightGray
             }
           ]}
         >
-          <FontAwesome5 name="search" size={16} color={colors.black} />
+          <FontAwesome5 name="search" size={16} color={textColor} />
           {disabled ? (
-            <Text type="body" style={styles.buttonLabel}>
+            <Text type="body" style={styles.buttonLabel} color={textColor}>
               {placeholder}
             </Text>
           ) : (
@@ -60,13 +64,13 @@ export function ContactsSearch({
               <TextInput
                 ref={textInputRef}
                 aria-disabled={disabled}
-                style={styles.textInput}
+                style={[styles.textInput, { color: textColor }]}
                 value={search}
                 onChangeText={(text) => setSearch(text)}
                 onFocus={onFocus}
                 onBlur={onBlur}
                 placeholder={placeholder}
-                placeholderTextColor={colors.black}
+                placeholderTextColor={dark ? colors.gray : colors.lightGray}
                 autoCapitalize="none"
                 inputAccessoryViewID={accessoryId}
               />
@@ -79,7 +83,7 @@ export function ContactsSearch({
                   <FontAwesome5
                     name="times-circle"
                     size={16}
-                    color={colors.black}
+                    color={dark ? colors.white : colors.black}
                   />
                 </TouchableOpacity>
               )}
@@ -102,7 +106,10 @@ export function ContactsSearch({
       placeholder,
       accessoryId,
       onFocus,
-      onBlur
+      onBlur,
+      textColor,
+      dark,
+      inset
     ]
   );
 
@@ -136,20 +143,20 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     alignItems: "center",
-    borderRadius: 16,
+    borderRadius: 12,
     flexDirection: "row",
-    gap: 12,
+    gap: 6,
     minHeight: 44,
     paddingHorizontal: 16
+  },
+  searchContainerFullWidth: {
+    marginHorizontal: 0
   },
   searchContainerWithButton: {
     marginHorizontal: 0
   },
   searchContainerWithoutButton: {
     marginHorizontal: 24
-  },
-  searchContainerFullWidth: {
-    marginHorizontal: 0
   },
   separator: {
     backgroundColor: colors.lightGray,

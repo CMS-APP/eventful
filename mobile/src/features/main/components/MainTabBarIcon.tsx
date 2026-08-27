@@ -33,7 +33,7 @@ export function MainTabBarIcon({
       <FontAwesome5 name={iconName} size={24} color={iconColor} />
       {notifications > 0 && (
         <View style={styles.badge}>
-          <Text type="header" style={styles.badgeText} center>
+          <Text type="subHeader" style={styles.badgeText} center>
             {notifications}
           </Text>
         </View>

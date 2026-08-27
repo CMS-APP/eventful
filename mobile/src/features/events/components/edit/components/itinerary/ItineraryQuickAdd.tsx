@@ -23,7 +23,7 @@ export function ItineraryQuickAdd({
 }) {
   return (
     <View style={styles.container}>
-      <Text type="subHeader" color="white" style={styles.title}>
+      <Text type="body" color="white" style={styles.title}>
         Itinerary Quick Add
       </Text>
       <View style={styles.buttonsContainer}>

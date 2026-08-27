@@ -79,7 +79,7 @@ export function PhotoBoothUnlockModal({
 
       <Button
         text="Unlock"
-        icon="unlock"
+        leadingIcon="unlock"
         onPress={unlockButtonAction}
         color={colors.primaryTint}
         textColor={colors.white}

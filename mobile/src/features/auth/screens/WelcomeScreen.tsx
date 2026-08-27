@@ -58,7 +58,7 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
             onPress={handleSignUp}
             color={colors.primary}
             textColor={colors.white}
-            icon="envelope"
+            leadingIcon="envelope"
           />
 
           <AppleLogin />

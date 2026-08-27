@@ -6,28 +6,67 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/Text";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { TextType } from "@/design-system/tokens/text";
 import { haptics } from "@/utils/haptics";
+
+type buttonSizes = "small" | "medium" | "large";
+
+type ButtonStyles = {
+  padding: number;
+  borderRadius: number;
+  gap: number;
+};
+
+const buttonStyles: Record<buttonSizes, ButtonStyles> = {
+  small: {
+    padding: 12,
+    borderRadius: 12,
+    gap: 4
+  },
+  medium: {
+    padding: 16,
+    borderRadius: 16,
+    gap: 8
+  },
+  large: {
+    padding: 20,
+    borderRadius: 20,
+    gap: 8
+  }
+};
+
+const iconSizes = {
+  small: 16,
+  medium: 20,
+  large: 24
+};
+
+const buttonTextStyles = {
+  small: "body",
+  medium: "subHeader",
+  large: "header"
+};
 
 interface ButtonProps {
   text: string;
-  subText?: string;
-  onPress: () => void;
   color: string;
   textColor: string;
+  size?: buttonSizes;
+  onPress: () => void;
   flex?: number;
-  icon?: keyof typeof FontAwesome5.glyphMap;
+  leadingIcon?: keyof typeof FontAwesome5.glyphMap;
   disabled?: boolean;
   loading?: boolean;
 }
 
 export function Button({
   text,
-  subText,
-  onPress,
   color,
   textColor,
+  size = "medium",
+  onPress,
   flex = 0,
-  icon,
+  leadingIcon,
   disabled = false,
   loading = false
 }: ButtonProps) {
@@ -37,13 +76,9 @@ export function Button({
   };
 
   const flexContainer = flex ? styles.flexContainer : undefined;
-
-  const buttonStyle = [
-    styles.button,
-    {
-      backgroundColor: color
-    }
-  ];
+  const buttonStyle = buttonStyles[size];
+  const iconSize = iconSizes[size];
+  const textStyle = buttonTextStyles[size];
 
   return (
     <TouchableOpacity
@@ -53,25 +88,24 @@ export function Button({
       activeOpacity={0.5}
       hitSlop={getHitSlop("large")}
     >
-      <View style={buttonStyle}>
+      <View style={[styles.button, { backgroundColor: color, ...buttonStyle }]}>
         <View style={styles.textContainer}>
-          {icon && <FontAwesome5 name={icon} size={20} color={textColor} />}
-          <Text type="subHeader" color={textColor} style={styles.text}>
-            {text}
-          </Text>
-          {loading && (
-            <ActivityIndicator
-              size="small"
+          {leadingIcon && (
+            <FontAwesome5
+              name={leadingIcon}
+              size={iconSize}
               color={textColor}
-              style={styles.loading}
             />
           )}
-        </View>
-        {subText && (
-          <Text type="body" color={textColor} style={styles.text}>
-            {subText}
+          <Text
+            type={textStyle as TextType}
+            color={textColor}
+            style={styles.text}
+          >
+            {text}
           </Text>
-        )}
+          {loading && <ActivityIndicator size={iconSize} color={textColor} />}
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -93,10 +127,6 @@ const styles = StyleSheet.create({
   flexContainer: {
     flex: 1,
     width: "auto"
-  },
-  loading: {
-    height: 20,
-    width: 20
   },
   text: {
     flexShrink: 1,

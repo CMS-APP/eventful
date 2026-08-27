@@ -30,7 +30,7 @@ export function PhotoBoothCustomise() {
       <View style={styles.container}>
         <Button
           text="Layout & Filters"
-          icon="images"
+          leadingIcon="images"
           onPress={() => {
             navigation.navigate("PhotoBoothLayout");
           }}
@@ -40,7 +40,7 @@ export function PhotoBoothCustomise() {
 
         <Button
           text="Text & Colors"
-          icon="font"
+          leadingIcon="font"
           onPress={() => {
             navigation.navigate("PhotoBoothTextColors");
           }}
@@ -49,7 +49,7 @@ export function PhotoBoothCustomise() {
         />
         <Button
           text="Settings"
-          icon="cog"
+          leadingIcon="cog"
           onPress={() => {
             navigation.navigate("PhotoBoothSettings");
           }}
@@ -58,7 +58,7 @@ export function PhotoBoothCustomise() {
         />
         <Button
           text="Preview"
-          icon="eye"
+          leadingIcon="eye"
           onPress={() => {
             navigation.navigate("PhotoBoothPreview");
           }}

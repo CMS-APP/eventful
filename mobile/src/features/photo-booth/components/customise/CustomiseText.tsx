@@ -1,38 +1,19 @@
 import { useCallback, useState } from "react";
 
-import { StyleSheet, TextStyle, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { Dropdown } from "@/design-system/components/Dropdown";
-import { fontStyles } from "@/design-system/tokens/fonts";
+import { CUSTOM_FONTS, getCustomFontStyle } from "@/design-system/tokens/fonts";
 
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 import { CustomiseTextRow } from "./CustomiseTextRow";
 
-export function CustomiseText() {
-  const fonts = {
-    Anton: { style: fontStyles.anton, font: "Anton-Regular" },
-    "Bebas Neue": { style: fontStyles.bebasNeue, font: "BebasNeue-Regular" },
-    Lobster: { style: fontStyles.lobster, font: "Lobster" },
-    "Great Vibes": {
-      style: fontStyles.greatVibes,
-      font: "GreatVibes-Regular"
-    },
-    Playfair: { style: fontStyles.playfair, font: "Playfair-Variable" },
-    "Gotham Bold": { style: fontStyles.gotham, font: "Gotham-Bold" },
-    Poppins: {
-      style: fontStyles.poppinsRegular,
-      font: "Poppins-Regular"
-    },
-    "Poppins Bold": {
-      style: fontStyles.poppinsMedium,
-      font: "Poppins-Medium"
-    },
-    "Poppins Bold Italic": {
-      style: fontStyles.poppinsMediumItalic,
-      font: "Poppins-Medium-Italic"
-    }
-  };
+const fontNames = Object.values(CUSTOM_FONTS);
+const fontStyles = Object.fromEntries(
+  fontNames.map((name) => [name, getCustomFontStyle(name)])
+);
 
+export function CustomiseText() {
   const {
     title,
     setTitle,
@@ -115,7 +96,7 @@ export function CustomiseText() {
         placeholder="Title"
         handleTitleFontPress={handleTitleFontPress}
         handleTitleSizePress={handleTitleSizePress}
-        fonts={fonts}
+        fontStyles={fontStyles}
         customTitleFont={customTitleFont}
         customTitleFontSize={customTitleFontSize}
       />
@@ -126,16 +107,14 @@ export function CustomiseText() {
         placeholder="Subtitle"
         handleTitleFontPress={handleSubTitleFontPress}
         handleTitleSizePress={handleSubTitleSizePress}
-        fonts={fonts}
+        fontStyles={fontStyles}
         customTitleFont={customSubTitleFont}
         customTitleFontSize={customSubTitleFontSize}
       />
 
       <Dropdown
-        data={Object.keys(fonts)}
-        textStyles={Object.values(fonts).map(
-          (font: { style: TextStyle }) => font.style
-        )}
+        data={fontNames}
+        textStyles={Object.values(fontStyles)}
         isVisible={isFontPickerVisible}
         setIsVisible={setIsFontPickerVisible}
         placeholder="Select Font"

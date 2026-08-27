@@ -10,16 +10,18 @@ import {
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { TextButton } from "@/components/buttons/TextButton";
-import { Input } from "@/components/inputs/Input";
-import { Text } from "@/components/text/Text";
+import { Input } from "@/design-system/components/Input";
+import { Text } from "@/design-system/components/Text";
+import { TextButton } from "@/design-system/components/TextButton";
+import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { ContactsSearch } from "@/features/contacts/components/ContactsSearch";
 import {
   COUNTRIES,
   Country,
   getCountryByCode,
   getDefaultCountryCode
-} from "@/constants/countries";
-import { ContactsSearch } from "@/features/contacts/components/ContactsSearch";
+} from "@/features/events/countries";
 import {
   AddressField,
   AddressFieldKey,
@@ -28,9 +30,7 @@ import {
   formatAddress,
   getAddressFieldsForCountry
 } from "@/services/address/addressFormat";
-import { colors } from "@/styles/colors";
 import { Event } from "@/types/Event";
-import { getHitSlop } from "@/utils/hitSlop";
 
 interface EventLocationEditProps {
   event: Event;
@@ -173,6 +173,7 @@ export function EventLocationEdit({ event, setEvent }: EventLocationEditProps) {
         showSeparator={false}
         inset={false}
         onFocus={handleSearchFocus}
+        dark
       />
 
       {showResults && (
@@ -233,8 +234,8 @@ export function EventLocationEdit({ event, setEvent }: EventLocationEditProps) {
               value={addressValues[field.key] ?? ""}
               onChangeText={(text) => handleAddressFieldChange(field.key, text)}
               dark
-              backgroundColor={colors.lightGray}
-              textColor={colors.black}
+              backgroundColor={colors.primaryTint3}
+              textColor={colors.white}
             />
           ))}
         </View>
@@ -244,9 +245,12 @@ export function EventLocationEdit({ event, setEvent }: EventLocationEditProps) {
 }
 
 const styles = StyleSheet.create({
+  addressFields: {
+    gap: 6
+  },
   container: {
     flex: 1,
-    gap: 16,
+    gap: 6,
     paddingHorizontal: 24
   },
   emptyState: {
@@ -256,30 +260,27 @@ const styles = StyleSheet.create({
   },
   resultItem: {
     alignItems: "center",
+    backgroundColor: colors.lightGray + "40",
     borderRadius: 12,
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 12,
-    backgroundColor: colors.lightGray + "40"
+    padding: 12
   },
   resultItemSelected: {
     backgroundColor: colors.lightGray
+  },
+  resultsContainer: {
+    gap: 8
   },
   resultsList: {
     backgroundColor: colors.white,
     borderRadius: 16,
     gap: 4,
-    paddingVertical: 4,
-    height: 200
+    height: 200,
+    paddingVertical: 4
   },
   resultsListContainer: {
     gap: 4,
     marginHorizontal: 4
-  },
-  resultsContainer: {
-    gap: 8
-  },
-  addressFields: {
-    gap: 16
   }
 });

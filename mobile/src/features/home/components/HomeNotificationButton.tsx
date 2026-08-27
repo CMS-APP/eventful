@@ -36,19 +36,19 @@ export function HomeNotificationButton({
     >
       <View style={styles.iconContainer}>
         <FontAwesome5 name={icon} size={20} color={colors.black} />
+
+        {unreadNotifications > 0 && (
+          <View style={styles.badge}>
+            <Text type="subHeader" style={styles.badgeText} center>
+              {unreadNotifications}
+            </Text>
+          </View>
+        )}
       </View>
 
       <Text type="body" color={colors.black}>
         {text}
       </Text>
-
-      {unreadNotifications > 0 && (
-        <View style={styles.badge}>
-          <Text type="header" style={styles.badgeText} center>
-            {unreadNotifications}
-          </Text>
-        </View>
-      )}
     </TouchableOpacity>
   );
 }
@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     height: 20,
     justifyContent: "center",
-    minWidth: 24,
     paddingHorizontal: 6,
     position: "absolute",
     right: -4,
@@ -68,7 +67,8 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     color: colors.white,
-    fontSize: 12
+    fontSize: 12,
+    right: -1
   },
   container: {
     alignItems: "center",

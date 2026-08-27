@@ -46,9 +46,8 @@ export function InviteButtons({
   return (
     <View style={styles.container}>
       <Button
-        text="Guests"
-        subText={`Invited: ${guestCount}`}
-        icon="user"
+        text={"Guests: " + guestCount}
+        leadingIcon="user"
         color={colors.primary}
         textColor={colors.white}
         onPress={() =>
@@ -57,9 +56,8 @@ export function InviteButtons({
       />
 
       <Button
-        text="Itinerary"
-        subText={`Activities: ${getActivityCount()}`}
-        icon="calendar"
+        text={"Activities: " + getActivityCount()}
+        leadingIcon="calendar"
         color={colors.primary}
         textColor={colors.white}
         onPress={() =>
@@ -68,9 +66,8 @@ export function InviteButtons({
       />
 
       <Button
-        text="Music"
-        subText={`Playlists: ${getPlaylistCount()}`}
-        icon="play-circle"
+        text={"Music: " + getPlaylistCount()}
+        leadingIcon="play-circle"
         color={colors.primary}
         textColor={colors.white}
         onPress={() =>
@@ -80,8 +77,7 @@ export function InviteButtons({
 
       <Button
         text="Food & Drink"
-        subText="Optional dietary requirements"
-        icon="coffee"
+        leadingIcon="coffee"
         color={colors.primary}
         textColor={colors.white}
         onPress={() =>

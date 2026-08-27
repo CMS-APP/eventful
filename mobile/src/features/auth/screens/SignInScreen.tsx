@@ -244,7 +244,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
             onPress={signIn}
             color={colors.primary}
             textColor={colors.white}
-            icon="sign-in-alt"
+            leadingIcon="sign-in-alt"
           />
 
           <View style={styles.orContainer}>

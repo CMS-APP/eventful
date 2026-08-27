@@ -7,8 +7,6 @@ import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { haptics } from "@/utils/haptics";
 
-const SWITCH_ROW_MIN_HEIGHT = 48;
-
 interface SwitchButtonProps {
   title: string;
   isChecked: boolean;
@@ -66,7 +64,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     flex: 1,
     justifyContent: "center",
-    minHeight: SWITCH_ROW_MIN_HEIGHT,
     paddingHorizontal: 12,
     paddingVertical: 12
   },
@@ -77,7 +74,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 12,
     justifyContent: "center",
-    minHeight: SWITCH_ROW_MIN_HEIGHT,
     paddingHorizontal: 12
   }
 });

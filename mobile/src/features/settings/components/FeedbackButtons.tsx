@@ -47,7 +47,7 @@ export function FeedbackButtons() {
             text="Feature Request"
             color={colors.primaryTint3}
             textColor={colors.white}
-            icon="lightbulb"
+            leadingIcon="lightbulb"
             onPress={featureRequest}
           />
 
@@ -55,7 +55,7 @@ export function FeedbackButtons() {
             text="Report Bug"
             color={colors.primaryTint3}
             textColor={colors.white}
-            icon="bug"
+            leadingIcon="bug"
             onPress={reportBug}
           />
         </View>

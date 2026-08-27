@@ -76,16 +76,12 @@ export function ContactInviteItem({ eventInvite }: ContactInviteItemProps) {
           <UserPicture uid={event.userId} size={50} />
           <View style={styles.iconsContainer}>
             <FontAwesome5
-              name={response === "accept" ? "check-circle" : "check"}
+              name={"check"}
               size={16}
               color={response === "accept" ? colors.primary : colors.gray}
             />
             <FontAwesome5
-              name={
-                response === "maybe" || response === "pending"
-                  ? "question-circle"
-                  : "question"
-              }
+              name={"question"}
               size={16}
               color={
                 response === "maybe" || response === "pending"
@@ -94,7 +90,7 @@ export function ContactInviteItem({ eventInvite }: ContactInviteItemProps) {
               }
             />
             <FontAwesome5
-              name={response === "decline" ? "times-circle" : "times"}
+              name={"times"}
               size={16}
               color={response === "decline" ? colors.tertiary : colors.gray}
             />

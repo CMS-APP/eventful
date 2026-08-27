@@ -1,36 +1,21 @@
-import { getAuth } from "@react-native-firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useCallback, useState } from "react";
 
 import { Alert } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-
-import { AllStackParamList } from "@/app/navigation";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
-import {
-  deleteUserData,
-  updateUserInfo
-} from "@/services/firebase/firebaseUserFunctions";
+import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { clearCache as clearImageCache } from "@/services/local/cache";
-import {
-  UserState,
-  clearSpotifyData,
-  clearStorage,
-  setUserData
-} from "@/store/UserSlice";
+import { UserState, clearSpotifyData } from "@/store/UserSlice";
 import { showErrorToast } from "@/utils/toast";
 
 export function DataActionButtons() {
   const userId = useSelector((state: UserState) => state.uid);
   const dispatch = useDispatch();
-  const navigation = useNavigation<StackNavigationProp<AllStackParamList>>();
 
   const [clearingCache, setClearingCache] = useState(false);
-  const [resettingData, setResettingData] = useState(false);
   const [resettingSpotify, setResettingSpotify] = useState(false);
 
   const handleClearCache = useCallback(async () => {
@@ -59,55 +44,6 @@ export function DataActionButtons() {
       ]
     );
   }, [handleClearCache]);
-
-  const deleteAllUserData = useCallback(
-    async (move = true) => {
-      try {
-        setResettingData(true);
-        await deleteUserData(userId);
-        dispatch(clearStorage());
-
-        const auth = getAuth();
-        const user = auth.currentUser;
-        if (user) {
-          const data = {
-            uid: user.uid,
-            email: user.email,
-            emailVerified: user.emailVerified
-          };
-          dispatch(setUserData(data));
-        }
-
-        if (move) {
-          Alert.alert("Success", "All your data has been deleted.");
-          navigation.reset({
-            index: 0,
-            routes: [{ name: "Onboarding" }] as never
-          });
-        }
-      } catch {
-        showErrorToast("Error Deleting Data");
-      } finally {
-        setResettingData(false);
-      }
-    },
-    [dispatch, navigation, userId]
-  );
-
-  const deleteDataAlert = useCallback(() => {
-    Alert.alert(
-      "Reset Data",
-      "Are you sure you want to reset all your data? This process is irreversible",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Yes",
-          style: "destructive",
-          onPress: () => void deleteAllUserData(true)
-        }
-      ]
-    );
-  }, [deleteAllUserData]);
 
   const resetSpotifyData = useCallback(async () => {
     try {
@@ -149,7 +85,7 @@ export function DataActionButtons() {
         color={colors.primaryTint3}
         textColor={colors.white}
         onPress={resetSpotifyDataAlert}
-        icon="spotify"
+        leadingIcon="spotify"
         loading={resettingSpotify}
       />
 
@@ -158,17 +94,8 @@ export function DataActionButtons() {
         color={colors.primaryTint3}
         textColor={colors.white}
         onPress={clearCacheAlert}
-        icon="database"
+        leadingIcon="database"
         loading={clearingCache}
-      />
-
-      <Button
-        text="Reset Data"
-        color={colors.primaryTint3}
-        textColor={colors.white}
-        onPress={deleteDataAlert}
-        icon="sync"
-        loading={resettingData}
       />
     </>
   );

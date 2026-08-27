@@ -150,7 +150,7 @@ export function PhotoBoothPhoto() {
         {photo.type === "local" && (
           <Button
             text={premium ? "Upload" : "Upgrade to upload"}
-            icon="upload"
+            leadingIcon="upload"
             onPress={handleUpload}
             color={colors.primary}
             textColor={colors.white}
@@ -161,7 +161,7 @@ export function PhotoBoothPhoto() {
         {photo.type === "cloud" && (
           <Button
             text="Download"
-            icon="download"
+            leadingIcon="download"
             onPress={handleDownload}
             color={colors.primary}
             textColor={colors.white}

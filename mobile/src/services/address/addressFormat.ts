@@ -1,6 +1,6 @@
 import PostalAddress, { addressFormats } from "i18n-postal-address";
 
-import { labelFromNameType } from "@/constants/addressNameTypeLabels";
+import { labelFromNameType } from "@/features/events/addressNameTypeLabels";
 
 import {
   CountryAddressMetadata,
@@ -109,10 +109,7 @@ function getFieldLabel(
   }
 
   if (key === "address2") {
-    return labelFromNameType(
-      metadata?.sublocality_name_type,
-      "Address line 2"
-    );
+    return labelFromNameType(metadata?.sublocality_name_type, "Address line 2");
   }
 
   if (key === "city") {

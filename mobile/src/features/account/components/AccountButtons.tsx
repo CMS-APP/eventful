@@ -67,7 +67,7 @@ export function AccountButtons() {
         color={colors.secondary}
         textColor={colors.white}
         flex={undefined}
-        icon="gift"
+        leadingIcon="gift"
         onPress={() => {
           navigation.navigate("Paywall" as never);
         }}
@@ -78,7 +78,7 @@ export function AccountButtons() {
         color={colors.primaryTint}
         textColor={colors.white}
         flex={undefined}
-        icon="cog"
+        leadingIcon="cog"
         onPress={() => {
           navigation.navigate("Settings" as never);
         }}
@@ -89,7 +89,7 @@ export function AccountButtons() {
         color={colors.primary}
         textColor={colors.white}
         flex={undefined}
-        icon="sign-out-alt"
+        leadingIcon="sign-out-alt"
         onPress={() => {
           signOutAlert();
         }}

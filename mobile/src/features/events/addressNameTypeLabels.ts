@@ -1,8 +1,3 @@
-/**
- * Maps Google's libaddressinput name-type codes to English field labels.
- * These are universal types returned by the Address Data Service — not per-country.
- * @see https://github.com/google/libaddressinput/wiki/AddressValidationMetadata
- */
 export const ADDRESS_NAME_TYPE_LABELS: Record<string, string> = {
   area: "Area",
   city: "City",

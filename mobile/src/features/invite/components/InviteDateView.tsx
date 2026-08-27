@@ -34,7 +34,7 @@ export function InviteDateView({ date }: InviteDateViewProps) {
           </Text>
           <View style={styles.line} />
         </View>
-        <Text type="header" style={styles.day}>
+        <Text type="title" style={styles.day}>
           {day}
         </Text>
         <View style={styles.lineContainer}>
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
   },
   day: {
     flex: 1,
-    fontSize: 50,
     textAlign: "center"
   },
   dayName: {

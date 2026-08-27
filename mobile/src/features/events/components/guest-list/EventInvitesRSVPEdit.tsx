@@ -146,33 +146,30 @@ export function EventInvitesRSVPEdit({
     <View style={styles.container}>
       <View style={styles.buttonsContainer}>
         <Button
-          text="In-App Friends"
+          text={"In-App Friends: " + appList.length}
           onPress={openInviteFriends}
           flex={1}
           color={colors.lightGray}
           textColor={colors.black}
-          subText={"Invited: " + appList.length}
-          icon="users"
+          leadingIcon="users"
         />
 
         <Button
-          text="Invite Via Link"
+          text={"Invite Via Link: " + linkList.length}
           onPress={openInviteLink}
           flex={1}
           color={colors.lightGray}
           textColor={colors.black}
-          icon="link"
-          subText={"Responded: " + linkList.length}
+          leadingIcon="link"
         />
 
         <Button
-          text="Manual Guests"
+          text={"Manual Guests: " + manualList.length}
           onPress={openManualGuest}
           flex={1}
           color={colors.lightGray}
           textColor={colors.black}
-          icon="user"
-          subText={"Added: " + manualList.length}
+          leadingIcon="user"
         />
       </View>
 
