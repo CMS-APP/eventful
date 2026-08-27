@@ -96,7 +96,6 @@ export async function processAuthResponse(
     // Prevent duplicate processing
     const responseKey = `${code}-${response.type}`;
     if (processedResponseRef.current === responseKey) {
-      log("Already processed this Spotify authorization code", "info");
       return null;
     }
 
@@ -118,7 +117,6 @@ export async function processAuthResponse(
   }
 
   if (response.type === "cancel") {
-    log("Spotify sign in cancelled", "info");
     return null;
   }
 

@@ -17,7 +17,6 @@ import { colors } from "@/design-system/tokens/colors";
 import { createEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
 import { UserState } from "@/store/UserSlice";
 import { Event, NewEvent } from "@/types/Event";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 interface CreateEventModalProps {
@@ -50,8 +49,7 @@ export function CreateEventModal({
       await createEventInDatabase(event, user);
 
       navigation.navigate("EventEdit", { event });
-    } catch (error) {
-      log(`Error creating event: ${(error as any)?.message ?? error}`, "error");
+    } catch {
       showErrorToast("Error Creating Event");
     }
   }, [eventName, userId, navigation, setShowModal]);

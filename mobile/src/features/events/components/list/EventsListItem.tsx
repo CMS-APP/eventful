@@ -21,7 +21,6 @@ import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { formatDate, formatTime } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
-import { log } from "@/utils/logging";
 
 interface EventsListItemProps {
   index: number;
@@ -61,7 +60,6 @@ export function EventsListItem({
 
   const onPress = useCallback(async () => {
     haptics.soft();
-    log(`Event: ${JSON.stringify(event, null, 2)}`, "debug");
 
     if (event.userId === userId) {
       navEvents.navigate("EventEdit", { event });

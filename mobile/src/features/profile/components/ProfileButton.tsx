@@ -17,7 +17,6 @@ import { padding } from "@/design-system/tokens/padding";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
 import { User } from "@/types/User";
-import { log } from "@/utils/logging";
 
 import { ProfilePicture } from "./ProfilePicture";
 
@@ -31,7 +30,6 @@ export function ProfileButton({ uid }: ProfileButtonProps) {
   const navigation = useNavigation() as StackNavigationProp<HomeStackParamList>;
 
   async function fetchUser() {
-    log("Fetching user details", "info");
     const user = await getUserInfo(uid);
     setUser(user);
   }

@@ -12,7 +12,6 @@ import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
-import { log } from "@/utils/logging";
 
 interface InviteProfilePicturesProps {
   event: Event;
@@ -25,7 +24,6 @@ export function InviteProfilePictures({ event }: InviteProfilePicturesProps) {
 
   useEffect(() => {
     async function fetchInvites() {
-      log("Fetching invites", "info");
       const invites = await getEventRecipientInvites(event.id);
       const userPromises = invites.map((invite: Invite) =>
         getUserInfo(invite.recipient)

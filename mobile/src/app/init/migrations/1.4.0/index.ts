@@ -1,9 +1,11 @@
-import { followUser, getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import {
+  followUser,
+  getUserInfo
+} from "@/services/firebase/firebaseUserFunctions";
 import { log } from "@/utils/logging";
 
 export async function convertUserFollowingToDatabaseFollowing(userId: string) {
   try {
-    log("Converting user following to database following", "info");
     const user = (await getUserInfo(userId)) as any;
 
     if (user?.following && Array.isArray(user.following)) {

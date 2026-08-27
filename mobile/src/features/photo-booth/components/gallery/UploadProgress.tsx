@@ -18,7 +18,6 @@ import {
 import { convertEventTitleToHash } from "@/services/photo-booth/utils";
 import { UserState } from "@/store/UserSlice";
 import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 type PhotoState = {
@@ -66,11 +65,7 @@ export function UploadProgress({
       setDownloading(true);
       await downloadCloudPhotos(event, photoState.cloud);
       await refreshEvent(event);
-    } catch (error) {
-      log(
-        `Error downloading photos: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+    } catch {
       showErrorToast("Error Downloading Photos");
     } finally {
       setDownloading(false);
@@ -83,11 +78,7 @@ export function UploadProgress({
       setUploading(true);
       await uploadPhotosToCloud(userId, event.eventTitle, photoState.local);
       await refreshEvent(event);
-    } catch (error) {
-      log(
-        `Error uploading photos: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+    } catch {
       showErrorToast("Error Uploading Photos");
     } finally {
       setUploading(false);
@@ -104,11 +95,7 @@ export function UploadProgress({
         "Link copied",
         "The gallery link has been copied to your clipboard."
       );
-    } catch (error) {
-      log(
-        `Error copying photo booth gallery link: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+    } catch {
       showErrorToast("Error Copying Link");
     }
   }, [canCopyWebGalleryLink, event.eventTitle, isSyncing, userId]);

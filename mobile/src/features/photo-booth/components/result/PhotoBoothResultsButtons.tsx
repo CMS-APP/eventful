@@ -11,16 +11,15 @@ import * as FileSystem from "expo-file-system/legacy";
 import * as MediaLibrary from "expo-media-library";
 
 import { colors } from "@/design-system/tokens/colors";
+import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
+import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 import {
   savePhotoDataLocally,
   sharePhoto
 } from "@/services/photo-booth/localPhotos";
 import { saveIndividualPhoto } from "@/services/photo-booth/photos";
-import { log } from "@/utils/logging";
 
 import type { PhotoBoothStackNavigation } from "../../photoBoothStackParams";
-import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
-import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 import { PhotoBoothResultsButton } from "./PhotoBoothResultsButton";
 
 export function PhotoBoothResultsButtons({
@@ -56,9 +55,7 @@ export function PhotoBoothResultsButtons({
       }
 
       if (saveIndividualPhotos) {
-        log("Saving individual photos, count: " + photos.length, "info");
         for (const photo of photos) {
-          log("Saving photo: " + photo.uri, "info");
           await saveIndividualPhoto(photo as PhotoResult);
         }
       }
@@ -85,8 +82,7 @@ export function PhotoBoothResultsButtons({
         "Photo saved",
         "Your photo has been saved to your camera roll"
       );
-    } catch (error) {
-      console.error(error);
+    } catch {
       Alert.alert("Error", "Failed to save photo");
     } finally {
       setLoading(false);
@@ -106,8 +102,7 @@ export function PhotoBoothResultsButtons({
       });
 
       await sharePhoto(capturedUri);
-    } catch (error) {
-      console.error(error);
+    } catch {
       Alert.alert("Error", "Failed to share photo");
     }
   };

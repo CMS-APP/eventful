@@ -16,7 +16,6 @@ import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { InAppNotification } from "@/types/InAppNotification";
 import { User } from "@/types/User";
 import { haptics } from "@/utils/haptics";
-import { log } from "@/utils/logging";
 
 interface HomeFollowsItemProps {
   notification: InAppNotification;
@@ -28,7 +27,6 @@ export function HomeFollowsItem({ notification }: HomeFollowsItemProps) {
 
   useEffect(() => {
     async function fetchUserDetails() {
-      log("Fetching user details", "info");
       const userDetails = await getUserInfo(notification.senderId);
       setUserDetails(userDetails);
     }

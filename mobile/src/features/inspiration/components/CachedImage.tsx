@@ -11,7 +11,6 @@ import {
   saveLocalImageToCache
 } from "@/services/local/cache";
 import { Photo } from "@/types/Photo";
-import { log } from "@/utils/logging";
 
 interface CachedImageProps {
   photo: Photo;
@@ -56,17 +55,12 @@ export function CachedImage({
       }
 
       if (cachedUri) {
-        log(`CachedImage: Using cached image for ${cacheFilename}`, "debug");
         setImageUri(cachedUri);
         setLoading(false);
         return;
       }
 
       // If not in cache, download and cache it
-      log(
-        `CachedImage: Downloading and caching image for ${cacheFilename}`,
-        "debug"
-      );
       let cachedPath: string | null = null;
 
       if (postId !== undefined && imageIndex !== undefined) {
@@ -77,20 +71,11 @@ export function CachedImage({
 
       if (cachedPath) {
         setImageUri(cachedPath);
-        log(
-          `CachedImage: Successfully cached image for ${cacheFilename}`,
-          "debug"
-        );
       } else {
         // Fallback to original URI if caching fails
         setImageUri(photo.uri);
-        log(
-          `CachedImage: Fallback to original URI for ${cacheFilename}`,
-          "warn"
-        );
       }
-    } catch (error) {
-      log(`CachedImage: Error loading image: ${error}`, "error");
+    } catch {
       setError(true);
       // Fallback to original URI
       setImageUri(photo.uri);

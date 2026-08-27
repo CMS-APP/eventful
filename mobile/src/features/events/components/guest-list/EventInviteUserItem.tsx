@@ -25,7 +25,6 @@ import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
 import { UserInvite } from "@/types/UserInvite";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 interface EventInviteUserItemProps {
@@ -55,8 +54,6 @@ export function EventInviteUserItem({
     const invite = await checkInvitedToEvent(event, user.uid);
     if (invite) {
       setInviteId(invite.id);
-    } else {
-      log("User is not invited to the event, inviteId is null", "warn");
     }
   }, [user, event]);
 
@@ -85,18 +82,12 @@ export function EventInviteUserItem({
   const deleteGuest = useCallback(async () => {
     if (invite.type === "app") {
       try {
-        log("Removing user from event", "info");
         event.invited = event.invited.filter(
           (invited: string) => invited !== user.uid
         );
         await updateEventInDatabase(event);
         await deleteInviteFromDatabase(inviteId ?? "");
-        log("User removed from event", "info");
-      } catch (error) {
-        log(
-          `Error removing user from event: ${(error as any)?.message ?? error}`,
-          "error"
-        );
+      } catch {
         showErrorToast("Error Removing User");
       }
     } else if (invite.type === "link") {

@@ -176,10 +176,6 @@ export async function syncUserPicture(user: User, activeUser = false) {
       const newHash = await computeImageHash(imageUri as string);
 
       if (newHash !== user.profilePictureHash) {
-        log(
-          "CacheStorage: Hash mismatch after download - Updating Hash in Database",
-          "info"
-        );
         await updateUserInfo(user.uid, {
           profilePictureHash: newHash as string
         });

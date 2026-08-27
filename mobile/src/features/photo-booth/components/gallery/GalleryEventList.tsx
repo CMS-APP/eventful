@@ -12,7 +12,6 @@ import { UserState } from "@/store/UserSlice";
 import { GalleryEvent } from "@/types/photoBoothGallery";
 
 import { GalleryEventListItem } from "./GalleryEventListItem";
-import { log } from "@/utils/logging";
 
 export function GalleryEventList() {
   const [events, setEvents] = useState<GalleryEvent[]>([]);
@@ -22,8 +21,8 @@ export function GalleryEventList() {
     try {
       const events = await getEvents(userId!);
       setEvents(events);
-    } catch (error) {
-      log(`Error getting local events: ${(error as any)?.message ?? error}`, "error");
+    } catch {
+      // ignore
     }
   }, []);
 

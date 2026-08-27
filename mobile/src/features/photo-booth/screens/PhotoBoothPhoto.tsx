@@ -21,7 +21,6 @@ import {
   sharePhoto
 } from "@/services/photo-booth/localPhotos";
 import { UserState } from "@/store/UserSlice";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { GalleryPhotoItem } from "../components/gallery/GalleryPhotoItem";
@@ -73,8 +72,7 @@ export function PhotoBoothPhoto() {
         await deletePhotoLocally(photo);
       }
       navigation.navigate("PhotoBoothHome");
-    } catch (error) {
-      log(`Error deleting photo: ${(error as any)?.message ?? error}`, "error");
+    } catch {
       showErrorToast("Error Deleting Photo");
     }
   }, [navigation, userId, photo]);
@@ -111,11 +109,7 @@ export function PhotoBoothPhoto() {
       setUploading(true);
       await uploadPhotosToCloud(userId, photo.eventTitle, [photo]);
       setPhoto({ ...photo, type: "both" });
-    } catch (error) {
-      log(
-        `Error uploading photos: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+    } catch {
       showErrorToast("Error Uploading Photos");
     } finally {
       setUploading(false);
@@ -127,11 +121,7 @@ export function PhotoBoothPhoto() {
       setDownloading(true);
       await downloadCloudPhoto(photo, userId);
       setPhoto({ ...photo, type: "both" });
-    } catch (error) {
-      log(
-        `Error downloading photo: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+    } catch {
       showErrorToast("Error Downloading Photo");
     } finally {
       setDownloading(false);

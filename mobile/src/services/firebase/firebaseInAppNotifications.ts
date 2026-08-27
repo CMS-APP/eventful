@@ -12,7 +12,6 @@ import { deleteDocument } from "@/services/api/delete";
 import { getDocumentsByQuery } from "@/services/api/get";
 import { updateDocument } from "@/services/api/update";
 import { InAppNotification } from "@/types/InAppNotification";
-import { safeListener } from "@/services/api/error";
 
 import { FIRESTORE_DB } from "./firebase";
 
@@ -20,66 +19,62 @@ export function listenToFollowNotifications(
   userId: string,
   callback: (notifications: InAppNotification[]) => void
 ) {
-  return safeListener(() => {
-    const notificationCollection = collection(FIRESTORE_DB, "notifications");
+  const notificationCollection = collection(FIRESTORE_DB, "notifications");
 
-    const notificationQuery = query(
-      notificationCollection,
-      where("userId", "==", userId),
-      where("type", "==", "follow")
-    );
+  const notificationQuery = query(
+    notificationCollection,
+    where("userId", "==", userId),
+    where("type", "==", "follow")
+  );
 
-    return onSnapshot(
-      notificationQuery,
-      (snapshot: FirebaseFirestoreTypes.QuerySnapshot) => {
-        const notifications = snapshot?.docs?.map(
-          (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot) => ({
-            id: doc.id,
-            ...doc.data()
-          })
-        ) as InAppNotification[];
+  return onSnapshot(
+    notificationQuery,
+    (snapshot: FirebaseFirestoreTypes.QuerySnapshot) => {
+      const notifications = snapshot?.docs?.map(
+        (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot) => ({
+          id: doc.id,
+          ...doc.data()
+        })
+      ) as InAppNotification[];
 
-        notifications?.sort(
-          (a, b) =>
-            b.timestamp.toDate().getTime() - a.timestamp.toDate().getTime()
-        );
-        callback(notifications);
-      }
-    );
-  }, "FirebaseNotification: Error listening to follow notifications");
+      notifications?.sort(
+        (a, b) =>
+          b.timestamp.toDate().getTime() - a.timestamp.toDate().getTime()
+      );
+      callback(notifications);
+    }
+  );
 }
 
 export function listenToUpdateNotifications(
   userId: string,
   callback: (notifications: InAppNotification[]) => void
 ) {
-  return safeListener(() => {
-    const notificationCollection = collection(FIRESTORE_DB, "notifications");
+  const notificationCollection = collection(FIRESTORE_DB, "notifications");
 
-    const notificationQuery = query(
-      notificationCollection,
-      where("userId", "==", userId),
-      where("type", "==", "update")
-    );
+  const notificationQuery = query(
+    notificationCollection,
+    where("userId", "==", userId),
+    where("type", "==", "update")
+  );
 
-    return onSnapshot(
-      notificationQuery,
-      (snapshot: FirebaseFirestoreTypes.QuerySnapshot) => {
-        const notifications = snapshot?.docs?.map(
-          (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot) => ({
-            id: doc?.id,
-            ...doc?.data()
-          })
-        ) as InAppNotification[];
+  return onSnapshot(
+    notificationQuery,
+    (snapshot: FirebaseFirestoreTypes.QuerySnapshot) => {
+      const notifications = snapshot?.docs?.map(
+        (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot) => ({
+          id: doc?.id,
+          ...doc?.data()
+        })
+      ) as InAppNotification[];
 
-        notifications?.sort(
-          (a, b) =>
-            b.timestamp.toDate().getTime() - a.timestamp.toDate().getTime()
-        );
-        callback(notifications ?? []);
-      }
-    );
-  }, "FirebaseNotification: Error listening to update notifications");
+      notifications?.sort(
+        (a, b) =>
+          b.timestamp.toDate().getTime() - a.timestamp.toDate().getTime()
+      );
+      callback(notifications ?? []);
+    }
+  );
 }
 
 async function getExistingNotification(

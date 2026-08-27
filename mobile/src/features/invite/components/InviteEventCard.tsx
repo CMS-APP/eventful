@@ -24,7 +24,6 @@ import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
 import { formatDate, formatTime, parseDatabaseDate } from "@/utils/date";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { InviteEventCardResponse } from "./InviteEventCardResponse";
@@ -59,13 +58,11 @@ export function InviteEventCard({
   }
 
   const fetchHost = useCallback(async () => {
-    log(`Fetching host for event: ${event.id}`, "info");
     const host = await getUserInfo(event.userId);
     setHost(host);
   }, [event]);
 
   const fetchInvite = useCallback(async () => {
-    log(`Fetching invite for event: ${event.id}`, "info");
     const invite = await getInviteFromDatabase(event, userId);
     setInvite(invite);
   }, [event, userId]);
@@ -77,7 +74,6 @@ export function InviteEventCard({
 
   const handleInvite = useCallback(async () => {
     try {
-      log("Inviting user to event", "info");
       const { refresh } = await sendInvite(
         host?.uid || "",
         host?.name || "",
@@ -88,11 +84,7 @@ export function InviteEventCard({
       if (refresh) {
         setRefreshKey((prev: number) => prev + 1);
       }
-    } catch (error) {
-      log(
-        `Error inviting user to event: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+    } catch {
       showErrorToast("Error Inviting User");
     }
   }, [host?.uid, host?.name, host?.username, user, event]);

@@ -17,7 +17,6 @@ import { dataInit } from "@/app/init/data";
 import { navigationRef } from "@/app/navigation";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { saveGoogleOnboardingName } from "../utils";
@@ -63,13 +62,8 @@ export function GoogleLogin() {
           error.code === statusCodes.SIGN_IN_CANCELLED) ||
         error?.toString() === "Error: No ID token found"
       ) {
-        log("User cancelled Google authentication", "info");
         return;
       }
-      log(
-        `Error signing in with Google: ${(error as any)?.message ?? error}`,
-        "error"
-      );
       showErrorToast("Error Signing In");
     } finally {
       setIsSubmitting(false);

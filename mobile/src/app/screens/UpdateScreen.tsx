@@ -4,7 +4,6 @@ import { Button } from "@/design-system/components/Button";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { haptics } from "@/utils/haptics";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { openAppStore } from "../update";
@@ -14,11 +13,7 @@ export function UpdateScreen() {
     haptics.soft();
     try {
       await openAppStore();
-    } catch (error) {
-      log(
-        `Error opening app store: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+    } catch {
       showErrorToast("Error Opening App Store");
     }
   };

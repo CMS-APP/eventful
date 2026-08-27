@@ -20,7 +20,6 @@ import { EventInvite } from "@/types/EventInvite";
 import { User } from "@/types/User";
 import { parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
-import { log } from "@/utils/logging";
 
 interface ContactInviteItemProps {
   eventInvite: EventInvite;
@@ -38,7 +37,6 @@ export function ContactInviteItem({ eventInvite }: ContactInviteItemProps) {
       return;
     }
 
-    log("Viewing event", "info");
     const host = (await getUserInfo(event.userId)) as User;
     haptics.soft();
 

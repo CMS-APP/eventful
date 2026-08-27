@@ -12,7 +12,6 @@ import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
 import { Photo } from "@/types/Photo";
 import { haptics } from "@/utils/haptics";
-import { log } from "@/utils/logging";
 
 interface UploadPhotoProps {
   photos: Photo[];
@@ -81,11 +80,8 @@ export function UploadPhoto({
         } else {
           setPhotos([...photos, ...newPhotos]);
         }
-
-        log(`Added ${newPhotos.length} photos`, "info");
       }
-    } catch (error) {
-      log("Error picking images: " + error, "error");
+    } catch {
       Alert.alert("Error", "Failed to pick images. Please try again.");
     } finally {
       setLoading(false);
@@ -97,7 +93,6 @@ export function UploadPhoto({
       haptics.soft();
       const updatedPhotos = photos.filter((photo) => photo.id !== photoId);
       setPhotos(updatedPhotos);
-      log("Removed photo", "info");
     },
     [photos, setPhotos]
   );

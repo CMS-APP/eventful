@@ -29,10 +29,8 @@ function mediaLibraryAssetRef(
 
 export async function getPhotosDataLocally() {
   try {
-    log("Getting photo data locally", "info");
     const photoData = await AsyncStorage.getItem("photosData");
     if (!photoData) {
-      log("No photo data found locally", "info");
       return [];
     }
 
@@ -71,7 +69,6 @@ export async function savePhotoDataLocally(
       url: uri
     });
 
-    log("Photo data saved: " + JSON.stringify(photoData), "info");
     await AsyncStorage.setItem("photosData", JSON.stringify(photoData));
   } catch (error) {
     log(
@@ -112,7 +109,7 @@ export async function getLocalEvents(): Promise<GalleryEvent[]> {
       photosData.map((photo: GalleryPhoto & { id?: string; uri?: string }) => {
         const ref = mediaLibraryAssetRef(photo);
         if (!ref) {
-          console.warn("no ref found for photo", photo.photoId);
+          log("No ref found for photo: " + photo.photoId, "warn");
           return Promise.resolve(null);
         }
         return MediaLibrary.getAssetInfoAsync(ref);
@@ -125,7 +122,7 @@ export async function getLocalEvents(): Promise<GalleryEvent[]> {
       const assetResult = assetChecks[i];
 
       if (assetResult.status === "rejected" || !assetResult.value) {
-        console.warn("no asset found for photo", photo);
+        log("No asset found for photo: " + JSON.stringify(photo), "warn");
         continue;
       }
 

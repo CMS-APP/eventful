@@ -571,7 +571,6 @@ export async function getUsersFromFollowing(
   type: string
 ) {
   try {
-    log("Getting users from following", "info");
     const users = await Promise.all(
       following.map(
         async (follower) =>

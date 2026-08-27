@@ -21,7 +21,6 @@ import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher"
 import { TextButton } from "@/design-system/components/TextButton";
 import { colors } from "@/design-system/tokens/colors";
 import { Subscription } from "@/types/Subscription";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { AllStackParamList } from "../../app/navigation";
@@ -87,11 +86,7 @@ export function PaywallScreen({ navigation, route }: PaywallScreenProps) {
         purchasePackage,
         navigation as StackNavigationProp<AppStackParamList>
       );
-    } catch (error) {
-      log(
-        `Error subscribing to product: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+    } catch {
       showErrorToast("Error Subscribing");
     } finally {
       setLoading(false);

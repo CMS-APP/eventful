@@ -17,7 +17,6 @@ import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { getCurrencySymbolForDevice } from "@/utils/currency";
 import { haptics } from "@/utils/haptics";
-import { log } from "@/utils/logging";
 
 interface EventBudgetProps {
   event: Event;
@@ -66,7 +65,6 @@ export function EventBudget({ event }: EventBudgetProps) {
   const handlePress = () => {
     haptics.soft();
     if (!premium) {
-      log("EventBudget: Navigating to Paywall", "info");
       navigation.navigate("Paywall", { type: "Premium" });
     }
 

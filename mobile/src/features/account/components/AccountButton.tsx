@@ -13,7 +13,6 @@ import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { useAccountProfilePicture } from "@/features/account/useAccountProfilePicture";
 import { UserState } from "@/store/UserSlice";
 import { haptics } from "@/utils/haptics";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 import { getInitials } from "@/utils/validation";
 
@@ -70,16 +69,9 @@ export function AccountButton({
                   <Image
                     source={{ uri: image }}
                     style={styles.image}
-                    onError={(error) => {
-                      log(
-                        `Profile picture load error: ${(error as any)?.message ?? error}`,
-                        "error"
-                      );
+                    onError={() => {
                       showErrorToast("Error Loading Photo");
                     }}
-                    onLoad={() =>
-                      log("Account: Profile image loaded successfully", "debug")
-                    }
                   />
                 ) : (
                   <View style={styles.textBackground}>

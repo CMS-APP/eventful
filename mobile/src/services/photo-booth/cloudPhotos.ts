@@ -6,10 +6,11 @@ import {
   ref,
   uploadBytesResumable
 } from "@react-native-firebase/storage";
+
 import * as FileSystem from "expo-file-system/legacy";
 import * as ImageManipulator from "expo-image-manipulator";
-import * as MediaLibrary from "expo-media-library";
 import { SaveFormat } from "expo-image-manipulator";
+import * as MediaLibrary from "expo-media-library";
 
 import { API_COLLECTIONS } from "@/services/api/constants";
 import { createDocument } from "@/services/api/create";
@@ -25,7 +26,6 @@ import { convertEventTitleToHash } from "./utils";
 
 async function getCloudPhotos(userId: string) {
   try {
-    log("Getting cloud photos for user: " + userId, "info");
     const photos = await getDocumentsByQuery(
       [where("userId", "==", userId)],
       API_COLLECTIONS.PHOTO_BOOTH_PHOTOS
@@ -33,7 +33,10 @@ async function getCloudPhotos(userId: string) {
 
     return photos;
   } catch (error) {
-    log(`Error getting cloud photos: ${(error as any)?.message ?? error}`, "error");
+    log(
+      `Error getting cloud photos: ${(error as any)?.message ?? error}`,
+      "error"
+    );
     return [];
   }
 }
@@ -51,7 +54,9 @@ export async function getCloudEvents(userId: string) {
         type: "cloud"
       });
     } else {
-      events.find((event) => event.eventTitle === photo.eventTitle)?.photos.push(photo);
+      events
+        .find((event) => event.eventTitle === photo.eventTitle)
+        ?.photos.push(photo);
       if (
         parseDatabaseDate(
           events.find((event) => event.eventTitle === photo.eventTitle)?.date
@@ -98,7 +103,10 @@ export async function downloadCloudPhotos(
     }
     await AsyncStorage.setItem("photosData", JSON.stringify(photoData));
   } catch (error) {
-    log(`Error downloading cloud photos: ${(error as any)?.message ?? error}`, "error");
+    log(
+      `Error downloading cloud photos: ${(error as any)?.message ?? error}`,
+      "error"
+    );
   }
 }
 
@@ -126,7 +134,10 @@ export async function downloadCloudPhoto(photo: GalleryPhoto, userId: string) {
 
     await AsyncStorage.setItem("photosData", JSON.stringify(photoData));
   } catch (error) {
-    log(`Error downloading photo cloud: ${(error as any)?.message ?? error}`, "error");
+    log(
+      `Error downloading photo cloud: ${(error as any)?.message ?? error}`,
+      "error"
+    );
     throw error;
   }
 }
@@ -141,7 +152,10 @@ export async function deletePhotoCloud(photo: GalleryPhoto, userId: string) {
     await deleteObject(storageRef);
     await deleteDocument(API_COLLECTIONS.PHOTO_BOOTH_PHOTOS, storageId);
   } catch (error) {
-    log(`PhotoBooth: Error deleting photo booth image: ${(error as any)?.message ?? error}`, "error");
+    log(
+      `PhotoBooth: Error deleting photo booth image: ${(error as any)?.message ?? error}`,
+      "error"
+    );
     throw error;
   }
 }
@@ -159,7 +173,10 @@ async function compressImage(localUri: string) {
 
     return compressedImage.uri;
   } catch (error) {
-    log(`Error compressing image: ${(error as any)?.message ?? error}`, "error");
+    log(
+      `Error compressing image: ${(error as any)?.message ?? error}`,
+      "error"
+    );
     throw error;
   }
 }
@@ -176,7 +193,10 @@ export async function uploadPhotosToCloud(
     const uploadPromises = photos.map(async (photo) => {
       const photoId = photo.photoId;
       const finalPhotoId = photoId.split("/")[0];
-      const photoRef = ref(FIREBASE_STORAGE, `${storagePath}/${finalPhotoId}.jpg`);
+      const photoRef = ref(
+        FIREBASE_STORAGE,
+        `${storagePath}/${finalPhotoId}.jpg`
+      );
       const asset = await MediaLibrary.getAssetInfoAsync(photoId);
       const localUri = asset.localUri || asset.uri;
       const response = await fetch(localUri);
@@ -206,7 +226,10 @@ export async function uploadPhotosToCloud(
 
     await Promise.all(uploadPromises);
   } catch (error) {
-    log(`Error uploading photos to cloud: ${(error as any)?.message ?? error}`, "error");
+    log(
+      `Error uploading photos to cloud: ${(error as any)?.message ?? error}`,
+      "error"
+    );
     throw error;
   }
 }

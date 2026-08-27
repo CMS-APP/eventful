@@ -7,9 +7,7 @@ import {
   query
 } from "@react-native-firebase/firestore";
 
-import { safeQuery } from "@/services/api/error";
 import { FIRESTORE_DB } from "@/services/firebase/firebase";
-import { log } from "@/utils/logging";
 
 type DocumentData = FirebaseFirestoreTypes.DocumentData | undefined;
 type QueryDocumentSnapshot = FirebaseFirestoreTypes.QueryDocumentSnapshot;
@@ -20,67 +18,40 @@ type QueryConstraintType =
 export async function getDocument(
   ...pathSegments: string[]
 ): Promise<DocumentData> {
-  log("Getting document", "debug");
-  log("Path segments: " + pathSegments, "debug");
-  return safeQuery(
-    async () => {
-      const docRef = doc(FIRESTORE_DB, ...pathSegments);
-      const docSnap = await getDoc(docRef);
-      if (!docSnap.exists()) {
-        return undefined;
-      }
-      const data = docSnap.data();
-      return data ? ({ ...data, id: docSnap.id } as DocumentData) : undefined;
-    },
-    "Error getting document",
-    undefined
-  );
+  const docRef = doc(FIRESTORE_DB, ...pathSegments);
+  const docSnap = await getDoc(docRef);
+  if (!docSnap.exists()) {
+    return undefined;
+  }
+  const data = docSnap.data();
+  return data ? ({ ...data, id: docSnap.id } as DocumentData) : undefined;
 }
 
 export async function getDocuments(
   ...pathSegments: string[]
 ): Promise<DocumentData[]> {
-  log("Getting documents", "debug");
-  log("Path segments: " + pathSegments, "debug");
-  return safeQuery(
-    async () => {
-      const docsRef = collection(
-        FIRESTORE_DB,
-        ...(pathSegments as [string, ...string[]])
-      );
-      const docsSnap = await getDocs(docsRef);
-      return docsSnap.docs.map((doc: QueryDocumentSnapshot) => ({
-        ...doc.data(),
-        id: doc.id
-      }));
-    },
-    "Error getting documents",
-    []
+  const docsRef = collection(
+    FIRESTORE_DB,
+    ...(pathSegments as [string, ...string[]])
   );
+  const docsSnap = await getDocs(docsRef);
+  return docsSnap.docs.map((doc: QueryDocumentSnapshot) => ({
+    ...doc.data(),
+    id: doc.id
+  }));
 }
 
 export async function getDocumentsByQuery(
   queryConstraints: QueryConstraintType[],
   ...pathSegments: string[]
 ): Promise<DocumentData[]> {
-  log("Getting documents by query", "debug");
-  log("Query constraints: " + JSON.stringify(queryConstraints), "debug");
-  log("Path segments: " + pathSegments, "debug");
-  return safeQuery(
-    async () => {
-      const docsRef = collection(
-        FIRESTORE_DB,
-        ...(pathSegments as [string, ...string[]])
-      );
-      const docsSnap = await getDocs(
-        query(docsRef, ...(queryConstraints as any))
-      );
-      return docsSnap.docs.map((doc: QueryDocumentSnapshot) => ({
-        ...doc.data(),
-        id: doc.id
-      }));
-    },
-    "Error getting documents by query: " + JSON.stringify(queryConstraints),
-    []
+  const docsRef = collection(
+    FIRESTORE_DB,
+    ...(pathSegments as [string, ...string[]])
   );
+  const docsSnap = await getDocs(query(docsRef, ...(queryConstraints as any)));
+  return docsSnap.docs.map((doc: QueryDocumentSnapshot) => ({
+    ...doc.data(),
+    id: doc.id
+  }));
 }

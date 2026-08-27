@@ -23,7 +23,6 @@ import {
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { User } from "@/types/User";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 interface EventInviteGuestItemProps {
@@ -52,7 +51,6 @@ export function EventInviteGuestItem({
 
   const removeUserFromEvent = useCallback(async () => {
     try {
-      log("Removing user from event", "info");
       event.invited = event.invited.filter(
         (invited: string) => invited !== guestId
       );
@@ -61,11 +59,7 @@ export function EventInviteGuestItem({
       await deleteInviteFromDatabase(inviteId ?? "");
       await deleteUpdateNotification(userId, guestId, event.id);
       refreshInvites();
-    } catch (error) {
-      log(
-        `Error removing user from event: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+    } catch {
       showErrorToast("Error Removing User");
     }
   }, [event, guestId, inviteId, userId]);

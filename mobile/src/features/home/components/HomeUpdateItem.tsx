@@ -14,7 +14,6 @@ import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { InAppNotification } from "@/types/InAppNotification";
 import { User } from "@/types/User";
-import { log } from "@/utils/logging";
 
 interface HomeUpdateItemProps {
   update: InAppNotification;
@@ -26,7 +25,6 @@ export function HomeUpdateItem({ update }: HomeUpdateItemProps) {
 
   useEffect(() => {
     async function fetchUserDetails() {
-      log("Fetching user details", "info");
       const userDetails = await getUserInfo(update.senderId);
       setUserDetails(userDetails);
     }

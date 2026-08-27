@@ -38,7 +38,6 @@ import {
 import { UserState, setProfilePictureHash } from "@/store/UserSlice";
 import { User } from "@/types/User";
 import { haptics } from "@/utils/haptics";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 export function AccountPicture() {
@@ -61,7 +60,6 @@ export function AccountPicture() {
       return;
     }
 
-    log("Syncing user picture 3", "info");
     const user = (await getUserInfo(userId)) as User;
     const imageUri = await syncUserPicture(user, true);
     setImage(imageUri as string);
@@ -79,7 +77,6 @@ export function AccountPicture() {
     try {
       setLoading(true);
       setImageLoading(true);
-      log("Opening Image Picker", "debug");
 
       setTimeout(async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
@@ -90,7 +87,6 @@ export function AccountPicture() {
 
         if (!result.canceled) {
           const uri = result.assets[0].uri;
-          log("Selected Image URI: " + uri, "debug");
 
           await saveLocalImageToCache(uri, "profilePicture", true);
           setImage(uri);
@@ -103,11 +99,7 @@ export function AccountPicture() {
           dispatch(setProfilePictureHash(imageHash));
         }
       }, 10);
-    } catch (error) {
-      log(
-        `Error opening image picker: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+    } catch {
       showErrorToast("Error Opening Photos");
     } finally {
       setLoading(false);
@@ -118,7 +110,6 @@ export function AccountPicture() {
   const requestPermissions = useCallback(async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status === "granted") {
-      log("Media Library permissions granted", "debug");
       openImagePicker();
     } else {
       Alert.alert(
@@ -138,11 +129,7 @@ export function AccountPicture() {
       });
       await deleteImageAsync(`${userId}/profilePicture`);
       dispatch(setProfilePictureHash(undefined));
-    } catch (error) {
-      log(
-        `Error deleting profile picture: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+    } catch {
       showErrorToast("Error Deleting Photo");
     } finally {
       setLoading(false);
@@ -212,16 +199,9 @@ export function AccountPicture() {
         <Image
           source={{ uri: image }}
           style={styles.image}
-          onError={(error) => {
-            log(
-              `Profile picture loading error: ${(error as any)?.message ?? error}`,
-              "error"
-            );
+          onError={() => {
             showErrorToast("Error Loading Photo");
           }}
-          onLoad={() =>
-            log("Account: Profile image loaded successfully", "debug")
-          }
         />
       );
     }

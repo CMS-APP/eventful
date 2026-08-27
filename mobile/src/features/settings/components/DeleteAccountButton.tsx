@@ -28,7 +28,6 @@ import { deleteImageAsync } from "@/services/firebase/firebaseStorage";
 import { deleteUserData } from "@/services/firebase/firebaseUserFunctions";
 import { removeAllData } from "@/services/local/async";
 import { UserState, clearStorage } from "@/store/UserSlice";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { SettingsPasswordModal } from "./SettingsPasswordModal";
@@ -69,7 +68,7 @@ export function DeleteAccountButton() {
       try {
         await deleteImageAsync(storageString);
       } catch {
-        log("No profile picture to delete", "info");
+        // ignore
       }
       await removeAllData();
       await deleteAllUserData();
@@ -91,7 +90,7 @@ export function DeleteAccountButton() {
         try {
           await revokeSignInWithAppleToken();
         } catch {
-          log("Error revoking Apple token", "error");
+          // ignore
         }
       }
 
@@ -126,11 +125,7 @@ export function DeleteAccountButton() {
       const googleCredential = GoogleAuthProvider.credential(idToken);
       await reauthenticateWithCredential(user, googleCredential);
       await finalizeAccountDeletion(user);
-    } catch (error: any) {
-      log(
-        `Error deleting account: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+    } catch {
       showErrorToast("Error Deleting Account");
     } finally {
       setDeleting(false);
@@ -154,11 +149,7 @@ export function DeleteAccountButton() {
       );
       await reauthenticateWithCredential(user, appleCredential);
       await finalizeAccountDeletion(user);
-    } catch (error: any) {
-      log(
-        `Error deleting account: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+    } catch {
       showErrorToast("Error Deleting Account");
     } finally {
       setDeleting(false);
@@ -233,10 +224,6 @@ export function DeleteAccountButton() {
       ) {
         Alert.alert("Error", "Incorrect password, please try again.");
       } else {
-        log(
-          `Error deleting account: ${(error as any)?.message ?? error}`,
-          "error"
-        );
         showErrorToast("Error Deleting Account");
       }
     } finally {

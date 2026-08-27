@@ -9,7 +9,6 @@ import { Event } from "@/types/Event";
 import { EventInvite } from "@/types/EventInvite";
 import { User } from "@/types/User";
 import { parseDatabaseDate } from "@/utils/date";
-import { log } from "@/utils/logging";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -193,7 +192,6 @@ async function cancelAllScheduledNotifications() {
 
 async function cancelNotificationsForEvent(eventId: string) {
   if (!eventId) return;
-  log("Cancelling notifications for event " + eventId, "info");
 
   const scheduledNotifications =
     await Notifications.getAllScheduledNotificationsAsync();
@@ -261,8 +259,6 @@ async function scheduleToDoShoppingNotification(event: Event, seconds: number) {
 }
 
 export async function createNotificationForEvent(event: Event) {
-  log("Creating notification for event " + event.id, "debug");
-
   const reminders = [
     { label: "in One Hour!", hours: 1, type: "hour" },
     { label: "Tomorrow!", days: 1, type: "day" },

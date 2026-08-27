@@ -22,7 +22,6 @@ import {
   clearStorage,
   setUserData
 } from "@/store/UserSlice";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 export function DataActionButtons() {
@@ -39,8 +38,7 @@ export function DataActionButtons() {
       setClearingCache(true);
       await clearImageCache();
       Alert.alert("Success", "The cache has been cleared.");
-    } catch (error) {
-      log(`Error clearing cache: ${(error as any)?.message ?? error}`, "error");
+    } catch {
       showErrorToast("Error Clearing Cache");
     } finally {
       setClearingCache(false);
@@ -87,11 +85,7 @@ export function DataActionButtons() {
             routes: [{ name: "Onboarding" }] as never
           });
         }
-      } catch (error) {
-        log(
-          `Error deleting data: ${(error as any)?.message ?? error}`,
-          "error"
-        );
+      } catch {
         showErrorToast("Error Deleting Data");
       } finally {
         setResettingData(false);
@@ -126,11 +120,7 @@ export function DataActionButtons() {
       });
       dispatch(clearSpotifyData());
       Alert.alert("Success", "Your Spotify data has been reset.");
-    } catch (error) {
-      log(
-        `Error resetting spotify data: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+    } catch {
       showErrorToast("Error Resetting Spotify Data");
     } finally {
       setResettingSpotify(false);

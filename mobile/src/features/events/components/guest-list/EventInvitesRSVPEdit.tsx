@@ -21,7 +21,6 @@ import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { UserInvite } from "@/types/UserInvite";
 import { parseDatabaseDate } from "@/utils/date";
-import { log } from "@/utils/logging";
 
 import { EventInvitesRSVPUserList } from "./EventInvitesRSVPUserList";
 
@@ -74,7 +73,6 @@ export function EventInvitesRSVPEdit({
   );
 
   const fetchData = useCallback(async () => {
-    log("Fetching data for event invites", "info");
     setFetchingData(true);
     const eventData = await getEventInfo({ id: event.id } as Event);
     const appUsers = await getRSVPAppUsers(eventData as Event);
@@ -97,7 +95,6 @@ export function EventInvitesRSVPEdit({
 
   useFocusEffect(
     useCallback(() => {
-      log("Focusing on EventInvitesRSVPEdit", "info");
       fetchData();
     }, [fetchData])
   );

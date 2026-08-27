@@ -17,7 +17,6 @@ import { ResponseButtonIcon } from "@/features/events/components/invite/Response
 import { updateResponseInDatabase } from "@/services/firebase/firebaseInviteFunctions";
 import { updateResponseNotification } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { InviteButtons } from "../components/InviteButtons";
@@ -41,7 +40,6 @@ export function EventInviteHomeScreen({
   const handleUpdateResponse = useCallback(
     async (newResponse: string) => {
       try {
-        log(`Updating response to: ${newResponse}`, "info");
         setResponse(newResponse);
         await updateResponseInDatabase(invite, { response: newResponse });
         await updateResponseNotification(
@@ -51,11 +49,7 @@ export function EventInviteHomeScreen({
           event,
           newResponse
         );
-      } catch (error) {
-        log(
-          `Error updating response: ${(error as any)?.message ?? error}`,
-          "error"
-        );
+      } catch {
         showErrorToast("Error Updating Response");
       }
     },

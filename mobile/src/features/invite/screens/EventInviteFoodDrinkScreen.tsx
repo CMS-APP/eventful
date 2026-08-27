@@ -10,7 +10,6 @@ import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Input } from "@/design-system/components/Input";
 import { colors } from "@/design-system/tokens/colors";
 import { updateResponseInDatabase } from "@/services/firebase/firebaseInviteFunctions";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 type Props = NativeStackScreenProps<
@@ -25,16 +24,11 @@ export function EventInviteFoodDrinkScreen({ navigation, route }: Props) {
   useEffect(() => {
     if (invite.dietary !== dietary) {
       try {
-        log(`Updating dietary requirements to: ${dietary}`, "info");
         updateResponseInDatabase(invite, {
           response: invite.response,
           dietary
         });
-      } catch (error) {
-        log(
-          `Error updating dietary requirements: ${(error as any)?.message ?? error}`,
-          "error"
-        );
+      } catch {
         showErrorToast("Error Updating Requirements");
       }
     }

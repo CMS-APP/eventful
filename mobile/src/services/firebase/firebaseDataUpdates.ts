@@ -7,7 +7,6 @@ import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
 import { GalleryPhoto } from "@/types/photoBoothGallery";
 import { parseDatabaseDate } from "@/utils/date";
-import { log } from "@/utils/logging";
 import { generateUUID } from "@/utils/uuid";
 
 import { FIRESTORE_DB } from "./firebase";
@@ -101,7 +100,6 @@ export async function convertDateToTimestamp(userId: string) {
 }
 
 export async function convertUserFollowingToDatabaseFollowing(userId: string) {
-  log("Converting user following to database following", "info");
   const user = (await getUserInfo(userId)) as any;
 
   if (user?.following && Array.isArray(user.following)) {
@@ -133,7 +131,6 @@ export async function convertPollVotesToDatabasePollVotes(userId: string) {
 }
 
 export async function convertPhotoDataToGalleryPhotoData(userId: string) {
-  log("Converting photo data to gallery photo data", "info");
   const photoData = await getPhotosDataLocally();
 
   const newPhotoData: GalleryPhoto[] = [];
@@ -152,8 +149,5 @@ export async function convertPhotoDataToGalleryPhotoData(userId: string) {
     }
   }
 
-  log("New photo data: " + JSON.stringify(newPhotoData), "info");
-
   await AsyncStorage.setItem("photosData", JSON.stringify(newPhotoData));
-  log("Photo data updated to gallery photo data", "info");
 }

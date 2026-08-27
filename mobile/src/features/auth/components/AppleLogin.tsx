@@ -19,7 +19,6 @@ import { dataInit } from "@/app/init/data";
 import { navigationRef } from "@/app/navigation";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { saveAppleOnboardingName } from "../utils";
@@ -61,10 +60,7 @@ export function AppleLogin() {
 
       navigationRef.navigate(result);
     } catch (error: any) {
-      if (error.code === "1001") {
-        log("User cancelled authentication", "info");
-      } else {
-        log(error, "error");
+      if (error.code !== "1001") {
         showErrorToast("Error signing in with Apple");
       }
     } finally {

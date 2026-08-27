@@ -9,14 +9,14 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Alert } from "react-native";
 
 import {
-  checkIfPhotoBoothSubscription,
-  checkIfPremiumSubscription
-} from "@/app/context/payment/const";
-import { PaymentContext } from "@/app/context/payment/PaymentContext";
-import {
   ILoadingModalContext,
   useLoadingModal
 } from "@/app/context/loading/LoadingModalContext";
+import { PaymentContext } from "@/app/context/payment/PaymentContext";
+import {
+  checkIfPhotoBoothSubscription,
+  checkIfPremiumSubscription
+} from "@/app/context/payment/const";
 
 import { UserState, setPhotoBooth, setPremium } from "../../../store/UserSlice";
 
@@ -86,8 +86,8 @@ export function PaymentProvider({ children }: { children: React.ReactNode }) {
       );
       getProducts();
       setIsReady(true);
-    } catch (error) {
-      console.error(error);
+    } catch {
+      // ignore
     } finally {
       setLoading(false);
     }

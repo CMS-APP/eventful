@@ -20,7 +20,6 @@ import { CalendarDate } from "@/types/CalendarDate";
 import { Event } from "@/types/Event";
 import { dateIsInEvent, isActiveEvent, parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
-import { log } from "@/utils/logging";
 
 import { CalendarDay } from "./CalendarDay";
 import { CalendarDayHeader } from "./CalendarDayHeader";
@@ -121,7 +120,6 @@ export function CalendarView({
       return;
     }
 
-    log("Navigating to event", "info");
     const userDetails = await getUserInfo(event.userId);
     if (isActiveEvent(event)) {
       const invite = await getInviteFromDatabase(event, userId);

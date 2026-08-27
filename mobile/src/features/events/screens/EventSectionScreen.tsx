@@ -17,7 +17,6 @@ import { updateNotificationsForEvent } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
 import type { Event } from "@/types/Event";
 import { parseDatabaseDate } from "@/utils/date";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { EventDetailsEdit } from "../components/edit/EventDetailsEdit";
@@ -54,7 +53,6 @@ export function EventSectionScreen({
         if (eventData) {
           setEvent(eventData);
         } else {
-          log("Error fetching event: Event not found", "error");
           showErrorToast("Error Loading Event");
         }
       }
@@ -73,7 +71,6 @@ export function EventSectionScreen({
 
     debounceTimeout.current = setTimeout(async () => {
       if (JSON.stringify(event) === JSON.stringify(originalEvent)) {
-        log("Event has not changed", "info");
         return;
       }
 

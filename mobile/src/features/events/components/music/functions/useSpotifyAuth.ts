@@ -60,7 +60,6 @@ export function useSpotifyAuth({ userId, onSuccess }: UseSpotifyAuthOptions) {
 
           dispatch(setSpotifyData(data));
           onSuccess(tokenData.accessToken);
-          log("Spotify sign in success", "info");
         }
       } catch (error) {
         // Reset processed ref on error

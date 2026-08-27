@@ -20,7 +20,6 @@ import { HeaderArcs } from "@/features/auth/components/HeaderArcs";
 import { formStyles } from "@/features/auth/styles/formStyles";
 import { handleSignIn } from "@/services/firebase/firebaseAuth";
 import { sendVerificationEmail } from "@/services/firebase/firebaseBackend";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 interface FormErrors {
@@ -98,11 +97,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
           );
         }
       }
-    } catch (error) {
-      log(
-        `Error sending verification email: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+    } catch {
       showErrorToast("Error Sending Email");
       Alert.alert(
         "Error",
@@ -178,11 +173,6 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
           if (errorMessage) {
             setErrors({ password: errorMessage });
           } else {
-            log("Error logging in: " + error.message, "error");
-            log(
-              `Error logging In: ${(error as any)?.message ?? error}`,
-              "error"
-            );
             showErrorToast("Error Logging In");
           }
         }

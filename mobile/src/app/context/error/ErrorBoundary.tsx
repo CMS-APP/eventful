@@ -4,8 +4,6 @@ import React, { Component, ReactNode } from "react";
 
 import * as Updates from "expo-updates";
 
-import { log } from "@/utils/logging";
-
 import { ErrorFallback } from "./ErrorFallback";
 
 interface ErrorBoundaryState {
@@ -57,10 +55,8 @@ export class ErrorBoundary extends Component<
         error: null
       });
 
-      log("ErrorBoundary: Reloading app after error", "info");
       await Updates.reloadAsync();
-    } catch (reloadError) {
-      log(`ErrorBoundary: Failed to reload app - ${reloadError}`, "error");
+    } catch {
       this.setState({
         hasError: false,
         error: null

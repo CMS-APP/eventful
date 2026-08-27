@@ -17,7 +17,6 @@ import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
 import { haptics } from "@/utils/haptics";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 interface EventGuestListInvitedItemProps {
@@ -65,21 +64,13 @@ export function EventGuestListInvitedItem({
 
   const removeUserFromEvent = useCallback(async () => {
     try {
-      log("Removing user from event", "info");
-      log("Invite: " + JSON.stringify(invite, null, 2), "debug");
-
       await deleteInviteFromDatabase(invite.id);
 
       event.invited = event.invited.filter(
         (invited: string) => invited !== user.uid
       );
       await updateEventInDatabase(event);
-      log("User removed from event", "info");
-    } catch (error) {
-      log(
-        `Error removing user from event: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+    } catch {
       showErrorToast("Error Removing User");
     }
   }, [invite, user, event]);

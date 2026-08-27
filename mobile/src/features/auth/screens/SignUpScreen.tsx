@@ -18,7 +18,6 @@ import { colors } from "@/design-system/tokens/colors";
 import { handleSignUp } from "@/services/firebase/firebaseAuth";
 import { sendVerificationEmail } from "@/services/firebase/firebaseBackend";
 import { FormErrors } from "@/types/FormErrors";
-import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 import { emailValid, passwordValid } from "@/utils/validation";
 
@@ -91,7 +90,6 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
         if (error.message.includes("auth/email-already-in-use")) {
           setErrors({ email: "Email already in use." });
         } else {
-          log(`Error signing up: ${(error as any)?.message ?? error}`, "error");
           showErrorToast("Error Signing Up");
           Alert.alert(
             "Error",
