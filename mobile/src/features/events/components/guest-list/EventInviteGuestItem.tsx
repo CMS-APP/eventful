@@ -22,9 +22,9 @@ import { deleteUpdateNotification } from "@/services/firebase/firebaseNotificati
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
 import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
+import { showErrorNotification } from "@/utils/appNotifications";
 
 interface EventInviteGuestItemProps {
   user: User;
@@ -62,7 +62,8 @@ export function EventInviteGuestItem({
       await deleteUpdateNotification(userId, guestId, event.id);
       refreshInvites();
     } catch (error) {
-      new AppError(error, "Error removing user from event", true);
+      log(`Error removing user from event: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Removing User");
     }
   }, [event, guestId, inviteId, userId]);
 

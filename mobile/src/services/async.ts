@@ -1,13 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { AppError } from "@/utils/error";
+import { log } from "@/utils/logging";
 
 export async function saveData(key: string, value: unknown) {
-  try {
-    await AsyncStorage.setItem(key, JSON.stringify(value));
-  } catch (error) {
-    throw new AppError(error, "AsyncStorage: Error saving data to " + key);
-  }
+  await AsyncStorage.setItem(key, JSON.stringify(value));
+
 }
 
 export async function getData(key: string) {
@@ -15,23 +12,20 @@ export async function getData(key: string) {
     const data = await AsyncStorage.getItem(key);
     return data ? JSON.parse(data) : null;
   } catch (error) {
-    new AppError(error, "AsyncStorage: Error getting data from " + key);
+    log(
+      `AsyncStorage: Error getting data from ${key}: ${(error as any)?.message ?? error}`,
+      "error"
+    );
     return null;
   }
 }
 
 export async function removeData(key: string) {
-  try {
-    await AsyncStorage.removeItem(key);
-  } catch (error) {
-    throw new AppError(error, "AsyncStorage: Error removing data from " + key);
-  }
+  await AsyncStorage.removeItem(key);
+
 }
 
 export async function removeAllData() {
-  try {
-    await AsyncStorage.clear();
-  } catch (error) {
-    throw new AppError(error, "AsyncStorage: Error removing all data");
-  }
+  await AsyncStorage.clear();
+
 }

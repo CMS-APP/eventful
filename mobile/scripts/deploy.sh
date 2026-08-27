@@ -24,26 +24,6 @@ if [ "$(git branch --show-current)" != "main" ]; then
   exit 1
 fi
 
-send_error_notification() {
-  local error_message="$1"
-  echo ""
-  echo "❌ ERROR: ${error_message}"
-  echo "📱 Sending error notification..."
-
-  if command -v terminal-notifier >/dev/null 2>&1; then
-    terminal-notifier -title "Eventful Build Failed" -message "${error_message}" -sound Basso
-  else
-    if osascript -e "display notification \"${error_message}\" with title \"Eventful Build Failed\" sound name \"Basso\"" 2>/dev/null; then
-      echo "✅ Error notification sent via osascript!"
-    else
-      echo "🔔 Build failed! ${error_message}"
-      printf "\a\a\a"
-    fi
-  fi
-}
-
-trap 'send_error_notification "Build failed at line $LINENO. Check the output above for details."' ERR
-
 echo "🔧 Updating CocoaPods repository..."
 pod repo update
 
@@ -129,7 +109,7 @@ fi
 
 if [ "$BUILD_IOS" = true ]; then
   echo "🔧 Regenerating iOS native project..."
-  npx expo prebuild --clean --platform ios
+  npx expo prebuild --platform ios
   echo "✅ iOS native project regenerated"
 
   echo "🔧 Stamping iOS version $NEW_VERSION, build $NEW_IOS_BUILD..."
@@ -142,7 +122,7 @@ fi
 
 if [ "$BUILD_ANDROID" = true ]; then
   echo "🔧 Regenerating Android native project..."
-  npx expo prebuild --clean --platform android
+  npx expo prebuild --platform android
   echo "✅ Android native project regenerated"
 
   echo "🔧 Stamping Android version $NEW_VERSION, versionCode $NEW_ANDROID_BUILD..."
@@ -161,7 +141,7 @@ ANDROID_SECONDS=0
 if [ "$BUILD_IOS" = true ]; then
   echo "📦 Building iOS app..."
   IOS_START_TIME=$(date +%s)
-  eas build --platform ios --local --non-interactive
+  eas build --platform ios --local
   IOS_END_TIME=$(date +%s)
   IOS_DURATION=$((IOS_END_TIME - IOS_START_TIME))
   IOS_MINUTES=$((IOS_DURATION / 60))
@@ -253,7 +233,7 @@ if [ "$BUILD_IOS" = true ]; then
     if [ $? -eq 0 ]; then
       echo "✅ iOS build uploaded to App Store Connect successfully!"
     else
-      send_error_notification "Failed to upload iOS build to App Store Connect."
+      echo "❌ Failed to upload iOS build to App Store Connect."
     fi
   else
     echo "❌ .ipa file not found for upload."
@@ -276,7 +256,7 @@ if [ "$BUILD_ANDROID" = true ]; then
     if [ $? -eq 0 ]; then
       echo "✅ Android build uploaded to Google Play Console successfully!"
     else
-      send_error_notification "Failed to upload Android build to Google Play Console."
+      echo "❌ Failed to upload Android build to Google Play Console."
     fi
   else
     echo "❌ .aab file not found for upload."

@@ -6,7 +6,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { AllStackParamList } from "@/features/app/navigationTypes";
 import { getEventInfo } from "@/services/firebase/firebaseEventFunctions";
 import { Event } from "@/types/Event";
-import { AppError } from "@/utils/error";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 
 export function useEventEdit(
   originalEvent: Event,
@@ -19,7 +20,8 @@ export function useEventEdit(
     if (eventData) {
       setEvent(eventData);
     } else {
-      new AppError(new Error("Event not found"), "Error fetching event", true);
+      log("Error fetching event: Event not found", "error");
+      showErrorNotification("Error Loading Event");
     }
   }, [originalEvent]);
 

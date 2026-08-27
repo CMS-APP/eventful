@@ -17,7 +17,7 @@ import * as ImagePicker from "expo-image-picker";
 import {
   ILoadingModalContext,
   useLoadingModal
-} from "@/contexts/LoadingProviderContext";
+} from "@/app/context/loading/LoadingModalContext";
 import { colors } from "@/design-system/tokens/colors";
 import { AllStackParamList } from "@/features/app/navigationTypes";
 import {
@@ -36,7 +36,7 @@ import {
 } from "@/services/firebase/firebaseUserFunctions";
 import { UserState, setProfilePictureHash } from "@/store/UserSlice";
 import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
+import { showErrorNotification } from "@/utils/appNotifications";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
@@ -55,19 +55,19 @@ export function AccountPicture() {
   const syncPicture = useCallback(async () => {
     setImage(null);
 
-    log("Syncing user picture 3", "info");
     if (!userId) {
       setLoading(false);
       setImageLoading(false);
       return;
     }
 
+    log("Syncing user picture 3", "info");
     const user = (await getUserInfo(userId)) as User;
     const imageUri = await syncUserPicture(user, true);
     setImage(imageUri as string);
     setLoading(false);
     setImageLoading(false);
-  }, [userId]);
+  }, [userId, setLoading, setImageLoading]);
 
   useFocusEffect(
     useCallback(() => {
@@ -104,7 +104,11 @@ export function AccountPicture() {
         }
       }, 10);
     } catch (error) {
-      new AppError(error, "Error opening image picker", true);
+      log(
+        `Error opening image picker: ${(error as any)?.message ?? error}`,
+        "error"
+      );
+      showErrorNotification("Error Opening Photos");
     } finally {
       setLoading(false);
       setImageLoading(false);
@@ -135,7 +139,11 @@ export function AccountPicture() {
       await deleteImageAsync(`${userId}/profilePicture`);
       dispatch(setProfilePictureHash(undefined));
     } catch (error) {
-      new AppError(error, "Error deleting profile picture", true);
+      log(
+        `Error deleting profile picture: ${(error as any)?.message ?? error}`,
+        "error"
+      );
+      showErrorNotification("Error Deleting Photo");
     } finally {
       setLoading(false);
     }
@@ -204,9 +212,13 @@ export function AccountPicture() {
         <Image
           source={{ uri: image }}
           style={styles.image}
-          onError={(error) =>
-            new AppError(error, "Profile picture loading error", true)
-          }
+          onError={(error) => {
+            log(
+              `Profile picture loading error: ${(error as any)?.message ?? error}`,
+              "error"
+            );
+            showErrorNotification("Error Loading Photo");
+          }}
           onLoad={() =>
             log("Account: Profile image loaded successfully", "debug")
           }

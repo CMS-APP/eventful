@@ -43,11 +43,6 @@ export const fontStyles = StyleSheet.create({
     fontSize: 24,
     ...androidFontAdjustments
   },
-  playfair: {
-    fontFamily: "Playfair-Variable",
-    fontSize: 24,
-    ...androidFontAdjustments
-  },
   greatVibes: {
     fontFamily: "GreatVibes-Regular",
     fontSize: 24,
@@ -55,6 +50,11 @@ export const fontStyles = StyleSheet.create({
   },
   lobster: {
     fontFamily: "Lobster",
+    fontSize: 24,
+    ...androidFontAdjustments
+  },
+  playfair: {
+    fontFamily: "Playfair-Variable",
     fontSize: 24,
     ...androidFontAdjustments
   },

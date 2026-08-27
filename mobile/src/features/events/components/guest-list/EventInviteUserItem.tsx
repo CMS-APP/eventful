@@ -24,9 +24,9 @@ import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
 import { UserInvite } from "@/types/UserInvite";
-import { AppError } from "@/utils/error";
 import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
+import { showErrorNotification } from "@/utils/appNotifications";
 
 interface EventInviteUserItemProps {
   user: User;
@@ -93,7 +93,8 @@ export function EventInviteUserItem({
         await deleteInviteFromDatabase(inviteId ?? "");
         log("User removed from event", "info");
       } catch (error) {
-        new AppError(error, "Error removing user from event", true);
+        log(`Error removing user from event: ${(error as any)?.message ?? error}`, "error");
+        showErrorNotification("Error Removing User");
       }
     } else if (invite.type === "link") {
       await deleteEventLinkResponse(invite.id);

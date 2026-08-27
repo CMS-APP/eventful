@@ -7,7 +7,6 @@ import { Alert, StyleSheet, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { LoadingModal } from "@/components/views/LoadingModal";
 import { Screen } from "@/components/views/screen/Screen";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
@@ -22,9 +21,10 @@ import {
   sharePhoto
 } from "@/services/photo-booth/localPhotos";
 import { UserState } from "@/store/UserSlice";
-import { AppError } from "@/utils/error";
 
 import { GalleryPhotoItem } from "../components/gallery/GalleryPhotoItem";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 import {
   PhotoBoothStackNavigation,
   PhotoBoothStackParamList
@@ -40,7 +40,6 @@ export function PhotoBoothPhoto() {
   const premium = useSelector((state: UserState) => state.premium);
 
   const [photo, setPhoto] = useState(initialPhoto);
-  const [deleting, setDeleting] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [downloading, setDownloading] = useState(false);
 
@@ -67,7 +66,6 @@ export function PhotoBoothPhoto() {
 
   const handleDelete = useCallback(async () => {
     try {
-      setDeleting(true);
       if (photo.type === "cloud" || photo.type === "both") {
         await deletePhotoCloud(photo, userId);
       }
@@ -76,9 +74,8 @@ export function PhotoBoothPhoto() {
       }
       navigation.navigate("PhotoBoothHome");
     } catch (error) {
-      new AppError(error, "Error deleting photo", true);
-    } finally {
-      setDeleting(false);
+      log(`Error deleting photo: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Deleting Photo");
     }
   }, [navigation, userId, photo]);
 
@@ -115,7 +112,8 @@ export function PhotoBoothPhoto() {
       await uploadPhotosToCloud(userId, photo.eventTitle, [photo]);
       setPhoto({ ...photo, type: "both" });
     } catch (error) {
-      new AppError(error, "Error uploading photos", true);
+      log(`Error uploading photos: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Uploading Photos");
     } finally {
       setUploading(false);
     }
@@ -127,7 +125,8 @@ export function PhotoBoothPhoto() {
       await downloadCloudPhoto(photo, userId);
       setPhoto({ ...photo, type: "both" });
     } catch (error) {
-      new AppError(error, "Error downloading photo", true);
+      log(`Error downloading photo: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Downloading Photo");
     } finally {
       setDownloading(false);
     }
@@ -149,8 +148,6 @@ export function PhotoBoothPhoto() {
         }
       }}
     >
-      <LoadingModal visible={deleting || uploading || downloading} />
-
       <View style={styles.container}>
         <GalleryPhotoItem photo={photo} onPhotoPress={handlePhotoPress} />
 

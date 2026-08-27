@@ -5,10 +5,10 @@ import Share from "react-native-share";
 
 import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
 import { formatDate, parseDatabaseDate } from "@/utils/date";
-import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 
 import { getPhotoIdSplit } from "./utils";
+import { showErrorNotification } from "@/utils/appNotifications";
 
 function mediaLibraryAssetRef(
   photo: GalleryPhoto & { id?: string; uri?: string }
@@ -37,7 +37,7 @@ export async function getPhotosDataLocally() {
 
     return JSON.parse(photoData);
   } catch (error) {
-    new AppError(error, "Error getting photo data");
+    log(`Error getting photo data: ${(error as any)?.message ?? error}`, "error");
     return [];
   }
 }
@@ -70,7 +70,7 @@ export async function savePhotoDataLocally(
     log("Photo data saved: " + JSON.stringify(photoData), "info");
     await AsyncStorage.setItem("photosData", JSON.stringify(photoData));
   } catch (error) {
-    new AppError(error, "Error saving photo data");
+    log(`Error saving photo data: ${(error as any)?.message ?? error}`, "error");
   }
 }
 
@@ -84,7 +84,7 @@ export async function deletePhotoLocally(photo: GalleryPhoto): Promise<void> {
     await MediaLibrary.deleteAssetsAsync([mediaLibraryAssetRef(photo)]);
     await AsyncStorage.setItem("photosData", JSON.stringify(filteredPhotoData));
   } catch (error) {
-    new AppError(error, "Error deleting photo data");
+    log(`Error deleting photo data: ${(error as any)?.message ?? error}`, "error");
   }
 }
 
@@ -154,7 +154,7 @@ export async function getLocalEvents(): Promise<GalleryEvent[]> {
     await AsyncStorage.setItem("photosData", JSON.stringify(newPhotosData));
     return Object.values(eventsData);
   } catch (error) {
-    new AppError(error, "Error getting events data");
+    log(`Error getting events data: ${(error as any)?.message ?? error}`, "error");
     return [];
   }
 }
@@ -219,7 +219,8 @@ export async function sharePhoto(uri: string): Promise<void> {
   } catch (error) {
     const message = (error as Error)?.message ?? "";
     if (message !== "User did not share") {
-      new AppError(error, "Error sharing photo", true);
+      log(`Error sharing photo: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Sharing Photo");
     }
   }
 }

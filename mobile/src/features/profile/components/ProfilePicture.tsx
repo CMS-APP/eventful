@@ -6,7 +6,7 @@ import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { syncUserPicture } from "@/services/cache";
 import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
+import { log } from "@/utils/logging";
 import { getInitials } from "@/utils/regex";
 
 interface ProfilePictureProps {
@@ -41,7 +41,7 @@ export function ProfilePicture({
       setImage(imageUri || null);
       setLoading(false);
     } catch (error) {
-      new AppError(error, "Profile: Profile image load error");
+      log(`Profile: Profile image load error: ${(error as any)?.message ?? error}`, "error");
     }
   }
 
@@ -65,7 +65,10 @@ export function ProfilePicture({
           source={{ uri: image }}
           style={[styles.image, { height: size, width: size }]}
           onError={(error) =>
-            new AppError(error, "Profile: Profile image load error")
+            log(
+              `Profile: Profile image load error: ${(error as any)?.message ?? error}`,
+              "error"
+            )
           }
         />
       ) : (

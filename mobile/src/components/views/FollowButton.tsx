@@ -14,10 +14,10 @@ import {
 import { UserState } from "@/store/UserSlice";
 import { Follower } from "@/types/Follower";
 import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
 import { haptics } from "@/utils/haptics";
 
 import { SmallButton } from "../buttons/SmallButton";
+import { log } from "@/utils/logging";
 
 interface FollowButtonProps {
   user: User;
@@ -58,7 +58,7 @@ export function FollowButton({ user, flex = undefined }: FollowButtonProps) {
         following.filter((follow) => follow.followingId !== user.uid)
       );
     } catch (error) {
-      new AppError(error, "Error unfollowing user");
+      log(`Error unfollowing user: ${(error as any)?.message ?? error}`, "error");
     }
   }, [userId, user.uid, following]);
 

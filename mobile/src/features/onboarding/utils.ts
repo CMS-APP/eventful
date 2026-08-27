@@ -1,15 +1,11 @@
 import { FIREBASE_AUTH } from "@/services/firebase/firebase";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
-import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 
 export async function getLoginNames() {
   const user = FIREBASE_AUTH.currentUser;
   if (!user) {
-    throw new AppError(
-      "No authenticated user found",
-      "Error getting login names"
-    );
+    throw new Error("No authenticated user found");
   }
 
   log("Getting user details", "info");

@@ -2,7 +2,7 @@ import type { RefObject } from "react";
 
 import * as AuthSession from "expo-auth-session";
 
-import { AppError } from "@/utils/error";
+import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
 
 export const SPOTIFY_CLIENT_ID = "5ac26743c8154bf781d819ef92f34245";
@@ -124,7 +124,8 @@ export async function processAuthResponse(
 
   if (response.type === "error") {
     log(`Spotify sign in error: ${response.error?.message}`, "error");
-    throw new AppError(response.error, "Error signing into Spotify", true);
+    showErrorNotification("Error Connecting Spotify");
+    throw new Error(response.error?.message ?? "Error signing into Spotify");
   }
 
   return null;

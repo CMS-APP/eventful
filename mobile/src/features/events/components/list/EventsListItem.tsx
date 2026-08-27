@@ -105,7 +105,9 @@ export function EventsListItem({
   }
 
   useEffect(() => {
-    fetchHostInfo();
+    if (userId) {
+      fetchHostInfo();
+    }
   }, [event, isUpcoming, userId, isDecline]);
 
   return (

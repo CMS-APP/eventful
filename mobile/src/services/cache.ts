@@ -3,13 +3,11 @@ import * as FileSystem from "expo-file-system";
 
 import { Photo } from "@/types/Photo";
 import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
 
 import { log } from "../utils/logging";
 import { downloadImageAsync } from "./firebase/firebaseStorage";
 import { updateUserInfo } from "./firebase/firebaseUserFunctions";
 
-// Helper function to get the image cache directory safely
 function getImageCacheDirectory(): FileSystem.Directory {
   const cachePath = FileSystem.Paths.cache;
   if (!cachePath) {
@@ -27,32 +25,21 @@ const getCachedImageFile = (filename: string) =>
   new FileSystem.File(getImageCacheDirectory(), `${filename}.jpg`);
 
 async function createCacheImageFolder() {
-  try {
-    const imageCacheDirectory = getImageCacheDirectory();
-    const dirInfo = imageCacheDirectory.info();
-    if (!dirInfo.exists) {
-      await imageCacheDirectory.create({
-        intermediates: true,
-        idempotent: true
-      });
-    }
-  } catch (error) {
-    throw new AppError(
-      error,
-      "CacheStorage: Error creating image cache directory"
-    );
+  const imageCacheDirectory = getImageCacheDirectory();
+  const dirInfo = imageCacheDirectory.info();
+  if (!dirInfo.exists) {
+    imageCacheDirectory.create({
+      intermediates: true,
+      idempotent: true
+    });
   }
 }
 
 export async function getImageFromCache(filename: string) {
   const imageFile = getCachedImageFile(filename);
 
-  try {
-    const { exists } = imageFile.info();
-    return exists ? imageFile.uri : null;
-  } catch (error) {
-    throw new AppError(error, "CacheStorage: Error getting image from cache");
-  }
+  const { exists } = imageFile.info();
+  return exists ? imageFile.uri : null;
 }
 
 export async function saveLocalImageToCache(
@@ -87,7 +74,7 @@ export async function saveLocalImageToCache(
         return cacheFile.uri;
       }
     }
-    throw new AppError(error, "CacheStorage: Error saving image to cache");
+    throw error;
   }
 }
 
@@ -103,10 +90,7 @@ export async function saveDatabaseImageToCache(
     typeof filename !== "string" ||
     filename.includes("/")
   ) {
-    throw new AppError(
-      "Invalid URL or filename provided",
-      "CacheStorage: Error saving image to cache"
-    );
+    throw new Error("Invalid URL or filename provided");
   }
 
   await createCacheImageFolder();
@@ -137,7 +121,10 @@ export async function saveDatabaseImageToCache(
         return cacheFile.uri;
       }
     }
-    new AppError(error, "CacheStorage: Error saving image to cache");
+    log(
+      `CacheStorage: Error saving image to cache: ${(error as any)?.message ?? error}`,
+      "error"
+    );
     return null;
   }
 }
@@ -155,21 +142,17 @@ export async function deleteCachedImage(filename: string) {
       log(`CacheStorage: Image not found in cache: ${filename}`, "warn");
       return;
     }
-    throw new AppError(error, "CacheStorage: Error deleting image from cache");
+    throw error;
   }
 }
 
 export async function computeImageHash(imageUri: string) {
-  try {
-    const fileContents = await new FileSystem.File(imageUri).base64();
-    const hash = await Crypto.digestStringAsync(
-      Crypto.CryptoDigestAlgorithm.SHA256,
-      fileContents
-    );
-    return hash;
-  } catch (error) {
-    throw new AppError(error, "CacheStorage: Error computing image hash");
-  }
+  const fileContents = await new FileSystem.File(imageUri).base64();
+  const hash = await Crypto.digestStringAsync(
+    Crypto.CryptoDigestAlgorithm.SHA256,
+    fileContents
+  );
+  return hash;
 }
 
 export async function syncUserPicture(user: User, activeUser = false) {
@@ -242,20 +225,13 @@ async function handleImageDownload(
     if ((error as { code: string }).code === "storage/object-not-found") {
       log("CacheStorage: Image not in storage - should remove", "warn");
     } else {
-      throw new AppError(
-        error,
-        "CacheStorage: Error downloading or caching image"
-      );
+      throw error;
     }
   }
 }
 
 export async function clearCache() {
-  try {
-    const imageCacheDirectory = getImageCacheDirectory();
-    imageCacheDirectory.delete();
-    await createCacheImageFolder();
-  } catch (error) {
-    throw new AppError(error, "CacheStorage: Error clearing image cache");
-  }
+  const imageCacheDirectory = getImageCacheDirectory();
+  imageCacheDirectory.delete();
+  await createCacheImageFolder();
 }

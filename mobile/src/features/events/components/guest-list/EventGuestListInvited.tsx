@@ -90,7 +90,7 @@ export function EventGuestListInvited({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 24,
-    gap: 12
+    gap: 12,
+    paddingHorizontal: 24
   }
 });

@@ -10,9 +10,9 @@ import { Text } from "@/design-system/components/Text";
 import { getEvents } from "@/services/photo-booth/events";
 import { UserState } from "@/store/UserSlice";
 import { GalleryEvent } from "@/types/photoBoothGallery";
-import { AppError } from "@/utils/error";
 
 import { GalleryEventListItem } from "./GalleryEventListItem";
+import { log } from "@/utils/logging";
 
 export function GalleryEventList() {
   const [events, setEvents] = useState<GalleryEvent[]>([]);
@@ -23,7 +23,7 @@ export function GalleryEventList() {
       const events = await getEvents(userId!);
       setEvents(events);
     } catch (error) {
-      new AppError(error, "Error getting local events");
+      log(`Error getting local events: ${(error as any)?.message ?? error}`, "error");
     }
   }, []);
 

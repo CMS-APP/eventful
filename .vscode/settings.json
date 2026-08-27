@@ -45,6 +45,8 @@
     "mobile/dsyms": true,
     "mobile/metadata": true,
     "mobile/screenshots": true,
+    "mobile/ios": true,
+    "mobile/android": true,
     "web/.next/": true,
     "web/next-env.d.ts": true
   }

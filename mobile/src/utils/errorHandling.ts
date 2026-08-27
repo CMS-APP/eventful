@@ -1,4 +1,5 @@
-import { AppError } from "./error";
+import { showErrorNotification } from "./appNotifications";
+import { log } from "./logging";
 
 export async function safeQuery<T>(
   operation: () => Promise<T>,
@@ -8,7 +9,7 @@ export async function safeQuery<T>(
   try {
     return await operation();
   } catch (error) {
-    new AppError(error, context);
+    log(`${context}: ${(error as any)?.message ?? error}`, "error");
     return defaultValue;
   }
 }
@@ -21,7 +22,10 @@ export async function safeMutation(
   try {
     await operation();
   } catch (error) {
-    throw new AppError(error, context, showUserNotification);
+    if (showUserNotification) {
+      showErrorNotification(`Error: ${context}`);
+    }
+    throw error;
   }
 }
 
@@ -33,7 +37,10 @@ export async function safeMutationWithReturn<T>(
   try {
     return await operation();
   } catch (error) {
-    throw new AppError(error, context, showUserNotification);
+    if (showUserNotification) {
+      showErrorNotification(`Error: ${context}`);
+    }
+    throw error;
   }
 }
 
@@ -44,7 +51,7 @@ export function safeListener(
   try {
     return operation();
   } catch (error) {
-    new AppError(error, context);
+    log(`${context}: ${(error as any)?.message ?? error}`, "error");
     return () => {};
   }
 }

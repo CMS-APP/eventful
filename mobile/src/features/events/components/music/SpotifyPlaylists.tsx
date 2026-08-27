@@ -7,19 +7,20 @@ import { Alert, StyleSheet, View } from "react-native";
 import {
   ILoadingModalContext,
   useLoadingModal
-} from "@/contexts/LoadingProviderContext";
+} from "@/app/context/loading/LoadingModalContext";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
-import { AppError } from "@/utils/error";
 import { haptics } from "@/utils/haptics";
 
 import { SpotifyPlaylistItem } from "./SpotifyPlaylistItem";
 import { viewSpotifyPlaylist } from "./SpotifyService";
 import { SpotifySignInButton } from "./SpotifySignInButton";
 import { useSpotifyPlaylists } from "./functions/useSpotifyPlaylists";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 
 interface SpotifyPlaylistsProps {
   event: Event;
@@ -60,7 +61,8 @@ export function SpotifyPlaylists({ event, setEvent }: SpotifyPlaylistsProps) {
         setLoading(true);
         await viewSpotifyPlaylist(playlist);
       } catch (error) {
-        new AppError(error, "Error opening Spotify playlist", true);
+        log(`Error opening Spotify playlist: ${(error as any)?.message ?? error}`, "error");
+        showErrorNotification("Error Opening Playlist");
       } finally {
         setLoading(false);
       }

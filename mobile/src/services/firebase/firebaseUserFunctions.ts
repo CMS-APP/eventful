@@ -28,7 +28,6 @@ import { Notification } from "@/types/Notification";
 import { PB_CONFIG, PhotoBoothConfig } from "@/types/PhotoBoothConfig";
 import { PollVote } from "@/types/PollVote";
 import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 import { sendFollowNotification } from "@/utils/notifications";
 
@@ -44,7 +43,10 @@ export function convertTimestampsToMillis(user: User) {
     }
     return user;
   } catch (error) {
-    new AppError(error, "Error converting timestamps to millis");
+    log(
+      `Error converting timestamps to millis: ${(error as any)?.message ?? error}`,
+      "error"
+    );
     return user;
   }
 }
@@ -61,11 +63,7 @@ export async function getUserInfo(userId: string): Promise<User | null> {
 }
 
 export async function createUserInfo(userId: string, data: User) {
-  try {
-    await setDocument(data, API_COLLECTIONS.USER, userId);
-  } catch (error) {
-    throw new AppError(error, "Error creating user details");
-  }
+  await setDocument(data, API_COLLECTIONS.USER, userId);
 }
 
 export type UserUpdateData = {
@@ -73,12 +71,8 @@ export type UserUpdateData = {
 };
 
 export async function updateUserInfo(userId: string, data: UserUpdateData) {
-  try {
-    const docRef = doc(FIRESTORE_DB, "user", userId);
-    await updateDoc(docRef, data);
-  } catch (error) {
-    throw new AppError(error, "Error updating user details");
-  }
+  const docRef = doc(FIRESTORE_DB, "user", userId);
+  await updateDoc(docRef, data);
 }
 
 async function deleteUserEvents(userId: string) {
@@ -93,7 +87,10 @@ async function deleteUserEvents(userId: string) {
     );
     await Promise.all(eventsDeletePromises);
   } catch (error) {
-    new AppError(error, "Error deleting user events");
+    log(
+      `Error deleting user events: ${(error as any)?.message ?? error}`,
+      "error"
+    );
   }
 }
 
@@ -118,79 +115,70 @@ async function deleteUserInvites(userId: string) {
     ];
     await Promise.all(deletePromise);
   } catch (error) {
-    new AppError(error, "Error deleting user invites");
+    log(
+      `Error deleting user invites: ${(error as any)?.message ?? error}`,
+      "error"
+    );
   }
 }
 
 async function deleteUserFollowing(userId: string) {
-  try {
-    const followingDocs = await getDocuments(
+  const followingDocs = await getDocuments(
+    API_COLLECTIONS.FOLLOWING,
+    userId,
+    API_FOLLOWING_COLLECTIONS.FOLLOWING
+  );
+
+  const followingDeletePromises = followingDocs.map((doc: any) =>
+    deleteDocument(
       API_COLLECTIONS.FOLLOWING,
       userId,
-      API_FOLLOWING_COLLECTIONS.FOLLOWING
-    );
+      API_FOLLOWING_COLLECTIONS.FOLLOWING,
+      doc.id
+    )
+  );
 
-    const followingDeletePromises = followingDocs.map((doc: any) =>
-      deleteDocument(
-        API_COLLECTIONS.FOLLOWING,
-        userId,
-        API_FOLLOWING_COLLECTIONS.FOLLOWING,
-        doc.id
-      )
-    );
-
-    await Promise.all(followingDeletePromises);
-  } catch (error) {
-    throw new AppError(error, "Error deleting user following");
-  }
+  await Promise.all(followingDeletePromises);
 }
 
 async function deleteUserFollowers(userId: string) {
-  try {
-    const followersDocs = await getDocuments(
+  const followersDocs = await getDocuments(
+    API_COLLECTIONS.FOLLOWERS,
+    userId,
+    API_FOLLOWERS_COLLECTIONS.FOLLOWERS
+  );
+
+  const followersDeletePromises = followersDocs.map((doc: any) =>
+    deleteDocument(
       API_COLLECTIONS.FOLLOWERS,
       userId,
-      API_FOLLOWERS_COLLECTIONS.FOLLOWERS
-    );
+      API_FOLLOWERS_COLLECTIONS.FOLLOWERS,
+      doc.id
+    )
+  );
 
-    const followersDeletePromises = followersDocs.map((doc: any) =>
-      deleteDocument(
-        API_COLLECTIONS.FOLLOWERS,
-        userId,
-        API_FOLLOWERS_COLLECTIONS.FOLLOWERS,
-        doc.id
-      )
-    );
-
-    await Promise.all(followersDeletePromises);
-  } catch (error) {
-    throw new AppError(error, "Error deleting user followers");
-  }
+  await Promise.all(followersDeletePromises);
 }
 
 async function deleteUserNotifications(userId: string) {
-  try {
-    const userNotifications = (await getDocumentsByQuery(
-      [where("userId", "==", userId)],
-      API_COLLECTIONS.NOTIFICATIONS
-    )) as Notification[];
-    const senderNotifications = (await getDocumentsByQuery(
-      [where("senderId", "==", userId)],
-      API_COLLECTIONS.NOTIFICATIONS
-    )) as Notification[];
+  const userNotifications = (await getDocumentsByQuery(
+    [where("userId", "==", userId)],
+    API_COLLECTIONS.NOTIFICATIONS
+  )) as Notification[];
+  const senderNotifications = (await getDocumentsByQuery(
+    [where("senderId", "==", userId)],
+    API_COLLECTIONS.NOTIFICATIONS
+  )) as Notification[];
 
-    const deletePromises = [
-      ...userNotifications.map((notification) =>
-        deleteDocument(API_COLLECTIONS.NOTIFICATIONS, notification.id)
-      ),
-      ...senderNotifications.map((notification) =>
-        deleteDocument(API_COLLECTIONS.NOTIFICATIONS, notification.id)
-      )
-    ];
-    await Promise.all(deletePromises);
-  } catch (error) {
-    throw new AppError(error, "Error deleting user notifications");
-  }
+  const deletePromises = [
+    ...userNotifications.map((notification) =>
+      deleteDocument(API_COLLECTIONS.NOTIFICATIONS, notification.id)
+    ),
+    ...senderNotifications.map((notification) =>
+      deleteDocument(API_COLLECTIONS.NOTIFICATIONS, notification.id)
+    )
+  ];
+  await Promise.all(deletePromises);
 }
 
 async function deleteUserPollVotes(userId: string) {
@@ -206,7 +194,10 @@ async function deleteUserPollVotes(userId: string) {
 
     await Promise.all(deletePromises);
   } catch (error) {
-    new AppError(error, "Error deleting user poll votes");
+    log(
+      `Error deleting user poll votes: ${(error as any)?.message ?? error}`,
+      "error"
+    );
   }
 }
 
@@ -214,7 +205,10 @@ async function deleteUserPhotoBoothConfig(userId: string) {
   try {
     await deleteDocument(API_COLLECTIONS.PHOTO_BOOTH_CONFIG, userId);
   } catch (error) {
-    new AppError(error, "Error deleting user photo booth config");
+    log(
+      `Error deleting user photo booth config: ${(error as any)?.message ?? error}`,
+      "error"
+    );
   }
 }
 
@@ -233,7 +227,10 @@ export async function deleteUserData(userId: string): Promise<void> {
     await removeData("spotifyData");
     await deleteDocument(API_COLLECTIONS.USER, userId);
   } catch (error) {
-    new AppError(error, "Error deleting user data");
+    log(
+      `Error deleting user data: ${(error as any)?.message ?? error}`,
+      "error"
+    );
   }
 }
 
@@ -245,30 +242,21 @@ export async function checkUsernameExists(username: string) {
   return usernameExists.length > 0;
 }
 
-export async function getPushTokensFromDatabase(userId: string) {
-  const user = await getDocument(API_COLLECTIONS.USER, userId);
-  return user?.pushTokens || [];
-}
-
 export async function sendFeedbackToDatabase(
   user: User,
   type: string,
   message: string
 ) {
-  try {
-    const feedback = {
-      userId: user.uid,
-      username: user.username,
-      email: user.email,
-      type,
-      message,
-      timestamp: new Date()
-    };
+  const feedback = {
+    userId: user.uid,
+    username: user.username,
+    email: user.email,
+    type,
+    message,
+    timestamp: new Date()
+  };
 
-    await createDocument(feedback, API_COLLECTIONS.FEEDBACK);
-  } catch (error) {
-    throw new AppError(error, "Error sending feedback");
-  }
+  await createDocument(feedback, API_COLLECTIONS.FEEDBACK);
 }
 
 export async function changeHostname(
@@ -276,24 +264,20 @@ export async function changeHostname(
   firstName: string,
   lastName: string
 ) {
-  try {
-    const eventLinks = (await getDocumentsByQuery(
-      [where("userId", "==", userId)],
-      API_COLLECTIONS.EVENT_LINKS
-    )) as EventLinkResponse[];
+  const eventLinks = (await getDocumentsByQuery(
+    [where("userId", "==", userId)],
+    API_COLLECTIONS.EVENT_LINKS
+  )) as EventLinkResponse[];
 
-    const eventLinksUpdatePromises = eventLinks.map((eventLink) =>
-      updateDocument(
-        { hostName: firstName + " " + lastName },
-        API_COLLECTIONS.EVENT_LINKS,
-        eventLink.id
-      )
-    );
+  const eventLinksUpdatePromises = eventLinks.map((eventLink) =>
+    updateDocument(
+      { hostName: firstName + " " + lastName },
+      API_COLLECTIONS.EVENT_LINKS,
+      eventLink.id
+    )
+  );
 
-    await Promise.all(eventLinksUpdatePromises);
-  } catch (error) {
-    throw new AppError(error, "Error changing hostname");
-  }
+  await Promise.all(eventLinksUpdatePromises);
 }
 
 export async function followUser(
@@ -301,36 +285,31 @@ export async function followUser(
   followUserId: string,
   notification = true
 ) {
-  try {
-    const following = await getDocument(
-      API_COLLECTIONS.FOLLOWING,
-      userId,
-      API_FOLLOWING_COLLECTIONS.FOLLOWING,
-      followUserId
-    );
+  const following = await getDocument(
+    API_COLLECTIONS.FOLLOWING,
+    userId,
+    API_FOLLOWING_COLLECTIONS.FOLLOWING,
+    followUserId
+  );
 
-    if (following?.status === "active") {
-      // User is already following this user
-      return;
+  if (following?.status === "active") {
+    return;
+  }
+
+  await setDocument(
+    { status: "active", followedAt: Timestamp.now() },
+    API_COLLECTIONS.FOLLOWING,
+    userId,
+    API_FOLLOWING_COLLECTIONS.FOLLOWING,
+    followUserId
+  );
+
+  if (notification) {
+    const sender = await getUserInfo(userId);
+    const recipient = await getUserInfo(followUserId);
+    if (recipient && sender) {
+      await sendFollowNotification(recipient, sender);
     }
-
-    await setDocument(
-      { status: "active", followedAt: Timestamp.now() },
-      API_COLLECTIONS.FOLLOWING,
-      userId,
-      API_FOLLOWING_COLLECTIONS.FOLLOWING,
-      followUserId
-    );
-
-    if (notification) {
-      const sender = await getUserInfo(userId);
-      const recipient = await getUserInfo(followUserId);
-      if (recipient && sender) {
-        await sendFollowNotification(recipient, sender);
-      }
-    }
-  } catch (error) {
-    throw new AppError(error, "Error following user");
   }
 }
 
@@ -345,30 +324,26 @@ export async function isFollowingUser(userId: string, followUserId: string) {
 }
 
 export async function unFollowUser(userId: string, followUserId: string) {
-  try {
-    const following = await getDocument(
-      API_COLLECTIONS.FOLLOWING,
-      userId,
-      API_FOLLOWING_COLLECTIONS.FOLLOWING,
-      followUserId
-    );
+  const following = await getDocument(
+    API_COLLECTIONS.FOLLOWING,
+    userId,
+    API_FOLLOWING_COLLECTIONS.FOLLOWING,
+    followUserId
+  );
 
-    if (following && following.status === "inactive") {
-      return;
-    }
-
-    await updateDocument(
-      { status: "inactive", unfollowedAt: Timestamp.now() },
-      API_COLLECTIONS.FOLLOWING,
-      userId,
-      API_FOLLOWING_COLLECTIONS.FOLLOWING,
-      followUserId
-    );
-
-    await removeUserFromAllInvites(userId, followUserId);
-  } catch (error) {
-    throw new AppError(error, "Error unfollowing user");
+  if (following && following.status === "inactive") {
+    return;
   }
+
+  await updateDocument(
+    { status: "inactive", unfollowedAt: Timestamp.now() },
+    API_COLLECTIONS.FOLLOWING,
+    userId,
+    API_FOLLOWING_COLLECTIONS.FOLLOWING,
+    followUserId
+  );
+
+  await removeUserFromAllInvites(userId, followUserId);
 }
 
 async function removeUserFromAllInvites(senderId: string, userId: string) {
@@ -382,52 +357,47 @@ async function removeUserFromAllInvites(senderId: string, userId: string) {
     );
     await Promise.all(deletePromises);
   } catch (error) {
-    new AppError(error, "Error removing user from all invites");
+    log(
+      `Error removing user from all invites: ${(error as any)?.message ?? error}`,
+      "error"
+    );
   }
 }
 
 export async function getUserFollowers(userId: string) {
-  try {
-    const followersDocs = await getDocuments(
-      API_COLLECTIONS.FOLLOWERS,
-      userId,
-      API_FOLLOWERS_COLLECTIONS.FOLLOWERS
-    );
+  const followersDocs = await getDocuments(
+    API_COLLECTIONS.FOLLOWERS,
+    userId,
+    API_FOLLOWERS_COLLECTIONS.FOLLOWERS
+  );
 
-    const followers: Follower[] = followersDocs.map((doc: any) => ({
-      followerId: doc.id,
-      followingId: userId,
-      status: doc.status,
-      followedAt: doc.followedAt,
-      unfollowedAt: doc.unfollowedAt
-    }));
+  const followers: Follower[] = followersDocs.map((doc: any) => ({
+    followerId: doc.id,
+    followingId: userId,
+    status: doc.status,
+    followedAt: doc.followedAt,
+    unfollowedAt: doc.unfollowedAt
+  }));
 
-    return followers.filter((follower) => follower.status === "active");
-  } catch (error) {
-    throw new AppError(error, "Error getting user followers");
-  }
+  return followers.filter((follower) => follower.status === "active");
 }
 
 export async function getUserFollowing(userId: string) {
-  try {
-    const followingDocs = await getDocuments(
-      API_COLLECTIONS.FOLLOWING,
-      userId,
-      API_FOLLOWING_COLLECTIONS.FOLLOWING
-    );
+  const followingDocs = await getDocuments(
+    API_COLLECTIONS.FOLLOWING,
+    userId,
+    API_FOLLOWING_COLLECTIONS.FOLLOWING
+  );
 
-    const following: Follower[] = followingDocs.map((doc: any) => ({
-      followerId: userId,
-      followingId: doc.id,
-      status: doc.status,
-      followedAt: doc.followedAt,
-      unfollowedAt: doc.unfollowedAt
-    }));
+  const following: Follower[] = followingDocs.map((doc: any) => ({
+    followerId: userId,
+    followingId: doc.id,
+    status: doc.status,
+    followedAt: doc.followedAt,
+    unfollowedAt: doc.unfollowedAt
+  }));
 
-    return following.filter((follower) => follower.status === "active");
-  } catch (error) {
-    throw new AppError(error, "Error getting user following");
-  }
+  return following.filter((follower) => follower.status === "active");
 }
 
 export async function readFollowNotification(notificationId: string) {
@@ -438,7 +408,10 @@ export async function readFollowNotification(notificationId: string) {
       notificationId
     );
   } catch (error) {
-    new AppError(error, "Error reading follow notification");
+    log(
+      `Error reading follow notification: ${(error as any)?.message ?? error}`,
+      "error"
+    );
   }
 }
 
@@ -450,135 +423,108 @@ export async function readUpdateNotification(notificationId: string) {
       notificationId
     );
   } catch (error) {
-    new AppError(error, "Error reading update notification");
+    log(
+      `Error reading update notification: ${(error as any)?.message ?? error}`,
+      "error"
+    );
   }
 }
 
 async function deleteOrphanedFollowing(userId: string) {
-  try {
-    const followingDocs = await getDocuments(
-      API_COLLECTIONS.FOLLOWING,
-      userId,
-      API_FOLLOWING_COLLECTIONS.FOLLOWING
-    );
+  const followingDocs = await getDocuments(
+    API_COLLECTIONS.FOLLOWING,
+    userId,
+    API_FOLLOWING_COLLECTIONS.FOLLOWING
+  );
 
-    for (const doc of followingDocs) {
-      if (!doc?.id) continue;
-      const userDoc = await getDocument(API_COLLECTIONS.USER, doc.id);
-      if (!userDoc) {
-        await deleteDocument(
-          API_COLLECTIONS.FOLLOWING,
-          userId,
-          API_FOLLOWING_COLLECTIONS.FOLLOWING,
-          doc.id
-        );
-      }
+  for (const doc of followingDocs) {
+    if (!doc?.id) continue;
+    const userDoc = await getUserInfo(doc.id);
+    if (!userDoc) {
+      await deleteDocument(
+        API_COLLECTIONS.FOLLOWING,
+        userId,
+        API_FOLLOWING_COLLECTIONS.FOLLOWING,
+        doc.id
+      );
     }
-  } catch (error) {
-    throw new AppError(error, "Error cleaning up orphaned following data");
   }
 }
 
 async function deleteOrphanedFollowers(userId: string) {
-  try {
-    const followersDocs = await getDocuments(
-      API_COLLECTIONS.FOLLOWERS,
-      userId,
-      API_FOLLOWERS_COLLECTIONS.FOLLOWERS
-    );
-    for (const doc of followersDocs) {
-      if (!doc?.id) continue;
-      const userDoc = await getDocument(API_COLLECTIONS.USER, doc.id);
-      if (!userDoc) {
-        await deleteDocument(
-          API_COLLECTIONS.FOLLOWERS,
-          userId,
-          API_FOLLOWERS_COLLECTIONS.FOLLOWERS,
-          doc.id
-        );
-      }
+  const followersDocs = await getDocuments(
+    API_COLLECTIONS.FOLLOWERS,
+    userId,
+    API_FOLLOWERS_COLLECTIONS.FOLLOWERS
+  );
+  for (const doc of followersDocs) {
+    if (!doc?.id) continue;
+    const userDoc = await getUserInfo(doc.id);
+    if (!userDoc) {
+      await deleteDocument(
+        API_COLLECTIONS.FOLLOWERS,
+        userId,
+        API_FOLLOWERS_COLLECTIONS.FOLLOWERS,
+        doc.id
+      );
     }
-  } catch (error) {
-    throw new AppError(error, "Error cleaning up orphaned followers data");
   }
 }
 
 async function deleteOrphanedNotifications(userId: string) {
-  try {
-    const [userNotifications, senderNotifications] = await Promise.all([
-      getDocumentsByQuery(
-        [where("userId", "==", userId)],
-        API_COLLECTIONS.NOTIFICATIONS
-      ),
-      getDocumentsByQuery(
-        [where("senderId", "==", userId)],
-        API_COLLECTIONS.NOTIFICATIONS
-      )
-    ]);
+  const [userNotifications, senderNotifications] = await Promise.all([
+    getDocumentsByQuery(
+      [where("userId", "==", userId)],
+      API_COLLECTIONS.NOTIFICATIONS
+    ),
+    getDocumentsByQuery(
+      [where("senderId", "==", userId)],
+      API_COLLECTIONS.NOTIFICATIONS
+    )
+  ]);
 
-    for (const notification of userNotifications) {
-      const senderDoc = await getDocument(
-        API_COLLECTIONS.USER,
-        notification?.senderId || ""
+  for (const notification of userNotifications) {
+    const senderDoc = await getUserInfo(notification?.senderId || "");
+
+    if (!senderDoc) {
+      await deleteDocument(
+        API_COLLECTIONS.NOTIFICATIONS,
+        notification?.id || ""
       );
-
-      if (!senderDoc) {
-        await deleteDocument(
-          API_COLLECTIONS.NOTIFICATIONS,
-          notification?.id || ""
-        );
-      }
     }
+  }
 
-    for (const notification of senderNotifications) {
-      const recipientDoc = await getDocument(
-        API_COLLECTIONS.USER,
-        notification?.userId || ""
+  for (const notification of senderNotifications) {
+    const recipientDoc = await getUserInfo(notification?.userId || "");
+
+    if (!recipientDoc) {
+      await deleteDocument(
+        API_COLLECTIONS.NOTIFICATIONS,
+        notification?.id || ""
       );
-
-      if (!recipientDoc) {
-        await deleteDocument(
-          API_COLLECTIONS.NOTIFICATIONS,
-          notification?.id || ""
-        );
-      }
     }
-  } catch (error) {
-    throw new AppError(error, "Error cleaning up orphaned notifications");
   }
 }
 
 export async function cleanupOrphanedData(userId: string) {
-  try {
-    await Promise.all([
-      deleteOrphanedFollowing(userId),
-      deleteOrphanedFollowers(userId),
-      deleteOrphanedNotifications(userId)
-    ]);
-  } catch (error) {
-    new AppError(
-      error,
-      "FirebaseFunctions: Error during orphaned data cleanup"
-    );
-  }
+  await Promise.all([
+    deleteOrphanedFollowing(userId),
+    deleteOrphanedFollowers(userId),
+    deleteOrphanedNotifications(userId)
+  ]);
 }
 
 export async function getPhotoBoothConfig(
   userId: string
 ): Promise<PhotoBoothConfig> {
-  try {
-    const configData = await getDocument(
-      API_COLLECTIONS.PHOTO_BOOTH_CONFIG,
-      userId
-    );
+  const configData = await getDocument(
+    API_COLLECTIONS.PHOTO_BOOTH_CONFIG,
+    userId
+  );
 
-    if (configData) {
-      return configData as PhotoBoothConfig;
-    } else {
-      return PB_CONFIG as PhotoBoothConfig;
-    }
-  } catch (error) {
-    new AppError(error, "Error fetching photo booth configuration");
+  if (configData) {
+    return configData as PhotoBoothConfig;
+  } else {
     return PB_CONFIG as PhotoBoothConfig;
   }
 }
@@ -587,42 +533,38 @@ export async function savePhotoBoothConfig(
   userId: string,
   config: PhotoBoothConfig
 ) {
-  try {
-    const configData = {
-      title: config.title || "",
-      subTitle: config.subTitle || "",
-      frameColor: config.frameColor || "#FFFFFF",
-      textColor: config.textColor || "#000000",
-      customTitleFont: config.customTitleFont || "Poppins",
-      customTitleFontSize: config.customTitleFontSize || 24,
-      customSubTitleFont: config.customSubTitleFont || "Poppins",
-      customSubTitleFontSize: config.customSubTitleFontSize || 24,
-      autoSave: config.autoSave !== undefined ? config.autoSave : true,
-      saveIndividualPhotos:
-        config.saveIndividualPhotos !== undefined
-          ? config.saveIndividualPhotos
-          : false,
-      removeWatermark:
-        config.removeWatermark !== undefined ? config.removeWatermark : false,
-      flipPhotosHorizontally:
-        config.flipPhotosHorizontally !== undefined
-          ? config.flipPhotosHorizontally
-          : true,
-      collageStyle: config.collageStyle || "square",
-      canChangeCollage:
-        config.canChangeCollage !== undefined ? config.canChangeCollage : false,
-      canChangeFilter:
-        config.canChangeFilter !== undefined ? config.canChangeFilter : false,
-      flash: config.flash !== undefined ? config.flash : false,
-      filter: config.filter || "Normal",
-      timerDuration: config.timerDuration || 4,
-      updatedAt: Timestamp.now()
-    };
+  const configData = {
+    title: config.title || "",
+    subTitle: config.subTitle || "",
+    frameColor: config.frameColor || "#FFFFFF",
+    textColor: config.textColor || "#000000",
+    customTitleFont: config.customTitleFont || "Poppins",
+    customTitleFontSize: config.customTitleFontSize || 24,
+    customSubTitleFont: config.customSubTitleFont || "Poppins",
+    customSubTitleFontSize: config.customSubTitleFontSize || 24,
+    autoSave: config.autoSave !== undefined ? config.autoSave : true,
+    saveIndividualPhotos:
+      config.saveIndividualPhotos !== undefined
+        ? config.saveIndividualPhotos
+        : false,
+    removeWatermark:
+      config.removeWatermark !== undefined ? config.removeWatermark : false,
+    flipPhotosHorizontally:
+      config.flipPhotosHorizontally !== undefined
+        ? config.flipPhotosHorizontally
+        : true,
+    collageStyle: config.collageStyle || "square",
+    canChangeCollage:
+      config.canChangeCollage !== undefined ? config.canChangeCollage : false,
+    canChangeFilter:
+      config.canChangeFilter !== undefined ? config.canChangeFilter : false,
+    flash: config.flash !== undefined ? config.flash : false,
+    filter: config.filter || "Normal",
+    timerDuration: config.timerDuration || 4,
+    updatedAt: Timestamp.now()
+  };
 
-    await setDocument(configData, API_COLLECTIONS.PHOTO_BOOTH_CONFIG, userId);
-  } catch (error) {
-    throw new AppError(error, "Error saving photo booth configuration");
-  }
+  await setDocument(configData, API_COLLECTIONS.PHOTO_BOOTH_CONFIG, userId);
 }
 
 export async function getUsersFromFollowing(
@@ -643,7 +585,10 @@ export async function getUsersFromFollowing(
     );
     return users.filter((user: User | null) => user !== null);
   } catch (error) {
-    new AppError(error, "Error getting users from following");
+    log(
+      `Error getting users from following: ${(error as any)?.message ?? error}`,
+      "error"
+    );
     return [];
   }
 }

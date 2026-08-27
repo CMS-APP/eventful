@@ -13,10 +13,10 @@ import { useDispatch } from "react-redux";
 
 import { useState } from "react";
 
+import { dataInit } from "@/app/init/data";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
-import { appInit } from "@/services/initialisation/appInit";
-import { AppError } from "@/utils/error";
+import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
 import { navigationRef } from "@/utils/navigation";
 
@@ -47,7 +47,7 @@ export function GoogleLogin() {
       );
 
       const user = await signInWithCredential(getAuth(), googleCredential);
-      const result = await appInit(dispatch);
+      const result = await dataInit(dispatch);
 
       if (user.additionalUserInfo?.profile) {
         await saveGoogleOnboardingName(
@@ -66,7 +66,11 @@ export function GoogleLogin() {
         log("User cancelled Google authentication", "info");
         return;
       }
-      new AppError(error, "Error signing in with Google", true);
+      log(
+        `Error signing in with Google: ${(error as any)?.message ?? error}`,
+        "error"
+      );
+      showErrorNotification("Error Signing In");
     } finally {
       setIsSubmitting(false);
     }

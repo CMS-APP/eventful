@@ -7,7 +7,6 @@ import { Alert, StyleSheet, View } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { LoadingModal } from "@/components/views/LoadingModal";
 import { FlatHeader } from "@/components/views/screen/FlatHeader";
 import { FlatHeaderProps } from "@/components/views/screen/props";
 import { Button } from "@/design-system/components/Button";
@@ -20,9 +19,10 @@ import {
 import { createPostInDatabase } from "@/services/firebase/firebaseInspirationFunctions";
 import { UserState } from "@/store/UserSlice";
 import { Photo } from "@/types/Photo";
-import { AppError } from "@/utils/error";
 
 import { UploadPhoto } from "../components/UploadPhoto";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 
 interface CreatePostScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;
@@ -46,7 +46,8 @@ export function CreatePostScreen({ navigation }: CreatePostScreenProps) {
       setLoading(false);
       (navigation as StackNavigationProp<InspirationStackParamList>).goBack();
     } catch (error) {
-      new AppError(error, "Error creating post", true);
+      log(`Error creating post: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Creating Post");
     } finally {
       setLoading(false);
     }
@@ -77,8 +78,6 @@ export function CreatePostScreen({ navigation }: CreatePostScreenProps) {
 
   return (
     <View style={styles.container}>
-      <LoadingModal visible={loading} />
-
       <KeyboardScrollView
         tabBarPresent={false}
         handleScroll={() => {}}
@@ -117,6 +116,7 @@ export function CreatePostScreen({ navigation }: CreatePostScreenProps) {
               color={colors.primary}
               textColor={colors.white}
               onPress={createNewPostAlert}
+              loading={loading}
             />
           </View>
         </View>

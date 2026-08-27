@@ -12,10 +12,11 @@ import {
   AppStackParamList,
   OnboardingStackParamList
 } from "@/features/app/navigationTypes";
-import { AppError } from "@/utils/error";
 
 import { FeatureView } from "../components/FeatureView";
 import { OnboardingButtons } from "../components/OnboardingButtons";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 
 interface Onboarding1ScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;
@@ -28,7 +29,8 @@ export function Onboarding1Screen({ navigation }: Onboarding1ScreenProps) {
       await signOut(auth);
       await signOutNavigation();
     } catch (error) {
-      new AppError(error, "Error Signing out", true);
+      log(`Error Signing out: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Signing Out");
     }
   }
 

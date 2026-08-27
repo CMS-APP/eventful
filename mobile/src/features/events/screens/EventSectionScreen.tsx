@@ -18,8 +18,8 @@ import {
 import { updateEventLinkInDatabase } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";
 import type { Event } from "@/types/Event";
+import { showErrorNotification } from "@/utils/appNotifications";
 import { parseDatabaseDate } from "@/utils/date";
-import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 import { updateNotificationsForEvent } from "@/utils/notifications";
 
@@ -57,11 +57,8 @@ export function EventSectionScreen({
         if (eventData) {
           setEvent(eventData);
         } else {
-          new AppError(
-            new Error("Event not found"),
-            "Error fetching event",
-            true
-          );
+          log("Error fetching event: Event not found", "error");
+          showErrorNotification("Error Loading Event");
         }
       }
 

@@ -11,8 +11,7 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    es6: true,
-    jest: true
+    es6: true
   },
   plugins: ["react", "react-native"],
   rules: {
@@ -33,13 +32,5 @@ module.exports = {
       }
     }
   },
-  ignorePatterns: ["/dist/*", "node_modules/"],
-  overrides: [
-    {
-      files: ["**/*.test.{ts,tsx}", "**/__tests__/**/*.{ts,tsx}"],
-      env: {
-        jest: true
-      }
-    }
-  ]
+  ignorePatterns: ["/dist/*", "node_modules/"]
 };

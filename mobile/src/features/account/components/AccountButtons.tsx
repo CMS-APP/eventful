@@ -8,12 +8,13 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import {
   ILoadingModalContext,
   useLoadingModal
-} from "@/contexts/LoadingProviderContext";
+} from "@/app/context/loading/LoadingModalContext";
 import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
 import { AllStackParamList } from "@/features/app/navigationTypes";
 import { handleSignOut } from "@/services/firebase/firebaseAuth";
-import { AppError } from "@/utils/error";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 
 export function AccountButtons() {
   const { setLoading } = useLoadingModal() as ILoadingModalContext;
@@ -26,7 +27,8 @@ export function AccountButtons() {
       handleSignOut(dispatch);
       signOutNavigation();
     } catch (error) {
-      new AppError(error, "Error signing out", true);
+      log(`Error signing out: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Signing Out");
     } finally {
       setLoading(false);
     }

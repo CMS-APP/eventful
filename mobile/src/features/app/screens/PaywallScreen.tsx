@@ -14,19 +14,20 @@ import { openSubscriptionManagement } from "@/features/app/utils/update";
 import {
   PaymentContextType,
   usePaymentProvider
-} from "@/providers/PaymentProvider";
+} from "@/app/context/payment/PaymentContext";
 import {
   getPhotoBoothProducts,
   getPremiumProducts,
   subscribeToProduct
-} from "@/services/purchases/payments";
+} from "@/app/context/payment/payments";
 import { Subscription } from "@/types/Subscription";
-import { AppError } from "@/utils/error";
 
 import { PaywallButtons } from "../components/PaywallButtons";
 import { PaywallFeatures } from "../components/PaywallFeatures";
 import { SubscriptionButton } from "../components/SubscriptionButton";
 import { AllStackParamList } from "../navigationTypes";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 
 interface PaywallScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;
@@ -87,7 +88,8 @@ export function PaywallScreen({ navigation, route }: PaywallScreenProps) {
         navigation as StackNavigationProp<AppStackParamList>
       );
     } catch (error) {
-      new AppError(error, "Error subscribing to product", true);
+      log(`Error subscribing to product: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Subscribing");
     } finally {
       setLoading(false);
     }

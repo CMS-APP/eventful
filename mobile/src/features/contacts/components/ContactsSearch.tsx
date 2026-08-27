@@ -89,12 +89,19 @@ export function ContactsSearch({
 }
 
 const styles = StyleSheet.create({
+  buttonLabel: {
+    color: colors.black,
+    flex: 1,
+    fontSize: 12,
+    letterSpacing: 2,
+    textTransform: "capitalize"
+  },
   searchContainer: {
     alignItems: "center",
-    minHeight: 44,
     borderRadius: 16,
     flexDirection: "row",
     gap: 12,
+    minHeight: 44,
     paddingHorizontal: 16
   },
   searchContainerWithButton: {
@@ -116,13 +123,6 @@ const styles = StyleSheet.create({
     minHeight: 44,
     paddingVertical: 0,
     textAlignVertical: "center",
-    textTransform: "capitalize"
-  },
-  buttonLabel: {
-    color: colors.black,
-    flex: 1,
-    fontSize: 12,
-    letterSpacing: 2,
     textTransform: "capitalize"
   }
 });

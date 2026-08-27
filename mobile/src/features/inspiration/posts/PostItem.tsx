@@ -28,12 +28,12 @@ import { UserState } from "@/store/UserSlice";
 import { Post } from "@/types/Post";
 import { User } from "@/types/User";
 import { calculateTimeAgo } from "@/utils/date";
-import { AppError } from "@/utils/error";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
 
 import { PostImageCarousel } from "./PostImageCarousel";
+import { showErrorNotification } from "@/utils/appNotifications";
 
 export function PostItem({ post }: { post: Post }) {
   const [author, setAuthor] = useState<User | null>(null);
@@ -58,7 +58,7 @@ export function PostItem({ post }: { post: Post }) {
       setLikesCount(count);
       setIsLiked(liked);
     } catch (error) {
-      new AppError(error, "Error loading like data");
+      log(`Error loading like data: ${(error as any)?.message ?? error}`, "error");
     }
   };
 
@@ -101,7 +101,8 @@ export function PostItem({ post }: { post: Post }) {
         setIsLiked(true);
         setLikesCount((prev) => prev + 1);
       } catch (error) {
-        new AppError(error, "Error liking post", true);
+        log(`Error liking post: ${(error as any)?.message ?? error}`, "error");
+        showErrorNotification("Error Liking Post");
       }
     } else {
       tapTimeoutRef.current = setTimeout(() => {
@@ -128,7 +129,7 @@ export function PostItem({ post }: { post: Post }) {
     try {
       await togglePostLike(post.id, currentUserId);
     } catch (error) {
-      new AppError(error, "Error toggling like");
+      log(`Error toggling like: ${(error as any)?.message ?? error}`, "error");
     }
   };
 

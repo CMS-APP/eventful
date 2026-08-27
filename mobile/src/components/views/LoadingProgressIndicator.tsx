@@ -9,20 +9,18 @@ interface LoadingProgressIndicatorProps {
   progress?: number;
   currentStep?: string;
   totalSteps?: number;
-  size?: number;
 }
 
 export function LoadingProgressIndicator({
   progress = 0,
   currentStep = "",
-  totalSteps = 0,
-  size = 100
+  totalSteps = 0
 }: LoadingProgressIndicatorProps) {
   const progressPercentage = Math.min(progress / totalSteps, 1);
 
   return (
     <View style={styles.container}>
-      <LoadingIndicator size={100} />
+      <LoadingIndicator />
       <View style={styles.progressContainer}>
         <View style={styles.progressBar}>
           <View

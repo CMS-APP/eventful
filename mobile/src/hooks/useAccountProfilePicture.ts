@@ -6,7 +6,8 @@ import { syncUserPicture } from "@/services/cache";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState } from "@/store/UserSlice";
 import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 
 interface ProfilePictureCacheEntry {
   userId: string;
@@ -63,7 +64,8 @@ export function useAccountProfilePicture() {
       })
       .catch((error) => {
         if (!cancelled) {
-          new AppError(error, "Error syncing profile picture", true);
+          log(`Error syncing profile picture: ${(error as any)?.message ?? error}`, "error");
+          showErrorNotification("Error Loading Photo");
           setImage(null);
           setLoading(false);
         }

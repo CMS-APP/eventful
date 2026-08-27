@@ -28,8 +28,9 @@ import {
   setUsernameUpdateDate
 } from "@/store/UserSlice";
 import { parseDatabaseDate } from "@/utils/date";
-import { AppError } from "@/utils/error";
 import { checkValue as checkValueUtil } from "@/utils/regex";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 
 interface ChangeNameModalProps {
   presentModal: boolean;
@@ -197,7 +198,8 @@ export function ChangeNameModal({
       setUsernameExists(null);
       Alert.alert("Success", `Your ${type} has been updated.`);
     } catch (error) {
-      new AppError(error, "Error changing name", true);
+      log(`Error changing name: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Changing Name");
     }
   }, [
     type,

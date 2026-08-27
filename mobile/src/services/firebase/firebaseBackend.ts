@@ -1,7 +1,5 @@
 import { FirebaseAuthTypes, getIdToken } from "@react-native-firebase/auth";
 
-import { AppError } from "@/utils/error";
-
 const BASE_URL = "https://api.eventfulapp.com";
 
 const ENDPOINTS = {
@@ -21,8 +19,7 @@ async function getAppCheckToken(user: FirebaseAuthTypes.User) {
   });
 
   if (!appCheckRes.ok) {
-    const msg = "FirebaseBackend: Error getting App Check token";
-    throw new AppError(appCheckRes, msg);
+    throw new Error("FirebaseBackend: Error getting App Check token");
   }
 
   const { token: appCheckToken } = await appCheckRes.json();
@@ -46,53 +43,38 @@ async function post(
   });
 
   if (throwOnError && !response.ok) {
-    const msg = `FirebaseBackend: Request failed (${response.status})`;
-    throw new AppError(response, msg);
+    throw new Error(`FirebaseBackend: Request failed (${response.status})`);
   }
 
   return response;
 }
 
 export async function sendVerificationEmail(user: FirebaseAuthTypes.User) {
-  try {
-    return await post(
-      user,
-      ENDPOINTS.sendVerificationEmail,
-      { email: user.email },
-      { throwOnError: false }
-    );
-  } catch (error) {
-    const msg = "FirebaseBackend: Error sending verification email";
-    throw new AppError(error, msg);
-  }
+  return await post(
+    user,
+    ENDPOINTS.sendVerificationEmail,
+    { email: user.email },
+    { throwOnError: false }
+  );
+
 }
 
 export async function incrementUserCount(user: FirebaseAuthTypes.User) {
-  try {
-    await post(user, ENDPOINTS.incrementUserCount);
-  } catch (error) {
-    throw new AppError(error, "FirebaseBackend: Error incrementing user count");
-  }
+  await post(user, ENDPOINTS.incrementUserCount);
+
 }
 
 export async function incrementEventCount(user: FirebaseAuthTypes.User) {
-  try {
-    await post(user, ENDPOINTS.incrementEventCount);
-  } catch (error) {
-    const msg = "FirebaseBackend: Error incrementing event count";
-    throw new AppError(error, msg);
-  }
+  await post(user, ENDPOINTS.incrementEventCount);
+
 }
 
 export async function userSearch(
   searchInput: string,
   user: FirebaseAuthTypes.User
 ) {
-  try {
-    const response = await post(user, ENDPOINTS.userSearch, { q: searchInput });
-    const { hits } = await response.json();
-    return hits;
-  } catch (error) {
-    throw new AppError(error, "FirebaseBackend: Error searching for users");
-  }
+  const response = await post(user, ENDPOINTS.userSearch, { q: searchInput });
+  const { hits } = await response.json();
+  return hits;
+
 }

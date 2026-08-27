@@ -1,4 +1,4 @@
-import { Image, Platform, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
@@ -9,7 +9,6 @@ import { TextButton } from "@/design-system/components/TextButton";
 import { colors } from "@/design-system/tokens/colors";
 import { AuthStackParamList } from "@/features/app/navigationTypes";
 import { useSafeAreaStyles } from "@/hooks/useSafeAreaStyles";
-import { log } from "@/utils/logging";
 
 import { AppleLogin } from "../components/AppleLogin";
 import { GoogleLogin } from "../components/GoogleLogin";
@@ -19,13 +18,13 @@ interface WelcomeScreenProps {
 }
 
 export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
+  const { safeArea } = useSafeAreaStyles();
+
   const handleSignIn = () => {
-    log("Navigation: Sign In", "info");
     navigation.navigate("SignIn", { email: "", password: "" });
   };
 
   const handleSignUp = () => {
-    log("Navigation: Sign Up", "info");
     navigation.navigate("SignUp");
   };
 
@@ -34,10 +33,7 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
       <Background page="Welcome" image>
         <View style={styles.logoContainer}>
           <View
-            style={[
-              styles.logoBackground,
-              { marginTop: useSafeAreaStyles().safeArea.paddingTop }
-            ]}
+            style={[styles.logoBackground, { marginTop: safeArea.paddingTop }]}
           >
             <Image
               source={require("@/assets/logos/eventful-logo.png")}
@@ -62,7 +58,7 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
             icon="envelope"
           />
 
-          {Platform.OS === "ios" && <AppleLogin />}
+          <AppleLogin />
           <GoogleLogin />
 
           <View style={styles.orContainer}>

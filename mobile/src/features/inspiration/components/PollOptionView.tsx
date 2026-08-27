@@ -10,10 +10,10 @@ import { voteForOptionInDatabase } from "@/services/firebase/firebaseInspiration
 import { UserState } from "@/store/UserSlice";
 import { Poll } from "@/types/Poll";
 import { PollVote } from "@/types/PollVote";
-import { AppError } from "@/utils/error";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
 import { generateUUID } from "@/utils/uuid";
+import { showErrorNotification } from "@/utils/appNotifications";
 
 interface PollOptionViewProps {
   poll: Poll;
@@ -91,7 +91,8 @@ export function PollOptionView({
     try {
       await voteForOptionInDatabase(poll, userId, option);
     } catch (error) {
-      throw new AppError(error, "Error voting for option", true);
+      showErrorNotification("Error Voting");
+      throw error;
     }
   }, [poll, userId, option, votes, setVotes, setUserVote]);
 

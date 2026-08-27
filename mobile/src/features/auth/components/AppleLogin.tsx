@@ -1,13 +1,84 @@
 /** @format */
-// This file exists for TypeScript module resolution.
-// React Native Metro bundler will automatically prioritize platform-specific files:
-// - AppleLogin.ios.tsx (on iOS)
-// - AppleLogin.android.tsx (on Android)
-// - AppleLogin.web.tsx (on web)
-// This base file is only used if no platform-specific file matches.
+import { appleAuth } from "@invertase/react-native-apple-authentication";
+import {
+  AppleAuthProvider,
+  getAuth,
+  signInWithCredential
+} from "@react-native-firebase/auth";
+import { useDispatch } from "react-redux";
+
 import React from "react";
 
-// Placeholder component - Metro will use platform-specific versions instead
-export function AppleLogin(): React.JSX.Element | null {
-  return null;
+import { Platform } from "react-native";
+
+import { dataInit } from "@/app/init/data";
+import { Button } from "@/design-system/components/Button";
+import { colors } from "@/design-system/tokens/colors";
+import {
+  ILoadingModalContext,
+  useLoadingModal
+} from "@/app/context/loading/LoadingModalContext";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
+import { navigationRef } from "@/utils/navigation";
+
+import { saveAppleOnboardingName } from "../utils";
+
+export function AppleLogin() {
+  const dispatch = useDispatch();
+  const { setLoading } = useLoadingModal() as ILoadingModalContext;
+
+  if (Platform.OS !== "ios") {
+    return null;
+  }
+
+  async function onAppleButtonPress() {
+    try {
+      setLoading(true);
+      const appleAuthRequestResponse = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGIN,
+        requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL]
+      });
+
+      if (!appleAuthRequestResponse.identityToken) {
+        throw new Error("Apple Sign-In failed - no identify token returned");
+      }
+
+      const fullName = appleAuthRequestResponse.fullName;
+
+      const { identityToken, nonce } = appleAuthRequestResponse;
+      const appleCredential = AppleAuthProvider.credential(
+        identityToken,
+        nonce
+      );
+
+      const user = await signInWithCredential(getAuth(), appleCredential);
+      const result = await dataInit(dispatch);
+
+      if (fullName?.givenName && fullName?.familyName) {
+        await saveAppleOnboardingName(user.user, fullName);
+      }
+
+      navigationRef.navigate(result);
+    } catch (error: any) {
+      if (error.code === "1001") {
+        log("User cancelled authentication", "info");
+      } else {
+        log(error, "error");
+        showErrorNotification("Error signing in with Apple");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <Button
+      text="Apple"
+      onPress={onAppleButtonPress}
+      color={colors.primary}
+      textColor={colors.white}
+      icon="apple"
+    />
+  );
 }

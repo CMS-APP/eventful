@@ -43,9 +43,8 @@ export default ({ config }: ConfigContext) => {
     ios: {
       bundleIdentifier: bundleId,
       icon: "./src/assets/logos/eventful-logo.png",
-      buildNumber: "301",
+      buildNumber: "302",
       supportsTablet: true,
-      usesAppleSignIn: true,
       infoPlist: {
         NSPhotoLibraryUsageDescription:
           "This app needs access to your photo library to upload photos to your account and events.",
@@ -139,9 +138,7 @@ export default ({ config }: ConfigContext) => {
       }
     },
     updates: {
-      url: "https://u.expo.dev/8a843ae2-e39e-46ef-8eea-47724de6edf0",
-      enabled: true,
-      fallbackToCacheTimeout: 0
+      enabled: false
     }
   };
 };

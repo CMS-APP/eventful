@@ -1,36 +1,28 @@
-// App Notifications
-import { log } from "./logging";
+import { ToastType } from "@/app/context/toast/const";
 
-let globalShowError: ((message: string, duration?: number) => void) | null =
+let globalShowToast: ((message: string, type?: ToastType) => void) | null =
   null;
 
-let notificationQueue: { message: string; duration?: number }[] = [];
+let toastQueue: { message: string; type?: ToastType }[] = [];
 
-export function setGlobalNotificationFunctions(
-  showError: (message: string, duration?: number) => void
+export function setGlobalToastFunction(
+  showToast: (message: string, type?: ToastType) => void
 ) {
-  globalShowError = showError;
+  globalShowToast = showToast;
 
-  // Process any queued notifications
-  if (notificationQueue.length > 0) {
-    log(
-      `AppNotifications: Provider initialized, processing ${notificationQueue.length} queued notification(s)`,
-      "info"
-    );
-
-    notificationQueue.forEach(({ message, duration }) => {
-      showError(message, duration);
+  if (toastQueue.length > 0) {
+    toastQueue.forEach(({ message, type }) => {
+      showToast(message, type);
     });
 
-    notificationQueue = [];
+    toastQueue = [];
   }
 }
 
-export function showErrorNotification(message: string, duration?: number) {
-  if (globalShowError) {
-    globalShowError(message, duration);
+export function showErrorNotification(message: string) {
+  if (globalShowToast) {
+    globalShowToast(message, "error");
   } else {
-    // Queue the notification for when provider is ready
-    notificationQueue.push({ message, duration });
+    toastQueue.push({ message, type: "error" });
   }
 }

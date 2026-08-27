@@ -7,8 +7,6 @@ import {
 
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
-import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 import { generateUUID } from "@/utils/uuid";
 
@@ -26,45 +24,37 @@ import { getSenderInvitesFromDatabase } from "../firebase/firebaseInviteFunction
 import { followUser, getUserInfo } from "../firebase/firebaseUserFunctions";
 
 export async function convertLocalEventsToDatabase(userId: string) {
-  try {
-    const events = await getData("events");
-    if (events && events.length > 0) {
-      const eventPromises = events.map(async (event: Event) => {
-        const eventDoc = await getDocument(API_COLLECTIONS.EVENT, event.id);
-        if (!eventDoc) {
-          const data = { ...event, userId };
-          await setDocument(data, API_COLLECTIONS.EVENT, event.id);
-        }
-      });
+  const events = await getData("events");
+  if (events && events.length > 0) {
+    const eventPromises = events.map(async (event: Event) => {
+      const eventDoc = await getDocument(API_COLLECTIONS.EVENT, event.id);
+      if (!eventDoc) {
+        const data = { ...event, userId };
+        await setDocument(data, API_COLLECTIONS.EVENT, event.id);
+      }
+    });
 
-      await Promise.all(eventPromises);
-      await removeData("events");
-    }
-  } catch (error) {
-    throw new AppError(error, "Error converting local events to database");
+    await Promise.all(eventPromises);
+    await removeData("events");
   }
 }
 
 export async function convertEventEventToEvent(userId: string) {
-  try {
-    const events = (await getDocumentsByQuery(
-      [where("userId", "==", userId)],
-      API_COLLECTIONS.EVENT
-    )) as Event[];
+  const events = (await getDocumentsByQuery(
+    [where("userId", "==", userId)],
+    API_COLLECTIONS.EVENT
+  )) as Event[];
 
-    const updatePromises = events.map(async (event: Event) => {
-      const eventData = event as any;
-      if (eventData.event) {
-        eventData.event = undefined;
-        return updateDocument(eventData, API_COLLECTIONS.EVENT, event.id);
-      } else {
-        return null;
-      }
-    });
-    await Promise.all(updatePromises);
-  } catch (error) {
-    throw new AppError(error, "Error converting event event to event");
-  }
+  const updatePromises = events.map(async (event: Event) => {
+    const eventData = event as any;
+    if (eventData.event) {
+      eventData.event = undefined;
+      return updateDocument(eventData, API_COLLECTIONS.EVENT, event.id);
+    } else {
+      return null;
+    }
+  });
+  await Promise.all(updatePromises);
 }
 
 export async function convertEventInvites(userId: string) {
@@ -88,8 +78,8 @@ export async function convertEventInvites(userId: string) {
   await Promise.all(updatePromises);
 }
 
-export async function convertEventGuestList(user: User) {
-  const { upcomingEvents, pastEvents } = await getEventsFromDatabase(user.uid);
+export async function convertEventGuestList(userId: string) {
+  const { upcomingEvents, pastEvents } = await getEventsFromDatabase(userId);
   const allEvents = [...upcomingEvents, ...pastEvents];
   const eventsWithGuestList = allEvents.filter(
     (event) => event.guestList && event.guestList.length > 0
@@ -137,9 +127,9 @@ export async function convertUserFollowingToDatabaseFollowing(userId: string) {
       );
     }
   } catch (error) {
-    new AppError(
-      error,
-      "DatabaseUpdates: Error converting user following to database following"
+    log(
+      `DatabaseUpdates: Error converting user following to database following: ${(error as any)?.message ?? error}`,
+      "error"
     );
   }
 }
@@ -163,9 +153,9 @@ export async function convertPollVotesToDatabasePollVotes(userId: string) {
       userId: userId
     });
   } catch (error) {
-    new AppError(
-      error,
-      "DatabaseUpdates: Error converting poll votes to database poll votes"
+    log(
+      `DatabaseUpdates: Error converting poll votes to database poll votes: ${(error as any)?.message ?? error}`,
+      "error"
     );
   }
 }

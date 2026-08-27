@@ -1,15 +1,41 @@
-// Platform-specific implementations
-// React Native Metro bundler will automatically resolve to the correct platform file
-// This file provides TypeScript with the type definitions
+/** @format */
+import { Platform } from "react-native";
 
-export async function revokeSignInWithAppleToken(): Promise<void> {
-  // This is a type-only export - actual implementation is in platform-specific files
-  throw new Error("Platform-specific implementation required");
+import { appleAuth } from "@invertase/react-native-apple-authentication";
+import auth from "@react-native-firebase/auth";
+
+export async function revokeSignInWithAppleToken() {
+  if (Platform.OS !== "ios") {
+    throw new Error("Apple Sign In is not available on this platform");
+  }
+
+  const { authorizationCode } = await appleAuth.performRequest({
+    requestedOperation: appleAuth.Operation.REFRESH
+  });
+
+  if (!authorizationCode) {
+    throw new Error("Apple Revocation failed - no authorizationCode returned");
+  }
+
+  return auth().revokeToken(authorizationCode);
 }
 
-export async function getAppleCredentialForReauthentication(): Promise<{
-  identityToken: string;
-  nonce: string | undefined;
-}> {
-  throw new Error("Platform-specific implementation required");
+export async function getAppleCredentialForReauthentication() {
+  if (Platform.OS !== "ios") {
+    throw new Error("Apple Sign In is not available on this platform");
+  }
+
+  const response = await appleAuth.performRequest({
+    requestedOperation: appleAuth.Operation.LOGIN,
+    requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL]
+  });
+
+  if (!response.identityToken) {
+    throw new Error("Apple Sign-In failed - no identity token returned");
+  }
+
+  return {
+    identityToken: response.identityToken,
+    nonce: response.nonce
+  };
 }

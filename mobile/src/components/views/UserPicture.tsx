@@ -6,7 +6,6 @@ import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { syncUserPicture } from "@/services/cache";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
-import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 
 interface UserPictureProps {
@@ -22,12 +21,12 @@ export function UserPicture({ uid, size = 50 }: UserPictureProps) {
   const syncPicture = useCallback(async () => {
     setImage(null);
 
-    log("Syncing user picture 2", "info");
     if (!uid) {
       setLoading(false);
       return;
     }
 
+    log("Syncing user picture 2", "info");
     const user = await getUserInfo(uid);
 
     if (!user) {
@@ -67,7 +66,12 @@ export function UserPicture({ uid, size = 50 }: UserPictureProps) {
         <Image
           source={{ uri: image }}
           style={[styles.image, { height, width }]}
-          onError={(error) => new AppError(error, "User Picture load error")}
+          onError={(error) =>
+            log(
+              `User Picture load error: ${(error as any)?.message ?? error}`,
+              "error"
+            )
+          }
         />
       ) : (
         <View style={[styles.textBackground, { height, width }]}>

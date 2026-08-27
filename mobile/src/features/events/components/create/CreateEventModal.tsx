@@ -17,7 +17,8 @@ import { EventsStackParamList } from "@/features/app/navigationTypes";
 import { createEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
 import { UserState } from "@/store/UserSlice";
 import { Event, NewEvent } from "@/types/Event";
-import { AppError } from "@/utils/error";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 
 interface CreateEventModalProps {
   showModal: boolean;
@@ -50,7 +51,8 @@ export function CreateEventModal({
 
       navigation.navigate("EventEdit", { event });
     } catch (error) {
-      new AppError(error, "Error creating event", true);
+      log(`Error creating event: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Creating Event");
     }
   }, [eventName, userId, navigation, setShowModal]);
 

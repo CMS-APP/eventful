@@ -10,7 +10,6 @@ import { PhotoResult } from "expo-camera";
 import * as FileSystem from "expo-file-system/legacy";
 import * as MediaLibrary from "expo-media-library";
 
-import { LoadingModal } from "@/components/views/LoadingModal";
 import { colors } from "@/design-system/tokens/colors";
 import {
   savePhotoDataLocally,
@@ -49,6 +48,8 @@ export function PhotoBoothResultsButtons({
 
   const handleSave = async () => {
     try {
+      setLoading(true);
+
       if (!viewRef.current) {
         Alert.alert("Error", "Nothing to save");
         return;
@@ -87,6 +88,8 @@ export function PhotoBoothResultsButtons({
     } catch (error) {
       console.error(error);
       Alert.alert("Error", "Failed to save photo");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -111,19 +114,15 @@ export function PhotoBoothResultsButtons({
 
   useEffect(() => {
     if (autoSave) {
-      setLoading(true);
-
       setTimeout(() => {
         handleSave();
-        setLoading(false);
       }, 1000);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoSave]);
 
   return (
     <>
-      <LoadingModal visible={loading} />
-
       <View style={styles.buttonRow}>
         <PhotoBoothResultsButton
           onPress={handleRetake}
@@ -139,6 +138,7 @@ export function PhotoBoothResultsButtons({
           title="Save"
           color={colors.primary}
           textColor={colors.white}
+          loading={loading}
         />
 
         <PhotoBoothResultsButton

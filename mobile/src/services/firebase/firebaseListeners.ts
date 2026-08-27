@@ -12,10 +12,10 @@ import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { Invites } from "@/types/Invites";
 import { isActiveEvent } from "@/utils/date";
-import { AppError } from "@/utils/error";
 import { safeListener } from "@/utils/errorHandling";
 
 import { FIRESTORE_DB } from "./firebase";
+import { log } from "@/utils/logging";
 
 export function getInvitationsFromDatabaseSnapshot(
   userId: string,
@@ -58,7 +58,7 @@ export function getInvitationsFromDatabaseSnapshot(
                 }
               }
             } catch (error) {
-              new AppError(error, "Error getting event in listener");
+              log(`Error getting event in listener: ${(error as any)?.message ?? error}`, "error");
             }
           }
         );
@@ -67,7 +67,7 @@ export function getInvitationsFromDatabaseSnapshot(
         callback(events);
       },
       (error) => {
-        new AppError(error, "Error in invitations listener");
+        log(`Error in invitations listener: ${(error as any)?.message ?? error}`, "error");
       }
     );
   }, "FirebaseFunctions: Error setting up invitations listener");

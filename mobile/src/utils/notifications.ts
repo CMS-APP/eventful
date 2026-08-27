@@ -10,7 +10,6 @@ import { EventInvite } from "@/types/EventInvite";
 import { User } from "@/types/User";
 
 import { parseDatabaseDate } from "./date";
-import { AppError } from "./error";
 import { log } from "./logging";
 
 Notifications.setNotificationHandler({
@@ -23,8 +22,6 @@ Notifications.setNotificationHandler({
 });
 
 export async function registerForPushNotificationsAsync() {
-  let token;
-
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("myNotificationChannel", {
       name: "A channel is needed for the permissions prompt to appear",
@@ -34,50 +31,40 @@ export async function registerForPushNotificationsAsync() {
     });
   }
 
-  if (Device && Device.isDevice) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== "granted") {
-      Alert.alert(
-        "Request Unsuccessful",
-        "Please enable push notifications in your settings."
-      );
-      return null;
-    } else {
-      return await getExpoToken();
-    }
-  } else {
-    alert("Must use physical device for Push Notifications");
+  if (!Device || !Device.isDevice) {
+    return null;
   }
 
-  return token;
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  let finalStatus = existingStatus;
+
+  if (existingStatus !== "granted") {
+    const { status } = await Notifications.requestPermissionsAsync();
+    finalStatus = status;
+  }
+  if (finalStatus !== "granted") {
+    Alert.alert(
+      "Request Unsuccessful",
+      "Please enable push notifications in your settings."
+    );
+    return null;
+  } else {
+    return await getExpoToken();
+  }
 }
 
 export async function getExpoToken() {
-  if (Device && Device.isDevice) {
-    try {
-      const projectId =
-        Constants?.expoConfig?.extra?.eas?.projectId ??
-        Constants?.easConfig?.projectId;
-      if (!projectId) {
-        return null;
-      }
-      return (
-        await Notifications.getExpoPushTokenAsync({
-          projectId
-        })
-      ).data;
-    } catch (error) {
-      new AppError(error, "Error setting up notifications", true);
-      return null;
-    }
+  const projectId =
+    Constants?.expoConfig?.extra?.eas?.projectId ??
+    Constants?.easConfig?.projectId;
+  if (!projectId) {
+    return null;
   }
+  return (
+    await Notifications.getExpoPushTokenAsync({
+      projectId
+    })
+  ).data;
 }
 
 async function scheduleLocalNotification(
@@ -110,26 +97,22 @@ async function schedulePushNotification(
   body: string,
   data: any
 ) {
-  try {
-    const tokens = user.pushTokens;
-    if (tokens) {
-      const messages = tokens.map((token) => ({
-        to: token,
-        title,
-        body,
-        data
-      }));
+  const tokens = user.pushTokens;
+  if (tokens) {
+    const messages = tokens.map((token) => ({
+      to: token,
+      title,
+      body,
+      data
+    }));
 
-      await fetch("https://exp.host/--/api/v2/push/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(messages)
-      });
-    }
-  } catch (error) {
-    throw new AppError(error, "Error sending notifications");
+    await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(messages)
+    });
   }
 }
 
@@ -202,84 +185,49 @@ export async function updateResponseNotification(
 }
 
 export async function clearNotifications() {
-  try {
-    await Notifications.dismissAllNotificationsAsync();
-  } catch (error) {
-    throw new AppError(
-      error,
-      "NotificationService: Error clearing notifications"
-    );
-  }
+  await Notifications.dismissAllNotificationsAsync();
 }
 
 async function cancelAllScheduledNotifications() {
-  try {
-    await Notifications.cancelAllScheduledNotificationsAsync();
-  } catch (error) {
-    throw new AppError(
-      error,
-      "NotificationService: Error cancelling scheduled notifications"
-    );
-  }
+  await Notifications.cancelAllScheduledNotificationsAsync();
 }
 
 async function cancelNotificationsForEvent(eventId: string) {
-  try {
-    if (!eventId) return;
-    log("Cancelling notifications for event " + eventId, "info");
+  if (!eventId) return;
+  log("Cancelling notifications for event " + eventId, "info");
 
-    const scheduledNotifications =
-      await Notifications.getAllScheduledNotificationsAsync();
+  const scheduledNotifications =
+    await Notifications.getAllScheduledNotificationsAsync();
 
-    const eventNotificationIds = scheduledNotifications
-      .filter((notification) => {
-        return notification.identifier?.startsWith(`event-${eventId}-`);
-      })
-      .map((notification) => notification.identifier)
-      .filter((id): id is string => id !== undefined);
+  const eventNotificationIds = scheduledNotifications
+    .filter((notification) => {
+      return notification.identifier?.startsWith(`event-${eventId}-`);
+    })
+    .map((notification) => notification.identifier)
+    .filter((id): id is string => id !== undefined);
 
-    if (eventNotificationIds.length > 0) {
-      await Promise.all(
-        eventNotificationIds.map((id) =>
-          Notifications.cancelScheduledNotificationAsync(id)
-        )
-      );
-    }
-  } catch (error) {
-    throw new AppError(
-      error,
-      "NotificationService: Error cancelling notifications for event"
+  if (eventNotificationIds.length > 0) {
+    await Promise.all(
+      eventNotificationIds.map((id) =>
+        Notifications.cancelScheduledNotificationAsync(id)
+      )
     );
   }
 }
 
 export async function createNotificationsForEvents(upcomingEvents: Event[]) {
-  try {
-    await cancelAllScheduledNotifications();
+  await cancelAllScheduledNotifications();
 
-    if (upcomingEvents.length > 0) {
-      for (const event of upcomingEvents) {
-        await createNotificationForEvent(event);
-      }
+  if (upcomingEvents.length > 0) {
+    for (const event of upcomingEvents) {
+      await createNotificationForEvent(event);
     }
-  } catch (error) {
-    throw new AppError(
-      error,
-      "NotificationService: Error creating notifications for events"
-    );
   }
 }
 
 export async function updateNotificationsForEvent(event: Event) {
-  try {
-    await cancelNotificationsForEvent(event.id || "");
-    await createNotificationForEvent(event);
-  } catch (error) {
-    throw new AppError(
-      error,
-      "NotificationService: Error updating notifications for event"
-    );
-  }
+  await cancelNotificationsForEvent(event.id || "");
+  await createNotificationForEvent(event);
 }
 
 async function scheduleToDoShoppingNotification(event: Event, seconds: number) {
@@ -314,53 +262,44 @@ async function scheduleToDoShoppingNotification(event: Event, seconds: number) {
 }
 
 export async function createNotificationForEvent(event: Event) {
-  try {
-    log("Creating notification for event " + event.id, "info");
+  log("Creating notification for event " + event.id, "info");
 
-    const reminders = [
-      { label: "in One Hour!", hours: 1, type: "hour" },
-      { label: "Tomorrow!", days: 1, type: "day" },
-      { label: "in One Week!", days: 7, type: "week" }
-    ];
+  const reminders = [
+    { label: "in One Hour!", hours: 1, type: "hour" },
+    { label: "Tomorrow!", days: 1, type: "day" },
+    { label: "in One Week!", days: 7, type: "week" }
+  ];
 
-    const data = {
-      screen: "EventEdit",
-      params: { event }
-    };
+  const data = {
+    screen: "EventEdit",
+    params: { event }
+  };
 
-    for (const reminder of reminders) {
-      const date = parseDatabaseDate(event.date);
-      if (reminder.days) {
-        date.setDate(date.getDate() - reminder.days);
-      } else if (reminder.hours) {
-        date.setHours(date.getHours() - reminder.hours);
+  for (const reminder of reminders) {
+    const date = parseDatabaseDate(event.date);
+    if (reminder.days) {
+      date.setDate(date.getDate() - reminder.days);
+    } else if (reminder.hours) {
+      date.setHours(date.getHours() - reminder.hours);
+    }
+
+    const seconds = Math.floor((date.getTime() - new Date().getTime()) / 1000);
+    if (seconds > 0) {
+      let sent = false;
+      if (reminder.label === "in one week") {
+        sent = await scheduleToDoShoppingNotification(event, seconds);
       }
 
-      const seconds = Math.floor(
-        (date.getTime() - new Date().getTime()) / 1000
-      );
-      if (seconds > 0) {
-        let sent = false;
-        if (reminder.label === "in one week") {
-          sent = await scheduleToDoShoppingNotification(event, seconds);
-        }
-
-        if (!sent) {
-          const identifier = `event-${event.id}-${reminder.type}`;
-          await scheduleLocalNotification(
-            "Event Reminder",
-            `You have ${textFormatter(event.name.trim(), 50, "an event")} coming up ${reminder.label}`,
-            seconds,
-            data,
-            identifier
-          );
-        }
+      if (!sent) {
+        const identifier = `event-${event.id}-${reminder.type}`;
+        await scheduleLocalNotification(
+          "Event Reminder",
+          `You have ${textFormatter(event.name.trim(), 50, "an event")} coming up ${reminder.label}`,
+          seconds,
+          data,
+          identifier
+        );
       }
     }
-  } catch (error) {
-    throw new AppError(
-      error,
-      "NotificationService: Error creating notifications for event"
-    );
   }
 }

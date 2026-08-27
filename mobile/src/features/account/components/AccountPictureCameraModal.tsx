@@ -21,7 +21,6 @@ import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
 import { UserState, setProfilePictureHash } from "@/store/UserSlice";
 import { User } from "@/types/User";
 import { showErrorNotification } from "@/utils/appNotifications";
-import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 
 interface AccountPictureCameraModalProps {
@@ -80,12 +79,8 @@ export function AccountPictureCameraModal({
 
       navigation.goBack();
     } catch (error) {
-      // Some errors (e.g. permission-denied) are treated as "handled" by AppError and won't
-      // show a user notification. Show a generic message here so the failure is visible.
-      showErrorNotification(
-        "Failed to save profile picture. Please try again."
-      );
-      new AppError(error, "Error saving picture", true);
+      log(`Error saving picture: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Saving Photo");
     } finally {
       setIsLoading(false);
       setPresentModal(false);

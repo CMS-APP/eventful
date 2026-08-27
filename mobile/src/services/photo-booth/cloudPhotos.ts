@@ -18,7 +18,6 @@ import { getDocumentsByQuery } from "@/services/api/get";
 import { FIREBASE_STORAGE } from "@/services/firebase/firebase";
 import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
 import { parseDatabaseDate } from "@/utils/date";
-import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 
 import { getPhotosDataLocally } from "./localPhotos";
@@ -34,7 +33,7 @@ async function getCloudPhotos(userId: string) {
 
     return photos;
   } catch (error) {
-    new AppError(error, "Error getting cloud photos");
+    log(`Error getting cloud photos: ${(error as any)?.message ?? error}`, "error");
     return [];
   }
 }
@@ -99,7 +98,7 @@ export async function downloadCloudPhotos(
     }
     await AsyncStorage.setItem("photosData", JSON.stringify(photoData));
   } catch (error) {
-    new AppError(error, "Error downloading cloud photos");
+    log(`Error downloading cloud photos: ${(error as any)?.message ?? error}`, "error");
   }
 }
 
@@ -127,7 +126,7 @@ export async function downloadCloudPhoto(photo: GalleryPhoto, userId: string) {
 
     await AsyncStorage.setItem("photosData", JSON.stringify(photoData));
   } catch (error) {
-    new AppError(error, "Error downloading photo cloud");
+    log(`Error downloading photo cloud: ${(error as any)?.message ?? error}`, "error");
     throw error;
   }
 }
@@ -142,7 +141,7 @@ export async function deletePhotoCloud(photo: GalleryPhoto, userId: string) {
     await deleteObject(storageRef);
     await deleteDocument(API_COLLECTIONS.PHOTO_BOOTH_PHOTOS, storageId);
   } catch (error) {
-    new AppError(error, "PhotoBooth: Error deleting photo booth image");
+    log(`PhotoBooth: Error deleting photo booth image: ${(error as any)?.message ?? error}`, "error");
     throw error;
   }
 }
@@ -160,7 +159,7 @@ async function compressImage(localUri: string) {
 
     return compressedImage.uri;
   } catch (error) {
-    new AppError(error, "Error compressing image");
+    log(`Error compressing image: ${(error as any)?.message ?? error}`, "error");
     throw error;
   }
 }
@@ -207,7 +206,7 @@ export async function uploadPhotosToCloud(
 
     await Promise.all(uploadPromises);
   } catch (error) {
-    new AppError(error, "Error uploading photos to cloud");
+    log(`Error uploading photos to cloud: ${(error as any)?.message ?? error}`, "error");
     throw error;
   }
 }

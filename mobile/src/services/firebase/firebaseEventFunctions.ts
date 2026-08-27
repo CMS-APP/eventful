@@ -6,11 +6,11 @@ import { setDocument, updateDocument } from "@/services/api/update";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { isActiveEvent, parseDatabaseDate } from "@/utils/date";
-import { AppError } from "@/utils/error";
 import { createNotificationForEvent } from "@/utils/notifications";
 
 import { deleteDocument } from "../api/delete";
 import { incrementEventCount } from "./firebaseBackend";
+import { log } from "@/utils/logging";
 
 export async function getEventInfo(event: Event): Promise<Event | null> {
   const eventData = await getDocument(API_COLLECTIONS.EVENT, event.id || "");
@@ -18,29 +18,20 @@ export async function getEventInfo(event: Event): Promise<Event | null> {
 }
 
 export async function createEventInDatabase(data: Event, user: any) {
-  try {
-    await setDocument(data, API_COLLECTIONS.EVENT, data.id);
-    await createNotificationForEvent(data);
-    incrementEventCount(user);
-  } catch (error) {
-    throw new AppError(error, "Error creating event in database");
-  }
+  await setDocument(data, API_COLLECTIONS.EVENT, data.id);
+  await createNotificationForEvent(data);
+  incrementEventCount(user);
+
 }
 
 export async function updateEventInDatabase(event: Partial<Event>) {
-  try {
-    await updateDocument(event, API_COLLECTIONS.EVENT, event?.id || "");
-  } catch (error) {
-    throw new AppError(error, "Error updating event in database");
-  }
+  await updateDocument(event, API_COLLECTIONS.EVENT, event?.id || "");
+
 }
 
 export async function deleteEventFromDatabase(eventId: string) {
-  try {
-    await deleteDocument(API_COLLECTIONS.EVENT, eventId);
-  } catch (error) {
-    throw new AppError(error, "Error deleting event from database");
-  }
+  await deleteDocument(API_COLLECTIONS.EVENT, eventId);
+
 }
 
 export async function getEventsFromDatabase(userId: string) {
@@ -70,7 +61,7 @@ export async function getEventsFromDatabase(userId: string) {
 
     return { upcomingEvents, pastEvents };
   } catch (error) {
-    new AppError(error, "FirebaseFunctions: Error getting events");
+    log(`FirebaseFunctions: Error getting events: ${(error as any)?.message ?? error}`, "error");
     return { upcomingEvents: [], pastEvents: [] };
   }
 }
@@ -129,18 +120,12 @@ export async function changeEventEnabledStatus(
   eventId: string,
   status: boolean
 ) {
-  try {
-    await updateDocument(
-      { enabled: status },
-      API_COLLECTIONS.EVENT_LINKS,
-      eventId
-    );
-  } catch (error) {
-    throw new AppError(
-      error,
-      "FirebaseFunctions: Error updating event link status"
-    );
-  }
+  await updateDocument(
+    { enabled: status },
+    API_COLLECTIONS.EVENT_LINKS,
+    eventId
+  );
+
 }
 
 export async function getFutureEventsFromDatabase(userId: string) {

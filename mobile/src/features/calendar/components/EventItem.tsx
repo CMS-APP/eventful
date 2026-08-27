@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -21,6 +21,7 @@ import { User } from "@/types/User";
 import { isActiveEvent, parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
+import { log } from "@/utils/logging";
 
 interface EventItemProps {
   index: number;
@@ -35,19 +36,21 @@ export function EventItem({ index, event }: EventItemProps) {
   const navigationApp =
     useNavigation() as StackNavigationProp<AppStackParamList>;
 
-  async function fetchUserDetails() {
+  const fetchUserDetails = useCallback(async () => {
+    log("Fetching user details", "info");
     const userDetails = await getUserInfo(event.userId);
     setUserDetails(userDetails);
-  }
+  }, [event.userId]);
 
   useEffect(() => {
-    if (event.userId !== userId) {
+    if (userId && event.userId !== userId) {
       fetchUserDetails();
     }
   }, [event, userId]);
 
   async function navigateToEvent() {
     haptics.soft();
+    log("Navigating to event", "info");
     const userDetails = await getUserInfo(event.userId);
     if (event.userId === userId) {
       navigationEvents.reset({

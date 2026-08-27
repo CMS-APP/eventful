@@ -10,8 +10,8 @@ import { Input } from "@/design-system/components/Input";
 import { colors } from "@/design-system/tokens/colors";
 import { EventInviteStackParamList } from "@/features/app/navigationTypes";
 import { updateResponseInDatabase } from "@/services/firebase/firebaseInviteFunctions";
-import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
+import { showErrorNotification } from "@/utils/appNotifications";
 
 type Props = NativeStackScreenProps<
   EventInviteStackParamList,
@@ -31,7 +31,8 @@ export function EventInviteFoodDrinkScreen({ navigation, route }: Props) {
           dietary
         });
       } catch (error) {
-        new AppError(error, "Error updating dietary requirements", true);
+        log(`Error updating dietary requirements: ${(error as any)?.message ?? error}`, "error");
+        showErrorNotification("Error Updating Requirements");
       }
     }
   }, [dietary, invite]);

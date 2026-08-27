@@ -17,7 +17,7 @@ import { Screen } from "@/components/views/screen/Screen";
 import {
   ILoadingModalContext,
   useLoadingModal
-} from "@/contexts/LoadingProviderContext";
+} from "@/app/context/loading/LoadingModalContext";
 import { IconButton } from "@/design-system/components/IconButton";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
@@ -33,12 +33,13 @@ import {
 import { deleteEventInvitesFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";
 import { formatDate } from "@/utils/date";
-import { AppError } from "@/utils/error";
 import { haptics } from "@/utils/haptics";
 import { createNotificationsForEvents } from "@/utils/notifications";
 
 import { SectionButton } from "../components/edit/SectionButton";
 import { useEventEdit } from "../hooks/useEventEdit";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 
 interface EventEditScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;
@@ -75,7 +76,8 @@ export function EventEditScreen({ navigation, route }: EventEditScreenProps) {
       const { upcomingEvents } = await getEventsFromDatabase(userId);
       await createNotificationsForEvents(upcomingEvents);
     } catch (error) {
-      new AppError(error, "Error deleting event", true);
+      log(`Error deleting event: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Deleting Event");
     } finally {
       setLoading(false);
     }

@@ -15,10 +15,10 @@ import { ContactsStackParamList } from "@/features/app/navigationTypes";
 import { ProfileButton } from "@/features/profile/components/ProfileButton";
 import { userSearch } from "@/services/firebase/firebaseBackend";
 import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 
 import { ContactsSearch } from "../components/ContactsSearch";
+import { showErrorNotification } from "@/utils/appNotifications";
 
 interface ContactsSearchScreenProps {
   route: RouteProp<ContactsStackParamList, "ContactSearch">;
@@ -45,7 +45,8 @@ export function ContactsSearchScreen({ route }: ContactsSearchScreenProps) {
       const users = await userSearch(search, user as FirebaseAuthTypes.User);
       setUsers(users);
     } catch (error) {
-      new AppError(error, "Error getting users", true);
+      log(`Error getting users: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Loading Users");
     } finally {
       setLoading(false);
     }

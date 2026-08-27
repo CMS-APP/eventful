@@ -27,11 +27,12 @@ import {
 } from "@/services/firebase/firebaseUserFunctions";
 import { UserState, setUserData } from "@/store/UserSlice";
 import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
 import { capitalize, checkNames, checkUsernameValid } from "@/utils/regex";
 
 import { OnboardingButtons } from "../components/OnboardingButtons";
 import { getLoginNames } from "../utils";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 
 interface OnboardingNameInputScreenProps {
   navigation: StackNavigationProp<OnboardingStackParamList>;
@@ -81,11 +82,7 @@ export function OnboardingNameInputScreen({
       // Ensure the token is fresh and emailVerified is reflected
       const currentUser = FIREBASE_AUTH.currentUser;
       if (!currentUser) {
-        throw new AppError(
-          "No authenticated user found",
-          "Error creating user",
-          true
-        );
+        throw new Error("No authenticated user found");
       }
       await reload(currentUser);
       await getIdToken(currentUser, true);
@@ -108,7 +105,8 @@ export function OnboardingNameInputScreen({
       dispatch(setUserData(dataWithMillis));
       navigation.navigate("OnboardingNotifications");
     } catch (error) {
-      new AppError(error, "Error creating user", true);
+      log(`Error creating user: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Creating Account");
     }
   }, [firstName, lastName, username, userId, dispatch, navigation, email]);
 

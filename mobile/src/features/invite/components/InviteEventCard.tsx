@@ -23,12 +23,12 @@ import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
 import { formatDate, formatTime, parseDatabaseDate } from "@/utils/date";
-import { AppError } from "@/utils/error";
 import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
 
 import { InviteEventCardResponse } from "./InviteEventCardResponse";
 import { InviteProfilePictures } from "./InviteProfilePictures";
+import { showErrorNotification } from "@/utils/appNotifications";
 
 interface InviteEventCardProps {
   event: Event;
@@ -89,7 +89,8 @@ export function InviteEventCard({
         setRefreshKey((prev: number) => prev + 1);
       }
     } catch (error) {
-      new AppError(error, "Error inviting user to event", true);
+      log(`Error inviting user to event: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Inviting User");
     }
   }, [host?.uid, host?.name, host?.username, user, event]);
 

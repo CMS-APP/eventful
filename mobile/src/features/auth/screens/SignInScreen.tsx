@@ -6,11 +6,8 @@ import { Alert, LayoutChangeEvent, StyleSheet, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
+import { dataInit } from "@/app/init/data";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import {
-  ILoadingModalContext,
-  useLoadingModal
-} from "@/contexts/LoadingProviderContext";
 import { Button } from "@/design-system/components/Button";
 import { Input } from "@/design-system/components/Input";
 import { Text } from "@/design-system/components/Text";
@@ -20,10 +17,10 @@ import { AuthStackParamList } from "@/features/app/navigationTypes";
 import { Header } from "@/features/auth/components/Header";
 import { HeaderArcs } from "@/features/auth/components/HeaderArcs";
 import { formStyles } from "@/features/auth/styles/formStyles";
+import { useLoadingModal } from "@/app/context/loading/LoadingModalContext";
 import { handleSignIn } from "@/services/firebase/firebaseAuth";
 import { sendVerificationEmail } from "@/services/firebase/firebaseBackend";
-import { appInit } from "@/services/initialisation/appInit";
-import { AppError } from "@/utils/error";
+import { showErrorNotification } from "@/utils/appNotifications";
 import { log } from "@/utils/logging";
 import { navigationRef } from "@/utils/navigation";
 
@@ -48,7 +45,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
   const [headerHeight, setHeaderHeight] = useState(0);
 
   const dispatch = useDispatch();
-  const { setLoading } = useLoadingModal() as ILoadingModalContext;
+  const { setLoading } = useLoadingModal();
 
   const validateForm = useCallback((): boolean => {
     const newErrors: FormErrors = {};
@@ -103,7 +100,11 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
         }
       }
     } catch (error) {
-      new AppError(error, "Error sending verification email", true);
+      log(
+        `Error sending verification email: ${(error as any)?.message ?? error}`,
+        "error"
+      );
+      showErrorNotification("Error Sending Email");
       Alert.alert(
         "Error",
         "We encountered an issue sending the verification email. Please try again later."
@@ -159,7 +160,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
           return;
         }
 
-        const result = await appInit(dispatch);
+        const result = await dataInit(dispatch, () => {});
         navigationRef.navigate(result);
       } catch (error) {
         if (error instanceof Error) {
@@ -179,7 +180,11 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
             setErrors({ password: errorMessage });
           } else {
             log("Error logging in: " + error.message, "error");
-            new AppError(error, "Error logging In", true);
+            log(
+              `Error logging In: ${(error as any)?.message ?? error}`,
+              "error"
+            );
+            showErrorNotification("Error Logging In");
           }
         }
       } finally {

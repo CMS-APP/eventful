@@ -16,13 +16,13 @@ import { EventInviteStackParamList } from "@/features/app/navigationTypes";
 import { ResponseButtonIcon } from "@/features/events/components/invite/ResponseButtonIcon";
 import { updateResponseInDatabase } from "@/services/firebase/firebaseInviteFunctions";
 import { UserState } from "@/store/UserSlice";
-import { AppError } from "@/utils/error";
 import { log } from "@/utils/logging";
 import { updateResponseNotification } from "@/utils/notifications";
 
 import { InviteButtons } from "../components/InviteButtons";
 import { InviteDateView } from "../components/InviteDateView";
 import { InviteDateViewMulti } from "../components/InviteDateViewMulti";
+import { showErrorNotification } from "@/utils/appNotifications";
 
 type EventInviteHomeScreenProps = NativeStackScreenProps<
   EventInviteStackParamList,
@@ -52,7 +52,8 @@ export function EventInviteHomeScreen({
           newResponse
         );
       } catch (error) {
-        new AppError(error, "Error updating response", true);
+        log(`Error updating response: ${(error as any)?.message ?? error}`, "error");
+        showErrorNotification("Error Updating Response");
       }
     },
     [invite, host, name, username, event]

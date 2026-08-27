@@ -1,3 +1,5 @@
+import { ActivityIndicator } from "react-native-paper";
+
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -11,6 +13,7 @@ interface PhotoBoothResultsButtonProps {
   title: string;
   color: string;
   textColor: string;
+  loading?: boolean;
 }
 
 export function PhotoBoothResultsButton({
@@ -18,11 +21,13 @@ export function PhotoBoothResultsButton({
   icon,
   title,
   color,
-  textColor
+  textColor,
+  loading = false
 }: PhotoBoothResultsButtonProps) {
   return (
     <TouchableOpacity
       onPress={onPress}
+      disabled={loading}
       style={styles.buttonContainer}
       hitSlop={getHitSlop("small")}
     >
@@ -30,7 +35,11 @@ export function PhotoBoothResultsButton({
         <Text type="body" style={{ color: textColor }}>
           {title}
         </Text>
-        <FontAwesome5 name={icon} size={20} color={textColor} />
+        {loading ? (
+          <ActivityIndicator size="small" color={textColor} />
+        ) : (
+          <FontAwesome5 name={icon} size={20} color={textColor} />
+        )}
       </View>
     </TouchableOpacity>
   );

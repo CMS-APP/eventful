@@ -15,10 +15,10 @@ import { deleteInviteFromDatabase } from "@/services/firebase/firebaseInviteFunc
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
-import { AppError } from "@/utils/error";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
+import { showErrorNotification } from "@/utils/appNotifications";
 
 interface EventGuestListInvitedItemProps {
   user: User;
@@ -76,7 +76,8 @@ export function EventGuestListInvitedItem({
       await updateEventInDatabase(event);
       log("User removed from event", "info");
     } catch (error) {
-      new AppError(error, "Error removing user from event", true);
+      log(`Error removing user from event: ${(error as any)?.message ?? error}`, "error");
+      showErrorNotification("Error Removing User");
     }
   }, [invite, user, event]);
 

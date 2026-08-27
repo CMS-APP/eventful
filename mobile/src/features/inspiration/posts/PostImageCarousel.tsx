@@ -5,7 +5,8 @@ import { StyleSheet, View } from "react-native";
 import { colors } from "@/design-system/tokens/colors";
 import { syncPostImage } from "@/services/cache";
 import { Photo } from "@/types/Photo";
-import { AppError } from "@/utils/error";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 
 import { ImageButtons } from "./images/ImageButtons";
 import { ImageDots } from "./images/ImageDots";
@@ -33,11 +34,11 @@ export function PostImageCarousel({ photos, postId }: PostImageCarouselProps) {
 
       setCurrentImageUri(cachedImageUri);
     } catch (error) {
-      new AppError(
-        error,
-        "PostImageCarousel: Error loading cached image",
-        true
+      log(
+        `PostImageCarousel: Error loading cached image: ${(error as any)?.message ?? error}`,
+        "error"
       );
+      showErrorNotification("Error Loading Image");
       setCurrentImageUri(currentPhoto.uri);
     } finally {
       setLoading(false);

@@ -24,9 +24,6 @@ npm run lint             # expo lint
 npx eslint . --fix       # fix lint issues
 npx prettier --write .   # format
 npx expo-doctor          # validate Expo config/deps
-npx jest                 # run tests
-npx jest path/to/file.test.ts   # run a single test file
-npx jest -t "test name"         # run tests matching a name
 ```
 
 Before installing a native dependency or changing native config, run `expo prebuild`. Development builds (needed to test native modules like Firebase/RevenueCat on-device) are produced by `bash ./scripts/ios-dev-build.sh` / `bash ./scripts/android-dev-build.sh`. Version/build-number bumps and store uploads go through `bash ./scripts/upload.sh` — run only when merging to main, not per-commit.

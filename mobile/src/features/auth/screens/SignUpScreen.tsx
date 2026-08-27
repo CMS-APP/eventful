@@ -8,7 +8,7 @@ import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import {
   ILoadingModalContext,
   useLoadingModal
-} from "@/contexts/LoadingProviderContext";
+} from "@/app/context/loading/LoadingModalContext";
 import { Button } from "@/design-system/components/Button";
 import { Input } from "@/design-system/components/Input";
 import { Text } from "@/design-system/components/Text";
@@ -18,13 +18,14 @@ import { AuthStackParamList } from "@/features/app/navigationTypes";
 import { handleSignUp } from "@/services/firebase/firebaseAuth";
 import { sendVerificationEmail } from "@/services/firebase/firebaseBackend";
 import { FormErrors } from "@/types/FormErrors";
-import { AppError } from "@/utils/error";
 import { emailValid, passwordValid } from "@/utils/regex";
 import { useScreenStatusBar } from "@/utils/statusBar";
 
 import { Header } from "../components/Header";
 import { HeaderArcs } from "../components/HeaderArcs";
 import { formStyles } from "../styles/formStyles";
+import { showErrorNotification } from "@/utils/appNotifications";
+import { log } from "@/utils/logging";
 
 type SignUpScreenProps = NativeStackScreenProps<AuthStackParamList, "SignUp">;
 
@@ -93,7 +94,8 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
         if (error.message.includes("auth/email-already-in-use")) {
           setErrors({ email: "Email already in use." });
         } else {
-          new AppError(error, "Error signing up", true);
+          log(`Error signing up: ${(error as any)?.message ?? error}`, "error");
+          showErrorNotification("Error Signing Up");
           Alert.alert(
             "Error",
             "An unexpected error occurred. Please try again."

@@ -11,7 +11,7 @@ import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { useAccountProfilePicture } from "@/hooks/useAccountProfilePicture";
 import { UserState } from "@/store/UserSlice";
-import { AppError } from "@/utils/error";
+import { showErrorNotification } from "@/utils/appNotifications";
 import { haptics } from "@/utils/haptics";
 import { getHitSlop } from "@/utils/hitSlop";
 import { log } from "@/utils/logging";
@@ -70,9 +70,13 @@ export function AccountButton({
                   <Image
                     source={{ uri: image }}
                     style={styles.image}
-                    onError={(error) =>
-                      new AppError(error, "Profile picture load error", true)
-                    }
+                    onError={(error) => {
+                      log(
+                        `Profile picture load error: ${(error as any)?.message ?? error}`,
+                        "error"
+                      );
+                      showErrorNotification("Error Loading Photo");
+                    }}
                     onLoad={() =>
                       log("Account: Profile image loaded successfully", "debug")
                     }
