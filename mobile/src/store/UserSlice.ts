@@ -37,18 +37,12 @@ export interface UserState {
   appleOnboardingName: AppleOnboardingName | null;
 }
 
-const sentryReduxMiddleware = (store: any) => (next: any) => (action: any) => {
+const sentryReduxMiddleware = (_store: any) => (next: any) => (action: any) => {
   try {
-    const state = store.getState();
-
     Sentry.addBreadcrumb({
       category: "redux",
       message: `Action dispatched: ${action.type}`,
-      level: "info",
-      data: {
-        action,
-        state
-      }
+      level: "info"
     });
   } catch {
     // Silently handle Sentry breadcrumb errors to avoid breaking the app

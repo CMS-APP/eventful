@@ -1,16 +1,12 @@
 import { useCallback, useEffect } from "react";
 
-import { createNavigationContainerRef } from "@react-navigation/native";
-
 import * as Notifications from "expo-notifications";
 import { NotificationResponse } from "expo-notifications";
 
-import { AppStackParamList } from "@/app/navigation";
+import { navigationRef } from "@/app/navigation";
 import { getEventInfo } from "@/services/firebase/firebaseEventFunctions";
 import { getInviteInfo } from "@/services/firebase/firebaseInviteFunctions";
 import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
-
-export const navigationRef = createNavigationContainerRef<AppStackParamList>();
 
 async function handleEventEditNavigation(params: any) {
   const event = await getEventInfo(params.event);

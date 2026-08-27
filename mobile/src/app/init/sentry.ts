@@ -22,7 +22,7 @@ export function sentryInit(): void {
     tracesSampleRate: 1.0,
     integrations: [
       Sentry.mobileReplayIntegration({
-        maskAllText: false,
+        maskAllText: true,
         maskAllImages: true,
         maskAllVectors: true
       })

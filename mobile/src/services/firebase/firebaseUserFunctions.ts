@@ -90,6 +90,7 @@ async function deleteUserEvents(userId: string) {
       `Error deleting user events: ${(error as any)?.message ?? error}`,
       "error"
     );
+    throw error;
   }
 }
 
@@ -118,6 +119,7 @@ async function deleteUserInvites(userId: string) {
       `Error deleting user invites: ${(error as any)?.message ?? error}`,
       "error"
     );
+    throw error;
   }
 }
 
@@ -197,6 +199,7 @@ async function deleteUserPollVotes(userId: string) {
       `Error deleting user poll votes: ${(error as any)?.message ?? error}`,
       "error"
     );
+    throw error;
   }
 }
 
@@ -208,6 +211,7 @@ async function deleteUserPhotoBoothConfig(userId: string) {
       `Error deleting user photo booth config: ${(error as any)?.message ?? error}`,
       "error"
     );
+    throw error;
   }
 }
 
@@ -230,6 +234,7 @@ export async function deleteUserData(userId: string): Promise<void> {
       `Error deleting user data: ${(error as any)?.message ?? error}`,
       "error"
     );
+    throw error;
   }
 }
 
