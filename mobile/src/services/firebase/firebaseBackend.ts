@@ -7,7 +7,9 @@ const ENDPOINTS = {
   sendVerificationEmail: `${BASE_URL}/sendVerificationEmail`,
   incrementUserCount: `${BASE_URL}/incrementUserCount`,
   incrementEventCount: `${BASE_URL}/incrementEventCount`,
-  userSearch: `${BASE_URL}/searchUsers`
+  userSearch: `${BASE_URL}/searchUsers`,
+  searchPlaces: `${BASE_URL}/searchPlaces`,
+  placeDetails: `${BASE_URL}/getPlaceDetails`
 };
 
 async function getAppCheckToken(user: FirebaseAuthTypes.User) {
@@ -77,4 +79,47 @@ export async function userSearch(
   const { hits } = await response.json();
   return hits;
 
+}
+
+export interface PlaceSuggestion {
+  placeId: string | null;
+  text: string | null;
+  mainText: string | null;
+  secondaryText: string | null;
+}
+
+export interface PlaceAddressComponent {
+  longText: string | null;
+  shortText: string | null;
+  types: string[];
+}
+
+export interface PlaceDetailsResult {
+  formattedAddress: string | null;
+  addressComponents: PlaceAddressComponent[];
+}
+
+export async function searchPlaces(
+  input: string,
+  sessionToken: string,
+  user: FirebaseAuthTypes.User
+): Promise<PlaceSuggestion[]> {
+  const response = await post(user, ENDPOINTS.searchPlaces, {
+    input,
+    sessionToken
+  });
+  const { suggestions } = await response.json();
+  return suggestions;
+}
+
+export async function getPlaceDetails(
+  placeId: string,
+  sessionToken: string,
+  user: FirebaseAuthTypes.User
+): Promise<PlaceDetailsResult> {
+  const response = await post(user, ENDPOINTS.placeDetails, {
+    placeId,
+    sessionToken
+  });
+  return await response.json();
 }
