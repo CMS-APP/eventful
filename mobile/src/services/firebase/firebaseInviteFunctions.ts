@@ -2,6 +2,7 @@ import { Timestamp, where } from "@react-native-firebase/firestore";
 
 import { Alert } from "react-native";
 
+import { formatEventAddressDisplay } from "@/services/address/eventAddress";
 import { API_COLLECTIONS } from "@/services/api/constants";
 import { deleteDocument } from "@/services/api/delete";
 import { getDocument, getDocumentsByQuery } from "@/services/api/get";
@@ -278,7 +279,7 @@ export async function generateEventLink(event: Event, hostName: string) {
         event.multiDate && event.endDate
           ? Timestamp.fromDate(parseDatabaseDate(event.endDate))
           : null,
-      address: event.address ?? "No address",
+      address: formatEventAddressDisplay(event.address) || "No address",
       directions: event.directions ?? "No directions",
       eventName: event.name.trim() || "Event",
       theme: event.theme ?? "No theme",
@@ -311,7 +312,7 @@ export async function updateEventLinkInDatabase(event: Event) {
         event.multiDate && event.endDate
           ? Timestamp.fromDate(parseDatabaseDate(event.endDate))
           : null,
-      address: event.address ?? "No address",
+      address: formatEventAddressDisplay(event.address) || "No address",
       directions: event.directions ?? "No directions",
       eventName: event.name.trim() || "Event",
       theme: event.theme ?? "No theme"

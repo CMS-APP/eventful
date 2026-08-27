@@ -7,9 +7,9 @@
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "android:build": "APP_VARIANT=development eas build --profile development --platform android --local --non-interactive",
-    "android:dev": "APP_VARIANT=development expo prebuild --platform android && APP_VARIANT=development expo run:android",
+    "android:dev": "APP_VARIANT=development expo prebuild --clean --platform android && APP_VARIANT=development expo run:android",
     "ios": "expo run:ios",
-    "ios:dev": "APP_VARIANT=development expo run:ios",
+    "ios:dev": "APP_VARIANT=development expo prebuild --clean --platform ios && APP_VARIANT=development expo run:ios",
     "ios:build": "APP_VARIANT=development eas build --profile development --platform ios --local --non-interactive",
     "lint": "expo lint"
   },

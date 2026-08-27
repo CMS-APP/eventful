@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 
 import { useCallback, useState } from "react";
 
-import { Platform, StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
@@ -14,7 +14,9 @@ import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { textFormatter } from "@/design-system/tokens/fonts";
 import { ResponseButtonIcon } from "@/features/events/components/invite/ResponseButtonIcon";
+import { formatEventAddressDisplay } from "@/services/address/eventAddress";
 import { updateResponseInDatabase } from "@/services/firebase/firebaseInviteFunctions";
+import { openInMaps } from "@/services/maps/openInMaps";
 import { updateResponseNotification } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
 import { showErrorToast } from "@/utils/toast";
@@ -36,6 +38,7 @@ export function EventInviteHomeScreen({
   const name = useSelector((state: UserState) => state.name);
   const username = useSelector((state: UserState) => state.username);
   const [response, setResponse] = useState(invite.response);
+  const address = formatEventAddressDisplay(event.address);
 
   const handleUpdateResponse = useCallback(
     async (newResponse: string) => {
@@ -112,15 +115,17 @@ export function EventInviteHomeScreen({
             <InviteDateView date={event.date} />
           )}
 
-          {event.address && (
-            <View>
+          {address && (
+            <TouchableOpacity onPress={() => openInMaps(address)}>
               <View style={styles.locationIcon}>
                 <Entypo name="location-pin" size={50} color={colors.black} />
               </View>
               <View style={styles.addressContainer}>
-                <Text type="subHeader">{event.address}</Text>
+                <Text type="subHeader" center>
+                  {address}
+                </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           )}
 
           {event.theme && event.theme.length > 0 && (

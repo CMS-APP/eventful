@@ -8,10 +8,10 @@ interface EventLocationEditProps {
   setEvent: (event: Event) => void;
 }
 
-export function EventLocationEdit(_props: EventLocationEditProps) {
+export function EventLocationEdit({ event, setEvent }: EventLocationEditProps) {
   return (
     <View style={styles.container}>
-      <LocationSearch />
+      <LocationSearch event={event} setEvent={setEvent} />
     </View>
   );
 }

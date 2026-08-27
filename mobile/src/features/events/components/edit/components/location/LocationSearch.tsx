@@ -3,22 +3,11 @@ import { ActivityIndicator } from "react-native-paper";
 
 import { useEffect, useRef, useState } from "react";
 
-import {
-  Keyboard,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View
-} from "react-native";
+import { Keyboard, StyleSheet, View } from "react-native";
 
-import { FontAwesome5 } from "@expo/vector-icons";
-
-import { Divider } from "@/design-system/components/Divider";
 import { Input } from "@/design-system/components/Input";
 import { Text } from "@/design-system/components/Text";
-import { TextButton } from "@/design-system/components/TextButton";
 import { colors } from "@/design-system/tokens/colors";
-import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { ContactsSearch } from "@/features/contacts/components/ContactsSearch";
 import { getCountryByCode } from "@/features/events/countries";
 import {
@@ -26,8 +15,10 @@ import {
   AddressFieldKey,
   AddressValues,
   createEmptyAddressValues,
+  formatAddress,
   getAddressFieldsForCountry
 } from "@/services/address/addressFormat";
+import { normalizeEventAddress } from "@/services/address/eventAddress";
 import {
   extractRawPlaceAddress,
   mapRawPlaceAddressToFields
@@ -37,24 +28,64 @@ import {
   getPlaceDetails,
   searchPlaces
 } from "@/services/firebase/firebaseBackend";
+import { Event } from "@/types/Event";
 import { showErrorToast } from "@/utils/toast";
 import { generateUUID } from "@/utils/uuid";
 
+import { AddressFieldsForm } from "./AddressFieldsForm";
+import { Divider } from "@/design-system/components/Divider";
+import { PlaceSuggestionsList } from "./PlaceSuggestionsList";
+
 const SEARCH_DEBOUNCE_MS = 500;
 
-export function LocationSearch() {
+interface LocationSearchProps {
+  event: Event;
+  setEvent: (event: Event) => void;
+}
+
+export function LocationSearch({ event, setEvent }: LocationSearchProps) {
+  const initialAddress = useRef(normalizeEventAddress(event.address)).current;
+
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
   const [loading, setLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [addressFields, setAddressFields] = useState<AddressField[]>([]);
-  const [addressValues, setAddressValues] = useState<AddressValues>({});
-  const [countryName, setCountryName] = useState("");
-  const [manualAddress, setManualAddress] = useState("");
-  const [directions, setDirections] = useState("");
+  const [addressValues, setAddressValues] = useState<AddressValues>(
+    initialAddress.type === "search" ? initialAddress.values : {}
+  );
+  const [countryCode, setCountryCode] = useState(
+    initialAddress.type === "search" ? initialAddress.countryCode : ""
+  );
+  const [countryName, setCountryName] = useState(
+    initialAddress.type === "search" ? initialAddress.countryName : ""
+  );
+  const [manualAddress, setManualAddress] = useState(
+    initialAddress.type === "manual" ? initialAddress.value : ""
+  );
+  const [directions, setDirections] = useState(event.directions ?? "");
 
   const user = getAuth().currentUser;
   const sessionTokenRef = useRef(generateUUID());
+  const eventRef = useRef(event);
+  eventRef.current = event;
+
+  useEffect(() => {
+    if (initialAddress.type !== "search") return;
+
+    let cancelled = false;
+
+    getAddressFieldsForCountry(initialAddress.countryCode).then((fields) => {
+      if (!cancelled) {
+        setAddressFields(fields);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!query.trim() || !user) {
@@ -93,13 +124,36 @@ export function LocationSearch() {
       cancelled = true;
       clearTimeout(debounceTimeout);
     };
-    // user is excluded on purpose: getAuth().currentUser returns a new
-    // object reference on every render even for the same signed-in user,
-    // which would re-trigger this effect (and re-search) continuously.
-    // user?.uid is the stable, reference-safe way to key off "did the
-    // signed-in user actually change".
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, user?.uid]);
+
+  function saveSearchAddress(
+    nextCountryCode: string,
+    nextCountryName: string,
+    nextValues: AddressValues
+  ) {
+    setEvent({
+      ...eventRef.current,
+      address: {
+        type: "search",
+        countryCode: nextCountryCode,
+        countryName: nextCountryName,
+        values: nextValues,
+        formattedAddress: formatAddress(
+          nextCountryCode,
+          nextCountryName,
+          nextValues
+        )
+      }
+    });
+  }
+
+  function saveManualAddress(value: string) {
+    setEvent({
+      ...eventRef.current,
+      address: { type: "manual", value }
+    });
+  }
 
   function handleQueryChange(text: string) {
     setQuery(text);
@@ -119,20 +173,36 @@ export function LocationSearch() {
   }
 
   function handleAddressFieldChange(key: AddressFieldKey, text: string) {
-    setAddressValues((current) => ({
-      ...current,
-      [key]: text
-    }));
+    const nextValues = { ...addressValues, [key]: text };
+    setAddressValues(nextValues);
+    saveSearchAddress(countryCode, countryName, nextValues);
+  }
+
+  function handleCountryNameChange(text: string) {
+    setCountryName(text);
+    saveSearchAddress(countryCode, text, addressValues);
+  }
+
+  function handleManualAddressChange(text: string) {
+    setManualAddress(text);
+    saveManualAddress(text);
+  }
+
+  function handleDirectionsChange(text: string) {
+    setDirections(text);
+    setEvent({ ...eventRef.current, directions: text });
   }
 
   function handleClearAddress() {
     setAddressFields([]);
     setAddressValues({});
+    setCountryCode("");
     setCountryName("");
     setQuery("");
     setSuggestions([]);
     setShowResults(false);
     setManualAddress("");
+    saveManualAddress("");
   }
 
   async function handleSelect(suggestion: PlaceSuggestion) {
@@ -161,10 +231,14 @@ export function LocationSearch() {
         ...createEmptyAddressValues(fields),
         ...mapRawPlaceAddressToFields(raw, fields)
       };
+      const nextCountryCode = country?.code ?? raw.countryCode ?? "";
+      const nextCountryName = country?.name ?? raw.countryCode ?? "";
 
       setAddressFields(fields);
       setAddressValues(values);
-      setCountryName(country?.name ?? raw.countryCode ?? "");
+      setCountryCode(nextCountryCode);
+      setCountryName(nextCountryName);
+      saveSearchAddress(nextCountryCode, nextCountryName, values);
 
       setQuery("");
       setSuggestions([]);
@@ -199,90 +273,28 @@ export function LocationSearch() {
       />
 
       {showResults && query.trim() && !loading && (
-        <View style={styles.resultsContainer}>
-          <View style={styles.resultsList}>
-            <ScrollView>
-              {suggestions.length === 0 ? (
-                <View style={styles.emptyState}>
-                  <FontAwesome5 name="search" size={24} color={colors.black} />
-                  <Text type="subHeader" color={colors.black} center>
-                    No results found
-                  </Text>
-                  <Text type="body" color={colors.gray} center>
-                    Please try again with a different search.
-                  </Text>
-                </View>
-              ) : (
-                <View style={styles.resultsListContainer}>
-                  {suggestions.map((suggestion) => (
-                    <TouchableOpacity
-                      key={suggestion.placeId}
-                      style={styles.resultItem}
-                      onPress={() => handleSelect(suggestion)}
-                      hitSlop={getHitSlop("small")}
-                    >
-                      <Text type="body" color={colors.black}>
-                        {suggestion.mainText ?? suggestion.text}
-                      </Text>
-                      {suggestion.secondaryText && (
-                        <Text type="body" color={colors.gray}>
-                          {suggestion.secondaryText}
-                        </Text>
-                      )}
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              )}
-            </ScrollView>
-          </View>
-
-          <TextButton
-            text="Close Results"
-            textColor={colors.white}
-            textAlign="center"
-            type="body"
-            onPress={() => handleCloseResults()}
-          />
-        </View>
+        <PlaceSuggestionsList
+          suggestions={suggestions}
+          onSelect={handleSelect}
+          onClose={handleCloseResults}
+        />
       )}
 
       {addressFields.length > 0 ? (
-        <View style={styles.addressFields}>
-          {addressFields.map((field) => (
-            <Input
-              key={field.key}
-              placeholder={field.label}
-              value={addressValues[field.key] ?? ""}
-              onChangeText={(text) => handleAddressFieldChange(field.key, text)}
-              dark
-              backgroundColor={colors.primaryTint3}
-              textColor={colors.white}
-            />
-          ))}
-
-          <Input
-            placeholder="Country"
-            value={countryName}
-            onChangeText={setCountryName}
-            dark
-            backgroundColor={colors.primaryTint3}
-            textColor={colors.white}
-          />
-
-          <TextButton
-            text="Clear Address"
-            textColor={colors.white}
-            textAlign="center"
-            type="body"
-            onPress={() => handleClearAddress()}
-          />
-        </View>
+        <AddressFieldsForm
+          fields={addressFields}
+          values={addressValues}
+          countryName={countryName}
+          onFieldChange={handleAddressFieldChange}
+          onCountryNameChange={handleCountryNameChange}
+          onClear={handleClearAddress}
+        />
       ) : (
         !query.trim() && (
           <Input
             placeholder="Address"
             value={manualAddress}
-            onChangeText={setManualAddress}
+            onChangeText={handleManualAddressChange}
             dark
             backgroundColor={colors.primaryTint3}
             textColor={colors.white}
@@ -299,7 +311,7 @@ export function LocationSearch() {
       <Input
         placeholder="Directions / Other Information"
         value={directions}
-        onChangeText={setDirections}
+        onChangeText={handleDirectionsChange}
         dark
         backgroundColor={colors.primaryTint3}
         textColor={colors.white}
@@ -313,42 +325,12 @@ export function LocationSearch() {
 }
 
 const styles = StyleSheet.create({
-  addressFields: {
-    gap: 6
-  },
   container: {
     gap: 6
-  },
-  emptyState: {
-    alignItems: "center",
-    gap: 4,
-    paddingVertical: 24
   },
   header: {
     alignItems: "center",
     flexDirection: "row",
     gap: 4
-  },
-  resultItem: {
-    alignItems: "center",
-    backgroundColor: colors.lightGray + "40",
-    borderRadius: 12,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 12
-  },
-  resultsContainer: {
-    gap: 8
-  },
-  resultsList: {
-    backgroundColor: colors.white,
-    borderRadius: 16,
-    gap: 4,
-    height: 200,
-    paddingVertical: 4
-  },
-  resultsListContainer: {
-    gap: 4,
-    marginHorizontal: 4
   }
 });

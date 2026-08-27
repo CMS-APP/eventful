@@ -136,7 +136,7 @@ export function EventDateTimeRangeEditor({
   return (
     <View style={styles.container}>
       <Text type="body" color="white">
-        Start Date
+        Date
       </Text>
       <View style={styles.row}>
         <Button
@@ -159,9 +159,6 @@ export function EventDateTimeRangeEditor({
       </View>
 
       <View style={styles.column}>
-        <Text type="body" color="white">
-          Mutli-Day
-        </Text>
         <SwitchButton
           isChecked={multiDate}
           onChange={handleSwitchChange}
