@@ -1,4 +1,4 @@
-import { PlaceAddressComponent } from "@/services/firebase/firebaseBackend";
+import { PlaceAddressComponent } from "@/services/firebase/backend";
 
 import { AddressField, AddressFieldKey, AddressValues } from "./addressFormat";
 
@@ -32,7 +32,8 @@ export function extractRawPlaceAddress(
   const countryCode =
     findComponent(components, "country")?.shortText?.toUpperCase() ?? null;
 
-  const streetNumber = findComponent(components, "street_number")?.longText ?? "";
+  const streetNumber =
+    findComponent(components, "street_number")?.longText ?? "";
   const route = findComponent(components, "route")?.longText ?? "";
   const premise = findComponent(components, "premise")?.longText ?? "";
 
@@ -64,7 +65,9 @@ export function extractRawPlaceAddress(
     address2,
     city,
     adminArea1,
-    postalCode: postalCodeSuffix ? `${postalCode}-${postalCodeSuffix}` : postalCode
+    postalCode: postalCodeSuffix
+      ? `${postalCode}-${postalCodeSuffix}`
+      : postalCode
   };
 }
 

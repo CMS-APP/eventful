@@ -6,6 +6,7 @@ import {
   where
 } from "@react-native-firebase/firestore";
 
+import { FIRESTORE_DB } from "@/app/init/firebase";
 import {
   API_COLLECTIONS,
   API_FOLLOWERS_COLLECTIONS,
@@ -30,8 +31,6 @@ import { PB_CONFIG, PhotoBoothConfig } from "@/types/PhotoBoothConfig";
 import { PollVote } from "@/types/PollVote";
 import { User } from "@/types/User";
 import { log } from "@/utils/logging";
-
-import { FIRESTORE_DB } from "./firebase";
 
 export function convertTimestampsToMillis(user: User) {
   try {

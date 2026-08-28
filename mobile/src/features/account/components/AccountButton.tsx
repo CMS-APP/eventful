@@ -7,7 +7,7 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { useAccountProfilePicture } from "@/features/account/useAccountProfilePicture";

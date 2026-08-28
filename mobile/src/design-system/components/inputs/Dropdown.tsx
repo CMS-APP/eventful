@@ -10,8 +10,8 @@ import {
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { useAppDimensions } from "@/app/hooks/useAppDimensions";
-import { Divider } from "@/design-system/components/Divider";
-import { Text } from "@/design-system/components/Text";
+import { Divider } from "@/design-system/components/layout/Divider";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 

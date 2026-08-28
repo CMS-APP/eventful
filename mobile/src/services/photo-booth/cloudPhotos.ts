@@ -12,11 +12,11 @@ import * as ImageManipulator from "expo-image-manipulator";
 import { SaveFormat } from "expo-image-manipulator";
 import * as MediaLibrary from "expo-media-library";
 
+import { FIREBASE_STORAGE } from "@/app/init/firebase";
 import { API_COLLECTIONS } from "@/services/api/constants";
 import { createDocument } from "@/services/api/create";
 import { deleteDocument } from "@/services/api/delete";
 import { getDocumentsByQuery } from "@/services/api/get";
-import { FIREBASE_STORAGE } from "@/services/firebase/firebase";
 import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
 import { parseDatabaseDate } from "@/utils/date";
 import { log } from "@/utils/logging";

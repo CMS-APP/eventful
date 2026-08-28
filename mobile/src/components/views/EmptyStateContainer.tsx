@@ -2,9 +2,8 @@ import { StyleSheet, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
-
-import { Text } from "../../design-system/components/Text";
 
 interface EmptyStateContainerProps {
   title: string;

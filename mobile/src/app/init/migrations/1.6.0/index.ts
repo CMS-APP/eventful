@@ -1,7 +1,7 @@
 import { Timestamp, doc, updateDoc } from "@react-native-firebase/firestore";
 
-import { FIRESTORE_DB } from "@/services/firebase/firebase";
-import { getEventsFromDatabase } from "@/services/firebase/firebaseEventFunctions";
+import { FIRESTORE_DB } from "@/app/init/firebase";
+import { getEventsFromDatabase } from "@/services/firebase/event";
 
 export async function convertDateToTimestamp(userId: string) {
   const { upcomingEvents, pastEvents } = await getEventsFromDatabase(userId);

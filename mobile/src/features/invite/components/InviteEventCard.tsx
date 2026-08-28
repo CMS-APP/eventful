@@ -9,16 +9,13 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AppStackParamList } from "@/app/navigation";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
-import {
-  getInviteFromDatabase,
-  sendInvite
-} from "@/services/firebase/firebaseInviteFunctions";
-import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { getInviteFromDatabase, sendInvite } from "@/services/firebase/invite";
+import { getUserInfo } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
@@ -103,7 +100,7 @@ export function InviteEventCard({
         }
       ]
     );
-  }, [host?.uid, host?.name, host?.username, user, event]);
+  }, [user, handleInvite]);
 
   const alreadyInvitedAlert = useCallback(() => {
     Alert.alert(

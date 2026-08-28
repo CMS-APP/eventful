@@ -13,7 +13,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { EventsStackParamList, MainStackParamList } from "@/app/navigation";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { Event } from "@/types/Event";
@@ -78,7 +78,7 @@ export function HomeNextEvent({
         });
       }
     }
-  }, [navigation, edit, nextEvent]);
+  }, [navigation, edit, nextEvent, eventNav]);
 
   return (
     <TouchableWithoutFeedback onPress={goToEvent}>

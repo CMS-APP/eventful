@@ -1,9 +1,9 @@
 import { ScrollView, StyleSheet, View } from "react-native";
 
 import { Screen } from "@/components/screen/Screen";
-import { Divider } from "@/design-system/components/Divider";
-import { SwitchButton } from "@/design-system/components/SwitchButton";
-import { Text } from "@/design-system/components/Text";
+import { SwitchButton } from "@/design-system/components/buttons/SwitchButton";
+import { Divider } from "@/design-system/components/layout/Divider";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 

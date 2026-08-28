@@ -38,7 +38,7 @@ export function Calendar() {
         style={[
           styles.animatedView,
           {
-            bottom: -height,
+            bottom: -height + 1,
             height: height
           }
         ]}

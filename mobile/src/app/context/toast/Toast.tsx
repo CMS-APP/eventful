@@ -17,7 +17,7 @@ import {
   toastColors,
   toastIcons
 } from "@/app/context/toast/const";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 
 type ToastProps = {

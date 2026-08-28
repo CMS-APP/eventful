@@ -8,7 +8,7 @@ import {
   ILoadingModalContext,
   useLoadingModal
 } from "@/app/context/loading/LoadingModalContext";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";

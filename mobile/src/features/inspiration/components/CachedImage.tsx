@@ -33,6 +33,7 @@ export function CachedImage({
 
   useEffect(() => {
     loadCachedImage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [photo.uri]);
 
   const loadCachedImage = async () => {

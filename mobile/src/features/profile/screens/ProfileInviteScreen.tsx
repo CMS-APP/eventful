@@ -12,7 +12,7 @@ import { Screen } from "@/components/screen/Screen";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { colors } from "@/design-system/tokens/colors";
 import { InviteEventCard } from "@/features/invite/components/InviteEventCard";
-import { getFutureEventsFromDatabase } from "@/services/firebase/firebaseEventFunctions";
+import { getFutureEventsFromDatabase } from "@/services/firebase/event";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 

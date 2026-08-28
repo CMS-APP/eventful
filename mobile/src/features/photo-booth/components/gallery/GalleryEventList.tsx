@@ -6,7 +6,7 @@ import { StyleSheet, View } from "react-native";
 
 import { useFocusEffect } from "@react-navigation/native";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { getEvents } from "@/services/photo-booth/events";
 import { UserState } from "@/store/UserSlice";
 import { GalleryEvent } from "@/types/photoBoothGallery";
@@ -24,7 +24,7 @@ export function GalleryEventList() {
     } catch {
       // ignore
     }
-  }, []);
+  }, [userId]);
 
   useFocusEffect(
     useCallback(() => {

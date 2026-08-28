@@ -8,9 +8,9 @@ import { Alert, StyleSheet, View } from "react-native";
 
 import { usePaymentProvider } from "@/app/context/payment/PaymentContext";
 import { openSubscriptionManagement } from "@/app/update";
-import { Button } from "@/design-system/components/Button";
+import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
-import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { updateUserInfo } from "@/services/firebase/user";
 import { registerForPushNotificationsAsync } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
 import { showErrorToast } from "@/utils/toast";

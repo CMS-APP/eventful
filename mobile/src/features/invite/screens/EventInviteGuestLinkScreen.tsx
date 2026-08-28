@@ -9,21 +9,18 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
-import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
-import { Button } from "@/design-system/components/Button";
-import { SwitchButton } from "@/design-system/components/SwitchButton";
-import { Text } from "@/design-system/components/Text";
+import { Button } from "@/design-system/components/buttons/Button";
+import { SegmentedControl } from "@/design-system/components/buttons/SegmentedControl";
+import { SwitchButton } from "@/design-system/components/buttons/SwitchButton";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { padding } from "@/design-system/tokens/padding";
 import { EventInviteUserItem } from "@/features/events/components/guest-list/EventInviteUserItem";
 import {
   changeEventEnabledStatus,
   updateEventInDatabase
-} from "@/services/firebase/firebaseEventFunctions";
-import {
-  generateEventLink,
-  getRSVPWebUsers
-} from "@/services/firebase/firebaseInviteFunctions";
+} from "@/services/firebase/event";
+import { generateEventLink, getRSVPWebUsers } from "@/services/firebase/invite";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { UserInvite } from "@/types/UserInvite";
@@ -205,7 +202,7 @@ export function EventInviteGuestLinkScreen({
           Link Responses
         </Text>
 
-        <AppButtonSwitcher
+        <SegmentedControl
           selections={["accept", "maybe", "decline"]}
           selectionValues={[
             acceptNum.toString(),

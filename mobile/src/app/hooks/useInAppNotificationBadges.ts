@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 
 import { setBadgeCountAsync } from "expo-notifications";
 
-import { getInvitationsFromDatabaseSnapshot } from "@/services/firebase/firebaseListeners";
+import { getInvitationsFromDatabaseSnapshot } from "@/services/firebase/listeners";
 import { Invites } from "@/types/Invites";
 
 export function useInAppNotificationBadges(userId: string | null | undefined) {

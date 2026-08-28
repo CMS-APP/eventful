@@ -18,14 +18,14 @@ import { CommonActions, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AllStackParamList, navigationRef } from "@/app/navigation";
-import { Button } from "@/design-system/components/Button";
+import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
 import {
   getAppleCredentialForReauthentication,
   revokeSignInWithAppleToken
 } from "@/features/settings/utils/apple";
-import { deleteImageAsync } from "@/services/firebase/firebaseStorage";
-import { deleteUserData } from "@/services/firebase/firebaseUserFunctions";
+import { deleteImageAsync } from "@/services/firebase/storage";
+import { deleteUserData } from "@/services/firebase/user";
 import { removeAllData } from "@/services/local/async";
 import { UserState, clearStorage } from "@/store/UserSlice";
 import { showErrorToast } from "@/utils/toast";

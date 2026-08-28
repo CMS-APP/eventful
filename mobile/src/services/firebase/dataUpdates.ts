@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Timestamp, doc, updateDoc } from "@react-native-firebase/firestore";
 
+import { FIRESTORE_DB } from "@/app/init/firebase";
 import { getPhotosDataLocally } from "@/services/photo-booth/localPhotos";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
@@ -9,14 +10,10 @@ import { GalleryPhoto } from "@/types/photoBoothGallery";
 import { parseDatabaseDate } from "@/utils/date";
 import { generateUUID } from "@/utils/uuid";
 
-import { FIRESTORE_DB } from "./firebase";
-import { getEventsFromDatabase } from "./firebaseEventFunctions";
-import {
-  getPollInDatabase,
-  getVoteForUserInDatabase
-} from "./firebaseInspirationFunctions";
-import { getSenderInvitesFromDatabase } from "./firebaseInviteFunctions";
-import { followUser, getUserInfo } from "./firebaseUserFunctions";
+import { getEventsFromDatabase } from "./event";
+import { getPollInDatabase, getVoteForUserInDatabase } from "./inspiration";
+import { getSenderInvitesFromDatabase } from "./invite";
+import { followUser, getUserInfo } from "./user";
 
 export async function convertEventGuestList(user: User) {
   const { upcomingEvents, pastEvents } = await getEventsFromDatabase(user.uid);

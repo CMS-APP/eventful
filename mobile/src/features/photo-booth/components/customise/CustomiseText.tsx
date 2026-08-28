@@ -2,10 +2,10 @@ import { useCallback, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { Dropdown } from "@/design-system/components/Dropdown";
+import { Dropdown } from "@/design-system/components/inputs/Dropdown";
 import { CUSTOM_FONTS, getCustomFontStyle } from "@/design-system/tokens/fonts";
-
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
+
 import { CustomiseTextRow } from "./CustomiseTextRow";
 
 const fontNames = Object.values(CUSTOM_FONTS);

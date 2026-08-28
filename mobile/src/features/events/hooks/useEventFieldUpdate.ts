@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
+import { updateEventInDatabase } from "@/services/firebase/event";
 import { Event } from "@/types/Event";
 
 type EventStringField = "food" | "drink" | "decor" | "outfit" | "notes";

@@ -7,11 +7,11 @@ import { StyleSheet, View } from "react-native";
 
 import { ArcCutout } from "@/components/views/ArcCutout";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { InviteEventCard } from "@/features/invite/components/InviteEventCard";
-import { getFutureEventsFromDatabaseByIds } from "@/services/firebase/firebaseEventFunctions";
-import { getInvitesFromUser } from "@/services/firebase/firebaseInviteFunctions";
+import { getFutureEventsFromDatabaseByIds } from "@/services/firebase/event";
+import { getInvitesFromUser } from "@/services/firebase/invite";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";

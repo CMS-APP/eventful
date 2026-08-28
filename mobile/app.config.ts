@@ -28,7 +28,7 @@ export default ({ config }: ConfigContext) => {
     android: {
       package: bundleId,
       icon: "./src/assets/logos/eventful-logo-android.png",
-      versionCode: 311,
+      versionCode: 312,
       softwareKeyboardLayoutMode: "pan",
       permissions: [
         "android.permission.READ_EXTERNAL_STORAGE",
@@ -43,7 +43,7 @@ export default ({ config }: ConfigContext) => {
     ios: {
       bundleIdentifier: bundleId,
       icon: "./src/assets/logos/eventful-logo.png",
-      buildNumber: "315",
+      buildNumber: "316",
       supportsTablet: true,
       infoPlist: {
         NSPhotoLibraryUsageDescription:

@@ -4,7 +4,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AllStackParamList } from "@/app/navigation";
-import { getEventInfo } from "@/services/firebase/firebaseEventFunctions";
+import { getEventInfo } from "@/services/firebase/event";
 import { Event } from "@/types/Event";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";

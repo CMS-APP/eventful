@@ -2,7 +2,7 @@ import { Timestamp } from "@react-native-firebase/firestore";
 
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { parseDatabaseDate } from "@/utils/date";
 

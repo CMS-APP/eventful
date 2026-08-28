@@ -2,10 +2,10 @@ import { useCallback, useMemo, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { DateTimeButton } from "@/design-system/components/DateTimeButton";
-import { DateTimeSelector } from "@/design-system/components/DateTimeSelector";
-import { Input } from "@/design-system/components/Input";
-import { Text } from "@/design-system/components/Text";
+import { DateTimeButton } from "@/design-system/components/buttons/DateTimeButton";
+import { DateTimeSelector } from "@/design-system/components/inputs/DateTimeSelector";
+import { Input } from "@/design-system/components/inputs/Input";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 import {

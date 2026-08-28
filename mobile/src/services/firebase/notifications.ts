@@ -6,14 +6,13 @@ import {
   where
 } from "@react-native-firebase/firestore";
 
+import { FIRESTORE_DB } from "@/app/init/firebase";
 import { API_COLLECTIONS } from "@/services/api/constants";
 import { createDocument } from "@/services/api/create";
 import { deleteDocument } from "@/services/api/delete";
 import { getDocumentsByQuery } from "@/services/api/get";
 import { updateDocument } from "@/services/api/update";
 import { InAppNotification } from "@/types/InAppNotification";
-
-import { FIRESTORE_DB } from "./firebase";
 
 export function listenToFollowNotifications(
   userId: string,

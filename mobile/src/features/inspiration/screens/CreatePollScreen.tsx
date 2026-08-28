@@ -8,14 +8,14 @@ import { AllStackParamList, InspirationStackParamList } from "@/app/navigation";
 import { FlatHeader } from "@/components/screen/FlatHeader";
 import { FlatHeaderProps } from "@/components/screen/props";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { Button } from "@/design-system/components/Button";
-import { Divider } from "@/design-system/components/Divider";
-import { Input } from "@/design-system/components/Input";
-import { Text } from "@/design-system/components/Text";
+import { Button } from "@/design-system/components/buttons/Button";
+import { Input } from "@/design-system/components/inputs/Input";
+import { Divider } from "@/design-system/components/layout/Divider";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
-import { createPollInDatabase } from "@/services/firebase/firebaseInspirationFunctions";
+import { createPollInDatabase } from "@/services/firebase/inspiration";
 
 interface CreatePollScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;

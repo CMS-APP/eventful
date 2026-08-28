@@ -8,18 +8,18 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AccountStackParamList } from "@/app/navigation";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
-import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
-import { deleteUpdateNotification } from "@/services/firebase/firebaseInAppNotifications";
+import { updateEventInDatabase } from "@/services/firebase/event";
 import {
   checkInvitedToEvent,
   deleteInviteFromDatabase,
   sendInvite
-} from "@/services/firebase/firebaseInviteFunctions";
+} from "@/services/firebase/invite";
+import { deleteUpdateNotification } from "@/services/firebase/notifications";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { User } from "@/types/User";
@@ -62,7 +62,7 @@ export function EventInviteGuestItem({
     } catch {
       showErrorToast("Error Removing User");
     }
-  }, [event, guestId, inviteId, userId]);
+  }, [event, guestId, inviteId, userId, refreshInvites]);
 
   const removeUserAlert = useCallback(() => {
     Alert.alert(
@@ -114,7 +114,7 @@ export function EventInviteGuestItem({
       screen: "ProfileView",
       params: { user, type: "user" }
     });
-  }, [user]);
+  }, [user, navigation]);
 
   useEffect(() => {
     const getInviteId = async () => {

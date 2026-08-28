@@ -1,8 +1,8 @@
 import { doc, updateDoc } from "@react-native-firebase/firestore";
 
-import { FIRESTORE_DB } from "@/services/firebase/firebase";
-import { getEventsFromDatabase } from "@/services/firebase/firebaseEventFunctions";
-import { getSenderInvitesFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
+import { FIRESTORE_DB } from "@/app/init/firebase";
+import { getEventsFromDatabase } from "@/services/firebase/event";
+import { getSenderInvitesFromDatabase } from "@/services/firebase/invite";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { generateUUID } from "@/utils/uuid";

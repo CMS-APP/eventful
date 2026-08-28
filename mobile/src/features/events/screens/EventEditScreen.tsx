@@ -19,15 +19,15 @@ import {
 } from "@/app/context/loading/LoadingModalContext";
 import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
-import { IconButton } from "@/design-system/components/IconButton";
-import { Text } from "@/design-system/components/Text";
+import { IconButton } from "@/design-system/components/buttons/IconButton";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { HomeNextEvent } from "@/features/home/components/HomeNextEvent";
 import {
   deleteEventFromDatabase,
   getEventsFromDatabase
-} from "@/services/firebase/firebaseEventFunctions";
-import { deleteEventInvitesFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
+} from "@/services/firebase/event";
+import { deleteEventInvitesFromDatabase } from "@/services/firebase/invite";
 import { createNotificationsForEvents } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
 import { formatDate } from "@/utils/date";

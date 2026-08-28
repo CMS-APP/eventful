@@ -5,7 +5,7 @@ import { Platform } from "react-native";
 import * as Application from "expo-application";
 import * as Device from "expo-device";
 
-import type { UserUpdateData } from "@/services/firebase/firebaseUserFunctions";
+import type { UserUpdateData } from "@/services/firebase/user";
 import { log } from "@/utils/logging";
 
 import { getCurrentVersion } from "./version";

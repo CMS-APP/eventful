@@ -4,8 +4,8 @@ import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { InputAccessory } from "@/design-system/components/InputAccessory";
-import { Text } from "@/design-system/components/Text";
+import { InputAccessory } from "@/design-system/components/inputs/InputAccessory";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 
@@ -72,6 +72,11 @@ export function ContactsSearch({
                 placeholder={placeholder}
                 placeholderTextColor={dark ? colors.gray : colors.lightGray}
                 autoCapitalize="none"
+                autoCorrect={false}
+                autoComplete="off"
+                spellCheck={false}
+                textContentType="none"
+                importantForAutofill="no"
                 inputAccessoryViewID={accessoryId}
               />
 

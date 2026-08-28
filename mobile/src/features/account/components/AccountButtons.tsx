@@ -10,9 +10,9 @@ import {
   useLoadingModal
 } from "@/app/context/loading/LoadingModalContext";
 import { AllStackParamList, navigationRef } from "@/app/navigation";
-import { Button } from "@/design-system/components/Button";
+import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
-import { handleSignOut } from "@/services/firebase/firebaseAuth";
+import { handleSignOut } from "@/services/firebase/auth";
 import { showErrorToast } from "@/utils/toast";
 
 export function AccountButtons() {

@@ -19,7 +19,7 @@ import {
 } from "@/app/context/loading/LoadingModalContext";
 import { dataInit } from "@/app/init/data";
 import { navigationRef } from "@/app/navigation";
-import { Button } from "@/design-system/components/Button";
+import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
 import { showErrorToast } from "@/utils/toast";
 

@@ -4,7 +4,7 @@ import { Text as RNText, TextProps as RNTextProps } from "react-native";
 
 import { colors } from "@/design-system/tokens/colors";
 
-import { textStyles } from "../tokens/text";
+import { textStyles } from "../../tokens/text";
 
 type TextType =
   | "title"

@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 
 import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { padding } from "@/design-system/tokens/padding";
 import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";

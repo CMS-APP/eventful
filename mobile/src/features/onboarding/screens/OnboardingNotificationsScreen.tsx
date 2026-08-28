@@ -7,7 +7,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AllStackParamList } from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
-import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { updateUserInfo } from "@/services/firebase/user";
 import { registerForPushNotificationsAsync } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
 

@@ -1,7 +1,7 @@
 import { Image, StyleSheet, View } from "react-native";
 
-import { Button } from "@/design-system/components/Button";
-import { Text } from "@/design-system/components/Text";
+import { Button } from "@/design-system/components/buttons/Button";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { haptics } from "@/utils/haptics";
 import { showErrorToast } from "@/utils/toast";

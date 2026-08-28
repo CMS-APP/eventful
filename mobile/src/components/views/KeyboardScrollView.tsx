@@ -124,6 +124,7 @@ export function KeyboardScrollView({
         keyboardDidHideListener.remove();
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customEasing, keyboardMarginBottom]);
 
   const scrollViewStyle = {

@@ -4,9 +4,9 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
 import { AuthStackParamList } from "@/app/navigation";
-import { Button } from "@/design-system/components/Button";
-import { Text } from "@/design-system/components/Text";
-import { TextButton } from "@/design-system/components/TextButton";
+import { Button } from "@/design-system/components/buttons/Button";
+import { TextButton } from "@/design-system/components/buttons/TextButton";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 
 import { AppleLogin } from "../components/AppleLogin";
@@ -55,7 +55,7 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
 
           <Button
             text="Email"
-            onPress={handleSignUp}
+            onPress={handleSignIn}
             color={colors.primary}
             textColor={colors.white}
             leadingIcon="envelope"
@@ -66,15 +66,15 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
 
           <View style={styles.orContainer}>
             <Text type="body" color={colors.primary}>
-              Already have an account?
+              Don&apos;t have an account?
             </Text>
 
             <TextButton
-              text="Sign in"
+              text="Sign up"
               textColor={colors.primary}
               textAlign="center"
               type="subHeader"
-              onPress={handleSignIn}
+              onPress={handleSignUp}
             />
           </View>
         </View>

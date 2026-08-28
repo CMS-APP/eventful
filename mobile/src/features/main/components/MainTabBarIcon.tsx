@@ -1,8 +1,8 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/design-system/components/Text";
+import { Badge } from "@/design-system/components/feedback/Badge";
 import { colors } from "@/design-system/tokens/colors";
 
 const iconNames = {
@@ -31,31 +31,14 @@ export function MainTabBarIcon({
   return (
     <>
       <FontAwesome5 name={iconName} size={24} color={iconColor} />
-      {notifications > 0 && (
-        <View style={styles.badge}>
-          <Text type="subHeader" style={styles.badgeText} center>
-            {notifications}
-          </Text>
-        </View>
-      )}
+      <Badge count={notifications} style={styles.badgeOffset} />
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  badge: {
-    alignItems: "center",
-    backgroundColor: colors.primary,
-    borderRadius: 12,
-    justifyContent: "center",
-    paddingHorizontal: 6,
-    position: "absolute",
+  badgeOffset: {
     right: -12,
     top: -8
-  },
-  badgeText: {
-    color: colors.white,
-    fontSize: 12,
-    left: 0.5
   }
 });

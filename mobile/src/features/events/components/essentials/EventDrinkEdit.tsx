@@ -5,7 +5,7 @@ import { View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 
 import { EventsStackParamList } from "@/app/navigation";
-import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
+import { updateEventInDatabase } from "@/services/firebase/event";
 
 import { EventBudget } from "../budget/EventBudget";
 import { EventBudgetList } from "../budget/EventBudgetList";

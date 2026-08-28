@@ -7,8 +7,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
-import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
-import { IconButton } from "@/design-system/components/IconButton";
+import { IconButton } from "@/design-system/components/buttons/IconButton";
+import { SegmentedControl } from "@/design-system/components/buttons/SegmentedControl";
 import { colors } from "@/design-system/tokens/colors";
 
 import { CreateEventModal } from "../components/create/CreateEventModal";
@@ -62,7 +62,7 @@ export function EventsScreen({ navigation, route }: EventsScreenProps) {
             />
           </View>
 
-          <AppButtonSwitcher
+          <SegmentedControl
             selections={["Upcoming", "Past", "Declined"]}
             selectedButton={selectedButton}
             setSelectedButton={setSelectedButton}

@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
+import { SegmentedControl } from "@/design-system/components/buttons/SegmentedControl";
 import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 
@@ -22,7 +22,7 @@ export function EventToDoShoppingEdit({
 
   return (
     <View style={styles.container}>
-      <AppButtonSwitcher
+      <SegmentedControl
         selections={selections}
         selectedButton={selectedButton}
         setSelectedButton={setSelectedButton}

@@ -9,12 +9,12 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { EventsStackParamList } from "@/app/navigation";
-import { Button } from "@/design-system/components/Button";
-import { Input } from "@/design-system/components/Input";
-import { ModalView } from "@/design-system/components/ModalView";
-import { Text } from "@/design-system/components/Text";
+import { Button } from "@/design-system/components/buttons/Button";
+import { Input } from "@/design-system/components/inputs/Input";
+import { ModalView } from "@/design-system/components/overlays/ModalView";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { createEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
+import { createEventInDatabase } from "@/services/firebase/event";
 import { UserState } from "@/store/UserSlice";
 import { Event, NewEvent } from "@/types/Event";
 import { showErrorToast } from "@/utils/toast";

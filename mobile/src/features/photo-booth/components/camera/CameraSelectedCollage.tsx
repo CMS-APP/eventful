@@ -1,9 +1,9 @@
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
-
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
+
 import { CustomiseCollageModal } from "./CustomiseCollageModal";
 
 export function CameraSelectedCollage({

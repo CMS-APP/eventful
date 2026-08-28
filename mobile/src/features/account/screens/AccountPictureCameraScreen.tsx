@@ -10,7 +10,7 @@ import { CameraView, PhotoResult } from "expo-camera";
 import { CameraType } from "expo-image-picker";
 
 import { AccountStackParamList } from "@/app/navigation";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 

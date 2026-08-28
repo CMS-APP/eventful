@@ -10,13 +10,13 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { AppStackParamList, EventsStackParamList } from "@/app/navigation";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { textFormatter } from "@/design-system/tokens/fonts";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
-import { getInviteFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
-import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { getInviteFromDatabase } from "@/services/firebase/invite";
+import { getUserInfo } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { formatDate, formatTime } from "@/utils/date";
@@ -80,7 +80,7 @@ export function EventsListItem({
         { text: "OK" }
       ]);
     }
-  }, [event, userId, navigation, isUpcoming, isDecline]);
+  }, [event, userId, navigation, navEvents, isUpcoming, isDecline]);
 
   async function fetchHostInfo() {
     if (event.userId === userId) {
@@ -99,6 +99,7 @@ export function EventsListItem({
     if (userId) {
       fetchHostInfo();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [event, isUpcoming, userId, isDecline]);
 
   return (

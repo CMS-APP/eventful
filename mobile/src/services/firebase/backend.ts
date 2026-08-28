@@ -1,6 +1,6 @@
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
-import { getAppCheckToken } from "@/services/firebase/firebase";
+import { getAppCheckToken } from "@/app/init/firebase";
 
 const BASE_URL = "https://api.eventfulapp.com";
 
@@ -40,17 +40,14 @@ export async function sendVerificationEmail(user: FirebaseAuthTypes.User) {
     { email: user.email },
     { throwOnError: false }
   );
-
 }
 
 export async function incrementUserCount(_user: FirebaseAuthTypes.User) {
   await post(ENDPOINTS.incrementUserCount);
-
 }
 
 export async function incrementEventCount(_user: FirebaseAuthTypes.User) {
   await post(ENDPOINTS.incrementEventCount);
-
 }
 
 export async function userSearch(
@@ -60,7 +57,6 @@ export async function userSearch(
   const response = await post(ENDPOINTS.userSearch, { q: searchInput });
   const { hits } = await response.json();
   return hits;
-
 }
 
 export interface PlaceSuggestion {

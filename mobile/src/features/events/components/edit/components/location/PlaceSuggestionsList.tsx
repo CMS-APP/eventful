@@ -2,11 +2,11 @@ import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/design-system/components/Text";
-import { TextButton } from "@/design-system/components/TextButton";
+import { TextButton } from "@/design-system/components/buttons/TextButton";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
-import { PlaceSuggestion } from "@/services/firebase/firebaseBackend";
+import { PlaceSuggestion } from "@/services/firebase/backend";
 
 interface PlaceSuggestionsListProps {
   suggestions: PlaceSuggestion[];

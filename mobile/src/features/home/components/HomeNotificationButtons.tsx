@@ -13,7 +13,7 @@ import { colors } from "@/design-system/tokens/colors";
 import {
   listenToFollowNotifications,
   listenToUpdateNotifications
-} from "@/services/firebase/firebaseInAppNotifications";
+} from "@/services/firebase/notifications";
 import { UserState } from "@/store/UserSlice";
 import { InAppNotification } from "@/types/InAppNotification";
 
@@ -72,7 +72,7 @@ export function HomeNotificationButtons() {
       screen: "ContactsInvitations",
       params: undefined
     });
-  }, [navigation]);
+  }, [navMain]);
 
   return (
     <View style={styles.container}>

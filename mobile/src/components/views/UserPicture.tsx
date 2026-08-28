@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Image, StyleSheet, View } from "react-native";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { getUserInfo } from "@/services/firebase/user";
 import { syncUserPicture } from "@/services/local/cache";
 
 interface UserPictureProps {

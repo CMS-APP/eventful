@@ -5,7 +5,7 @@ import { StyleSheet, View } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import { Screen } from "@/components/screen/Screen";
-import { Button } from "@/design-system/components/Button";
+import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
 import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
 import { usePhotoBoothPermissions } from "@/features/photo-booth/context/permissions/PhotoBoothPermissionsContext";

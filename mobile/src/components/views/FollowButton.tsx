@@ -4,14 +4,14 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Alert, View } from "react-native";
 
-import { Button } from "@/design-system/components/Button";
+import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
 import {
   followUser,
   getUserFollowers,
   getUserFollowing,
   unFollowUser
-} from "@/services/firebase/firebaseUserFunctions";
+} from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { Follower } from "@/types/Follower";
 import { User } from "@/types/User";
@@ -81,7 +81,7 @@ export function FollowButton({ user, flex = undefined }: FollowButtonProps) {
     const following = await getUserFollowing(user.uid);
     setFollowing(following);
     getContactText(followers, following);
-  }, [user.uid]);
+  }, [user.uid, getContactText]);
 
   useEffect(() => {
     fetchData();

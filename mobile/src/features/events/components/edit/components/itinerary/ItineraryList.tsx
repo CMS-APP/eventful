@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 import { Itinerary } from "@/types/Itinerary";

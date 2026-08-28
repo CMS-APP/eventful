@@ -91,7 +91,7 @@ export function PaymentProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setLoading(false);
     }
-  }, [updateUserInfo, getProducts]);
+  }, [updateUserInfo, getProducts, setLoading]);
 
   useEffect(() => {
     if (!userId) {

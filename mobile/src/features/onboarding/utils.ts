@@ -1,5 +1,5 @@
-import { FIREBASE_AUTH } from "@/services/firebase/firebase";
-import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { FIREBASE_AUTH } from "@/app/init/firebase";
+import { getUserInfo } from "@/services/firebase/user";
 
 export async function getLoginNames() {
   const user = FIREBASE_AUTH.currentUser;

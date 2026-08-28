@@ -10,12 +10,12 @@ import { Entypo } from "@expo/vector-icons";
 
 import { EventInviteStackParamList } from "@/app/navigation";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { textFormatter } from "@/design-system/tokens/fonts";
 import { ResponseButtonIcon } from "@/features/events/components/invite/ResponseButtonIcon";
 import { formatEventAddressDisplay } from "@/services/address/eventAddress";
-import { updateResponseInDatabase } from "@/services/firebase/firebaseInviteFunctions";
+import { updateResponseInDatabase } from "@/services/firebase/invite";
 import { openInMaps } from "@/services/maps/openInMaps";
 import { updateResponseNotification } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";

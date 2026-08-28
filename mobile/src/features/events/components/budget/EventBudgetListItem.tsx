@@ -2,8 +2,8 @@ import React, { useCallback } from "react";
 
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 
-import { InputAccessory } from "@/design-system/components/InputAccessory";
-import { Text } from "@/design-system/components/Text";
+import { InputAccessory } from "@/design-system/components/inputs/InputAccessory";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";

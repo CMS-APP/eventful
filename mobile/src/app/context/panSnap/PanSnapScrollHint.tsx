@@ -6,7 +6,7 @@ import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 
 import { FontAwesome } from "@expo/vector-icons";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 
 import { usePanSnapContext } from "./PanSnapContext";

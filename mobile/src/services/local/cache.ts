@@ -5,8 +5,8 @@ import { Photo } from "@/types/Photo";
 import { User } from "@/types/User";
 
 import { log } from "../../utils/logging";
-import { downloadImageAsync } from "../firebase/firebaseStorage";
-import { updateUserInfo } from "../firebase/firebaseUserFunctions";
+import { downloadImageAsync } from "../firebase/storage";
+import { updateUserInfo } from "../firebase/user";
 
 function getImageCacheDirectory(): FileSystem.Directory {
   const cachePath = FileSystem.Paths.cache;

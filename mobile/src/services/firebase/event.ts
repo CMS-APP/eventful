@@ -10,7 +10,7 @@ import { isActiveEvent, parseDatabaseDate } from "@/utils/date";
 import { log } from "@/utils/logging";
 
 import { deleteDocument } from "../api/delete";
-import { incrementEventCount } from "./firebaseBackend";
+import { incrementEventCount } from "./backend";
 
 export async function getEventInfo(event: Event): Promise<Event | null> {
   const eventData = await getDocument(API_COLLECTIONS.EVENT, event.id || "");

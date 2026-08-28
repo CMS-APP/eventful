@@ -4,9 +4,9 @@ import * as Notifications from "expo-notifications";
 import { NotificationResponse } from "expo-notifications";
 
 import { navigationRef } from "@/app/navigation";
-import { getEventInfo } from "@/services/firebase/firebaseEventFunctions";
-import { getInviteInfo } from "@/services/firebase/firebaseInviteFunctions";
-import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { getEventInfo } from "@/services/firebase/event";
+import { getInviteInfo } from "@/services/firebase/invite";
+import { getUserInfo } from "@/services/firebase/user";
 
 async function handleEventEditNavigation(params: any) {
   const event = await getEventInfo(params.event);

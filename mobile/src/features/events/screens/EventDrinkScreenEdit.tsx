@@ -7,9 +7,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
-import { Divider } from "@/design-system/components/Divider";
-import { Input } from "@/design-system/components/Input";
-import { Text } from "@/design-system/components/Text";
+import { Input } from "@/design-system/components/inputs/Input";
+import { Divider } from "@/design-system/components/layout/Divider";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { AmazonButton } from "@/features/events/components/misc/AmazonButton";
 import { UserState } from "@/store/UserSlice";

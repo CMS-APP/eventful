@@ -1,6 +1,6 @@
 import { AppProvider } from "@/app/context/AppProvider";
+import "@/app/init/firebase";
 import { useAppInit } from "@/app/init/useAppInit";
-import "@/services/firebase/firebase";
 
 import { LoadingScreen } from "../app/screens/LoadingScreen";
 import { AppNavigator } from "./AppNavigator";

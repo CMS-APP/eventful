@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { Screen } from "@/components/screen/Screen";
-import { Input } from "@/design-system/components/Input";
-import { SwitchButton } from "@/design-system/components/SwitchButton";
+import { SwitchButton } from "@/design-system/components/buttons/SwitchButton";
+import { Input } from "@/design-system/components/inputs/Input";
 import { colors } from "@/design-system/tokens/colors";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
@@ -57,6 +57,7 @@ export function PhotoBoothSettings() {
     ) {
       setTimerDuration(newDuration);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timerDurationLocal]);
 
   return (

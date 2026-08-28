@@ -9,7 +9,7 @@ import { AllStackParamList, HomeStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { colors } from "@/design-system/tokens/colors";
-import { readUpdateNotification } from "@/services/firebase/firebaseUserFunctions";
+import { readUpdateNotification } from "@/services/firebase/user";
 import { InAppNotification } from "@/types/InAppNotification";
 
 import { HomeUpdateItem } from "../components/HomeUpdateItem";

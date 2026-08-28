@@ -7,7 +7,7 @@ import {
   query
 } from "@react-native-firebase/firestore";
 
-import { FIRESTORE_DB } from "@/services/firebase/firebase";
+import { FIRESTORE_DB } from "@/app/init/firebase";
 
 type DocumentData = FirebaseFirestoreTypes.DocumentData | undefined;
 type QueryDocumentSnapshot = FirebaseFirestoreTypes.QueryDocumentSnapshot;

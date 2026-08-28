@@ -17,7 +17,7 @@ import { CommonActions } from "@react-navigation/native";
 
 import { dataInit } from "@/app/init/data";
 import { navigationRef } from "@/app/navigation";
-import { Button } from "@/design-system/components/Button";
+import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";

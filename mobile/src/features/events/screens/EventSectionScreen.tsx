@@ -8,11 +8,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { colors } from "@/design-system/tokens/colors";
-import {
-  getEventInfo,
-  updateEventInDatabase
-} from "@/services/firebase/firebaseEventFunctions";
-import { updateEventLinkInDatabase } from "@/services/firebase/firebaseInviteFunctions";
+import { getEventInfo, updateEventInDatabase } from "@/services/firebase/event";
+import { updateEventLinkInDatabase } from "@/services/firebase/invite";
 import { updateNotificationsForEvent } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
 import type { Event } from "@/types/Event";
@@ -89,6 +86,7 @@ export function EventSectionScreen({
         await updateNotificationsForEvent(event);
       }
     }, 250);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [event, userId]);
 
   useEffect(() => {

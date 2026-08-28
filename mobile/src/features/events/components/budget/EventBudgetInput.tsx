@@ -5,7 +5,7 @@ import {
   TextInput
 } from "react-native";
 
-import { InputAccessory } from "@/design-system/components/InputAccessory";
+import { InputAccessory } from "@/design-system/components/inputs/InputAccessory";
 import { colors } from "@/design-system/tokens/colors";
 import { padding } from "@/design-system/tokens/padding";
 

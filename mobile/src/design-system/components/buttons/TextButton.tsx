@@ -2,7 +2,7 @@ import { useCallback } from "react";
 
 import { StyleSheet, TouchableOpacity } from "react-native";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { haptics } from "@/utils/haptics";
 

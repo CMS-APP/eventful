@@ -11,12 +11,12 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
-import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
-import { Input } from "@/design-system/components/Input";
+import { SegmentedControl } from "@/design-system/components/buttons/SegmentedControl";
+import { Input } from "@/design-system/components/inputs/Input";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { EventInviteUserItem } from "@/features/events/components/guest-list/EventInviteUserItem";
-import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
+import { updateEventInDatabase } from "@/services/firebase/event";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { Guest } from "@/types/Guest";
@@ -102,7 +102,7 @@ export function EventInviteGuestManualScreen({
     }
     addGuest(newGuest);
     setNewGuest("");
-  }, [addGuest, newGuest]);
+  }, [addGuest, newGuest, checkInput]);
 
   const refreshUsers = useCallback(() => {}, []);
 
@@ -190,7 +190,7 @@ export function EventInviteGuestManualScreen({
         backgroundColor: colors.darkGray
       }}
     >
-      <AppButtonSwitcher
+      <SegmentedControl
         selections={["accept", "maybe", "decline"]}
         selectionValues={[
           acceptNum.toString(),

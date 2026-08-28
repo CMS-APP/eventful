@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 
 import { View } from "react-native";
 
-import { Text } from "@/design-system/components/Text";
-import { getRSVPWebUsers } from "@/services/firebase/firebaseInviteFunctions";
+import { Text } from "@/design-system/components/text/Text";
+import { getRSVPWebUsers } from "@/services/firebase/invite";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { UserInvite } from "@/types/UserInvite";

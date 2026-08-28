@@ -10,15 +10,15 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { ProfileStackParamList } from "@/app/navigation";
 import { ArcCutout } from "@/components/views/ArcCutout";
 import { FollowButton } from "@/components/views/FollowButton";
-import { Button } from "@/design-system/components/Button";
-import { Text } from "@/design-system/components/Text";
+import { Button } from "@/design-system/components/buttons/Button";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import {
   getUserFollowers,
   getUserFollowing,
   isFollowingUser
-} from "@/services/firebase/firebaseUserFunctions";
+} from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { Follower } from "@/types/Follower";
 import { User } from "@/types/User";

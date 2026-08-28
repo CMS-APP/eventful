@@ -2,7 +2,7 @@ import { useCallback } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { Input } from "@/design-system/components/Input";
+import { Input } from "@/design-system/components/inputs/Input";
 import { colors } from "@/design-system/tokens/colors";
 import { SpotifyPlaylists } from "@/features/events/components/music/SpotifyPlaylists";
 import { Event } from "@/types/Event";

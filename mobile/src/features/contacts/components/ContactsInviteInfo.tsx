@@ -9,10 +9,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { ContactsStackParamList } from "@/app/navigation";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
-import { Button } from "@/design-system/components/Button";
-import { Text } from "@/design-system/components/Text";
+import { Button } from "@/design-system/components/buttons/Button";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { getInvitationsForUser } from "@/services/firebase/firebaseInviteFunctions";
+import { getInvitationsForUser } from "@/services/firebase/invite";
 import { UserState } from "@/store/UserSlice";
 import { EventInvite } from "@/types/EventInvite";
 import { Invites } from "@/types/Invites";

@@ -8,7 +8,7 @@ import type { PhotoBoothSettingsValue } from "@/features/photo-booth/context/set
 import {
   getPhotoBoothConfig,
   savePhotoBoothConfig
-} from "@/services/firebase/firebaseUserFunctions";
+} from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { PB_CONFIG, PhotoBoothConfig } from "@/types/PhotoBoothConfig";
 import { showErrorToast } from "@/utils/toast";

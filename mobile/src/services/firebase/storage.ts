@@ -8,9 +8,8 @@ import {
 import * as ImageManipulator from "expo-image-manipulator";
 import { SaveFormat } from "expo-image-manipulator";
 
+import { FIREBASE_STORAGE } from "@/app/init/firebase";
 import { log } from "@/utils/logging";
-
-import { FIREBASE_STORAGE } from "./firebase";
 
 export async function downloadImageAsync(storageString: string) {
   const storageRef = ref(FIREBASE_STORAGE, storageString + ".jpg");
@@ -62,11 +61,9 @@ export async function uploadImageAsync(
   const compressedBlob = (await getBlob(compressedUri)) as Blob;
   const storageRef = ref(FIREBASE_STORAGE, storageString + ".jpg");
   await uploadBytesResumable(storageRef, compressedBlob);
-
 }
 
 export async function deleteImageAsync(storageString: string) {
   const storageRef = ref(FIREBASE_STORAGE, storageString + ".jpg");
   await deleteObject(storageRef);
-
 }

@@ -18,7 +18,7 @@ import { clearNotifications } from "@/services/pushNotifications";
 import { clearStorage } from "@/store/UserSlice";
 import { log } from "@/utils/logging";
 
-import { incrementUserCount } from "./firebaseBackend";
+import { incrementUserCount } from "./backend";
 
 export async function handleSignIn(
   email: string,

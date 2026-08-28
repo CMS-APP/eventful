@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { Button } from "@/design-system/components/Button";
+import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 import { Itinerary } from "@/types/Itinerary";

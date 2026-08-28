@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 
 import { useEffect, useState } from "react";
 
-import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { getUserInfo } from "@/services/firebase/user";
 import { syncUserPicture } from "@/services/local/cache";
 import { UserState } from "@/store/UserSlice";
 import { User } from "@/types/User";

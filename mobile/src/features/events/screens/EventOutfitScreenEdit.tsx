@@ -6,7 +6,7 @@ import { RouteProp } from "@react-navigation/native";
 
 import { EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
-import { Input } from "@/design-system/components/Input";
+import { Input } from "@/design-system/components/inputs/Input";
 import { colors } from "@/design-system/tokens/colors";
 import { UserState } from "@/store/UserSlice";
 

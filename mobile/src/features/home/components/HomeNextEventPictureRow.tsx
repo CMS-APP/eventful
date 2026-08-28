@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { ContactIcon } from "@/features/home/components/ContactIcon";
 import { UserInvite } from "@/types/UserInvite";

@@ -8,15 +8,15 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { EventsStackParamList } from "@/app/navigation";
-import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
-import { Button } from "@/design-system/components/Button";
+import { Button } from "@/design-system/components/buttons/Button";
+import { SegmentedControl } from "@/design-system/components/buttons/SegmentedControl";
 import { colors } from "@/design-system/tokens/colors";
-import { getEventInfo } from "@/services/firebase/firebaseEventFunctions";
+import { getEventInfo } from "@/services/firebase/event";
 import {
   getRSVPAppUsers,
   getRSVPManualUsers,
   getRSVPWebUsers
-} from "@/services/firebase/firebaseInviteFunctions";
+} from "@/services/firebase/invite";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { UserInvite } from "@/types/UserInvite";
@@ -173,7 +173,7 @@ export function EventInvitesRSVPEdit({
         />
       </View>
 
-      <AppButtonSwitcher
+      <SegmentedControl
         selections={selections}
         selectionValues={selectionValues}
         selectedButton={selectedButton}

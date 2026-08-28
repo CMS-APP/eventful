@@ -12,19 +12,19 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
+import { FIREBASE_AUTH } from "@/app/init/firebase";
 import { OnboardingStackParamList } from "@/app/navigation";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { Input } from "@/design-system/components/Input";
-import { Text } from "@/design-system/components/Text";
+import { Input } from "@/design-system/components/inputs/Input";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { API_COLLECTIONS } from "@/services/api/constants";
 import { createDocument } from "@/services/api/create";
-import { FIREBASE_AUTH } from "@/services/firebase/firebase";
 import {
   checkUsernameExists,
   convertTimestampsToMillis,
   createUserInfo
-} from "@/services/firebase/firebaseUserFunctions";
+} from "@/services/firebase/user";
 import { UserState, setUserData } from "@/store/UserSlice";
 import { User } from "@/types/User";
 import { showErrorToast } from "@/utils/toast";

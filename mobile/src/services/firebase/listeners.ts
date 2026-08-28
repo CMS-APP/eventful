@@ -8,13 +8,12 @@ import {
   where
 } from "@react-native-firebase/firestore";
 
+import { FIRESTORE_DB } from "@/app/init/firebase";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { Invites } from "@/types/Invites";
 import { isActiveEvent } from "@/utils/date";
 import { log } from "@/utils/logging";
-
-import { FIRESTORE_DB } from "./firebase";
 
 export function getInvitationsFromDatabaseSnapshot(
   userId: string,

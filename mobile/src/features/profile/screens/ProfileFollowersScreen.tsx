@@ -14,7 +14,7 @@ import {
   getUserFollowers,
   getUserFollowing,
   getUsersFromFollowing
-} from "@/services/firebase/firebaseUserFunctions";
+} from "@/services/firebase/user";
 import { User } from "@/types/User";
 
 import { ProfileButton } from "../components/ProfileButton";

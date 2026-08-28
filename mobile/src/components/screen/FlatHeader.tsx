@@ -8,35 +8,41 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { AllStackParamList } from "@/app/navigation";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { haptics } from "@/utils/haptics";
 
 import { FlatHeaderProps } from "./props";
 
-export function FlatHeader({ backgroundColor, ...props }: FlatHeaderProps) {
-  const color = props.dark ? colors.white : colors.black;
+export function FlatHeader({
+  backgroundColor,
+  title,
+  iconRight,
+  iconRightAction,
+  backAction,
+  dark,
+  icon
+}: FlatHeaderProps) {
+  const color = dark ? colors.white : colors.black;
   const nav = useNavigation<StackNavigationProp<AllStackParamList>>();
 
-  function leftAction() {
-    if (props?.backAction && typeof props?.backAction === "function") {
-      props?.backAction();
-    } else if (props?.backAction && typeof props?.backAction === "boolean") {
+  const leftAction = useCallback(() => {
+    if (backAction && typeof backAction === "function") {
+      backAction();
+    } else if (backAction && typeof backAction === "boolean") {
       nav.goBack();
-    } else {
-      null;
     }
-  }
+  }, [backAction, nav]);
 
   const rightAction = useCallback(() => {
     haptics.soft();
-    props.iconRightAction?.();
-  }, [props.iconRightAction]);
+    iconRightAction?.();
+  }, [iconRightAction]);
 
   const Side = useCallback(
     ({ isLeft }: { isLeft: boolean }) => {
-      if (isLeft && props.backAction) {
+      if (isLeft && backAction) {
         return (
           <TouchableOpacity
             onPress={leftAction}
@@ -48,21 +54,21 @@ export function FlatHeader({ backgroundColor, ...props }: FlatHeaderProps) {
         );
       }
 
-      if (!isLeft && props.iconRight) {
+      if (!isLeft && iconRight) {
         return (
           <TouchableOpacity
             onPress={rightAction}
             hitSlop={getHitSlop("small")}
             style={styles.iconButton}
           >
-            <FontAwesome5 name={props.iconRight} size={26} color={color} />
+            <FontAwesome5 name={iconRight} size={26} color={color} />
           </TouchableOpacity>
         );
       }
 
       return <View style={styles.spacer} />;
     },
-    [leftAction, rightAction, props.iconRight, color]
+    [leftAction, rightAction, iconRight, backAction, color]
   );
 
   const paddingTop = Platform.OS === "android" ? 12 : 0;
@@ -73,16 +79,16 @@ export function FlatHeader({ backgroundColor, ...props }: FlatHeaderProps) {
     <View style={[containerStyle, { backgroundColor }]}>
       <Side isLeft={true} />
       <View style={styles.titleContainer}>
-        {props.icon && (
+        {icon && (
           <FontAwesome5
-            name={props.icon}
+            name={icon}
             size={26}
             color={color}
             style={styles.headerIcon}
           />
         )}
         <Text type="header" color={color}>
-          {props.title}
+          {title}
         </Text>
       </View>
       <Side isLeft={false} />

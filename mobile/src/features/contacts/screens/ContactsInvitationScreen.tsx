@@ -4,7 +4,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AllStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
-import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
+import { SegmentedControl } from "@/design-system/components/buttons/SegmentedControl";
 import { colors } from "@/design-system/tokens/colors";
 import { InvitesView } from "@/features/events/components/invite/InvitesView";
 
@@ -37,7 +37,7 @@ export function ContactsInvitationScreen({
         paddingTop: 48
       }}
       nonScrollChildren={
-        <AppButtonSwitcher
+        <SegmentedControl
           selections={["Upcoming", "Past"]}
           selectedButton={selectedButton}
           setSelectedButton={setSelectedButton}

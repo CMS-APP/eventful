@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 
-import { Input } from "@/design-system/components/Input";
-import { TextButton } from "@/design-system/components/TextButton";
+import { TextButton } from "@/design-system/components/buttons/TextButton";
+import { Input } from "@/design-system/components/inputs/Input";
 import { colors } from "@/design-system/tokens/colors";
 import {
   AddressField,

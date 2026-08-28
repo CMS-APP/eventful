@@ -6,11 +6,11 @@ import { useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AllStackParamList } from "@/app/navigation";
-import { getInvitedGuests } from "@/services/firebase/firebaseInviteFunctions";
+import { getInvitedGuests } from "@/services/firebase/invite";
 import {
   getUserFollowing,
   getUsersFromFollowing
-} from "@/services/firebase/firebaseUserFunctions";
+} from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { User } from "@/types/User";
@@ -29,6 +29,14 @@ export function useEventInviteFollowing(
   const [search, setSearch] = useState("");
   const userId = useSelector((state: UserState) => state.uid);
 
+  const sortUsers = useCallback((users: User[]) => {
+    return (
+      users?.sort((a, b) => {
+        return a.name.localeCompare(b.name);
+      }) ?? []
+    );
+  }, []);
+
   const fetchData = useCallback(async () => {
     const invitedGuests = await getInvitedGuests(event, userId);
     const invitedUsers = invitedGuests.map((invite: UserInvite) => invite.user);
@@ -46,15 +54,7 @@ export function useEventInviteFollowing(
     );
     setNonInvitedUsers(nonInvitedUsers);
     setFilteredNonInvitedUsers(sortUsers(nonInvitedUsers ?? []));
-  }, [userId, event]);
-
-  const sortUsers = useCallback((users: User[]) => {
-    return (
-      users?.sort((a, b) => {
-        return a.name.localeCompare(b.name);
-      }) ?? []
-    );
-  }, []);
+  }, [userId, event, sortUsers]);
 
   const handleSearch = useCallback(() => {
     if (!search) {
@@ -75,6 +75,7 @@ export function useEventInviteFollowing(
     );
     setFilteredInvitedUsers(sortUsers(filteredInvitedUsers ?? []));
     setFilteredNonInvitedUsers(sortUsers(filteredNonInvitedUsers ?? []));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, sortUsers]);
 
   const refreshInvites = useCallback(() => {
@@ -84,7 +85,7 @@ export function useEventInviteFollowing(
   useFocusEffect(
     useCallback(() => {
       fetchData();
-    }, [fetchData, navigation])
+    }, [fetchData])
   );
 
   useEffect(() => {

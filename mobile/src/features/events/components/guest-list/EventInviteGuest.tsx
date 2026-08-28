@@ -16,7 +16,7 @@ import {
 } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { ContactsSearch } from "@/features/contacts/components/ContactsSearch";
 import { User } from "@/types/User";

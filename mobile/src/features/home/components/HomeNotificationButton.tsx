@@ -4,7 +4,8 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/design-system/components/Text";
+import { Badge } from "@/design-system/components/feedback/Badge";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { InAppNotification } from "@/types/InAppNotification";
@@ -37,13 +38,7 @@ export function HomeNotificationButton({
       <View style={styles.iconContainer}>
         <FontAwesome5 name={icon} size={20} color={colors.black} />
 
-        {unreadNotifications > 0 && (
-          <View style={styles.badge}>
-            <Text type="subHeader" style={styles.badgeText} center>
-              {unreadNotifications}
-            </Text>
-          </View>
-        )}
+        <Badge count={unreadNotifications} style={styles.badgeOffset} />
       </View>
 
       <Text type="body" color={colors.black}>
@@ -54,21 +49,10 @@ export function HomeNotificationButton({
 }
 
 const styles = StyleSheet.create({
-  badge: {
-    alignItems: "center",
-    backgroundColor: colors.primary,
-    borderRadius: 12,
+  badgeOffset: {
     height: 20,
-    justifyContent: "center",
-    paddingHorizontal: 6,
-    position: "absolute",
     right: -4,
     top: -4
-  },
-  badgeText: {
-    color: colors.white,
-    fontSize: 12,
-    left: 0.5
   },
   container: {
     alignItems: "center",

@@ -10,13 +10,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { AccountStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { ArcCutout } from "@/components/views/ArcCutout";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
-import {
-  getUserFollowers,
-  getUserFollowing
-} from "@/services/firebase/firebaseUserFunctions";
+import { getUserFollowers, getUserFollowing } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { User } from "@/types/User";
 import { haptics } from "@/utils/haptics";

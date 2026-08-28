@@ -10,7 +10,7 @@ import {
 
 import { Animated, Easing, StyleSheet, View } from "react-native";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);

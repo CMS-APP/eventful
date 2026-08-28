@@ -15,7 +15,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { FontAwesome } from "@expo/vector-icons";
 
 import { InspirationStackParamList } from "@/app/navigation";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
@@ -23,8 +23,8 @@ import {
   getPostLikesCount,
   hasUserLikedPost,
   togglePostLike
-} from "@/services/firebase/firebaseInspirationFunctions";
-import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+} from "@/services/firebase/inspiration";
+import { getUserInfo } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { Post } from "@/types/Post";
 import { User } from "@/types/User";
@@ -65,6 +65,7 @@ export function PostItem({ post }: { post: Post }) {
   useEffect(() => {
     fetchAuthor();
     loadLikeData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post.id, post.authorId, currentUserId]);
 
   useEffect(() => {

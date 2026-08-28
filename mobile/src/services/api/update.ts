@@ -1,6 +1,6 @@
 import { doc, setDoc, updateDoc } from "@react-native-firebase/firestore";
 
-import { FIRESTORE_DB } from "../firebase/firebase";
+import { FIRESTORE_DB } from "@/app/init/firebase";
 
 export async function updateDocument(
   data: any,

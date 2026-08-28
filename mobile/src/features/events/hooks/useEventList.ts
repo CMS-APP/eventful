@@ -6,7 +6,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AllStackParamList } from "@/app/navigation";
-import { getAllEvents } from "@/services/firebase/firebaseEventFunctions";
+import { getAllEvents } from "@/services/firebase/event";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 
@@ -33,7 +33,7 @@ export function useEventList(
   useFocusEffect(
     useCallback(() => {
       fetchData();
-    }, [fetchData, navigation])
+    }, [fetchData])
   );
 
   return { upcomingEvents, pastEvents, declineEvents };

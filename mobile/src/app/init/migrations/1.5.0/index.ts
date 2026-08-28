@@ -1,10 +1,10 @@
 import { doc, updateDoc } from "@react-native-firebase/firestore";
 
-import { FIRESTORE_DB } from "@/services/firebase/firebase";
+import { FIRESTORE_DB } from "@/app/init/firebase";
 import {
   getPollInDatabase,
   getVoteForUserInDatabase
-} from "@/services/firebase/firebaseInspirationFunctions";
+} from "@/services/firebase/inspiration";
 import { log } from "@/utils/logging";
 
 export async function convertPollVotesToDatabasePollVotes(userId: string) {

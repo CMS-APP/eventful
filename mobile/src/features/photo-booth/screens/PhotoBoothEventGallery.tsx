@@ -54,6 +54,7 @@ export function PhotoBoothEventGallery() {
   useFocusEffect(
     useCallback(() => {
       void refreshEvent(event);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [refreshEvent])
   );
 

@@ -7,12 +7,12 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AccountStackParamList } from "@/app/navigation";
 import { FollowButton } from "@/components/views/FollowButton";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
-import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { getUserInfo } from "@/services/firebase/user";
 import { InAppNotification } from "@/types/InAppNotification";
 import { User } from "@/types/User";
 import { haptics } from "@/utils/haptics";

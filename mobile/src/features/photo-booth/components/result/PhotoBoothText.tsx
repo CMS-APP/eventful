@@ -2,10 +2,9 @@ import { useCallback } from "react";
 
 import { Image, StyleSheet, View } from "react-native";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { getCustomFontStyle } from "@/design-system/tokens/fonts";
 import { textStyles } from "@/design-system/tokens/text";
-
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
 export function PhotoBoothText({
@@ -41,18 +40,21 @@ export function PhotoBoothText({
     [hexToRgb]
   );
 
-  const getFontStyle = useCallback((font: string, fontSizeString: string) => {
-    let fontSize = parseInt(fontSizeString);
-    if (collage === "column") {
-      fontSize /= 4;
-    }
+  const getFontStyle = useCallback(
+    (font: string, fontSizeString: string) => {
+      let fontSize = parseInt(fontSizeString);
+      if (collage === "column") {
+        fontSize /= 4;
+      }
 
-    if (collage === "grid") {
-      fontSize /= 1.5;
-    }
+      if (collage === "grid") {
+        fontSize /= 1.5;
+      }
 
-    return getCustomFontStyle(font, fontSize);
-  }, []);
+      return getCustomFontStyle(font, fontSize);
+    },
+    [collage]
+  );
 
   const getTextStyle = useCallback(
     (font: string, fontSizeString: string) => {
@@ -62,7 +64,7 @@ export function PhotoBoothText({
         color: textColor
       };
     },
-    [collage, textColor]
+    [collage, textColor, getFontStyle]
   );
 
   const getWatermarkContainerStyle = useCallback(() => {
@@ -104,7 +106,9 @@ export function PhotoBoothText({
             style={[
               getFontStyle(customTitleFont, customTitleFontSize.toString()),
               styles.title,
-              { marginTop: collage === "column" ? 1.6 : 15 }
+              collage === "column"
+                ? styles.titleMarginColumn
+                : styles.titleMarginDefault
             ]}
             color={textColor}
             adjustsFontSizeToFit
@@ -170,6 +174,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textTransform: "none",
     width: "100%"
+  },
+  titleMarginColumn: {
+    marginTop: 1.6
+  },
+  titleMarginDefault: {
+    marginTop: 15
   },
   watermarkContainer: {
     alignItems: "center",

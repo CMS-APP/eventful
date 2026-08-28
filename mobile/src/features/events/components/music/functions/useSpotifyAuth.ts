@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 import * as AuthSession from "expo-auth-session";
 
-import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { updateUserInfo } from "@/services/firebase/user";
 import { setSpotifyData } from "@/store/UserSlice";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
@@ -77,7 +77,6 @@ export function useSpotifyAuth({ userId, onSuccess }: UseSpotifyAuthOptions) {
     if (response) {
       handleAuthResponse();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, request, redirectUri, userId, onSuccess, dispatch]);
 
   const resetProcessedResponse = () => {

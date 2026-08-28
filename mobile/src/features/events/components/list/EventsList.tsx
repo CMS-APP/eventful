@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
-import { Button } from "@/design-system/components/Button";
+import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 
@@ -59,7 +59,7 @@ export function EventsList({
         </View>
       );
     },
-    [selectedButton, newEventAction]
+    [newEventAction]
   );
 
   return (

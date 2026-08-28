@@ -7,7 +7,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { InspirationStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
-import { IconButton } from "@/design-system/components/IconButton";
+import { IconButton } from "@/design-system/components/buttons/IconButton";
 import { colors } from "@/design-system/tokens/colors";
 import { UserState } from "@/store/UserSlice";
 

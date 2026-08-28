@@ -17,8 +17,8 @@ import {
 import { AppStackParamList } from "@/app/navigation";
 import { openSubscriptionManagement } from "@/app/update";
 import { Screen } from "@/components/screen/Screen";
-import { AppButtonSwitcher } from "@/design-system/components/AppButtonSwitcher";
-import { TextButton } from "@/design-system/components/TextButton";
+import { SegmentedControl } from "@/design-system/components/buttons/SegmentedControl";
+import { TextButton } from "@/design-system/components/buttons/TextButton";
 import { colors } from "@/design-system/tokens/colors";
 import { Subscription } from "@/types/Subscription";
 import { showErrorToast } from "@/utils/toast";
@@ -119,7 +119,7 @@ export function PaywallScreen({ navigation, route }: PaywallScreenProps) {
     >
       <View style={styles.container}>
         <View style={styles.headerBackground}>
-          <AppButtonSwitcher
+          <SegmentedControl
             selections={["Photo Booth", "Premium"]}
             selectedButton={selectedSubscriptionType}
             setSelectedButton={setSelectedSubscriptionType}

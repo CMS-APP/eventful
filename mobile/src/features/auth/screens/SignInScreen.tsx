@@ -11,16 +11,16 @@ import { useLoadingModal } from "@/app/context/loading/LoadingModalContext";
 import { dataInit } from "@/app/init/data";
 import { AuthStackParamList, navigationRef } from "@/app/navigation";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { Button } from "@/design-system/components/Button";
-import { Input } from "@/design-system/components/Input";
-import { Text } from "@/design-system/components/Text";
-import { TextButton } from "@/design-system/components/TextButton";
+import { Button } from "@/design-system/components/buttons/Button";
+import { TextButton } from "@/design-system/components/buttons/TextButton";
+import { Input } from "@/design-system/components/inputs/Input";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { Header } from "@/features/auth/components/Header";
 import { HeaderArcs } from "@/features/auth/components/HeaderArcs";
 import { formStyles } from "@/features/auth/styles/formStyles";
-import { handleSignIn } from "@/services/firebase/firebaseAuth";
-import { sendVerificationEmail } from "@/services/firebase/firebaseBackend";
+import { handleSignIn } from "@/services/firebase/auth";
+import { sendVerificationEmail } from "@/services/firebase/backend";
 import { showErrorToast } from "@/utils/toast";
 
 interface FormErrors {

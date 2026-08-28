@@ -6,9 +6,9 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { EventInviteStackParamList } from "@/app/navigation";
-import { Button } from "@/design-system/components/Button";
+import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
-import { getEventInvites } from "@/services/firebase/firebaseInviteFunctions";
+import { getEventInvites } from "@/services/firebase/invite";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";

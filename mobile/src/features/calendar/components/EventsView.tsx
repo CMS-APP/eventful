@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 import { parseDatabaseDate } from "@/utils/date";
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     gap: 12,
     marginTop: 12,
     paddingHorizontal: 24,
-    paddingTop: 24
+    paddingVertical: 24
   },
   eventsHeaderText: {
     color: colors.white,

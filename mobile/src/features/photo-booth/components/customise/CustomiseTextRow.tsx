@@ -1,7 +1,7 @@
 import { StyleSheet, TextStyle, TouchableOpacity, View } from "react-native";
 
-import { Input } from "@/design-system/components/Input";
-import { Text } from "@/design-system/components/Text";
+import { Input } from "@/design-system/components/inputs/Input";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 

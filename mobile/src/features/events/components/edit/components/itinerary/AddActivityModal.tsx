@@ -4,10 +4,10 @@ import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Button } from "@/design-system/components/Button";
-import { Input } from "@/design-system/components/Input";
-import { ModalView } from "@/design-system/components/ModalView";
-import { Text } from "@/design-system/components/Text";
+import { Button } from "@/design-system/components/buttons/Button";
+import { Input } from "@/design-system/components/inputs/Input";
+import { ModalView } from "@/design-system/components/overlays/ModalView";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { Event } from "@/types/Event";

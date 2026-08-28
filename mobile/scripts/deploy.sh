@@ -1,4 +1,4 @@
-echo "Building iOS Eventful App"
+echo "Building Eventful App"
 
 env_var() {
   grep -E "^$1=" .env 2>/dev/null | tail -n1 | cut -d '=' -f2-

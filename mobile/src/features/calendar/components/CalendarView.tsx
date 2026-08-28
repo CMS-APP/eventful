@@ -13,8 +13,8 @@ import {
   calculateEventActiveDays,
   getCalendarWeeks
 } from "@/features/calendar/utils/calendar";
-import { getInviteFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
-import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { getInviteFromDatabase } from "@/services/firebase/invite";
+import { getUserInfo } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { CalendarDate } from "@/types/CalendarDate";
 import { Event } from "@/types/Event";

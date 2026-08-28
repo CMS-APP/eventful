@@ -1,7 +1,7 @@
 import { Image, LayoutChangeEvent, StyleSheet, View } from "react-native";
 
 import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 
 interface HeaderProps {

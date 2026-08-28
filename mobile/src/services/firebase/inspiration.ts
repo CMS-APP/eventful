@@ -1,6 +1,7 @@
 import { where } from "@react-native-firebase/firestore";
 import { getDownloadURL, ref } from "@react-native-firebase/storage";
 
+import { FIREBASE_STORAGE } from "@/app/init/firebase";
 import { API_COLLECTIONS } from "@/services/api/constants";
 import { deleteDocument } from "@/services/api/delete";
 import {
@@ -9,8 +10,7 @@ import {
   getDocumentsByQuery
 } from "@/services/api/get";
 import { setDocument, updateDocument } from "@/services/api/update";
-import { FIREBASE_STORAGE } from "@/services/firebase/firebase";
-import { uploadImageAsync } from "@/services/firebase/firebaseStorage";
+import { uploadImageAsync } from "@/services/firebase/storage";
 import { Photo } from "@/types/Photo";
 import { Poll } from "@/types/Poll";
 import { PollVote } from "@/types/PollVote";
@@ -76,7 +76,6 @@ export async function createPostInDatabase(
   };
 
   await setDocument(newPost, API_COLLECTIONS.POSTS, newPost.id);
-
 }
 
 export async function getPostsFromDatabase(): Promise<Post[]> {
@@ -108,7 +107,6 @@ export async function createPollInDatabase(
   }
 
   await setDocument(newPoll, API_COLLECTIONS.POLL, newPoll.id);
-
 }
 
 export async function voteForOptionInDatabase(
@@ -141,7 +139,6 @@ export async function voteForOptionInDatabase(
     };
     await setDocument(vote, API_COLLECTIONS.POLL_VOTE, vote.voteId);
   }
-
 }
 
 export async function getVoteForUserInDatabase(
@@ -202,7 +199,6 @@ export async function togglePostLike(postId: string, userId: string) {
       `${postId}_${userId}`
     );
   }
-
 }
 
 export async function getPostLikesCount(postId: string): Promise<number> {
@@ -213,7 +209,10 @@ export async function getPostLikesCount(postId: string): Promise<number> {
     );
     return likes.length;
   } catch (error) {
-    log(`Error getting post likes count: ${(error as any)?.message ?? error}`, "error");
+    log(
+      `Error getting post likes count: ${(error as any)?.message ?? error}`,
+      "error"
+    );
     return 0;
   }
 }
@@ -229,7 +228,10 @@ export async function hasUserLikedPost(
     );
     return likes.length > 0;
   } catch (error) {
-    log(`Error checking if user liked post: ${(error as any)?.message ?? error}`, "error");
+    log(
+      `Error checking if user liked post: ${(error as any)?.message ?? error}`,
+      "error"
+    );
     return false;
   }
 }

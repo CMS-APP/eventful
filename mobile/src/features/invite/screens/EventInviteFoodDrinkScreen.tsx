@@ -7,9 +7,9 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { EventInviteStackParamList } from "@/app/navigation";
 import { FlatHeader } from "@/components/screen/FlatHeader";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { Input } from "@/design-system/components/Input";
+import { Input } from "@/design-system/components/inputs/Input";
 import { colors } from "@/design-system/tokens/colors";
-import { updateResponseInDatabase } from "@/services/firebase/firebaseInviteFunctions";
+import { updateResponseInDatabase } from "@/services/firebase/invite";
 import { showErrorToast } from "@/utils/toast";
 
 type Props = NativeStackScreenProps<

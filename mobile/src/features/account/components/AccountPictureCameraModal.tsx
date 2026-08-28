@@ -11,12 +11,12 @@ import { PhotoResult } from "expo-camera";
 import * as ImageManipulator from "expo-image-manipulator";
 import { CameraType } from "expo-image-picker";
 
-import { Button } from "@/design-system/components/Button";
-import { ModalView } from "@/design-system/components/ModalView";
-import { Text } from "@/design-system/components/Text";
+import { Button } from "@/design-system/components/buttons/Button";
+import { ModalView } from "@/design-system/components/overlays/ModalView";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { uploadImageAsync } from "@/services/firebase/firebaseStorage";
-import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { uploadImageAsync } from "@/services/firebase/storage";
+import { updateUserInfo } from "@/services/firebase/user";
 import {
   computeImageHash,
   saveLocalImageToCache

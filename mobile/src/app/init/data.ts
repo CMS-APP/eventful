@@ -15,7 +15,7 @@ import {
   cleanupOrphanedData,
   getUserInfo,
   updateUserInfo
-} from "@/services/firebase/firebaseUserFunctions";
+} from "@/services/firebase/user";
 import { setUserData, setUserInSentry } from "@/store/UserSlice";
 import { User } from "@/types/User";
 import { log } from "@/utils/logging";

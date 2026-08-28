@@ -6,11 +6,11 @@ import { Alert, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
-import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { updateUserInfo } from "@/services/firebase/user";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
 import { haptics } from "@/utils/haptics";
 

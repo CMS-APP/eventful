@@ -10,10 +10,10 @@ import { RouteProp } from "@react-navigation/native";
 import { ContactsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { ProfileButton } from "@/features/profile/components/ProfileButton";
-import { userSearch } from "@/services/firebase/firebaseBackend";
+import { userSearch } from "@/services/firebase/backend";
 import { User } from "@/types/User";
 import { showErrorToast } from "@/utils/toast";
 
@@ -63,6 +63,7 @@ export function ContactsSearchScreen({ route }: ContactsSearchScreenProps) {
     }, 500);
 
     return () => clearTimeout(debounceTimeout); // Clear timeout on cleanup
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   return (

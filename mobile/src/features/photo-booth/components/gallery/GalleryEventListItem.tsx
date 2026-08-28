@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { GalleryEvent } from "@/types/photoBoothGallery";
@@ -26,7 +26,7 @@ export function GalleryEventListItem({ event }: GalleryEventListItemProps) {
 
   const handlePress = useCallback(() => {
     navigation.navigate("PhotoBoothEventGallery", { event, type });
-  }, [navigation, event]);
+  }, [navigation, event, type]);
 
   return (
     <TouchableOpacity onPress={handlePress} hitSlop={getHitSlop("medium")}>

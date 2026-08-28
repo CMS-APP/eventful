@@ -2,17 +2,14 @@ import { useSelector } from "react-redux";
 
 import { useCallback, useState } from "react";
 
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { useFocusEffect } from "@react-navigation/native";
 
-import { AllStackParamList } from "@/app/navigation";
-import { getEventsFromDatabase } from "@/services/firebase/firebaseEventFunctions";
-import { getInvitedEvents } from "@/services/firebase/firebaseInviteFunctions";
+import { getEventsFromDatabase } from "@/services/firebase/event";
+import { getInvitedEvents } from "@/services/firebase/invite";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 
 export function useCalenderEvents() {
-  const navigation = useNavigation() as StackNavigationProp<AllStackParamList>;
   const [allEvents, setAllEvents] = useState<Event[]>([]);
   const [allInvitedEvents, setAllInvitedEvents] = useState<Event[]>([]);
   const userId = useSelector((state: UserState) => state.uid);
@@ -28,7 +25,7 @@ export function useCalenderEvents() {
   useFocusEffect(
     useCallback(() => {
       fetchData();
-    }, [fetchData, navigation])
+    }, [fetchData])
   );
 
   return { allEvents, allInvitedEvents };

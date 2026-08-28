@@ -13,9 +13,12 @@ import {
 
 import { CameraView, PhotoResult } from "expo-camera";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { padding } from "@/design-system/tokens/padding";
+import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
+import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
+import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
 import { PhotoBoothButtons } from "../components/camera/PhotoBoothButtons";
 import {
@@ -26,9 +29,6 @@ import type {
   PhotoBoothStackNavigation,
   PhotoBoothStackParamList
 } from "../photoBoothStackParams";
-import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
-import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
-import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
 type RedoPhotoRoute = RouteProp<
   PhotoBoothStackParamList,

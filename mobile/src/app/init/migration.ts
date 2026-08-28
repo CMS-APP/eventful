@@ -1,15 +1,12 @@
-import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { updateUserInfo } from "@/services/firebase/user";
 import { User } from "@/types/User";
 
-import { convertPhotoDataToGalleryPhotoData } from "../../services/firebase/firebaseDataUpdates";
+import { convertPhotoDataToGalleryPhotoData } from "../../services/firebase/dataUpdates";
 import {
   convertEventEventToEvent,
   convertLocalEventsToDatabase
 } from "./migrations/1.0.0";
-import {
-  convertEventGuestList,
-  convertEventInvites
-} from "./migrations/1.2.0";
+import { convertEventGuestList, convertEventInvites } from "./migrations/1.2.0";
 import { convertUserFollowingToDatabaseFollowing } from "./migrations/1.4.0";
 import { convertPollVotesToDatabasePollVotes } from "./migrations/1.5.0";
 import { convertDateToTimestamp } from "./migrations/1.6.0";

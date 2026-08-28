@@ -11,10 +11,10 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { AppStackParamList } from "@/app/navigation";
 import { UserPicture } from "@/components/views/UserPicture";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
-import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { getUserInfo } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { EventInvite } from "@/types/EventInvite";
 import { User } from "@/types/User";
@@ -49,7 +49,7 @@ export function ContactInviteItem({ eventInvite }: ContactInviteItemProps) {
     } else {
       Alert.alert("Error", "Host not found");
     }
-  }, [event, invite, response]);
+  }, [event, invite, response, navigation]);
 
   if (!event) {
     return null;

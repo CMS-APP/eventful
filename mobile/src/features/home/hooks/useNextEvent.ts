@@ -2,30 +2,19 @@ import { useSelector } from "react-redux";
 
 import { useCallback, useState } from "react";
 
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { useFocusEffect } from "@react-navigation/native";
 
-import { MainStackParamList } from "@/app/navigation";
-import { getNextEvent } from "@/services/firebase/firebaseEventFunctions";
-import { getEventResponses } from "@/services/firebase/firebaseInviteFunctions";
+import { getNextEvent } from "@/services/firebase/event";
+import { getEventResponses } from "@/services/firebase/invite";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { UserInvite } from "@/types/UserInvite";
 
 export function useNextEvent(event: Event | null) {
-  const navigation = useNavigation() as StackNavigationProp<MainStackParamList>;
   const [nextEvent, setNextEvent] = useState<Event | null>(null);
   const [percentageComplete, setPercentageComplete] = useState(0);
   const [accepted, setAccepted] = useState<UserInvite[]>([]);
   const userId = useSelector((state: UserState) => state.uid);
-
-  const fetchData = useCallback(async () => {
-    const nextEvent = event || (await getNextEvent(userId));
-    setNextEvent(nextEvent);
-    setPercentageComplete(calculatePercentageComplete(nextEvent));
-    const responses = await getEventResponses(nextEvent);
-    setAccepted(responses);
-  }, [userId, event]);
 
   const calculatePercentageComplete = useCallback((event: Event) => {
     if (!event?.timelineList?.length) {
@@ -38,10 +27,18 @@ export function useNextEvent(event: Event | null) {
     return (complete / total) * 100;
   }, []);
 
+  const fetchData = useCallback(async () => {
+    const nextEvent = event || (await getNextEvent(userId));
+    setNextEvent(nextEvent);
+    setPercentageComplete(calculatePercentageComplete(nextEvent));
+    const responses = await getEventResponses(nextEvent);
+    setAccepted(responses);
+  }, [userId, event, calculatePercentageComplete]);
+
   useFocusEffect(
     useCallback(() => {
       fetchData();
-    }, [fetchData, navigation])
+    }, [fetchData])
   );
 
   return { nextEvent, percentageComplete, accepted };

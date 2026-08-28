@@ -4,9 +4,9 @@ import { useNavigation } from "@react-navigation/native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
+import { Text } from "@/design-system/components/text/Text";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 
-import { Text } from "../../design-system/components/Text";
 import { ArcCutout } from "../views/ArcCutout";
 import { CurvyHeaderProps } from "./props";
 

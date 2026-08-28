@@ -4,12 +4,12 @@ import { useCallback, useState } from "react";
 
 import { Alert } from "react-native";
 
-import { Button } from "@/design-system/components/Button";
-import { Input } from "@/design-system/components/Input";
-import { ModalView } from "@/design-system/components/ModalView";
-import { Text } from "@/design-system/components/Text";
+import { Button } from "@/design-system/components/buttons/Button";
+import { Input } from "@/design-system/components/inputs/Input";
+import { ModalView } from "@/design-system/components/overlays/ModalView";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { sendFeedbackToDatabase } from "@/services/firebase/firebaseUserFunctions";
+import { sendFeedbackToDatabase } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { User } from "@/types/User";
 

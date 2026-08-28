@@ -6,7 +6,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AllStackParamList } from "@/app/navigation";
-import { getSortedInvites } from "@/services/firebase/firebaseEventFunctions";
+import { getSortedInvites } from "@/services/firebase/event";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 
@@ -26,7 +26,7 @@ export function useEventInvites(
   useFocusEffect(
     useCallback(() => {
       fetchData();
-    }, [fetchData, navigation])
+    }, [fetchData])
   );
 
   return { upcomingEvents, pastEvents };

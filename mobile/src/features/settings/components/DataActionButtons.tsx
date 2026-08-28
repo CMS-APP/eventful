@@ -4,9 +4,9 @@ import { useCallback, useState } from "react";
 
 import { Alert } from "react-native";
 
-import { Button } from "@/design-system/components/Button";
+import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
-import { updateUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { updateUserInfo } from "@/services/firebase/user";
 import { clearCache as clearImageCache } from "@/services/local/cache";
 import { UserState, clearSpotifyData } from "@/store/UserSlice";
 import { showErrorToast } from "@/utils/toast";

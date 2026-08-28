@@ -12,7 +12,7 @@ import { PanSnapGestureRoot } from "@/app/context/panSnap/PanSnapGestureRoot";
 import { PanSnapScrollHint } from "@/app/context/panSnap/PanSnapScrollHint";
 import { useAppDimensions } from "@/app/hooks/useAppDimensions";
 import { Screen } from "@/components/screen/Screen";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";

@@ -10,10 +10,10 @@ import { AllStackParamList, InspirationStackParamList } from "@/app/navigation";
 import { FlatHeader } from "@/components/screen/FlatHeader";
 import { FlatHeaderProps } from "@/components/screen/props";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { Button } from "@/design-system/components/Button";
-import { Input } from "@/design-system/components/Input";
+import { Button } from "@/design-system/components/buttons/Button";
+import { Input } from "@/design-system/components/inputs/Input";
 import { colors } from "@/design-system/tokens/colors";
-import { createPostInDatabase } from "@/services/firebase/firebaseInspirationFunctions";
+import { createPostInDatabase } from "@/services/firebase/inspiration";
 import { UserState } from "@/store/UserSlice";
 import { Photo } from "@/types/Photo";
 import { showErrorToast } from "@/utils/toast";
@@ -46,7 +46,7 @@ export function CreatePostScreen({ navigation }: CreatePostScreenProps) {
     } finally {
       setLoading(false);
     }
-  }, [postTitle, postDescription, photos, name, userId]);
+  }, [postTitle, postDescription, photos, name, userId, navigation]);
 
   function createNewPostAlert() {
     if (!postTitle || !postDescription) {

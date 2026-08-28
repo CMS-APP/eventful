@@ -36,7 +36,7 @@ export function HomeNavigator() {
       <Stack.Screen
         name="PhotoBooth"
         component={PhotoBoothWithProvider}
-        options={{ gestureEnabled: true, presentation: "transparentModal" }}
+        options={{ gestureEnabled: true }}
       />
 
       <Stack.Screen

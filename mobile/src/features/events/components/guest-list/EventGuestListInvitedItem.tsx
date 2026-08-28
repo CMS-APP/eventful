@@ -6,12 +6,12 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AppStackParamList } from "@/app/navigation";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
-import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
-import { deleteInviteFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
+import { updateEventInDatabase } from "@/services/firebase/event";
+import { deleteInviteFromDatabase } from "@/services/firebase/invite";
 import { syncUserPicture } from "@/services/local/cache";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";

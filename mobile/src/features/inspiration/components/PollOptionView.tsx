@@ -4,10 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Animated, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
-import { voteForOptionInDatabase } from "@/services/firebase/firebaseInspirationFunctions";
+import { voteForOptionInDatabase } from "@/services/firebase/inspiration";
 import { UserState } from "@/store/UserSlice";
 import { Poll } from "@/types/Poll";
 import { PollVote } from "@/types/PollVote";
@@ -94,7 +94,7 @@ export function PollOptionView({
       showErrorToast("Error Voting");
       throw error;
     }
-  }, [poll, userId, option, votes, setVotes, setUserVote]);
+  }, [poll, userId, option, votes, userVote, setVotes, setUserVote]);
 
   return (
     <View style={styles.container}>

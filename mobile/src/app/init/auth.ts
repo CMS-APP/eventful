@@ -3,7 +3,7 @@ import {
   onAuthStateChanged
 } from "@react-native-firebase/auth";
 
-import { FIREBASE_AUTH } from "@/services/firebase/firebase";
+import { FIREBASE_AUTH } from "@/app/init/firebase";
 
 export function checkAuth(): Promise<FirebaseAuthTypes.User | null> {
   return new Promise((resolve) => {

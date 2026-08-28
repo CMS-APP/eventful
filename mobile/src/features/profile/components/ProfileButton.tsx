@@ -10,11 +10,11 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { HomeStackParamList } from "@/app/navigation";
 import { FollowButton } from "@/components/views/FollowButton";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
-import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { getUserInfo } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { User } from "@/types/User";
 
@@ -36,6 +36,7 @@ export function ProfileButton({ uid }: ProfileButtonProps) {
 
   useEffect(() => {
     fetchUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uid]);
 
   const handleActionPress = useCallback(() => {

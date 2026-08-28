@@ -1,8 +1,8 @@
 import { StyleSheet, View } from "react-native";
 
-import { Button } from "@/design-system/components/Button";
-import { Divider } from "@/design-system/components/Divider";
-import { Text } from "@/design-system/components/Text";
+import { Button } from "@/design-system/components/buttons/Button";
+import { Divider } from "@/design-system/components/layout/Divider";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 import { formatDate, formatTime, parseDatabaseDate } from "@/utils/date";

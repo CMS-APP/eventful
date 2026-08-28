@@ -6,13 +6,13 @@ import { StyleSheet, View } from "react-native";
 
 import { useFocusEffect } from "@react-navigation/native";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import {
   getPollInDatabase,
   getVoteForUserInDatabase,
   getVotesInDatabase
-} from "@/services/firebase/firebaseInspirationFunctions";
+} from "@/services/firebase/inspiration";
 import { UserState } from "@/store/UserSlice";
 import { Poll } from "@/types/Poll";
 import { PollVote } from "@/types/PollVote";

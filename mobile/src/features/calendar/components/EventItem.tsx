@@ -8,11 +8,11 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AppStackParamList, MainStackParamList } from "@/app/navigation";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
-import { getInviteFromDatabase } from "@/services/firebase/firebaseInviteFunctions";
-import { getUserInfo } from "@/services/firebase/firebaseUserFunctions";
+import { getInviteFromDatabase } from "@/services/firebase/invite";
+import { getUserInfo } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { User } from "@/types/User";
@@ -41,7 +41,7 @@ export function EventItem({ index, event }: EventItemProps) {
     if (userId && event.userId !== userId) {
       fetchUserDetails();
     }
-  }, [event, userId]);
+  }, [event, userId, fetchUserDetails]);
 
   async function navigateToEvent() {
     haptics.soft();

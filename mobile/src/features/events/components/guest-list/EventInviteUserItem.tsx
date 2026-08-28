@@ -8,17 +8,17 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { AccountStackParamList } from "@/app/navigation";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
-import { updateEventInDatabase } from "@/services/firebase/firebaseEventFunctions";
+import { updateEventInDatabase } from "@/services/firebase/event";
 import {
   checkInvitedToEvent,
   deleteEventLinkResponse,
   deleteInviteFromDatabase,
   updateEventLinkResponse
-} from "@/services/firebase/firebaseInviteFunctions";
+} from "@/services/firebase/invite";
 import { syncUserPicture } from "@/services/local/cache";
 import { AlertOptions } from "@/types/AlertOptions";
 import { Event } from "@/types/Event";

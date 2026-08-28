@@ -8,17 +8,17 @@ import { Alert, StyleSheet, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Button } from "@/design-system/components/Button";
-import { Input } from "@/design-system/components/Input";
-import { ModalView } from "@/design-system/components/ModalView";
-import { Text } from "@/design-system/components/Text";
+import { Button } from "@/design-system/components/buttons/Button";
+import { Input } from "@/design-system/components/inputs/Input";
+import { ModalView } from "@/design-system/components/overlays/ModalView";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { padding } from "@/design-system/tokens/padding";
 import {
   changeHostname,
   checkUsernameExists,
   updateUserInfo
-} from "@/services/firebase/firebaseUserFunctions";
+} from "@/services/firebase/user";
 import {
   UserState,
   setFirstName,

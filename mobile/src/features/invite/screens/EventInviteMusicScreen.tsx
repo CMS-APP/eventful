@@ -9,7 +9,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { EventInviteStackParamList } from "@/app/navigation";
 import { FlatHeader } from "@/components/screen/FlatHeader";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { SpotifyPlaylistItem } from "@/features/events/components/music/SpotifyPlaylistItem";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";

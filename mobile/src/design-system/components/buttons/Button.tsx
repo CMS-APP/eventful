@@ -4,7 +4,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { TextType } from "@/design-system/tokens/text";
 import { haptics } from "@/utils/haptics";
@@ -26,7 +26,7 @@ const buttonStyles: Record<buttonSizes, ButtonStyles> = {
   medium: {
     padding: 16,
     borderRadius: 16,
-    gap: 8
+    gap: 6
   },
   large: {
     padding: 20,
@@ -79,6 +79,7 @@ export function Button({
   const buttonStyle = buttonStyles[size];
   const iconSize = iconSizes[size];
   const textStyle = buttonTextStyles[size];
+  const gap = buttonStyles[size].gap;
 
   return (
     <TouchableOpacity
@@ -89,7 +90,7 @@ export function Button({
       hitSlop={getHitSlop("large")}
     >
       <View style={[styles.button, { backgroundColor: color, ...buttonStyle }]}>
-        <View style={styles.textContainer}>
+        <View style={[styles.textContainer, { gap }]}>
           {leadingIcon && (
             <FontAwesome5
               name={leadingIcon}
@@ -133,7 +134,6 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   textContainer: {
-    flexDirection: "row",
-    gap: 12
+    flexDirection: "row"
   }
 });

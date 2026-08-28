@@ -3,12 +3,12 @@ import { memo, useCallback, useEffect, useMemo, useRef } from "react";
 import { Animated, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { useAppDimensions } from "@/app/hooks/useAppDimensions";
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { haptics } from "@/utils/haptics";
 
-interface AppButtonSwitcherProps {
+interface SegmentedControlProps {
   selections: string[];
   selectionValues?: string[] | null;
   selectedButton: string;
@@ -19,7 +19,7 @@ interface AppButtonSwitcherProps {
   onChange?: (selectedButton: string) => void;
 }
 
-export const AppButtonSwitcher = memo(function AppButtonSwitcher({
+export const SegmentedControl = memo(function SegmentedControl({
   selections,
   selectionValues = null,
   selectedButton,
@@ -28,7 +28,7 @@ export const AppButtonSwitcher = memo(function AppButtonSwitcher({
   nonPressColor = colors.primaryTint,
   disabled = false,
   onChange = () => {}
-}: AppButtonSwitcherProps) {
+}: SegmentedControlProps) {
   const animationRef = useRef(new Animated.Value(0));
   const width = useAppDimensions().screenWidth;
   const selectionCount = selections.length || 1;

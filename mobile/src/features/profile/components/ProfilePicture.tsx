@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Image, StyleSheet, View } from "react-native";
 
-import { Text } from "@/design-system/components/Text";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { syncUserPicture } from "@/services/local/cache";
 import { User } from "@/types/User";
@@ -46,6 +46,7 @@ export function ProfilePicture({
 
   useEffect(() => {
     syncPicture();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return (

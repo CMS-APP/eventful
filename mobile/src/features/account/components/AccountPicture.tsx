@@ -24,11 +24,8 @@ import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import {
   deleteImageAsync,
   uploadImageAsync
-} from "@/services/firebase/firebaseStorage";
-import {
-  getUserInfo,
-  updateUserInfo
-} from "@/services/firebase/firebaseUserFunctions";
+} from "@/services/firebase/storage";
+import { getUserInfo, updateUserInfo } from "@/services/firebase/user";
 import {
   computeImageHash,
   deleteCachedImage,

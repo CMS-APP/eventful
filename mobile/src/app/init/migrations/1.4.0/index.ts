@@ -1,7 +1,4 @@
-import {
-  followUser,
-  getUserInfo
-} from "@/services/firebase/firebaseUserFunctions";
+import { followUser, getUserInfo } from "@/services/firebase/user";
 import { log } from "@/utils/logging";
 
 export async function convertUserFollowingToDatabaseFollowing(userId: string) {

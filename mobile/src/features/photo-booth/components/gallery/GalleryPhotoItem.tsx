@@ -68,11 +68,10 @@ export function GalleryPhotoItem({
         <ImageBackground
           source={{ uri: imageUri ?? "", cacheKey: photoId }}
           cachePolicy="memory-disk"
-          style={{
-            width: imageSize.width,
-            height: imageSize.height,
-            borderRadius: 12
-          }}
+          style={[
+            styles.imageBackground,
+            { width: imageSize.width, height: imageSize.height }
+          ]}
           onLoadEnd={() => setLoading(false)}
         >
           <View style={styles.typeContainer}>
@@ -116,6 +115,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 4,
     width: 30
+  },
+  imageBackground: {
+    borderRadius: 12
   },
   loadingContainer: {
     alignItems: "center",

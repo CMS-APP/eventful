@@ -3,11 +3,11 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Image, StyleSheet, View } from "react-native";
 
 import { colors } from "@/design-system/tokens/colors";
-
 import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
 
 const THUMB_WIDTH = 80;
-const FALLBACK_RATIO = 7 / 10;
+const FALLBACK_RATIO = 0.7;
+const HEIGHT = THUMB_WIDTH / FALLBACK_RATIO;
 
 export function CameraPictureRow() {
   const { photos } = usePhotoBoothCamera();
@@ -18,18 +18,11 @@ export function CameraPictureRow() {
   return (
     <View style={[styles.scroll, { top }]}>
       {photos.map((photo, index) => {
-        const photoHeight = THUMB_WIDTH / FALLBACK_RATIO;
         return (
           <View key={`${photo.uri}-${index}`} style={styles.thumbWrap}>
             <Image
               source={{ uri: photo.uri }}
-              style={{
-                width: THUMB_WIDTH,
-                height: photoHeight,
-                borderRadius: 12,
-                borderWidth: 1,
-                borderColor: colors.white
-              }}
+              style={styles.thumb}
               resizeMode="cover"
             />
           </View>
@@ -48,6 +41,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
     top: 0
+  },
+  thumb: {
+    borderColor: colors.white,
+    borderRadius: 12,
+    borderWidth: 1,
+    height: HEIGHT,
+    width: THUMB_WIDTH
   },
   thumbWrap: {
     flexShrink: 0
