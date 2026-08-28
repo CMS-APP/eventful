@@ -1,40 +1,23 @@
-import { FirebaseAuthTypes, getIdToken } from "@react-native-firebase/auth";
+import { FirebaseAuthTypes } from "@react-native-firebase/auth";
+
+import { getAppCheckToken } from "@/services/firebase/firebase";
 
 const BASE_URL = "https://api.eventfulapp.com";
 
 const ENDPOINTS = {
-  appCheckToken: `${BASE_URL}/appCheckToken`,
   sendVerificationEmail: `${BASE_URL}/sendVerificationEmail`,
   incrementUserCount: `${BASE_URL}/incrementUserCount`,
   incrementEventCount: `${BASE_URL}/incrementEventCount`,
   userSearch: `${BASE_URL}/searchUsers`,
-  searchPlaces: `${BASE_URL}/searchPlaces`,
-  placeDetails: `${BASE_URL}/getPlaceDetails`
+  locationSearch: `${BASE_URL}/locationSearch`
 };
 
-async function getAppCheckToken(user: FirebaseAuthTypes.User) {
-  const idToken = await getIdToken(user, true);
-  const appCheckRes = await fetch(ENDPOINTS.appCheckToken, {
-    headers: {
-      Authorization: `Bearer ${idToken}`
-    }
-  });
-
-  if (!appCheckRes.ok) {
-    throw new Error("FirebaseBackend: Error getting App Check token");
-  }
-
-  const { token: appCheckToken } = await appCheckRes.json();
-  return appCheckToken;
-}
-
 async function post(
-  user: FirebaseAuthTypes.User,
   endpoint: string,
   body?: Record<string, unknown>,
   { throwOnError = true }: { throwOnError?: boolean } = {}
 ) {
-  const appCheckToken = await getAppCheckToken(user);
+  const appCheckToken = await getAppCheckToken();
   const response = await fetch(endpoint, {
     method: "POST",
     headers: {
@@ -53,7 +36,6 @@ async function post(
 
 export async function sendVerificationEmail(user: FirebaseAuthTypes.User) {
   return await post(
-    user,
     ENDPOINTS.sendVerificationEmail,
     { email: user.email },
     { throwOnError: false }
@@ -61,21 +43,21 @@ export async function sendVerificationEmail(user: FirebaseAuthTypes.User) {
 
 }
 
-export async function incrementUserCount(user: FirebaseAuthTypes.User) {
-  await post(user, ENDPOINTS.incrementUserCount);
+export async function incrementUserCount(_user: FirebaseAuthTypes.User) {
+  await post(ENDPOINTS.incrementUserCount);
 
 }
 
-export async function incrementEventCount(user: FirebaseAuthTypes.User) {
-  await post(user, ENDPOINTS.incrementEventCount);
+export async function incrementEventCount(_user: FirebaseAuthTypes.User) {
+  await post(ENDPOINTS.incrementEventCount);
 
 }
 
 export async function userSearch(
   searchInput: string,
-  user: FirebaseAuthTypes.User
+  _user: FirebaseAuthTypes.User
 ) {
-  const response = await post(user, ENDPOINTS.userSearch, { q: searchInput });
+  const response = await post(ENDPOINTS.userSearch, { q: searchInput });
   const { hits } = await response.json();
   return hits;
 
@@ -102,9 +84,10 @@ export interface PlaceDetailsResult {
 export async function searchPlaces(
   input: string,
   sessionToken: string,
-  user: FirebaseAuthTypes.User
+  _user: FirebaseAuthTypes.User
 ): Promise<PlaceSuggestion[]> {
-  const response = await post(user, ENDPOINTS.searchPlaces, {
+  const response = await post(ENDPOINTS.locationSearch, {
+    action: "autocomplete",
     input,
     sessionToken
   });
@@ -115,9 +98,10 @@ export async function searchPlaces(
 export async function getPlaceDetails(
   placeId: string,
   sessionToken: string,
-  user: FirebaseAuthTypes.User
+  _user: FirebaseAuthTypes.User
 ): Promise<PlaceDetailsResult> {
-  const response = await post(user, ENDPOINTS.placeDetails, {
+  const response = await post(ENDPOINTS.locationSearch, {
+    action: "details",
     placeId,
     sessionToken
   });

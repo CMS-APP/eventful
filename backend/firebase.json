@@ -74,13 +74,9 @@
         "function": { "functionId": "searchUsers", "region": "us-central1" }
       },
       {
-        "source": "/searchPlaces",
-        "function": { "functionId": "searchPlaces", "region": "us-central1" }
-      },
-      {
-        "source": "/getPlaceDetails",
+        "source": "/locationSearch",
         "function": {
-          "functionId": "getPlaceDetails",
+          "functionId": "locationSearch",
           "region": "us-central1"
         }
       }

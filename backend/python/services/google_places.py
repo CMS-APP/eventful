@@ -1,10 +1,3 @@
-"""Google Places API (New) proxy — Autocomplete + Place Details.
-
-Text-only address lookups for the mobile event Location editor; only
-address components/formatted address are requested — no coordinates or
-venue-name data.
-"""
-
 import json
 
 import requests
@@ -15,7 +8,6 @@ PLACES_API_BASE = "https://places.googleapis.com/v1"
 
 
 def _verify_app_check(req: https_fn.Request) -> https_fn.Response | None:
-    """Returns an error Response if App Check verification fails, else None."""
     token = req.headers.get("X-Firebase-AppCheck")
     if not token:
         return https_fn.Response("Missing app token", status=400)
@@ -143,7 +135,6 @@ def handle_place_details_request(
             params={"sessionToken": session_token},
             headers={
                 "X-Goog-Api-Key": api_key,
-                # Basic-tier fields only (no coordinates) — cheapest Details SKU.
                 "X-Goog-FieldMask": "addressComponents,formattedAddress",
             },
             timeout=10,
@@ -165,3 +156,19 @@ def handle_place_details_request(
     except Exception as exc:
         print(f"Place details request failed: {exc}")
         return https_fn.Response("Place details failed", status=500)
+
+
+def handle_location_search_request(
+    req: https_fn.Request, api_key: str
+) -> https_fn.Response:
+    if req.method == "OPTIONS":
+        return https_fn.Response("", status=204)
+
+    action = _string_param(req, "action")
+
+    if action == "autocomplete":
+        return handle_autocomplete_request(req, api_key)
+    if action == "details":
+        return handle_place_details_request(req, api_key)
+
+    return https_fn.Response("Missing or invalid action", status=400)

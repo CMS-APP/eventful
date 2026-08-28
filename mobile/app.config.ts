@@ -54,7 +54,8 @@ export default ({ config }: ConfigContext) => {
         ITSAppUsesNonExemptEncryption: false
       },
       entitlements: {
-        "com.apple.developer.applesignin": ["Default"]
+        "com.apple.developer.applesignin": ["Default"],
+        "com.apple.developer.devicecheck.appattest-environment": "production"
       },
       googleServicesFile: IS_DEV
         ? "./firebase/GoogleService-Info-Dev.plist"
@@ -62,6 +63,7 @@ export default ({ config }: ConfigContext) => {
     },
     plugins: [
       "@react-native-firebase/app",
+      "@react-native-firebase/app-check",
       "@react-native-firebase/auth",
       "@react-native-firebase/crashlytics",
       "@react-native-google-signin/google-signin",

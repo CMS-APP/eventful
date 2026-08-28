@@ -31,6 +31,7 @@ import {
 } from "@/services/firebase/firebaseBackend";
 import { Event } from "@/types/Event";
 import { EventAddress } from "@/types/EventAddress";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 import { generateUUID } from "@/utils/uuid";
 
@@ -122,8 +123,9 @@ export function LocationSearch({ event, setEvent }: LocationSearchProps) {
         if (!cancelled) {
           setSuggestions(results);
         }
-      } catch {
+      } catch (error) {
         if (!cancelled) {
+          log("Error Loading Locations " + error, "error");
           showErrorToast("Error Loading Locations");
         }
       } finally {
@@ -252,6 +254,8 @@ export function LocationSearch({ event, setEvent }: LocationSearchProps) {
       return;
     }
 
+    setLoading(true);
+
     try {
       const details = await getPlaceDetails(
         suggestion.placeId,
@@ -292,6 +296,8 @@ export function LocationSearch({ event, setEvent }: LocationSearchProps) {
       sessionTokenRef.current = generateUUID();
     } catch {
       showErrorToast("Error Loading Location Details");
+    } finally {
+      setLoading(false);
     }
   }
 

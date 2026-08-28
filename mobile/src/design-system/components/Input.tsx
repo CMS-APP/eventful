@@ -61,7 +61,8 @@ export function Input({
     ...styles.input,
     backgroundColor: backgroundColor,
     height: multilineProps?.height,
-    color: textColor
+    color: textColor,
+    textAlignVertical: multilineProps ? ("top" as const) : undefined
   };
 
   return (
