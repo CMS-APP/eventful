@@ -81,7 +81,7 @@ export function AppleLogin() {
       onPress={onAppleButtonPress}
       color={colors.primary}
       textColor={colors.white}
-      icon="apple"
+      leadingIcon="apple"
     />
   );
 }

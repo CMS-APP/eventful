@@ -6,14 +6,14 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { DateTimeButton } from "@/design-system/components/DateTimeButton";
+import { Button } from "@/design-system/components/Button";
 import { DateTimeSelector } from "@/design-system/components/DateTimeSelector";
 import { SwitchButton } from "@/design-system/components/SwitchButton";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { Event } from "@/types/Event";
-import { parseDatabaseDate } from "@/utils/date";
+import { formatDate, formatTime, parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
 
 type PickerType = "start" | "end";
@@ -135,28 +135,30 @@ export function EventDateTimeRangeEditor({
 
   return (
     <View style={styles.container}>
+      <Text type="body" color="white">
+        Date
+      </Text>
       <View style={styles.row}>
-        <DateTimeButton
-          date={startDate}
-          title={multiDate ? "Start Date" : "Date"}
-          type={"Date"}
+        <Button
+          size="small"
+          color={colors.primaryTint3}
+          textColor={colors.white}
+          text={formatDate(startDate)}
           onPress={handleDatePress}
-          dark={dark}
+          flex={1}
         />
 
-        <DateTimeButton
-          date={startDate}
-          title={multiDate ? "Start Time" : "Time"}
-          type={"Time"}
+        <Button
+          size="small"
+          color={colors.primaryTint3}
+          textColor={colors.white}
+          text={formatTime(startDate)}
           onPress={handleTimePress}
-          dark={dark}
+          flex={1}
         />
       </View>
 
-      <View>
-        <Text type="body" color="white" style={styles.multiDayLabel}>
-          Mutli-Day
-        </Text>
+      <View style={styles.column}>
         <SwitchButton
           isChecked={multiDate}
           onChange={handleSwitchChange}
@@ -167,20 +169,22 @@ export function EventDateTimeRangeEditor({
 
       {multiDate && endDate && (
         <View style={styles.row}>
-          <DateTimeButton
-            date={endDate}
-            title={"End Date"}
-            type={"Date"}
+          <Button
+            size="small"
+            color={colors.primaryTint3}
+            textColor={colors.white}
+            text={formatDate(endDate)}
             onPress={handleEndDatePress}
-            dark={dark}
+            flex={1}
           />
 
-          <DateTimeButton
-            date={endDate}
-            title={"End Time"}
-            type={"Time"}
+          <Button
+            size="small"
+            color={colors.primaryTint3}
+            textColor={colors.white}
+            text={formatTime(endDate)}
             onPress={handleEndTimePress}
-            dark={dark}
+            flex={1}
           />
         </View>
       )}
@@ -201,7 +205,7 @@ export function EventDateTimeRangeEditor({
 
       {showSaveChanges && (
         <View style={styles.column}>
-          <Text type="subHeader" color="white">
+          <Text type="body" color="white">
             Save Changes
           </Text>
           <TouchableOpacity
@@ -228,7 +232,7 @@ const styles = StyleSheet.create({
     gap: 6
   },
   container: {
-    gap: 12
+    gap: 6
   },
   dateText: {
     backgroundColor: colors.primaryTint3,
@@ -241,11 +245,8 @@ const styles = StyleSheet.create({
     gap: 6,
     justifyContent: "center"
   },
-  multiDayLabel: {
-    marginBottom: 6
-  },
   row: {
     flexDirection: "row",
-    gap: 12
+    gap: 6
   }
 });

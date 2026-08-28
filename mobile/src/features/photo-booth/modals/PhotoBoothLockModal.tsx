@@ -75,7 +75,7 @@ export function PhotoBoothLockModal({
         text="Lock"
         onPress={lockButtonAction}
         color={colors.primaryTint}
-        icon="lock"
+        leadingIcon="lock"
         textColor={colors.white}
       />
 

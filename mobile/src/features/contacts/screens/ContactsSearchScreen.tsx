@@ -93,8 +93,8 @@ export function ContactsSearchScreen({ route }: ContactsSearchScreenProps) {
       <View style={styles.usersContainer}>
         {loading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color={colors.secondary} />
             <Text type="body">Searching</Text>
+            <ActivityIndicator size="small" color={colors.secondary} />
           </View>
         ) : search.trim() ? (
           <View style={styles.usersList}>

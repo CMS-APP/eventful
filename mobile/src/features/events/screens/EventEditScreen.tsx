@@ -156,21 +156,28 @@ export function EventEditScreen({ navigation, route }: EventEditScreenProps) {
           />
 
           <SectionButton
+            color={colors.primary}
+            icon="map-marker-alt"
+            title="Location"
+            onPress={goToSection}
+          />
+
+          <SectionButton
             color={colors.primaryTint}
             icon="file"
             title="Essentials"
             onPress={goToSection}
           />
+        </View>
 
+        <View style={styles.buttonRow}>
           <SectionButton
             color={colors.gray}
             icon="bars"
             title="To Do"
             onPress={goToSection}
           />
-        </View>
 
-        <View style={styles.buttonRow}>
           <SectionButton
             color={colors.secondary}
             icon="play-circle"
@@ -184,23 +191,22 @@ export function EventEditScreen({ navigation, route }: EventEditScreenProps) {
             title="Timeline"
             onPress={goToSection}
           />
+        </View>
 
+        <View style={styles.buttonRow}>
           <SectionButton
             color={colors.darkGray}
             icon="envelope"
             title="Invites"
             onPress={goToSection}
           />
-        </View>
 
-        <View style={styles.buttonRow}>
           <SectionButton
             color={colors.primary}
             icon="calendar"
             title="Itinerary"
             onPress={goToSection}
           />
-          <View style={styles.flex1} />
           <View style={styles.flex1} />
         </View>
       </View>

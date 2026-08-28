@@ -28,7 +28,7 @@ export default ({ config }: ConfigContext) => {
     android: {
       package: bundleId,
       icon: "./src/assets/logos/eventful-logo-android.png",
-      versionCode: 310,
+      versionCode: 311,
       softwareKeyboardLayoutMode: "pan",
       permissions: [
         "android.permission.READ_EXTERNAL_STORAGE",
@@ -43,12 +43,12 @@ export default ({ config }: ConfigContext) => {
     ios: {
       bundleIdentifier: bundleId,
       icon: "./src/assets/logos/eventful-logo.png",
-      buildNumber: "314",
+      buildNumber: "315",
       supportsTablet: true,
       infoPlist: {
         NSPhotoLibraryUsageDescription:
           "This app needs access to your photo library to upload photos to your account and events.",
-        LSApplicationQueriesSchemes: ["spotify"],
+        LSApplicationQueriesSchemes: ["spotify", "comgooglemaps"],
         NSCameraUsageDescription:
           "Eventful uses your camera to let you take photos for your event pages or user profile.",
         ITSAppUsesNonExemptEncryption: false
@@ -73,7 +73,7 @@ export default ({ config }: ConfigContext) => {
             "./src/assets/fonts/Poppins-Medium.ttf",
             "./src/assets/fonts/Poppins-Medium-Italic.ttf",
             "./src/assets/fonts/Gotham-Bold.otf",
-            "./src/assets/fonts/Playfair-Variable.ttf",
+            "./src/assets/fonts/Playfair-Regular.ttf",
             "./src/assets/fonts/Anton-Regular.ttf",
             "./src/assets/fonts/BebasNeue-Regular.ttf",
             "./src/assets/fonts/Lobster.otf",

@@ -12,9 +12,9 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { fontStyles } from "@/design-system/tokens/fonts";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 
+import { textStyles } from "../tokens/text";
 import { InputAccessory } from "./InputAccessory";
 
 interface InputProps {
@@ -126,12 +126,12 @@ const styles = StyleSheet.create({
     flex: 1
   },
   input: {
-    ...fontStyles.body,
+    ...textStyles.body,
     color: colors.white,
     flex: 1,
     fontStyle: "italic",
     letterSpacing: 1,
-    paddingVertical: 12,
+    paddingVertical: 16,
     textTransform: "none"
   },
   inputContainer: {

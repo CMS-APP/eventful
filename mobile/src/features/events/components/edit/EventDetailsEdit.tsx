@@ -23,26 +23,6 @@ export function EventDetailsEdit({ event, setEvent }: EventDetailsEditProps) {
     [setEvent, event]
   );
 
-  const setEventAddress = useCallback(
-    (text: string) => {
-      setEvent({
-        ...event,
-        address: text
-      });
-    },
-    [setEvent, event]
-  );
-
-  const setEventDirections = useCallback(
-    (text: string) => {
-      setEvent({
-        ...event,
-        directions: text
-      });
-    },
-    [setEvent, event]
-  );
-
   const setEventTheme = useCallback(
     (text: string) => {
       setEvent({
@@ -75,28 +55,6 @@ export function EventDetailsEdit({ event, setEvent }: EventDetailsEditProps) {
         dark
         handleSaveChanges={() => {}}
         showSaveChanges={false}
-      />
-
-      <Input
-        placeholder="Address"
-        value={event.address}
-        onChangeText={(text) => setEventAddress(text)}
-        dark
-        multilineProps={{
-          numberOfLines: 10,
-          height: 100
-        }}
-      />
-
-      <Input
-        placeholder="Directions / Other Information"
-        value={event.directions}
-        onChangeText={(text) => setEventDirections(text)}
-        dark
-        multilineProps={{
-          numberOfLines: 10,
-          height: 100
-        }}
       />
     </View>
   );

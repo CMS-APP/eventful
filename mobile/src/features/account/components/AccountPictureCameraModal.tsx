@@ -115,7 +115,7 @@ export function AccountPictureCameraModal({
               onPress={savePhoto}
               color={colors.primaryTint}
               textColor={colors.white}
-              icon="check"
+              leadingIcon="check"
             />
 
             <Button

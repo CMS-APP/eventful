@@ -3,7 +3,8 @@ import { useCallback } from "react";
 import { Image, StyleSheet, View } from "react-native";
 
 import { Text } from "@/design-system/components/Text";
-import { fontStyles } from "@/design-system/tokens/fonts";
+import { getCustomFontStyle } from "@/design-system/tokens/fonts";
+import { textStyles } from "@/design-system/tokens/text";
 
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
@@ -50,31 +51,7 @@ export function PhotoBoothText({
       fontSize /= 1.5;
     }
 
-    if (font === "Poppins") {
-      return { ...fontStyles.poppinsRegular, fontSize };
-    } else if (font === "Poppins Bold") {
-      return { ...fontStyles.poppinsMedium, fontSize };
-    } else if (font === "Poppins Bold Italic") {
-      return { ...fontStyles.poppinsMediumItalic, fontSize };
-    } else if (font === "Anton") {
-      return { ...fontStyles.anton, fontSize };
-    } else if (font === "Bebas Neue") {
-      return { ...fontStyles.bebasNeue, fontSize };
-    } else if (font === "Lobster") {
-      return { ...fontStyles.lobster, fontSize };
-    } else if (font === "Great Vibes") {
-      return { ...fontStyles.greatVibes, fontSize };
-    } else if (font === "Playfair") {
-      return { ...fontStyles.playfair, fontSize };
-    } else if (
-      font === "Tribune Bold" ||
-      font === "Chloe" ||
-      font === "Gotham Bold"
-    ) {
-      return { ...fontStyles.gotham, fontSize };
-    } else {
-      return { ...fontStyles.poppinsRegular, fontSize };
-    }
+    return getCustomFontStyle(font, fontSize);
   }, []);
 
   const getTextStyle = useCallback(
@@ -107,8 +84,8 @@ export function PhotoBoothText({
     return {
       fontSize:
         collage === "column"
-          ? fontStyles.body.fontSize / 3
-          : fontStyles.body.fontSize / 1.5,
+          ? textStyles.body.fontSize / 3
+          : textStyles.body.fontSize / 1.5,
       letterSpacing: collage === "column" ? 0.5 : 1.5
     };
   }, [collage]);

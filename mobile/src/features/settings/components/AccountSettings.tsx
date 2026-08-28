@@ -104,7 +104,7 @@ export function AccountSettings() {
             color={colors.primaryTint3}
             textColor={colors.white}
             onPress={handleNamePress}
-            icon="user-edit"
+            leadingIcon="user-edit"
           />
 
           <Button
@@ -112,7 +112,7 @@ export function AccountSettings() {
             color={colors.primaryTint3}
             textColor={colors.white}
             onPress={handleUsernamePress}
-            icon="user-edit"
+            leadingIcon="user-edit"
           />
 
           <Button
@@ -120,7 +120,7 @@ export function AccountSettings() {
             color={colors.primaryTint3}
             textColor={colors.white}
             onPress={handleEnableNotificationsPress}
-            icon="bell"
+            leadingIcon="bell"
           />
 
           <Button
@@ -128,7 +128,7 @@ export function AccountSettings() {
             color={colors.primaryTint3}
             textColor={colors.white}
             onPress={handleRestorePurchasesPress}
-            icon="shopping-cart"
+            leadingIcon="shopping-cart"
           />
 
           {(premium || photoBooth) && (
@@ -137,7 +137,7 @@ export function AccountSettings() {
               color={colors.primaryTint3}
               textColor={colors.white}
               onPress={handleManageSubscriptionPress}
-              icon="cog"
+              leadingIcon="cog"
             />
           )}
         </View>

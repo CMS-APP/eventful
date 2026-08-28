@@ -3,6 +3,7 @@ import { type ReactNode, useState } from "react";
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
+  Platform,
   StyleSheet,
   View
 } from "react-native";
@@ -67,7 +68,8 @@ export function Screen({
   const containerStyle = {
     ...styles.root,
     backgroundColor: headerConfig?.backgroundColor || colors.primary,
-    paddingTop: headerConfig?.modal ? 24 : safeArea.paddingTop
+    paddingTop:
+      headerConfig?.modal && Platform.OS === "ios" ? 24 : safeArea.paddingTop
   };
 
   const contentStyle = {

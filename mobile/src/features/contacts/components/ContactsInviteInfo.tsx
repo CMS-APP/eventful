@@ -99,7 +99,7 @@ export function ContactsInviteInfo() {
       <Button
         text="View All Invites"
         onPress={goToInvites}
-        icon="inbox"
+        leadingIcon="inbox"
         color={colors.primary}
         textColor={colors.white}
       />

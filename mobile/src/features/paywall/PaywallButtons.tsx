@@ -33,7 +33,7 @@ export function PaywallButtons({
         onPress={subscribeToProduct}
         color={colors.secondary}
         textColor={colors.white}
-        icon="credit-card"
+        leadingIcon="credit-card"
         disabled={isSubscribing}
         loading={isSubscribing}
       />

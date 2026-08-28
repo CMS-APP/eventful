@@ -195,7 +195,7 @@ export function EventInviteGuestLinkScreen({
                 onPress={copyUrlToClipboard}
                 textColor={colors.white}
                 disabled={!enableLinkInvite}
-                icon={"copy"}
+                leadingIcon={"copy"}
               />
             </View>
           </View>

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { Button } from "@/design-system/components/Button";
-import { Divider } from "@/design-system/components/Divider";
 import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 import { Itinerary } from "@/types/Itinerary";
@@ -107,7 +106,6 @@ export function EventItineraryEdit({
         event={event}
         editEventDateTime={editEventDateTime}
         setEvent={setEvent}
-        handleAddActivity={handleAddActivity}
         handleEditDateTime={handleEditItinerary}
         handleSaveChanges={handleSaveChanges}
       />
@@ -122,8 +120,6 @@ export function EventItineraryEdit({
             onActivityPress={handleEditActivity}
           />
 
-          <Divider />
-
           <View style={styles.buttonContainer}>
             <Button
               text="Add Item"
@@ -131,7 +127,8 @@ export function EventItineraryEdit({
               color={colors.primaryTint}
               textColor={colors.white}
               flex={undefined}
-              icon="plus"
+              leadingIcon="plus"
+              loading={false}
             />
           </View>
         </>
@@ -159,7 +156,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primary,
     flex: 1,
-    gap: 16,
+    gap: 12,
     paddingHorizontal: 24
   }
 });

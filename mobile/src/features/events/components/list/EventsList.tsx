@@ -52,7 +52,7 @@ export function EventsList({
                 onPress={newEventAction}
                 color={colors.primary}
                 textColor={colors.white}
-                icon="calendar-plus"
+                leadingIcon="calendar-plus"
               />
             </>
           )}

@@ -10,7 +10,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { ProfileStackParamList } from "@/app/navigation";
 import { ArcCutout } from "@/components/views/ArcCutout";
 import { FollowButton } from "@/components/views/FollowButton";
-import { SmallButton } from "@/design-system/components/SmallButton";
+import { Button } from "@/design-system/components/Button";
 import { Text } from "@/design-system/components/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
@@ -100,12 +100,12 @@ export function ProfileTop({ user }: { user: User }) {
         <FollowButton user={user} flex={1} />
 
         {isFollowing && (
-          <SmallButton
+          <Button
+            size="small"
             text="Invite To Event"
             onPress={inviteToEvent}
             color={colors.primaryTint}
             textColor={colors.white}
-            textAlign="center"
             flex={1}
           />
         )}

@@ -14,14 +14,30 @@ interface ContactsSearchProps {
   setSearch?: (search: string) => void;
   buttonAction?: (() => void) | undefined;
   textInputRef?: React.RefObject<TextInput | null>;
+  placeholder?: string;
+  accessoryId?: string;
+  showSeparator?: boolean;
+  inset?: boolean;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  dark?: boolean;
 }
 
 export function ContactsSearch({
   search = "",
   setSearch = () => {},
   buttonAction = undefined,
-  textInputRef = undefined
+  textInputRef = undefined,
+  placeholder = "Search For Users...",
+  accessoryId = "contactSearchInput",
+  showSeparator = true,
+  inset = true,
+  onFocus,
+  onBlur,
+  dark = false
 }: ContactsSearchProps) {
+  const textColor = dark ? colors.white : colors.black;
+
   const renderSearch = useCallback(
     (disabled: boolean) => {
       return (
@@ -30,52 +46,81 @@ export function ContactsSearch({
             styles.searchContainer,
             buttonAction
               ? styles.searchContainerWithButton
-              : styles.searchContainerWithoutButton,
+              : inset
+                ? styles.searchContainerWithoutButton
+                : styles.searchContainerFullWidth,
             {
-              backgroundColor: colors.lightGray
+              backgroundColor: dark ? colors.primaryTint3 : colors.lightGray
             }
           ]}
         >
-          <FontAwesome5 name="search" size={16} color={colors.black} />
+          <FontAwesome5 name="search" size={16} color={textColor} />
           {disabled ? (
-            <Text type="body" style={styles.buttonLabel}>
-              Search For Users...
+            <Text type="body" style={styles.buttonLabel} color={textColor}>
+              {placeholder}
             </Text>
           ) : (
             <>
               <TextInput
                 ref={textInputRef}
                 aria-disabled={disabled}
-                style={styles.textInput}
+                style={[styles.textInput, { color: textColor }]}
                 value={search}
                 onChangeText={(text) => setSearch(text)}
-                placeholder="Search For Users..."
-                placeholderTextColor={colors.black}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                placeholder={placeholder}
+                placeholderTextColor={dark ? colors.gray : colors.lightGray}
                 autoCapitalize="none"
-                inputAccessoryViewID="contactSearchInput"
+                inputAccessoryViewID={accessoryId}
               />
+
+              {search !== "" && (
+                <TouchableOpacity
+                  onPress={() => setSearch("")}
+                  hitSlop={getHitSlop("small")}
+                >
+                  <FontAwesome5
+                    name="times-circle"
+                    size={16}
+                    color={dark ? colors.white : colors.black}
+                  />
+                </TouchableOpacity>
+              )}
 
               <InputAccessory
                 value={search}
-                placeholder="Search For Users..."
-                nativeID="contactSearchInput"
+                placeholder={placeholder}
+                nativeID={accessoryId}
               />
             </>
           )}
         </View>
       );
     },
-    [buttonAction, textInputRef, search, setSearch]
+    [
+      buttonAction,
+      textInputRef,
+      search,
+      setSearch,
+      placeholder,
+      accessoryId,
+      onFocus,
+      onBlur,
+      textColor,
+      dark,
+      inset
+    ]
   );
 
   const normalSearch = useCallback(() => {
     return (
       <View>
         {renderSearch(false)}
-        <View style={styles.separator} />
+        {showSeparator && <View style={styles.separator} />}
       </View>
     );
-  }, [renderSearch]);
+  }, [renderSearch, showSeparator]);
 
   const buttonSearch = useCallback(() => {
     return (
@@ -98,11 +143,14 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     alignItems: "center",
-    borderRadius: 16,
+    borderRadius: 12,
     flexDirection: "row",
-    gap: 12,
+    gap: 6,
     minHeight: 44,
     paddingHorizontal: 16
+  },
+  searchContainerFullWidth: {
+    marginHorizontal: 0
   },
   searchContainerWithButton: {
     marginHorizontal: 0

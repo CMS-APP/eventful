@@ -4,6 +4,7 @@ import { TIMELINE_TEXT_LIST } from "@/features/events/constants";
 import { generateUUID } from "@/utils/uuid";
 
 import { BudgetItem } from "./BudgetItem";
+import { EventAddress } from "./EventAddress";
 import { Guest } from "./Guest";
 import { Itinerary } from "./Itinerary";
 import { ListItem } from "./ListItem";
@@ -21,7 +22,7 @@ export interface Event {
   eventLinkEnabled: boolean;
   public: boolean;
   theme: string;
-  address: string;
+  address: EventAddress | string;
   directions: string;
   music: string;
   playlists: SpotifyPlaylist[];
@@ -56,7 +57,7 @@ export const NewEvent = (date: Date, userId: string, name: string): Event => {
     eventLinkEnabled: false,
     public: false,
     theme: "",
-    address: "",
+    address: { type: "manual", value: "" },
     directions: "",
     music: "",
     playlists: [],

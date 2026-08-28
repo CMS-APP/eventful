@@ -11,7 +11,7 @@ interface CustomiseTextRowProps {
   placeholder: string;
   handleTitleFontPress: () => void;
   handleTitleSizePress: () => void;
-  fonts: { [key: string]: { style: TextStyle; font: string } };
+  fontStyles: Record<string, TextStyle>;
   customTitleFont: string;
   customTitleFontSize: number;
 }
@@ -22,7 +22,7 @@ export function CustomiseTextRow({
   placeholder,
   handleTitleFontPress,
   handleTitleSizePress,
-  fonts,
+  fontStyles,
   customTitleFont,
   customTitleFontSize
 }: CustomiseTextRowProps) {
@@ -49,7 +49,7 @@ export function CustomiseTextRow({
             <View style={styles.fontButtonInner}>
               <Text
                 style={[
-                  (fonts[customTitleFont] ?? fonts["Poppins"]).style,
+                  fontStyles[customTitleFont] ?? fontStyles["Poppins"],
                   styles.fontButtonText
                 ]}
               >

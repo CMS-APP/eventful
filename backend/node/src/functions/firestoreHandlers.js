@@ -9,13 +9,16 @@ function createSyncFollowersHandler({ admin, db }) {
     const { userA, userB } = event.params;
     const newData = event.data.after.data();
 
-    if (!newData) return;
-
     const followerDocRef = db
       .collection("followers")
       .doc(userB)
       .collection("followers")
       .doc(userA);
+
+    if (!newData) {
+      await followerDocRef.delete();
+      return;
+    }
 
     const now = admin.firestore.Timestamp.now();
 

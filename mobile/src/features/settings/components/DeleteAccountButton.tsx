@@ -246,7 +246,7 @@ export function DeleteAccountButton() {
         color={colors.primaryTint3}
         textColor={colors.white}
         onPress={handleDeleteAccount}
-        icon="trash-alt"
+        leadingIcon="trash-alt"
         loading={deleting}
       />
     </>

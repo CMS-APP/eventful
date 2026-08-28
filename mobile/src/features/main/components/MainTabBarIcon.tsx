@@ -33,7 +33,7 @@ export function MainTabBarIcon({
       <FontAwesome5 name={iconName} size={24} color={iconColor} />
       {notifications > 0 && (
         <View style={styles.badge}>
-          <Text type="header" style={styles.badgeText} center>
+          <Text type="subHeader" style={styles.badgeText} center>
             {notifications}
           </Text>
         </View>
@@ -47,9 +47,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.primary,
     borderRadius: 12,
-    height: 20,
     justifyContent: "center",
-    minWidth: 24,
     paddingHorizontal: 6,
     position: "absolute",
     right: -12,
@@ -57,6 +55,7 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     color: colors.white,
-    fontSize: 12
+    fontSize: 12,
+    left: 0.5
   }
 });

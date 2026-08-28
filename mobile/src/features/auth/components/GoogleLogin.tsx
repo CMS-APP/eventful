@@ -85,7 +85,7 @@ export function GoogleLogin() {
       onPress={onGoogleButtonPress}
       color={colors.primary}
       textColor={colors.white}
-      icon="google"
+      leadingIcon="google"
       disabled={isSubmitting}
       loading={isSubmitting}
     />

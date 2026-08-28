@@ -80,7 +80,7 @@ export function PhotoBoothHome() {
         <View style={styles.container}>
           <Button
             text="Open Photo Booth"
-            icon="camera"
+            leadingIcon="camera"
             onPress={async () => {
               const hasPermissions = await ensurePermissions();
               if (!hasPermissions) {
@@ -94,7 +94,7 @@ export function PhotoBoothHome() {
 
           <Button
             text="Customise"
-            icon="cog"
+            leadingIcon="cog"
             onPress={() => {
               navigation.navigate("PhotoBoothCustomise");
             }}
@@ -105,7 +105,7 @@ export function PhotoBoothHome() {
 
           <Button
             text="Photo Gallery"
-            icon="cloud"
+            leadingIcon="cloud"
             onPress={async () => {
               const hasPermissions = await ensurePermissions();
               if (!hasPermissions) {
@@ -120,7 +120,7 @@ export function PhotoBoothHome() {
 
           <Button
             text={locked ? "Unlock Photo Booth" : "Lock Photo Booth"}
-            icon={locked ? "unlock" : "lock"}
+            leadingIcon={locked ? "unlock" : "lock"}
             onPress={() => {
               if (locked) {
                 setPresentUnlockModal(true);

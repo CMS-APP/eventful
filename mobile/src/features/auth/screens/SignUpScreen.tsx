@@ -163,7 +163,7 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
             color={colors.primary}
             textColor={colors.white}
             onPress={signUp}
-            icon="user-plus"
+            leadingIcon="user-plus"
           />
 
           <View style={styles.orContainer}>

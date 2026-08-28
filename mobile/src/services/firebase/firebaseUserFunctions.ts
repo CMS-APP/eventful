@@ -149,13 +149,25 @@ async function deleteUserFollowers(userId: string) {
     API_FOLLOWERS_COLLECTIONS.FOLLOWERS
   );
 
+  // Each follower's own following/{followerId}/following/{userId} doc is the
+  // source of truth for their side of the relationship. Deleting this user's
+  // followers subcollection never touches it, so it would otherwise be left
+  // pointing at a deleted account forever — remove it directly here.
   const followersDeletePromises = followersDocs.map((doc: any) =>
-    deleteDocument(
-      API_COLLECTIONS.FOLLOWERS,
-      userId,
-      API_FOLLOWERS_COLLECTIONS.FOLLOWERS,
-      doc.id
-    )
+    Promise.all([
+      deleteDocument(
+        API_COLLECTIONS.FOLLOWERS,
+        userId,
+        API_FOLLOWERS_COLLECTIONS.FOLLOWERS,
+        doc.id
+      ),
+      deleteDocument(
+        API_COLLECTIONS.FOLLOWING,
+        doc.id,
+        API_FOLLOWING_COLLECTIONS.FOLLOWING,
+        userId
+      )
+    ])
   );
 
   await Promise.all(followersDeletePromises);

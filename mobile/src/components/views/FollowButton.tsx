@@ -2,8 +2,9 @@ import { useSelector } from "react-redux";
 
 import { useCallback, useEffect, useState } from "react";
 
-import { Alert } from "react-native";
+import { Alert, View } from "react-native";
 
+import { Button } from "@/design-system/components/Button";
 import { colors } from "@/design-system/tokens/colors";
 import {
   followUser,
@@ -15,8 +16,6 @@ import { UserState } from "@/store/UserSlice";
 import { Follower } from "@/types/Follower";
 import { User } from "@/types/User";
 import { haptics } from "@/utils/haptics";
-
-import { SmallButton } from "../../design-system/components/SmallButton";
 
 interface FollowButtonProps {
   user: User;
@@ -103,13 +102,15 @@ export function FollowButton({ user, flex = undefined }: FollowButtonProps) {
   }
 
   return (
-    <SmallButton
-      text={contactText}
-      onPress={handlePress}
-      color={colors.secondary}
-      textColor={colors.white}
-      textAlign="center"
-      flex={flex}
-    />
+    <View style={flex ? { flex: flex } : undefined}>
+      <Button
+        size="small"
+        text={contactText}
+        onPress={handlePress}
+        color={colors.secondary}
+        textColor={colors.white}
+        flex={flex}
+      />
+    </View>
   );
 }
