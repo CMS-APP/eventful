@@ -66,10 +66,7 @@ export function useSpotifyAuth({ userId, onSuccess }: UseSpotifyAuthOptions) {
         if (response?.type === "success" && response.params?.code) {
           processedResponseRef.current = null;
         }
-        log(
-          `Error signing into Spotify: ${(error as any)?.message ?? error}`,
-          "error"
-        );
+        log(`Error signing into Spotify: ${error}`, "error");
         showErrorToast("Error Connecting Spotify");
       }
     };

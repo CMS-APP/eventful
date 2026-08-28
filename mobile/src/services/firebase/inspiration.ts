@@ -84,7 +84,7 @@ export async function getPostsFromDatabase(): Promise<Post[]> {
     posts.sort((a, b) => b?.createdAt?.localeCompare(a?.createdAt));
     return posts as Post[];
   } catch (error) {
-    log(`Error getting posts: ${(error as any)?.message ?? error}`, "error");
+    log(`Error getting posts: ${error}`, "error");
     return [];
   }
 }
@@ -152,7 +152,7 @@ export async function getVoteForUserInDatabase(
     );
     return votes[0] as PollVote | null;
   } catch (error) {
-    log(`Error getting votes: ${(error as any)?.message ?? error}`, "error");
+    log(`Error getting votes: ${error}`, "error");
     return null;
   }
 }
@@ -165,7 +165,7 @@ export async function getVotesInDatabase(poll: Poll): Promise<PollVote[]> {
     );
     return votes as PollVote[];
   } catch (error) {
-    log(`Error getting votes: ${(error as any)?.message ?? error}`, "error");
+    log(`Error getting votes: ${error}`, "error");
     return [];
   }
 }
@@ -175,7 +175,7 @@ export async function getPollInDatabase(): Promise<Poll | null> {
     const polls = await getDocuments(API_COLLECTIONS.POLL);
     return (polls[0] as Poll) || null;
   } catch (error) {
-    log(`Error getting poll: ${(error as any)?.message ?? error}`, "error");
+    log(`Error getting poll: ${error}`, "error");
     return null;
   }
 }
@@ -209,10 +209,7 @@ export async function getPostLikesCount(postId: string): Promise<number> {
     );
     return likes.length;
   } catch (error) {
-    log(
-      `Error getting post likes count: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error getting post likes count: ${error}`, "error");
     return 0;
   }
 }
@@ -228,10 +225,7 @@ export async function hasUserLikedPost(
     );
     return likes.length > 0;
   } catch (error) {
-    log(
-      `Error checking if user liked post: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error checking if user liked post: ${error}`, "error");
     return false;
   }
 }

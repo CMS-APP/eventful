@@ -33,10 +33,7 @@ async function getCloudPhotos(userId: string) {
 
     return photos;
   } catch (error) {
-    log(
-      `Error getting cloud photos: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error getting cloud photos: ${error}`, "error");
     return [];
   }
 }
@@ -103,10 +100,7 @@ export async function downloadCloudPhotos(
     }
     await AsyncStorage.setItem("photosData", JSON.stringify(photoData));
   } catch (error) {
-    log(
-      `Error downloading cloud photos: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error downloading cloud photos: ${error}`, "error");
   }
 }
 
@@ -134,10 +128,7 @@ export async function downloadCloudPhoto(photo: GalleryPhoto, userId: string) {
 
     await AsyncStorage.setItem("photosData", JSON.stringify(photoData));
   } catch (error) {
-    log(
-      `Error downloading photo cloud: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error downloading photo cloud: ${error}`, "error");
     throw error;
   }
 }
@@ -152,10 +143,7 @@ export async function deletePhotoCloud(photo: GalleryPhoto, userId: string) {
     await deleteObject(storageRef);
     await deleteDocument(API_COLLECTIONS.PHOTO_BOOTH_PHOTOS, storageId);
   } catch (error) {
-    log(
-      `PhotoBooth: Error deleting photo booth image: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`PhotoBooth: Error deleting photo booth image: ${error}`, "error");
     throw error;
   }
 }
@@ -173,10 +161,7 @@ async function compressImage(localUri: string) {
 
     return compressedImage.uri;
   } catch (error) {
-    log(
-      `Error compressing image: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error compressing image: ${error}`, "error");
     throw error;
   }
 }
@@ -226,10 +211,7 @@ export async function uploadPhotosToCloud(
 
     await Promise.all(uploadPromises);
   } catch (error) {
-    log(
-      `Error uploading photos to cloud: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error uploading photos to cloud: ${error}`, "error");
     throw error;
   }
 }

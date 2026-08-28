@@ -128,10 +128,7 @@ export async function getInvitedEvents(userId: string) {
       .filter((event: Event) => inviteList.includes(event.id))
       .map((event: Event) => ({ ...event }));
   } catch (error) {
-    log(
-      `FirebaseFunctions: Error fetching invited events: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error fetching invited events: ${error}`, "error");
     return [];
   }
 }
@@ -153,7 +150,7 @@ export async function getInviteFromDatabase(
     }
   } catch (error) {
     log(
-      `FirebaseFunctions: Error getting invite from database: ${(error as any)?.message ?? error}`,
+      `FirebaseFunctions: Error getting invite from database: ${error}`,
       "error"
     );
     return null;
@@ -215,10 +212,7 @@ export async function updateResponseInDatabase(
       );
     }
   } catch (error) {
-    log(
-      `Error updating invite response: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error updating invite response: ${error}`, "error");
   }
 }
 
@@ -232,10 +226,7 @@ export async function getSenderInvitesFromDatabase(
     );
     return invites as Invite[];
   } catch (error) {
-    log(
-      `Error getting sender invites: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error getting sender invites: ${error}`, "error");
     return [];
   }
 }
@@ -252,10 +243,7 @@ export async function checkInvitedToEvent(event: Event, userId: string) {
       return null;
     }
   } catch (error) {
-    log(
-      `Error checking if user is invited to event: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error checking if user is invited to event: ${error}`, "error");
     return null;
   }
 }
@@ -264,7 +252,7 @@ export async function deleteInviteFromDatabase(inviteId: string) {
   try {
     await deleteDocument(API_COLLECTIONS.INVITE, inviteId);
   } catch (error) {
-    log(`Error deleting invite: ${(error as any)?.message ?? error}`, "error");
+    log(`Error deleting invite: ${error}`, "error");
   }
 }
 
@@ -290,10 +278,7 @@ export async function generateEventLink(event: Event, hostName: string) {
 
     return eventLink;
   } catch (error) {
-    log(
-      `Error generating event link: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error generating event link: ${error}`, "error");
     throw error;
   }
 }
@@ -320,10 +305,7 @@ export async function updateEventLinkInDatabase(event: Event) {
 
     await updateDocument(eventLinkData, API_COLLECTIONS.EVENT_LINKS, event.id);
   } catch (error) {
-    log(
-      `Error updating event link: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error updating event link: ${error}`, "error");
   }
 }
 
@@ -339,7 +321,7 @@ export async function getEventLinkResponses(
     return eventLinks as EventLinkResponse[];
   } catch (error) {
     log(
-      `FirebaseFunctions: Error getting event link responses: ${(error as any)?.message ?? error}`,
+      `FirebaseFunctions: Error getting event link responses: ${error}`,
       "error"
     );
     return [];
@@ -358,7 +340,7 @@ export async function updateEventLinkResponse(
     );
   } catch (error) {
     log(
-      `FirebaseFunctions: Error updating event link response: ${(error as any)?.message ?? error}`,
+      `FirebaseFunctions: Error updating event link response: ${error}`,
       "error"
     );
   }
@@ -368,10 +350,7 @@ export async function deleteEventLinkResponse(eventLinkId: string) {
   try {
     await deleteDocument(API_COLLECTIONS.EVENT_RESPONSES, eventLinkId);
   } catch (error) {
-    log(
-      `Error deleting event link response: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error deleting event link response: ${error}`, "error");
   }
 }
 
@@ -405,10 +384,7 @@ export async function getRSVPAppUsers(event: Event): Promise<UserInvite[]> {
       (item): item is { user: User; invite: Invite } => item !== null
     );
   } catch (error) {
-    log(
-      `FirebaseFunctions: Error getting RSVP app users: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`FirebaseFunctions: Error getting RSVP app users: ${error}`, "error");
     return [];
   }
 }
@@ -448,10 +424,7 @@ export async function getRSVPWebUsers(
 
     return webUsers;
   } catch (error) {
-    log(
-      `FirebaseFunctions: Error getting RSVP web users: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`FirebaseFunctions: Error getting RSVP web users: ${error}`, "error");
     return [];
   }
 }
@@ -504,7 +477,7 @@ export async function getInvitesFromUser(
     return invites as Invite[];
   } catch (error) {
     log(
-      `FirebaseFunctions: Error getting invites from user: ${(error as any)?.message ?? error}`,
+      `FirebaseFunctions: Error getting invites from user: ${error}`,
       "error"
     );
     return [];

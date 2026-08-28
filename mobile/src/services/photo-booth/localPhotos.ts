@@ -37,10 +37,7 @@ export async function getPhotosDataLocally() {
 
     return JSON.parse(photoData);
   } catch (error) {
-    log(
-      `Error getting photo data: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error getting photo data: ${error}`, "error");
     return [];
   }
 }
@@ -72,10 +69,7 @@ export async function savePhotoDataLocally(
 
     await AsyncStorage.setItem("photosData", JSON.stringify(photoData));
   } catch (error) {
-    log(
-      `Error saving photo data: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error saving photo data: ${error}`, "error");
   }
 }
 
@@ -89,10 +83,7 @@ export async function deletePhotoLocally(photo: GalleryPhoto): Promise<void> {
     await MediaLibrary.deleteAssetsAsync([mediaLibraryAssetRef(photo)]);
     await AsyncStorage.setItem("photosData", JSON.stringify(filteredPhotoData));
   } catch (error) {
-    log(
-      `Error deleting photo data: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error deleting photo data: ${error}`, "error");
   }
 }
 
@@ -164,10 +155,7 @@ export async function getLocalEvents(): Promise<GalleryEvent[]> {
     await AsyncStorage.setItem("photosData", JSON.stringify(newPhotosData));
     return Object.values(eventsData);
   } catch (error) {
-    log(
-      `Error getting events data: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error getting events data: ${error}`, "error");
     return [];
   }
 }
@@ -250,7 +238,7 @@ export async function sharePhoto(uri: string): Promise<void> {
   } catch (error) {
     const message = (error as Error)?.message ?? "";
     if (message !== "User did not share") {
-      log(`Error sharing photo: ${(error as any)?.message ?? error}`, "error");
+      log(`Error sharing photo: ${error}`, "error");
       showErrorToast("Error Sharing Photo");
     }
   }

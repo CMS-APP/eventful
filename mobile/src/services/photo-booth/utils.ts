@@ -20,10 +20,7 @@ export function checkIfPhotoExistsInLocalEvent(
 export async function convertEventTitleToHash(eventTitle: string) {
   try {
     if (!eventTitle || typeof eventTitle !== "string") {
-      log(
-        "PhotoBooth: Error converting event title to hash: Event title must be a non-empty string",
-        "error"
-      );
+      log("Event title must be a non-empty string", "error");
       return "";
     }
 
@@ -42,7 +39,7 @@ export async function convertEventTitleToHash(eventTitle: string) {
 
     return shortHash;
   } catch (error) {
-    log(`PhotoBooth: Error converting event title to hash: ${(error as any)?.message ?? error}`, "error");
+    log(`PhotoBooth: Error converting event title to hash: ${error}`, "error");
     throw error;
   }
 }

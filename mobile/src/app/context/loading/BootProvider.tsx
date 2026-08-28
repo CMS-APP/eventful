@@ -8,13 +8,16 @@ const steps = [
   "Checking for auth...",
   "Checking for onboarding...",
   "Checking for paywall...",
-  "Checking for webview..."
+  "Updating your data...",
+  "Finishing up..."
 ];
+
+const TOTAL_STEPS = steps.length - 1;
 
 const initialState = {
   progress: 0,
   currentStep: steps[0],
-  totalSteps: steps.length
+  totalSteps: TOTAL_STEPS
 };
 
 export const BootProvider = ({ children }: { children: React.ReactNode }) => {
@@ -24,7 +27,7 @@ export const BootProvider = ({ children }: { children: React.ReactNode }) => {
     setLoadingState({
       progress: 0,
       currentStep: steps[0],
-      totalSteps: steps.length
+      totalSteps: TOTAL_STEPS
     });
   };
 
@@ -47,7 +50,5 @@ export const BootProvider = ({ children }: { children: React.ReactNode }) => {
     stopLoading
   };
 
-  return (
-    <BootContext.Provider value={value}>{children}</BootContext.Provider>
-  );
+  return <BootContext.Provider value={value}>{children}</BootContext.Provider>;
 };

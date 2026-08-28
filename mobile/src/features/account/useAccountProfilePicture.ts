@@ -64,10 +64,7 @@ export function useAccountProfilePicture() {
       })
       .catch((error) => {
         if (!cancelled) {
-          log(
-            `Error syncing profile picture: ${(error as any)?.message ?? error}`,
-            "error"
-          );
+          log(`Error syncing profile picture: ${error}`, "error");
           showErrorToast("Error Loading Photo");
           setImage(null);
           setLoading(false);

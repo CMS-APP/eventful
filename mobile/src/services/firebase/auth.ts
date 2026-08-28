@@ -53,10 +53,7 @@ export async function handleSignOut(dispatch: Dispatch<Action>) {
   try {
     await GoogleSignin.signOut();
   } catch (error) {
-    log(
-      `Error signing out from Google Sign-In: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error signing out from Google Sign-In: ${error}`, "error");
   }
 
   await signOut(auth);

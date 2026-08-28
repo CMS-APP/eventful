@@ -58,10 +58,7 @@ export async function getEventsFromDatabase(userId: string) {
 
     return { upcomingEvents, pastEvents };
   } catch (error) {
-    log(
-      `FirebaseFunctions: Error getting events: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error getting events: ${error}`, "error");
     return { upcomingEvents: [], pastEvents: [] };
   }
 }

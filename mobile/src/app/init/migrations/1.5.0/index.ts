@@ -26,9 +26,6 @@ export async function convertPollVotesToDatabasePollVotes(userId: string) {
       userId: userId
     });
   } catch (error) {
-    log(
-      `DatabaseUpdates: Error converting poll votes to database poll votes: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error converting: ${error}`, "error");
   }
 }

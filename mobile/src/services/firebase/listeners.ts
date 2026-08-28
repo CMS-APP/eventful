@@ -51,10 +51,7 @@ export function getInvitationsFromDatabaseSnapshot(
               }
             }
           } catch (error) {
-            log(
-              `Error getting event in listener: ${(error as any)?.message ?? error}`,
-              "error"
-            );
+            log(`Error getting event in listener: ${error}`, "error");
           }
         }
       );
@@ -63,10 +60,7 @@ export function getInvitationsFromDatabaseSnapshot(
       callback(events);
     },
     (error) => {
-      log(
-        `Error in invitations listener: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+      log(`Error in invitations listener: ${error}`, "error");
     }
   );
 }

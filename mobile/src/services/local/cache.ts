@@ -113,10 +113,7 @@ export async function saveDatabaseImageToCache(
         return cacheFile.uri;
       }
     }
-    log(
-      `CacheStorage: Error saving image to cache: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`CacheStorage: Error saving image to cache: ${error}`, "error");
     return null;
   }
 }

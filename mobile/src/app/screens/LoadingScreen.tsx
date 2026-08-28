@@ -5,14 +5,14 @@ import { LoadingProgressIndicator } from "@/app/context/loading/LoadingProgressI
 import { colors } from "@/design-system/tokens/colors";
 
 export function LoadingScreen() {
-  const { progress, currentStep } = useBoot();
+  const { progress, currentStep, totalSteps } = useBoot();
 
   return (
     <View style={styles.container}>
       <LoadingProgressIndicator
         progress={progress}
         currentStep={currentStep}
-        totalSteps={6}
+        totalSteps={totalSteps}
       />
     </View>
   );

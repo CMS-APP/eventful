@@ -43,7 +43,7 @@ export default ({ config }: ConfigContext) => {
     ios: {
       bundleIdentifier: bundleId,
       icon: "./src/assets/logos/eventful-logo.png",
-      buildNumber: "316",
+      buildNumber: "317",
       supportsTablet: true,
       infoPlist: {
         NSPhotoLibraryUsageDescription:

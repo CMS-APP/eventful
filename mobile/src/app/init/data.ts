@@ -94,10 +94,7 @@ export function useDataInit() {
       );
       stopLoading();
     } catch (error) {
-      log(
-        `Error initialising app: ${(error as any)?.message ?? error}`,
-        "error"
-      );
+      log(`Error initialising app: ${error}`, "error");
       setBootError(error instanceof Error ? error : new Error(String(error)));
     }
   }, [dispatch, startLoading, nextStep, stopLoading]);

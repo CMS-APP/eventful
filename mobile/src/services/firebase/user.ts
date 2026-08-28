@@ -42,10 +42,7 @@ export function convertTimestampsToMillis(user: User) {
     }
     return user;
   } catch (error) {
-    log(
-      `Error converting timestamps to millis: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error converting timestamps to millis: ${error}`, "error");
     return user;
   }
 }
@@ -85,10 +82,7 @@ async function deleteUserEvents(userId: string) {
     );
     await Promise.all(eventsDeletePromises);
   } catch (error) {
-    log(
-      `Error deleting user events: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error deleting user events: ${error}`, "error");
     throw error;
   }
 }
@@ -114,10 +108,7 @@ async function deleteUserInvites(userId: string) {
     ];
     await Promise.all(deletePromise);
   } catch (error) {
-    log(
-      `Error deleting user invites: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error deleting user invites: ${error}`, "error");
     throw error;
   }
 }
@@ -206,10 +197,7 @@ async function deleteUserPollVotes(userId: string) {
 
     await Promise.all(deletePromises);
   } catch (error) {
-    log(
-      `Error deleting user poll votes: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error deleting user poll votes: ${error}`, "error");
     throw error;
   }
 }
@@ -218,10 +206,7 @@ async function deleteUserPhotoBoothConfig(userId: string) {
   try {
     await deleteDocument(API_COLLECTIONS.PHOTO_BOOTH_CONFIG, userId);
   } catch (error) {
-    log(
-      `Error deleting user photo booth config: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error deleting user photo booth config: ${error}`, "error");
     throw error;
   }
 }
@@ -241,10 +226,7 @@ export async function deleteUserData(userId: string): Promise<void> {
     await removeData("spotifyData");
     await deleteDocument(API_COLLECTIONS.USER, userId);
   } catch (error) {
-    log(
-      `Error deleting user data: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error deleting user data: ${error}`, "error");
     throw error;
   }
 }
@@ -372,10 +354,7 @@ async function removeUserFromAllInvites(senderId: string, userId: string) {
     );
     await Promise.all(deletePromises);
   } catch (error) {
-    log(
-      `Error removing user from all invites: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error removing user from all invites: ${error}`, "error");
   }
 }
 
@@ -423,10 +402,7 @@ export async function readFollowNotification(notificationId: string) {
       notificationId
     );
   } catch (error) {
-    log(
-      `Error reading follow notification: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error reading follow notification: ${error}`, "error");
   }
 }
 
@@ -438,10 +414,7 @@ export async function readUpdateNotification(notificationId: string) {
       notificationId
     );
   } catch (error) {
-    log(
-      `Error reading update notification: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error reading update notification: ${error}`, "error");
   }
 }
 
@@ -603,10 +576,7 @@ export async function getUsersFromFollowing(
     );
     return users.filter((user: User | null) => user !== null);
   } catch (error) {
-    log(
-      `Error getting users from following: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error getting users from following: ${error}`, "error");
     return [];
   }
 }

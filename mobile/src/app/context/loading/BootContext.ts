@@ -3,6 +3,7 @@ import { createContext, useContext } from "react";
 export type BootContextType = {
   progress: number;
   currentStep: string;
+  totalSteps: number;
   startLoading: (initialStep?: string) => void;
   nextStep: () => void;
   stopLoading: () => void;

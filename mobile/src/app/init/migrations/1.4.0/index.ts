@@ -13,9 +13,6 @@ export async function convertUserFollowingToDatabaseFollowing(userId: string) {
       );
     }
   } catch (error) {
-    log(
-      `DatabaseUpdates: Error converting user following to database following: ${(error as any)?.message ?? error}`,
-      "error"
-    );
+    log(`Error converting: ${error}`, "error");
   }
 }
