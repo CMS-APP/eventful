@@ -1,12 +1,13 @@
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 
 import {
   type RouteProp,
   useFocusEffect,
+  useIsFocused,
   useNavigation,
   useRoute
 } from "@react-navigation/native";
@@ -38,6 +39,7 @@ type RedoPhotoRoute = RouteProp<
 export function PhotoBoothRedoPhoto() {
   const navigation = useNavigation<PhotoBoothStackNavigation>();
   const { top } = useSafeAreaInsets();
+  const isFocused = useIsFocused();
 
   const { params } = useRoute<RedoPhotoRoute>();
   const { index } = params;
@@ -50,6 +52,9 @@ export function PhotoBoothRedoPhoto() {
 
   const cameraRef = useRef<CameraView>(null);
   const photoBoothTimerRef = useRef<PhotoBoothTimerHandle>(null);
+  const [isLayoutReady, setIsLayoutReady] = useState(false);
+  const [cameraSessionKey, setCameraSessionKey] = useState(0);
+  const [canRenderCamera, setCanRenderCamera] = useState(true);
 
   useFocusEffect(
     useCallback(() => {
@@ -63,6 +68,30 @@ export function PhotoBoothRedoPhoto() {
     if (!isBoothRunning) return;
     photoBoothTimerRef.current?.start();
   }, [isBoothRunning]);
+
+  useEffect(() => {
+    setIsCameraReady(false);
+  }, [facing, isFocused, setIsCameraReady]);
+
+  // On Android the native camera view can size itself against a stale
+  // parent layout right after a screen transition, filling only part of
+  // the screen. Remounting it once the container's real layout has
+  // settled forces it to re-measure correctly. See PhotoBoothCamera.tsx
+  // for the same workaround.
+  useEffect(() => {
+    if (!isLayoutReady || !isFocused) return;
+    if (Platform.OS !== "android") return;
+
+    setCanRenderCamera(false);
+    const timer = setTimeout(() => {
+      setCameraSessionKey((prev) => prev + 1);
+      setCanRenderCamera(true);
+    }, 80);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [facing, isFocused, isLayoutReady]);
 
   async function onTimerComplete() {
     setIsBoothRunning(false);
@@ -81,18 +110,25 @@ export function PhotoBoothRedoPhoto() {
   }
 
   return (
-    <View style={styles.container}>
-      <CameraView
-        key={facing}
-        ref={cameraRef}
-        facing={facing}
-        flash={flashMode}
-        mirror={facing === "front"}
-        onCameraReady={() => {
-          setIsCameraReady(true);
-        }}
-        style={StyleSheet.absoluteFill}
-      />
+    <View
+      style={styles.container}
+      onLayout={() => {
+        setIsLayoutReady(true);
+      }}
+    >
+      {isLayoutReady && isFocused && canRenderCamera ? (
+        <CameraView
+          key={`${facing}-${cameraSessionKey}`}
+          ref={cameraRef}
+          facing={facing}
+          flash={flashMode}
+          mirror={facing === "front"}
+          onCameraReady={() => {
+            setIsCameraReady(true);
+          }}
+          style={StyleSheet.absoluteFill}
+        />
+      ) : null}
 
       <View pointerEvents="box-none" style={styles.overlay}>
         {!isBoothRunning && (

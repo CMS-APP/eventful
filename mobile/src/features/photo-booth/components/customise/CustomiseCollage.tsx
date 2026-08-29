@@ -15,7 +15,9 @@ export function CustomiseCollage() {
 
   return (
     <View style={styles.container}>
-      <Text type="subHeader">Photo Templates</Text>
+      <Text type="subHeader" color={colors.white}>
+        Photo Templates
+      </Text>
 
       <View style={styles.collageContainer}>
         <CustomiseCollageItem

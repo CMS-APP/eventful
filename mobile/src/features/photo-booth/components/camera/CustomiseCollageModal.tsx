@@ -15,9 +15,16 @@ export function CustomiseCollageModal({
   setShow: (show: boolean) => void;
 }) {
   return (
-    <ModalView show={show} setShow={setShow} backgroundColor={colors.white}>
+    <ModalView
+      show={show}
+      setShow={setShow}
+      backgroundColor={colors.primary}
+      borderColor={colors.lightGray + "40"}
+    >
       <View style={styles.container}>
-        <Text type="header">Customise Collage</Text>
+        <Text type="header" color={colors.white}>
+          Customise Collage
+        </Text>
 
         <CustomiseCollage />
 

@@ -23,7 +23,6 @@ import {
   PhotoBoothTimer,
   PhotoBoothTimerHandle
 } from "../components/camera/PhotoBoothTimer";
-import { PhotoPromptBanner } from "../components/camera/PhotoPromptBanner";
 import type { PhotoBoothStackNavigation } from "../photoBoothStackParams";
 
 export function PhotoBoothCamera() {
@@ -146,11 +145,8 @@ export function PhotoBoothCamera() {
             ref={photoBoothTimerRef}
             durationMs={timerDuration * 1000}
             onComplete={onTimerComplete}
+            prompt={currentPhotoPrompt}
           />
-        ) : null}
-
-        {currentPhotoPrompt ? (
-          <PhotoPromptBanner prompt={currentPhotoPrompt} />
         ) : null}
 
         <CameraPictureRow />
