@@ -39,6 +39,7 @@ export function UpdateScreen() {
         onPress={handleUpdateNow}
         color={colors.primaryTint}
         textColor={colors.white}
+        leadingIcon="cloud-download-alt"
       />
     </View>
   );

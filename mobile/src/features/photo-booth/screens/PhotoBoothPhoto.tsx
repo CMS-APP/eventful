@@ -21,6 +21,7 @@ import {
   sharePhoto
 } from "@/services/photo-booth/localPhotos";
 import { UserState } from "@/store/UserSlice";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { GalleryPhotoItem } from "../components/gallery/GalleryPhotoItem";
@@ -71,8 +72,9 @@ export function PhotoBoothPhoto() {
       if (photo.type === "local" || photo.type === "both") {
         await deletePhotoLocally(photo);
       }
-      navigation.navigate("PhotoBoothHome");
-    } catch {
+      navigation.goBack();
+    } catch (error) {
+      log(`Error deleting photo: ${error} ${JSON.stringify(photo)}`, "error");
       showErrorToast("Error Deleting Photo");
     }
   }, [navigation, userId, photo]);
@@ -107,8 +109,17 @@ export function PhotoBoothPhoto() {
 
     try {
       setUploading(true);
-      await uploadPhotosToCloud(userId, photo.eventTitle, [photo]);
-      setPhoto({ ...photo, type: "both" });
+      const [result] = await uploadPhotosToCloud(userId, photo.eventTitle, [
+        photo
+      ]);
+      setPhoto({
+        ...photo,
+        type: "both",
+        storageId: result?.storageId,
+        url: result?.url,
+        width: result?.width,
+        height: result?.height
+      });
     } catch {
       showErrorToast("Error Uploading Photos");
     } finally {

@@ -121,6 +121,7 @@ export function CelebrationScreen({
           }}
           color={colors.secondary}
           textColor={colors.white}
+          leadingIcon="arrow-right"
         />
 
         <Button
@@ -128,6 +129,7 @@ export function CelebrationScreen({
           onPress={handleLeaveReview}
           color={colors.primaryTint}
           textColor={colors.white}
+          leadingIcon="star"
         />
       </View>
     </View>

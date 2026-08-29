@@ -42,21 +42,18 @@ export function CustomiseTextRow({
           Font
         </Text>
         <TouchableOpacity
+          style={styles.controlButton}
           onPress={handleTitleFontPress}
           hitSlop={getHitSlop("small")}
         >
-          <View style={styles.fontButton}>
-            <View style={styles.fontButtonInner}>
-              <Text
-                style={[
-                  fontStyles[customTitleFont] ?? fontStyles["Poppins"],
-                  styles.fontButtonText
-                ]}
-              >
-                Aa
-              </Text>
-            </View>
-          </View>
+          <Text
+            style={[
+              fontStyles[customTitleFont] ?? fontStyles["Poppins"],
+              styles.fontButtonText
+            ]}
+          >
+            Aa
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -65,56 +62,46 @@ export function CustomiseTextRow({
           Size
         </Text>
         <TouchableOpacity
+          style={styles.controlButton}
           onPress={handleTitleSizePress}
           hitSlop={getHitSlop("small")}
         >
-          <View style={styles.sizeButton}>
-            <Text type="body" color={colors.black}>
-              {customTitleFontSize}
-            </Text>
-          </View>
+          <Text type="body" color={colors.black}>
+            {customTitleFontSize}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
 
+const CONTROL_WIDTH = 48;
+
 const styles = StyleSheet.create({
   container: {
-    alignItems: "flex-start",
     flexDirection: "row",
     gap: 12
   },
-  fontButton: {
+  controlButton: {
     alignItems: "center",
     backgroundColor: colors.lightGray,
     borderRadius: 12,
+    flex: 1,
     justifyContent: "center",
-    padding: 13
-  },
-  fontButtonInner: {
-    alignItems: "center",
-    height: 20,
-    justifyContent: "center",
-    width: 24
+    width: CONTROL_WIDTH
   },
   fontButtonText: {
     fontSize: 12,
-    justifyContent: "center",
-    textAlign: "center"
+    textAlign: "center",
+    textTransform: "none"
   },
   fontContainer: {
-    gap: 12
+    gap: 6
   },
   inputContainer: {
     flex: 1
   },
-  sizeButton: {
-    backgroundColor: colors.lightGray,
-    borderRadius: 12,
-    padding: 12
-  },
   sizeContainer: {
-    gap: 12
+    gap: 6
   }
 });

@@ -248,7 +248,7 @@ export function ChangeNameModal({
           >
             {helperText.length > 0 && (
               <FontAwesome5
-                name={usernameExists ? "times-circle" : "check-circle"}
+                name={usernameExists ? "times" : "check"}
                 size={12}
                 color={usernameExists ? colors.red : colors.green}
               />
@@ -263,6 +263,7 @@ export function ChangeNameModal({
         color={colors.primaryTint}
         textColor={colors.white}
         onPress={changeName}
+        leadingIcon="check"
       />
     </ModalView>
   );

@@ -46,6 +46,7 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
             color={colors.primary}
             textColor={colors.white}
             onPress={resetError}
+            leadingIcon="redo"
           />
         </View>
       </View>

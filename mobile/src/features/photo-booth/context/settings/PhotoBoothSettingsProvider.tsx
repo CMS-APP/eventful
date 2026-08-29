@@ -32,6 +32,7 @@ type ConfigState = {
   flash: boolean;
   filter: string;
   timerDuration: number;
+  photoPromptsEnabled: boolean;
 };
 
 /** Map legacy/renamed font names to current font keys (e.g. Chloe or Tribune Bold → Gotham Bold) */
@@ -58,7 +59,8 @@ const getDefaultConfig = (): ConfigState => ({
   canChangeFilter: PB_CONFIG.canChangeFilter,
   flash: PB_CONFIG.flash,
   filter: PB_CONFIG.filter,
-  timerDuration: PB_CONFIG.timerDuration
+  timerDuration: PB_CONFIG.timerDuration,
+  photoPromptsEnabled: PB_CONFIG.photoPromptsEnabled
 });
 
 const applyConfigWithDefaults = (
@@ -95,7 +97,9 @@ const applyConfigWithDefaults = (
     canChangeFilter: config.canChangeFilter ?? defaults.canChangeFilter,
     flash: config.flash ?? defaults.flash,
     filter: config.filter ?? defaults.filter,
-    timerDuration: config.timerDuration ?? defaults.timerDuration
+    timerDuration: config.timerDuration ?? defaults.timerDuration,
+    photoPromptsEnabled:
+      config.photoPromptsEnabled ?? defaults.photoPromptsEnabled
   };
 };
 
@@ -189,7 +193,9 @@ export function PhotoBoothSettingsProvider({
     setFlash: (flash: boolean) => updateConfig("flash", flash),
     setFilter: (filter: string) => updateConfig("filter", filter),
     setTimerDuration: (duration: number) =>
-      updateConfig("timerDuration", duration)
+      updateConfig("timerDuration", duration),
+    setPhotoPromptsEnabled: (enabled: boolean) =>
+      updateConfig("photoPromptsEnabled", enabled)
   };
 
   return (

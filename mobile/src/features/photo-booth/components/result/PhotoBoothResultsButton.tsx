@@ -36,7 +36,7 @@ export function PhotoBoothResultsButton({
           {title}
         </Text>
         {loading ? (
-          <ActivityIndicator size="small" color={textColor} />
+          <ActivityIndicator size={20} color={textColor} />
         ) : (
           <FontAwesome5 name={icon} size={20} color={textColor} />
         )}

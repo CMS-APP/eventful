@@ -52,6 +52,7 @@ export function ItineraryDateTime({
             textColor={colors.white}
             text={`${formatDate(eventDate)}, ${formatTime(eventDate)}`}
             onPress={handleEditDateTime}
+            leadingIcon="calendar-alt"
           />
         </View>
 

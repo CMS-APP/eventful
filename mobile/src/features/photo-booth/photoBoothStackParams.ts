@@ -16,7 +16,6 @@ export type PhotoBoothStackParamList = {
   PhotoBoothGallery: undefined;
   PhotoBoothEventGallery: {
     event: GalleryEvent;
-    type: "local" | "cloud" | "both";
   };
   PhotoBoothPhoto: {
     photo: GalleryPhoto;

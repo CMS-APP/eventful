@@ -22,6 +22,7 @@ export type PhotoBoothSettingsValue = Pick<
   | "flash"
   | "filter"
   | "timerDuration"
+  | "photoPromptsEnabled"
   | "setTitle"
   | "setSubTitle"
   | "setFrameColor"
@@ -40,6 +41,7 @@ export type PhotoBoothSettingsValue = Pick<
   | "setFlash"
   | "setFilter"
   | "setTimerDuration"
+  | "setPhotoPromptsEnabled"
   | "isLoading"
 >;
 

@@ -11,6 +11,10 @@ import {
 import { CameraView } from "expo-camera";
 
 import { colors } from "@/design-system/tokens/colors";
+import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
+import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
+import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
+import { getRandomPrompts } from "@/features/photo-booth/utils/getRandomPrompts";
 
 import { CameraHeader } from "../components/camera/CameraHeader";
 import { CameraPictureRow } from "../components/camera/CameraPictureRow";
@@ -19,17 +23,17 @@ import {
   PhotoBoothTimer,
   PhotoBoothTimerHandle
 } from "../components/camera/PhotoBoothTimer";
+import { PhotoPromptBanner } from "../components/camera/PhotoPromptBanner";
 import type { PhotoBoothStackNavigation } from "../photoBoothStackParams";
-import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
-import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
-import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
 export function PhotoBoothCamera() {
   const navigation = useNavigation<PhotoBoothStackNavigation>();
   const isFocused = useIsFocused();
-  const { facing, flash, setIsCameraReady, setPhotos } = usePhotoBoothCamera();
+  const { facing, flash, photos, setIsCameraReady, setPhotos } =
+    usePhotoBoothCamera();
   const { isBoothRunning, setIsBoothRunning } = usePhotoBoothSession();
-  const { collageStyle, timerDuration } = usePhotoBoothSettings();
+  const { collageStyle, timerDuration, photoPromptsEnabled } =
+    usePhotoBoothSettings();
   const cameraRef = useRef<CameraView>(null);
   const photoBoothTimerRef = useRef<PhotoBoothTimerHandle>(null);
   const [isLayoutReady, setIsLayoutReady] = useState(false);
@@ -37,6 +41,7 @@ export function PhotoBoothCamera() {
   const [canRenderCamera, setCanRenderCamera] = useState(true);
   const [showCustomiseCollageModal, setShowCustomiseCollageModal] =
     useState(false);
+  const [photoPrompts, setPhotoPrompts] = useState<string[]>([]);
 
   const flashMode = flash ? "on" : "off";
 
@@ -57,6 +62,17 @@ export function PhotoBoothCamera() {
     if (!isBoothRunning) return;
     photoBoothTimerRef.current?.start();
   }, [isBoothRunning]);
+
+  useEffect(() => {
+    if (!isBoothRunning || !photoPromptsEnabled) return;
+    setPhotoPrompts(getRandomPrompts(4));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isBoothRunning, photoPromptsEnabled]);
+
+  const currentPhotoPrompt =
+    isBoothRunning && photoPromptsEnabled
+      ? photoPrompts[photos.length]
+      : undefined;
 
   useEffect(() => {
     setIsCameraReady(false);
@@ -131,6 +147,10 @@ export function PhotoBoothCamera() {
             durationMs={timerDuration * 1000}
             onComplete={onTimerComplete}
           />
+        ) : null}
+
+        {currentPhotoPrompt ? (
+          <PhotoPromptBanner prompt={currentPhotoPrompt} />
         ) : null}
 
         <CameraPictureRow />

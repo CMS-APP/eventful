@@ -75,6 +75,7 @@ export function FeedbackModal({
         color={colors.primaryTint}
         textColor={colors.white}
         onPress={handleSubmit}
+        leadingIcon="paper-plane"
       />
     </ModalView>
   );

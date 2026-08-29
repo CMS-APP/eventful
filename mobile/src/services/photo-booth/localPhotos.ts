@@ -118,6 +118,9 @@ export async function getLocalEvents(): Promise<GalleryEvent[]> {
         continue;
       }
 
+      photo.width = assetResult.value.width;
+      photo.height = assetResult.value.height;
+
       newPhotosData.push({
         ...photo
       });

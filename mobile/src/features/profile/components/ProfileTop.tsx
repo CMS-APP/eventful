@@ -107,6 +107,7 @@ export function ProfileTop({ user }: { user: User }) {
             color={colors.primaryTint}
             textColor={colors.white}
             flex={1}
+            leadingIcon="calendar-plus"
           />
         )}
       </View>

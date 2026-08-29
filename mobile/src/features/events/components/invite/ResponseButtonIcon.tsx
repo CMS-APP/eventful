@@ -9,7 +9,6 @@ import { haptics } from "@/utils/haptics";
 
 interface ResponseButtonIconProps {
   icon: keyof typeof FontAwesome5.glyphMap;
-  pressedIcon: keyof typeof FontAwesome5.glyphMap;
   title: string;
   color: string;
   updateResponse: (title: string) => void;
@@ -19,7 +18,6 @@ interface ResponseButtonIconProps {
 
 export function ResponseButtonIcon({
   icon,
-  pressedIcon,
   title,
   color,
   updateResponse,
@@ -37,7 +35,7 @@ export function ResponseButtonIcon({
         hitSlop={getHitSlop("small")}
       >
         <FontAwesome5
-          name={title !== response ? icon : pressedIcon}
+          name={icon}
           size={50}
           color={title === response ? color : colors.gray}
         />

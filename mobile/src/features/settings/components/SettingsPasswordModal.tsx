@@ -49,6 +49,7 @@ export function SettingsPasswordModal({
             setPresentPasswordModal(false);
             submitFunction();
           }}
+          leadingIcon="trash-alt"
         />
       </View>
     </ModalView>

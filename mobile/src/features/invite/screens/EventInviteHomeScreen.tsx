@@ -145,8 +145,7 @@ export function EventInviteHomeScreen({
 
             <View style={styles.responseButtonsContainer}>
               <ResponseButtonIcon
-                icon={"check-circle"}
-                pressedIcon={"check"}
+                icon={"check"}
                 title="accept"
                 color={colors.primary}
                 updateResponse={handleUpdateResponse}
@@ -154,8 +153,7 @@ export function EventInviteHomeScreen({
               />
 
               <ResponseButtonIcon
-                icon={"question-circle"}
-                pressedIcon={"question"}
+                icon={"question"}
                 title="maybe"
                 color={colors.secondary}
                 updateResponse={handleUpdateResponse}
@@ -163,8 +161,7 @@ export function EventInviteHomeScreen({
               />
 
               <ResponseButtonIcon
-                icon={"times-circle"}
-                pressedIcon={"times"}
+                icon={"times"}
                 title="decline"
                 color={colors.tertiary}
                 updateResponse={handleUpdateResponse}

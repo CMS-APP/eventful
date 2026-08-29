@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     ...textStyles.body,
     color: colors.white,
     flex: 1,
-    fontStyle: "italic",
+    fontFamily: "poppinsMediumItalic",
     letterSpacing: 1,
     paddingVertical: 16,
     textTransform: "none"

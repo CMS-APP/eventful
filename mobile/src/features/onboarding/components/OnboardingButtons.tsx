@@ -24,6 +24,7 @@ export function OnboardingButtons({
         color={colors.secondary}
         textColor={colors.white}
         onPress={next}
+        leadingIcon="arrow-right"
       />
 
       <TextButton

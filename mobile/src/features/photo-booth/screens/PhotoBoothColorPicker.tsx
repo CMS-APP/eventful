@@ -94,6 +94,7 @@ export function PhotoBoothColorPicker() {
               onPress={saveColor}
               color={colors.secondary}
               textColor={colors.white}
+              leadingIcon="check"
             />
           </View>
         </View>

@@ -146,6 +146,7 @@ export function EventDateTimeRangeEditor({
           text={formatDate(startDate)}
           onPress={handleDatePress}
           flex={1}
+          leadingIcon="calendar-alt"
         />
 
         <Button
@@ -155,6 +156,7 @@ export function EventDateTimeRangeEditor({
           text={formatTime(startDate)}
           onPress={handleTimePress}
           flex={1}
+          leadingIcon="clock"
         />
       </View>
 
@@ -176,6 +178,7 @@ export function EventDateTimeRangeEditor({
             text={formatDate(endDate)}
             onPress={handleEndDatePress}
             flex={1}
+            leadingIcon="calendar-alt"
           />
 
           <Button
@@ -185,6 +188,7 @@ export function EventDateTimeRangeEditor({
             text={formatTime(endDate)}
             onPress={handleEndTimePress}
             flex={1}
+            leadingIcon="clock"
           />
         </View>
       )}

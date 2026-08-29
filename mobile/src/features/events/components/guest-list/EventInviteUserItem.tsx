@@ -135,15 +135,11 @@ export function EventInviteUserItem({
       );
     } else {
       const allResponses = ["accept", "maybe", "decline"];
-
-      // Remove the user's response from the list
-
       const newResponses = allResponses.filter(
         (response: string) => response !== invite.response
       );
 
       let allOptions: AlertOptions[] = [];
-      // Show the alert with the new responses
       newResponses.forEach((response: string) => {
         allOptions.push({
           text: "Move to " + response,

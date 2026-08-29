@@ -134,6 +134,7 @@ export function CreatePollScreen({ navigation }: CreatePollScreenProps) {
               color={colors.primary}
               textColor={colors.white}
               onPress={addPollOption}
+              leadingIcon="plus"
             />
 
             <Divider />
@@ -143,6 +144,7 @@ export function CreatePollScreen({ navigation }: CreatePollScreenProps) {
               color={colors.primary}
               textColor={colors.white}
               onPress={createNewPollAlert}
+              leadingIcon="poll"
             />
           </View>
         </View>

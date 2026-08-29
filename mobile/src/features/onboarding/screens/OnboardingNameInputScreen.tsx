@@ -220,7 +220,7 @@ export function OnboardingNameInputScreen({
                   center
                 >
                   <FontAwesome5
-                    name={usernameValid ? "check-circle" : "times-circle"}
+                    name={usernameValid ? "check" : "times"}
                     size={12}
                     color={usernameValid ? colors.green : colors.red + "CC"}
                   />{" "}

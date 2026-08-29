@@ -111,7 +111,7 @@ export async function subscribeToProduct(
     return;
   }
 
-  navigation.navigate("SubscriptionCelebration", {
+  navigation.navigate("Celebration", {
     type: type
   });
 }

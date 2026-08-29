@@ -47,6 +47,7 @@ export function PhotoBoothCustomise() {
           color={colors.primary}
           textColor={colors.white}
         />
+
         <Button
           text="Settings"
           leadingIcon="cog"
@@ -56,6 +57,7 @@ export function PhotoBoothCustomise() {
           color={colors.primary}
           textColor={colors.white}
         />
+
         <Button
           text="Preview"
           leadingIcon="eye"

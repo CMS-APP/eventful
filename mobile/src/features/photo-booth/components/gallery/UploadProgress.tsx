@@ -106,6 +106,7 @@ export function UploadProgress({
       onPress={() => {
         navigation.navigate("Paywall", { type: "Premium" });
       }}
+      leadingIcon={"star"}
       color={colors.primary}
       textColor={colors.white}
     />
@@ -117,10 +118,12 @@ export function UploadProgress({
         <Button
           text={`Sync ${photoState.local.length} photo${photoState.local.length > 1 ? "s" : ""}`}
           onPress={uploadPhotos}
+          leadingIcon={"upload"}
           color={colors.primary}
           textColor={colors.white}
           loading={uploading}
           disabled={downloading}
+          size="small"
         />
       )}
 
@@ -128,10 +131,12 @@ export function UploadProgress({
         <Button
           text={`Download ${photoState.cloud.length} photo${photoState.cloud.length > 1 ? "s" : ""}`}
           onPress={downloadPhotos}
+          leadingIcon={"download"}
           color={colors.primary}
           textColor={colors.white}
           loading={downloading}
           disabled={uploading}
+          size="small"
         />
       )}
     </>
@@ -198,6 +203,8 @@ export function UploadProgress({
           color={colors.primary}
           textColor={colors.white}
           disabled={isSyncing}
+          size="small"
+          leadingIcon={"link"}
         />
       )}
       {!premium && nonPremiumContent}
@@ -220,9 +227,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.lightGray,
     borderRadius: 12,
-    flex: 1,
     gap: 6,
-    justifyContent: "center",
     padding: 16
   }
 });

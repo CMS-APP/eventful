@@ -17,16 +17,12 @@ export function InviteEventCardResponse({
   return (
     <View style={styles.container}>
       <FontAwesome5
-        name={response === "accept" ? "check" : "check-circle"}
+        name={"check"}
         size={24}
         color={response === "accept" ? colors.primary : colors.gray}
       />
       <FontAwesome5
-        name={
-          response === "maybe" || response === "pending"
-            ? "question"
-            : "question-circle"
-        }
+        name={"question"}
         size={24}
         color={
           response === "maybe" || response === "pending"
@@ -35,7 +31,7 @@ export function InviteEventCardResponse({
         }
       />
       <FontAwesome5
-        name={response === "decline" ? "times" : "times-circle"}
+        name={"times"}
         size={24}
         color={response === "decline" ? colors.tertiary : colors.gray}
       />

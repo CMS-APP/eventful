@@ -21,7 +21,7 @@ const buttonStyles: Record<buttonSizes, ButtonStyles> = {
   small: {
     padding: 12,
     borderRadius: 12,
-    gap: 4
+    gap: 6
   },
   medium: {
     padding: 16,

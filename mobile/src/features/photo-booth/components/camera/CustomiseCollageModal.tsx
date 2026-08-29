@@ -30,6 +30,7 @@ export function CustomiseCollageModal({
             color={colors.primaryTint}
             textColor={colors.white}
             flex={1}
+            leadingIcon="check"
           />
         </View>
       </View>

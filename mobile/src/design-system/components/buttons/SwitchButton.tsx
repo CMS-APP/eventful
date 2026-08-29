@@ -27,25 +27,23 @@ export function SwitchButton({
 
   const textColor = dark ? colors.white : colors.black;
   const backgroundColor = dark ? colors.primaryTint3 : colors.lightGray;
+  const trackColor = dark ? colors.primaryTint3 : colors.primary;
 
   return (
     <TouchableOpacity onPress={handlePress} hitSlop={getHitSlop("medium")}>
       <View style={styles.switchButton}>
         <View style={[styles.switchContainer, { backgroundColor }]}>
-          <Text
-            type="body"
-            italic
-            style={[styles.switchText, { color: textColor }]}
-          >
+          <Text type="body" style={{ color: textColor }}>
             {title}
           </Text>
         </View>
-        <View style={[styles.switchToggle, { backgroundColor }]}>
+        <View>
           <Switch
             value={isChecked}
             onValueChange={handlePress}
-            trackColor={{ true: colors.primary }}
+            trackColor={{ true: trackColor }}
             thumbColor={colors.white}
+            ios_backgroundColor={colors.lightGray}
           />
         </View>
       </View>
@@ -55,7 +53,7 @@ export function SwitchButton({
 
 const styles = StyleSheet.create({
   switchButton: {
-    alignItems: "stretch",
+    alignItems: "center",
     flexDirection: "row",
     gap: 12
   },
@@ -63,17 +61,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryTint3,
     borderRadius: 12,
     flex: 1,
-    justifyContent: "center",
     paddingHorizontal: 12,
     paddingVertical: 12
-  },
-  switchText: {
-    textAlign: "center"
-  },
-  switchToggle: {
-    alignItems: "center",
-    borderRadius: 12,
-    justifyContent: "center",
-    paddingHorizontal: 12
   }
 });

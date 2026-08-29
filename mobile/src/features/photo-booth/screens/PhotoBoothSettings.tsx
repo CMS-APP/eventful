@@ -21,7 +21,9 @@ export function PhotoBoothSettings() {
     flash,
     setFlash,
     timerDuration,
-    setTimerDuration
+    setTimerDuration,
+    photoPromptsEnabled,
+    setPhotoPromptsEnabled
   } = usePhotoBoothSettings();
 
   const [timerDurationLocal, setTimerDurationLocal] = useState<string>(
@@ -46,6 +48,10 @@ export function PhotoBoothSettings() {
 
   function handleFlashChange() {
     setFlash(!flash);
+  }
+
+  function handlePhotoPromptsEnabledChange() {
+    setPhotoPromptsEnabled(!photoPromptsEnabled);
   }
 
   useEffect(() => {
@@ -107,11 +113,19 @@ export function PhotoBoothSettings() {
           onChange={handleFlashChange}
         />
 
+        <SwitchButton
+          title="Photo Prompts"
+          isChecked={photoPromptsEnabled}
+          onChange={handlePhotoPromptsEnabledChange}
+        />
+
         <Input
           placeholder="Photo Timer Duration (seconds)"
           value={timerDurationLocal.toString()}
           onChangeText={(text) => setTimerDurationLocal(text)}
           keyboardType="number-pad"
+          backgroundColor={colors.lightGray}
+          textColor={colors.black}
         />
       </View>
     </Screen>

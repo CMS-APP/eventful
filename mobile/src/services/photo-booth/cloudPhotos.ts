@@ -8,8 +8,6 @@ import {
 } from "@react-native-firebase/storage";
 
 import * as FileSystem from "expo-file-system/legacy";
-import * as ImageManipulator from "expo-image-manipulator";
-import { SaveFormat } from "expo-image-manipulator";
 import * as MediaLibrary from "expo-media-library";
 
 import { FIREBASE_STORAGE } from "@/app/init/firebase";
@@ -20,6 +18,7 @@ import { getDocumentsByQuery } from "@/services/api/get";
 import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
 import { parseDatabaseDate } from "@/utils/date";
 import { log } from "@/utils/logging";
+import { generateUUID } from "@/utils/uuid";
 
 import { getPhotosDataLocally } from "./localPhotos";
 import { convertEventTitleToHash } from "./utils";
@@ -42,7 +41,12 @@ export async function getCloudEvents(userId: string) {
   const photos = await getCloudPhotos(userId);
 
   const events: GalleryEvent[] = [];
-  for (const photo of photos as GalleryPhoto[]) {
+  for (const rawPhoto of photos as (GalleryPhoto & { id: string })[]) {
+    const photo: GalleryPhoto = {
+      ...rawPhoto,
+      type: "cloud",
+      storageId: rawPhoto.id
+    };
     if (!events.find((event) => event.eventTitle === photo.eventTitle)) {
       events.push({
         eventTitle: photo.eventTitle,
@@ -72,44 +76,11 @@ export async function downloadCloudPhotos(
   event: GalleryEvent,
   photos: GalleryPhoto[]
 ) {
-  try {
-    const photoData = await getPhotosDataLocally();
-    for (const photo of photos) {
-      const sourceUri = photo.url ?? photo.uri;
-      if (!sourceUri) {
-        continue;
-      }
-
-      const photoIdFormatted = photo.photoId.split("/")[0];
-      const cacheDir = FileSystem.cacheDirectory;
-      const destUri = `${cacheDir}photo-booth-${photoIdFormatted}-${Date.now()}.jpg`;
-      await FileSystem.downloadAsync(sourceUri, destUri);
-      const combinedAsset = await MediaLibrary.createAssetAsync(destUri);
-
-      const createdAt =
-        parseDatabaseDate(photo.createdAt ?? event.date)?.toISOString() ??
-        new Date().toISOString();
-
-      photoData.push({
-        photoId: photoIdFormatted,
-        eventTitle: event.eventTitle,
-        createdAt,
-        url: combinedAsset.uri,
-        uri: combinedAsset.uri
-      });
-    }
-    await AsyncStorage.setItem("photosData", JSON.stringify(photoData));
-  } catch (error) {
-    log(`Error downloading cloud photos: ${error}`, "error");
-  }
-}
-
-export async function downloadCloudPhoto(photo: GalleryPhoto, userId: string) {
-  try {
-    const photoData = await getPhotosDataLocally();
+  const photoData = await getPhotosDataLocally();
+  for (const photo of photos) {
     const sourceUri = photo.url ?? photo.uri;
     if (!sourceUri) {
-      return;
+      continue;
     }
 
     const photoIdFormatted = photo.photoId.split("/")[0];
@@ -118,52 +89,53 @@ export async function downloadCloudPhoto(photo: GalleryPhoto, userId: string) {
     await FileSystem.downloadAsync(sourceUri, destUri);
     const combinedAsset = await MediaLibrary.createAssetAsync(destUri);
 
+    const createdAt =
+      parseDatabaseDate(photo.createdAt ?? event.date)?.toISOString() ??
+      new Date().toISOString();
+
     photoData.push({
       photoId: photoIdFormatted,
-      eventTitle: photo.eventTitle,
-      createdAt: photo.createdAt,
+      eventTitle: event.eventTitle,
+      createdAt,
       url: combinedAsset.uri,
       uri: combinedAsset.uri
     });
-
-    await AsyncStorage.setItem("photosData", JSON.stringify(photoData));
-  } catch (error) {
-    log(`Error downloading photo cloud: ${error}`, "error");
-    throw error;
   }
+  await AsyncStorage.setItem("photosData", JSON.stringify(photoData));
+}
+
+export async function downloadCloudPhoto(photo: GalleryPhoto, userId: string) {
+  const photoData = await getPhotosDataLocally();
+  const sourceUri = photo.url ?? photo.uri;
+  if (!sourceUri) {
+    return;
+  }
+
+  const photoIdFormatted = photo.photoId.split("/")[0];
+  const cacheDir = FileSystem.cacheDirectory;
+  const destUri = `${cacheDir}photo-booth-${photoIdFormatted}-${Date.now()}.jpg`;
+  await FileSystem.downloadAsync(sourceUri, destUri);
+  const combinedAsset = await MediaLibrary.createAssetAsync(destUri);
+
+  photoData.push({
+    photoId: photoIdFormatted,
+    eventTitle: photo.eventTitle,
+    createdAt: photo.createdAt,
+    url: combinedAsset.uri,
+    uri: combinedAsset.uri
+  });
+
+  await AsyncStorage.setItem("photosData", JSON.stringify(photoData));
 }
 
 export async function deletePhotoCloud(photo: GalleryPhoto, userId: string) {
-  try {
-    const storageId = photo.photoId.split("/")[0];
-    const eventTitleHash = await convertEventTitleToHash(photo.eventTitle);
-    const storagePath = `gallery/${userId}/${eventTitleHash}/${storageId}.jpg`;
+  const storageId = photo.storageId ?? photo.photoId.split("/")[0];
+  const eventTitleHash = await convertEventTitleToHash(photo.eventTitle);
+  const storagePath = `gallery/${userId}/${eventTitleHash}/${storageId}.jpg`;
 
-    const storageRef = ref(FIREBASE_STORAGE, storagePath);
-    await deleteObject(storageRef);
-    await deleteDocument(API_COLLECTIONS.PHOTO_BOOTH_PHOTOS, storageId);
-  } catch (error) {
-    log(`PhotoBooth: Error deleting photo booth image: ${error}`, "error");
-    throw error;
-  }
-}
-
-async function compressImage(localUri: string) {
-  try {
-    const compressedImage = await ImageManipulator.manipulateAsync(
-      localUri,
-      [{ resize: { width: 1200 } }],
-      {
-        compress: 0.8,
-        format: SaveFormat.JPEG
-      }
-    );
-
-    return compressedImage.uri;
-  } catch (error) {
-    log(`Error compressing image: ${error}`, "error");
-    throw error;
-  }
+  const storageRef = ref(FIREBASE_STORAGE, storagePath);
+  await deleteObject(storageRef);
+  await deleteDocument(API_COLLECTIONS.PHOTO_BOOTH_PHOTOS, storageId);
 }
 
 export async function uploadPhotosToCloud(
@@ -171,47 +143,44 @@ export async function uploadPhotosToCloud(
   eventTitle: string,
   photos: GalleryPhoto[]
 ) {
-  try {
-    const eventTitleHash = await convertEventTitleToHash(eventTitle);
-    const storagePath = `gallery/${userId}/${eventTitleHash}`;
+  const eventTitleHash = await convertEventTitleToHash(eventTitle);
+  const storagePath = `gallery/${userId}/${eventTitleHash}`;
 
-    const uploadPromises = photos.map(async (photo) => {
-      const photoId = photo.photoId;
-      const finalPhotoId = photoId.split("/")[0];
-      const photoRef = ref(
-        FIREBASE_STORAGE,
-        `${storagePath}/${finalPhotoId}.jpg`
-      );
-      const asset = await MediaLibrary.getAssetInfoAsync(photoId);
-      const localUri = asset.localUri || asset.uri;
-      const response = await fetch(localUri);
-      let blob = await response.blob();
+  const uploadPromises = photos.map(async (photo) => {
+    const photoId = photo.photoId;
+    const localMatchId = photoId.split("/")[0];
+    const storageId = generateUUID();
+    const photoRef = ref(FIREBASE_STORAGE, `${storagePath}/${storageId}.jpg`);
+    const asset = await MediaLibrary.getAssetInfoAsync(photoId);
+    const localUri = asset.localUri || asset.uri;
+    const response = await fetch(localUri);
+    const blob = await response.blob();
 
-      if (blob.size > 1024 * 1024) {
-        const compressedImage = await compressImage(localUri);
-        const compressedResponse = await fetch(compressedImage);
-        blob = await compressedResponse.blob();
-      }
+    await uploadBytesResumable(photoRef, blob as Blob);
+    const downloadURL = await getDownloadURL(photoRef);
 
-      await uploadBytesResumable(photoRef, blob as Blob);
-      const downloadURL = await getDownloadURL(photoRef);
+    await createDocument(
+      {
+        url: downloadURL,
+        userId,
+        eventTitle,
+        photoId: localMatchId,
+        width: asset.width,
+        height: asset.height,
+        createdAt: serverTimestamp()
+      },
+      API_COLLECTIONS.PHOTO_BOOTH_PHOTOS,
+      storageId
+    );
 
-      await createDocument(
-        {
-          url: downloadURL,
-          userId,
-          eventTitle,
-          photoId: finalPhotoId,
-          createdAt: serverTimestamp()
-        },
-        API_COLLECTIONS.PHOTO_BOOTH_PHOTOS,
-        finalPhotoId
-      );
-    });
+    return {
+      photoId: localMatchId,
+      storageId,
+      url: downloadURL,
+      width: asset.width,
+      height: asset.height
+    };
+  });
 
-    await Promise.all(uploadPromises);
-  } catch (error) {
-    log(`Error uploading photos to cloud: ${error}`, "error");
-    throw error;
-  }
+  return await Promise.all(uploadPromises);
 }

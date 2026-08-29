@@ -88,6 +88,7 @@ export function DateTimeSelector({
         textColor={colors.white}
         color={colors.primaryTint}
         onPress={() => setShowPicker(false)}
+        leadingIcon="check"
       />
     </ModalView>
   );

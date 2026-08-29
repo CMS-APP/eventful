@@ -4,10 +4,13 @@ export type GalleryPhoto = {
   createdAt: FirebaseFirestoreTypes.Timestamp;
   eventTitle: string;
   photoId: string;
+  storageId?: string;
   url?: string;
   uri?: string;
   userId: string;
   type: "local" | "cloud" | "both";
+  width?: number;
+  height?: number;
 };
 
 export type GalleryEvent = {

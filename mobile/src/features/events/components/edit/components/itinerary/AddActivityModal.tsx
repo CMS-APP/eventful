@@ -153,6 +153,7 @@ export function AddActivityModal({
           onPress={handleSave}
           color={colors.primaryTint}
           textColor={colors.white}
+          leadingIcon={isEditing ? "check" : "plus"}
         />
       </ScrollView>
     </ModalView>

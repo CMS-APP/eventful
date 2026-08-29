@@ -553,6 +553,10 @@ export async function savePhotoBoothConfig(
     flash: config.flash !== undefined ? config.flash : false,
     filter: config.filter || "Normal",
     timerDuration: config.timerDuration || 4,
+    photoPromptsEnabled:
+      config.photoPromptsEnabled !== undefined
+        ? config.photoPromptsEnabled
+        : false,
     updatedAt: Timestamp.now()
   };
 

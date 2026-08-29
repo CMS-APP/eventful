@@ -25,7 +25,7 @@ import {
 } from "../photoBoothStackParams";
 
 export function PhotoBoothEventGallery() {
-  const { event: initialEvent, type } =
+  const { event: initialEvent } =
     useRoute<RouteProp<PhotoBoothStackParamList, "PhotoBoothEventGallery">>()
       .params;
   const userId = useSelector((state: UserState) => state.uid);
@@ -75,13 +75,11 @@ export function PhotoBoothEventGallery() {
       }}
     >
       <View style={styles.container}>
-        {type !== "cloud" && (
-          <UploadProgress event={event} refreshEvent={refreshEvent} />
-        )}
+        <UploadProgress event={event} refreshEvent={refreshEvent} />
 
         {event.photos.map((photo) => (
           <GalleryPhotoItem
-            key={photo.photoId}
+            key={photo.storageId ?? photo.photoId}
             photo={photo}
             onPhotoPress={handlePhotoPress}
           />

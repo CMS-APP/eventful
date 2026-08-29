@@ -25,8 +25,8 @@ export function GalleryEventListItem({ event }: GalleryEventListItemProps) {
   const parsedDate = formatDate(date);
 
   const handlePress = useCallback(() => {
-    navigation.navigate("PhotoBoothEventGallery", { event, type });
-  }, [navigation, event, type]);
+    navigation.navigate("PhotoBoothEventGallery", { event });
+  }, [navigation, event]);
 
   return (
     <TouchableOpacity onPress={handlePress} hitSlop={getHitSlop("medium")}>
@@ -47,8 +47,14 @@ export function GalleryEventListItem({ event }: GalleryEventListItemProps) {
             />
           )}
         </View>
-        <Text type="body">Date: {parsedDate}</Text>
-        <Text type="body">Photos: {photos.length}</Text>
+        <View style={styles.detailRow}>
+          <FontAwesome5 name="calendar-alt" size={14} color={colors.primary} />
+          <Text type="body">{parsedDate}</Text>
+        </View>
+        <View style={styles.detailRow}>
+          <FontAwesome5 name="images" size={14} color={colors.primary} />
+          <Text type="body">Photos: {photos.length}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -60,6 +66,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     gap: 6,
     padding: 12
+  },
+  detailRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 8
   },
   titleContainer: {
     flexDirection: "row",

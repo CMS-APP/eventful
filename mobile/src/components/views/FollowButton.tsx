@@ -110,6 +110,7 @@ export function FollowButton({ user, flex = undefined }: FollowButtonProps) {
         color={colors.secondary}
         textColor={colors.white}
         flex={flex}
+        leadingIcon={contactText === "Following" ? "check" : "user-plus"}
       />
     </View>
   );

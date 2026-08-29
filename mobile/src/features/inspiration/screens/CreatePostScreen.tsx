@@ -112,6 +112,7 @@ export function CreatePostScreen({ navigation }: CreatePostScreenProps) {
               textColor={colors.white}
               onPress={createNewPostAlert}
               loading={loading}
+              leadingIcon="plus"
             />
           </View>
         </View>

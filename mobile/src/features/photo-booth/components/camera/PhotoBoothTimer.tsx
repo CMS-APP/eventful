@@ -7,6 +7,7 @@ import { useAppDimensions } from "@/app/hooks/useAppDimensions";
 import { TimerRing, TimerRingHandle } from "./TimerRing";
 
 const DEFAULT_CYCLE_MS = 4000;
+export const TIMER_RING_SIZE = 96;
 
 export type PhotoBoothTimerHandle = TimerRingHandle;
 
@@ -20,7 +21,7 @@ const PhotoBoothTimer = forwardRef<PhotoBoothTimerHandle, PhotoBoothTimerProps>(
     const ringRef = useRef<TimerRingHandle>(null);
     const { screenHeight } = useAppDimensions();
 
-    const topLength = screenHeight * 0.5 - 96 / 2;
+    const topLength = screenHeight * 0.5 - TIMER_RING_SIZE / 2;
 
     useImperativeHandle(
       ref,
@@ -38,7 +39,7 @@ const PhotoBoothTimer = forwardRef<PhotoBoothTimerHandle, PhotoBoothTimerProps>(
           ref={ringRef}
           durationMs={durationMs}
           onComplete={onComplete}
-          size={96}
+          size={TIMER_RING_SIZE}
           strokeWidth={5}
         />
       </View>

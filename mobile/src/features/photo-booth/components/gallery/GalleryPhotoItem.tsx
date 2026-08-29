@@ -1,22 +1,18 @@
-import { ActivityIndicator } from "react-native-paper";
+import { useMemo, useState } from "react";
 
-import { useCallback, useEffect, useState } from "react";
-
-import {
-  Image as RNImage,
-  StyleSheet,
-  TouchableOpacity,
-  View
-} from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { ImageBackground } from "expo-image";
 
 import { useAppDimensions } from "@/app/hooks/useAppDimensions";
+import { Skeleton } from "@/design-system/components/feedback/Skeleton";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { GalleryPhoto } from "@/types/photoBoothGallery";
+
+const DEFAULT_ASPECT_RATIO = 3 / 4;
 
 export function GalleryPhotoItem({
   photo,
@@ -31,26 +27,21 @@ export function GalleryPhotoItem({
   const imageUri = photo.url ?? photo.uri;
   const { photoId } = photo;
 
-  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
   const [loading, setLoading] = useState(true);
 
-  const calculateImageSize = useCallback(() => {
-    if (imageUri) {
-      RNImage.getSize(imageUri, (width, height) => {
-        const widthScaleFactor = maxWidth / width;
-        const heightScaleFactor = maxHeight / height;
-        const scaleFactor = Math.min(widthScaleFactor, heightScaleFactor);
-        setImageSize({
-          width: width * scaleFactor,
-          height: height * scaleFactor
-        });
-      });
-    }
-  }, [imageUri, maxWidth, maxHeight]);
+  const imageSize = useMemo(() => {
+    const sourceWidth = photo.width ?? maxWidth;
+    const sourceHeight = photo.height ?? sourceWidth / DEFAULT_ASPECT_RATIO;
 
-  useEffect(() => {
-    calculateImageSize();
-  }, [calculateImageSize]);
+    const widthScaleFactor = maxWidth / sourceWidth;
+    const heightScaleFactor = maxHeight / sourceHeight;
+    const scaleFactor = Math.min(widthScaleFactor, heightScaleFactor);
+
+    return {
+      width: sourceWidth * scaleFactor,
+      height: sourceHeight * scaleFactor
+    };
+  }, [photo.width, photo.height, maxWidth, maxHeight]);
 
   return (
     <TouchableOpacity
@@ -60,43 +51,53 @@ export function GalleryPhotoItem({
       hitSlop={getHitSlop("medium")}
     >
       <View style={styles.container}>
-        {loading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={colors.primary} />
-          </View>
-        )}
-        <ImageBackground
-          source={{ uri: imageUri ?? "", cacheKey: photoId }}
-          cachePolicy="memory-disk"
-          style={[
-            styles.imageBackground,
-            { width: imageSize.width, height: imageSize.height }
-          ]}
-          onLoadEnd={() => setLoading(false)}
-        >
-          <View style={styles.typeContainer}>
-            {!loading && photo.type === "cloud" && (
-              <View style={styles.iconContainer}>
-                <FontAwesome5 name="cloud" size={16} color={colors.white} />
-              </View>
-            )}
-            {!loading && photo.type === "local" && (
-              <View style={styles.iconContainer}>
-                <FontAwesome5 name="folder" size={16} color={colors.white} />
-              </View>
-            )}
-            {!loading && photo.type === "both" && (
-              <>
+        <View style={[styles.imageWrapper, imageSize]}>
+          {loading && (
+            <Skeleton
+              width={imageSize.width}
+              height={imageSize.height}
+              borderRadius={12}
+              style={styles.skeleton}
+            />
+          )}
+          <ImageBackground
+            source={{
+              uri: imageUri ?? "",
+              cacheKey: photo.storageId ?? photoId
+            }}
+            cachePolicy="none"
+            transition={300}
+            style={[styles.imageBackground, imageSize]}
+            onLoadEnd={() => setLoading(false)}
+          >
+            <View style={styles.typeContainer}>
+              {!loading && photo.type === "cloud" && (
                 <View style={styles.iconContainer}>
                   <FontAwesome5 name="cloud" size={16} color={colors.white} />
                 </View>
+              )}
+              {!loading && photo.type === "local" && (
                 <View style={styles.iconContainer}>
                   <FontAwesome5 name="folder" size={16} color={colors.white} />
                 </View>
-              </>
-            )}
-          </View>
-        </ImageBackground>
+              )}
+              {!loading && photo.type === "both" && (
+                <>
+                  <View style={styles.iconContainer}>
+                    <FontAwesome5 name="cloud" size={16} color={colors.white} />
+                  </View>
+                  <View style={styles.iconContainer}>
+                    <FontAwesome5
+                      name="folder"
+                      size={16}
+                      color={colors.white}
+                    />
+                  </View>
+                </>
+              )}
+            </View>
+          </ImageBackground>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -119,13 +120,11 @@ const styles = StyleSheet.create({
   imageBackground: {
     borderRadius: 12
   },
-  loadingContainer: {
-    alignItems: "center",
-    backgroundColor: colors.lightGray,
-    borderRadius: 12,
-    justifyContent: "center",
-    paddingVertical: 50,
-    width: "100%"
+  imageWrapper: {
+    justifyContent: "center"
+  },
+  skeleton: {
+    position: "absolute"
   },
   touchable: {
     alignSelf: "stretch",

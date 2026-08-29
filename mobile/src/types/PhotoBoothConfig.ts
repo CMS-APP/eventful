@@ -31,6 +31,7 @@ export interface PhotoBoothConfig {
   flash: boolean;
   filter: string;
   timerDuration: number;
+  photoPromptsEnabled: boolean;
   requestCameraPermission: () => void;
   requestPhotoLibraryPermission: () => void;
   setPhotos: React.Dispatch<React.SetStateAction<PhotoResult[]>>;
@@ -55,6 +56,7 @@ export interface PhotoBoothConfig {
   setFlash: (flash: boolean) => void;
   setFilter: (filter: string) => void;
   setTimerDuration: (timerDuration: number) => void;
+  setPhotoPromptsEnabled: (photoPromptsEnabled: boolean) => void;
 }
 
 export const PB_CONFIG = {
@@ -75,5 +77,6 @@ export const PB_CONFIG = {
   canChangeFilter: false,
   flash: false,
   filter: "Normal",
-  timerDuration: 4
+  timerDuration: 4,
+  photoPromptsEnabled: false
 };
