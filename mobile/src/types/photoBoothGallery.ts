@@ -1,7 +1,7 @@
-import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+import { Timestamp } from "@react-native-firebase/firestore";
 
 export type GalleryPhoto = {
-  createdAt: FirebaseFirestoreTypes.Timestamp;
+  createdAt: Timestamp;
   eventTitle: string;
   photoId: string;
   storageId?: string;
@@ -16,6 +16,6 @@ export type GalleryPhoto = {
 export type GalleryEvent = {
   eventTitle: string;
   photos: GalleryPhoto[];
-  date: FirebaseFirestoreTypes.Timestamp | string;
+  date: Timestamp | string;
   type: "local" | "cloud" | "both";
 };

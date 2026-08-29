@@ -1,5 +1,5 @@
-import type { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 import {
+  FieldValue,
   Timestamp,
   doc,
   updateDoc,
@@ -62,7 +62,7 @@ export async function createUserInfo(userId: string, data: User) {
 }
 
 export type UserUpdateData = {
-  [K in keyof User]?: User[K] | FirebaseFirestoreTypes.FieldValue;
+  [K in keyof User]?: User[K] | FieldValue;
 };
 
 export async function updateUserInfo(userId: string, data: UserUpdateData) {

@@ -24,9 +24,7 @@ python -m pip install -r "$PYTHON_DIR/requirements.txt"
 python -m pip install ipython >/dev/null
 
 if [[ -f "$PYTHON_DIR/.secret.local" ]]; then
-  # Expose secrets as env vars for local IPython (defineSecret/SecretParam style)
   set -a
-  # shellcheck disable=SC1091
   source "$PYTHON_DIR/.secret.local"
   set +a
   echo "==> Loaded python/.secret.local into environment"

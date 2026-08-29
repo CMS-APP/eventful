@@ -18,7 +18,7 @@ type QueryConstraintType =
 export async function getDocument(
   ...pathSegments: string[]
 ): Promise<DocumentData> {
-  const docRef = doc(FIRESTORE_DB, ...pathSegments);
+  const docRef = doc(FIRESTORE_DB, ...(pathSegments as [string, ...string[]]));
   const docSnap = await getDoc(docRef);
   if (!docSnap.exists()) {
     return undefined;
