@@ -65,7 +65,7 @@ export function GalleryPhotoItem({
               uri: imageUri ?? "",
               cacheKey: photo.storageId ?? photoId
             }}
-            cachePolicy="none"
+            cachePolicy="memory-disk"
             transition={300}
             style={[styles.imageBackground, imageSize]}
             onLoadEnd={() => setLoading(false)}
