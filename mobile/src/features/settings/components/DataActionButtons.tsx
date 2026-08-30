@@ -9,6 +9,7 @@ import { colors } from "@/design-system/tokens/colors";
 import { updateUserInfo } from "@/services/firebase/user";
 import { clearCache as clearImageCache } from "@/services/local/cache";
 import { UserState, clearSpotifyData } from "@/store/UserSlice";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 export function DataActionButtons() {
@@ -24,6 +25,7 @@ export function DataActionButtons() {
       await clearImageCache();
       Alert.alert("Success", "The cache has been cleared.");
     } catch {
+      log("Error Clearing Cache", "error");
       showErrorToast("Error Clearing Cache");
     } finally {
       setClearingCache(false);
