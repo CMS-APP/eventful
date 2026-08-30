@@ -113,50 +113,56 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
         _handleScroll={() => {}}
       >
         <View style={formStyles.formContainer}>
-          <Input
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            backgroundColor={colors.lightGray}
-            textColor={colors.black}
-          />
+          <View style={styles.inputContainer}>
+            <Input
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              backgroundColor={colors.lightGray}
+              textColor={colors.black}
+            />
 
-          {errors.email && (
-            <Text type="body" color="red">
-              {errors.email}
-            </Text>
-          )}
+            {errors.email && (
+              <Text type="body" color="red">
+                {errors.email}
+              </Text>
+            )}
+          </View>
 
-          <Input
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            password
-            backgroundColor={colors.lightGray}
-            textColor={colors.black}
-          />
+          <View style={styles.inputContainer}>
+            <Input
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              password
+              backgroundColor={colors.lightGray}
+              textColor={colors.black}
+            />
 
-          {errors.password && (
-            <Text type="body" color="red">
-              {errors.password}
-            </Text>
-          )}
+            {errors.password && (
+              <Text type="body" color="red">
+                {errors.password}
+              </Text>
+            )}
+          </View>
 
-          <Input
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            password
-            backgroundColor={colors.lightGray}
-            textColor={colors.black}
-          />
+          <View style={styles.inputContainer}>
+            <Input
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              password
+              backgroundColor={colors.lightGray}
+              textColor={colors.black}
+            />
 
-          {errors.confirmPassword && (
-            <Text type="body" color="red">
-              {errors.confirmPassword}
-            </Text>
-          )}
+            {errors.confirmPassword && (
+              <Text type="body" color="red">
+                {errors.confirmPassword}
+              </Text>
+            )}
+          </View>
 
           <Button
             text="Sign Up"
@@ -188,6 +194,9 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  inputContainer: {
+    gap: 4
   },
   orContainer: {
     alignItems: "center",

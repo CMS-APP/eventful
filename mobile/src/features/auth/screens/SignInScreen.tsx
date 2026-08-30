@@ -200,36 +200,40 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
         _handleScroll={() => {}}
       >
         <View style={formStyles.formContainer}>
-          <Input
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            backgroundColor={colors.lightGray}
-            textColor={colors.black}
-          />
+          <View style={styles.inputContainer}>
+            <Input
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              backgroundColor={colors.lightGray}
+              textColor={colors.black}
+            />
 
-          {errors.email && (
-            <Text type="body" color="red">
-              {errors.email}
-            </Text>
-          )}
+            {errors.email && (
+              <Text type="body" color="red">
+                {errors.email}
+              </Text>
+            )}
+          </View>
 
-          <Input
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            keyboardType="default"
-            backgroundColor={colors.lightGray}
-            textColor={colors.black}
-            password
-          />
+          <View style={styles.inputContainer}>
+            <Input
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              keyboardType="default"
+              backgroundColor={colors.lightGray}
+              textColor={colors.black}
+              password
+            />
 
-          {errors.password && (
-            <Text type="body" color="red">
-              {errors.password}
-            </Text>
-          )}
+            {errors.password && (
+              <Text type="body" color="red">
+                {errors.password}
+              </Text>
+            )}
+          </View>
 
           <TextButton
             type="body"
@@ -270,6 +274,9 @@ const styles = StyleSheet.create({
   container: {
     color: colors.white,
     flex: 1
+  },
+  inputContainer: {
+    gap: 4
   },
   orContainer: {
     alignItems: "center",
