@@ -30,7 +30,7 @@ export function getDeviceInfo(): UserUpdateData {
       payload.locale = first.languageTag;
     }
   } catch (error) {
-    log(error as string, "error");
+    log(`Error getting device info: ${error}`, "error");
     return {};
   }
 
