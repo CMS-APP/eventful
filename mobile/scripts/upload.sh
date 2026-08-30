@@ -120,6 +120,7 @@ upload_ios() {
     --ipa "build/$NEW_VERSION/$IOS_FILENAME" \
     --skip_screenshots \
     --skip_metadata \
+    --skip_app_version_update true \
     --force \
     --run_precheck_before_submit false \
     --submit_for_review false
