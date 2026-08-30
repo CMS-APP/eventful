@@ -2,10 +2,9 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { TIMELINE_TEXT_LIST } from "@/features/events/constants";
 import { colors } from "@/design-system/tokens/colors";
+import { TIMELINE_TEXT_LIST } from "@/features/events/constants";
 import { Event } from "@/types/Event";
-import { haptics } from "@/utils/haptics";
 
 import { TimelineBottom } from "./components/timeline/TimelineBottom";
 import { TimelineButton } from "./components/timeline/TimelineButton";
@@ -21,7 +20,6 @@ export function EventTimelineEdit({ event, setEvent }: EventTimelineEditProps) {
   const [timelineList, setTimelineList] = useState<boolean[]>([]);
   const [percentageComplete, setPercentageComplete] = useState(0);
 
-  const prevTimelineListRef = useRef<boolean[] | null>(null);
   const isInitializedRef = useRef(false);
 
   const calculatePercentageComplete = useCallback((list: boolean[]) => {
@@ -30,17 +28,12 @@ export function EventTimelineEdit({ event, setEvent }: EventTimelineEditProps) {
   }, []);
 
   useEffect(() => {
-    if (
-      timelineList !== null &&
-      timelineList !== prevTimelineListRef.current &&
-      isInitializedRef.current
-    ) {
+    if (timelineList !== null && isInitializedRef.current) {
       setEvent((prevEvent: Event) => ({
         ...prevEvent,
         timelineList: timelineList as unknown as boolean[]
       }));
       setPercentageComplete(calculatePercentageComplete(timelineList));
-      prevTimelineListRef.current = timelineList;
     }
   }, [timelineList, setEvent, calculatePercentageComplete]);
 
@@ -58,12 +51,6 @@ export function EventTimelineEdit({ event, setEvent }: EventTimelineEditProps) {
   const updateList = useCallback(
     (index: number) => {
       const updatedList = [...timelineList];
-      if (updatedList[index]) {
-        haptics.error();
-      } else {
-        haptics.success();
-      }
-
       updatedList[index] = !updatedList[index];
       setTimelineList(updatedList);
     },
@@ -97,7 +84,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primaryTint2,
     flex: 1,
-    gap: 16,
     paddingHorizontal: 24
   },
   itemContainer: {

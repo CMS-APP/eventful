@@ -6,6 +6,7 @@ import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
+import { haptics } from "@/utils/haptics";
 
 interface TimelineButtonProps {
   index: number;
@@ -25,6 +26,11 @@ export function TimelineButton({
   return (
     <TouchableOpacity
       onPress={() => {
+        if (isCompleted) {
+          haptics.error();
+        } else {
+          haptics.success();
+        }
         updateList(index);
       }}
       style={styles.container}
