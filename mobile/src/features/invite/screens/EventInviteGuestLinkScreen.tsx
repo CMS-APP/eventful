@@ -14,8 +14,8 @@ import { SegmentedControl } from "@/design-system/components/buttons/SegmentedCo
 import { SwitchButton } from "@/design-system/components/buttons/SwitchButton";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { padding } from "@/design-system/tokens/padding";
 import { EventInviteUserItem } from "@/features/events/components/guest-list/EventInviteUserItem";
+import { LinkInviteDisclaimerModal } from "@/features/invite/components/LinkInviteDisclaimerModal";
 import {
   changeEventEnabledStatus,
   updateEventInDatabase
@@ -42,6 +42,7 @@ export function EventInviteGuestLinkScreen({
   const [maybeNum, setMaybeNum] = useState(0);
   const [declineNum, setDeclineNum] = useState(0);
   const [selectedButton, setSelectedButton] = useState("accept");
+  const [showDisclaimerModal, setShowDisclaimerModal] = useState(false);
   const [linkList, setLinkList] = useState(route.params?.linkList || []);
   const [userList, setUserList] = useState(linkList);
   const userId = useSelector((state: UserState) => state.uid);
@@ -76,17 +77,23 @@ export function EventInviteGuestLinkScreen({
   }
 
   async function handleSwitchChange() {
-    setEnableLinkInvite(!enableLinkInvite);
-
-    if (!enableLinkInvite) {
-      await createEventLink();
-    } else {
+    if (enableLinkInvite) {
+      setEnableLinkInvite(false);
       await changeEventEnabledStatus(event?.id || "", false);
       await updateEventInDatabase({
         id: event?.id || "",
         eventLinkEnabled: false
       });
+      return;
     }
+
+    setShowDisclaimerModal(true);
+  }
+
+  async function handleAcceptDisclaimer() {
+    setShowDisclaimerModal(false);
+    setEnableLinkInvite(true);
+    await createEventLink();
   }
 
   async function refreshLinks() {
@@ -128,110 +135,105 @@ export function EventInviteGuestLinkScreen({
   }, [selectedButton, linkList]);
 
   useEffect(() => {
-    async function fetchEventLinkStatus() {
-      setEnableLinkInvite(event?.eventLinkEnabled);
-    }
-
-    getUserNumbers();
-    getUsers();
-    fetchEventLinkStatus();
-  }, [linkList, event?.eventLinkEnabled, getUserNumbers, getUsers]);
+    setEnableLinkInvite(event?.eventLinkEnabled);
+  }, [event?.eventLinkEnabled]);
 
   useEffect(() => {
+    getUserNumbers();
     getUsers();
-  }, [selectedButton, getUsers]);
+  }, [linkList, selectedButton, getUserNumbers, getUsers]);
 
   if (!event) {
     return null;
   }
 
   return (
-    <Screen
-      headerConfig={{
-        type: "flat",
-        flatHeaderProps: {
-          title: "Invite Via Link",
-          backgroundColor: colors.darkGray,
-          dark: true,
-          backAction: true,
-          icon: "link"
-        },
-        backgroundColor: colors.darkGray
-      }}
-      contentConfig={{
-        backgroundColor: colors.darkGray
-      }}
-    >
-      <View style={styles.contentContainer}>
-        <View style={styles.linkContainer}>
-          <View style={[padding.smallWidget, styles.disclaimerContainer]}>
-            <Text type="footnote" color="black">
-              Disclaimer: This link will allow anyone to RSVP to your event and
-              view the event details and anyone with the link will be able to
-              see the event details, such as the location, time and date.
-            </Text>
-          </View>
+    <>
+      <LinkInviteDisclaimerModal
+        presentModal={showDisclaimerModal}
+        setPresentModal={setShowDisclaimerModal}
+        onAccept={handleAcceptDisclaimer}
+      />
 
-          <View style={styles.switchContainer}>
-            <SwitchButton
-              title={"Enable Link Invite"}
-              isChecked={enableLinkInvite ?? false}
-              onChange={handleSwitchChange}
-            />
-
-            <View
-              style={
-                enableLinkInvite
-                  ? styles.buttonContainerEnabled
-                  : styles.buttonContainerDisabled
-              }
-            >
-              <Button
-                color={colors.secondary}
-                text={"Copy Invite Link"}
-                onPress={copyUrlToClipboard}
-                textColor={colors.white}
-                disabled={!enableLinkInvite}
-                leadingIcon={"copy"}
+      <Screen
+        headerConfig={{
+          type: "flat",
+          flatHeaderProps: {
+            title: "Invite Via Link",
+            backgroundColor: colors.darkGray,
+            dark: true,
+            backAction: true,
+            icon: "link"
+          },
+          backgroundColor: colors.darkGray
+        }}
+        contentConfig={{
+          backgroundColor: colors.darkGray
+        }}
+      >
+        <View style={styles.contentContainer}>
+          <View style={styles.linkContainer}>
+            <View style={styles.switchContainer}>
+              <SwitchButton
+                title={"Enable Link Invite"}
+                isChecked={enableLinkInvite ?? false}
+                onChange={handleSwitchChange}
               />
+
+              <View
+                style={
+                  enableLinkInvite
+                    ? styles.buttonContainerEnabled
+                    : styles.buttonContainerDisabled
+                }
+              >
+                <Button
+                  color={colors.secondary}
+                  text={"Copy Invite Link"}
+                  onPress={copyUrlToClipboard}
+                  textColor={colors.white}
+                  disabled={!enableLinkInvite}
+                  leadingIcon={"copy"}
+                />
+              </View>
             </View>
           </View>
+
+          <Text type="header" color="white" center>
+            Responses
+          </Text>
+
+          <SegmentedControl
+            selections={["accept", "maybe", "decline"]}
+            selectionValues={[
+              acceptNum.toString(),
+              maybeNum.toString(),
+              declineNum.toString()
+            ]}
+            selectedButton={selectedButton}
+            setSelectedButton={setSelectedButton}
+            nonPressColor={colors.white}
+          />
+
+          <View style={styles.userListContainer}>
+            {userList.length > 0 &&
+              userList.map((user: UserInvite, index: number) => {
+                return (
+                  <EventInviteUserItem
+                    key={user.user.uid}
+                    user={user.user}
+                    event={event}
+                    refreshUsers={refreshLinks}
+                    invite={user.invite}
+                    deleteGuestManual={() => {}}
+                    setResponseManual={() => {}}
+                  />
+                );
+              })}
+          </View>
         </View>
-
-        <Text type="header" color="white" style={styles.responsesHeader} center>
-          Link Responses
-        </Text>
-
-        <SegmentedControl
-          selections={["accept", "maybe", "decline"]}
-          selectionValues={[
-            acceptNum.toString(),
-            maybeNum.toString(),
-            declineNum.toString()
-          ]}
-          selectedButton={selectedButton}
-          setSelectedButton={setSelectedButton}
-          nonPressColor={colors.white}
-        />
-
-        <View style={styles.userListContainer}>
-          {userList.length > 0 &&
-            userList.map((user: UserInvite, index: number) => {
-              return (
-                <EventInviteUserItem
-                  key={user.user.uid}
-                  user={user.user}
-                  event={event}
-                  refreshUsers={refreshLinks}
-                  invite={user.invite}
-                  deleteGuestManual={() => {}}
-                  setResponseManual={() => {}}
-                />
-              );
-            })}
-        </View>
-      </View>
-    </Screen>
+      </Screen>
+    </>
   );
 }
 
@@ -245,23 +247,17 @@ const styles = StyleSheet.create({
     opacity: 1
   },
   contentContainer: {
-    gap: 16
-  },
-  disclaimerContainer: {
-    backgroundColor: colors.lightGray
+    gap: 12
   },
   linkContainer: {
     gap: 16,
     paddingHorizontal: 24
-  },
-  responsesHeader: {
-    marginTop: 20
   },
   switchContainer: {
     gap: 12
   },
   userListContainer: {
     gap: 12,
-    marginVertical: 12
+    paddingHorizontal: 24
   }
 });
