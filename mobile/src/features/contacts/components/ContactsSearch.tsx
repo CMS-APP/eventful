@@ -70,7 +70,7 @@ export function ContactsSearch({
                 onFocus={onFocus}
                 onBlur={onBlur}
                 placeholder={placeholder}
-                placeholderTextColor={dark ? colors.gray : colors.lightGray}
+                placeholderTextColor={dark ? colors.gray : colors.gray}
                 autoCapitalize="none"
                 autoCorrect={false}
                 autoComplete="off"
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 12,
     flexDirection: "row",
-    gap: 6,
+    gap: 8,
     minHeight: 44,
     paddingHorizontal: 16
   },
