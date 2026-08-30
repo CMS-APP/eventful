@@ -19,6 +19,7 @@ import { updateResponseInDatabase } from "@/services/firebase/invite";
 import { openInMaps } from "@/services/maps/openInMaps";
 import { updateResponseNotification } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { InviteButtons } from "../components/InviteButtons";
@@ -52,7 +53,8 @@ export function EventInviteHomeScreen({
           event,
           newResponse
         );
-      } catch {
+      } catch (error) {
+        log(`Error Updating Response: ${error}`, "error");
         showErrorToast("Error Updating Response");
       }
     },

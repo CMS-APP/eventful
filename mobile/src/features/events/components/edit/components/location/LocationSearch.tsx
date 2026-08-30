@@ -294,7 +294,8 @@ export function LocationSearch({ event, setEvent }: LocationSearchProps) {
       Keyboard.dismiss();
 
       sessionTokenRef.current = generateUUID();
-    } catch {
+    } catch (error) {
+      log(`Error Loading Location Details: ${error}`, "error");
       showErrorToast("Error Loading Location Details");
     } finally {
       setLoading(false);

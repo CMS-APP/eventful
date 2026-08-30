@@ -14,6 +14,7 @@ import { updateNotificationsForEvent } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
 import type { Event } from "@/types/Event";
 import { parseDatabaseDate } from "@/utils/date";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { EventDetailsEdit } from "../components/edit/EventDetailsEdit";
@@ -51,6 +52,7 @@ export function EventSectionScreen({
         if (eventData) {
           setEvent(eventData);
         } else {
+          log("Error Loading Event: Event not found", "error");
           showErrorToast("Error Loading Event");
         }
       }

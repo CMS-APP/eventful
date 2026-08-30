@@ -28,6 +28,7 @@ import {
   setUsernameUpdateDate
 } from "@/store/UserSlice";
 import { parseDatabaseDate } from "@/utils/date";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 import { checkValue as checkValueUtil } from "@/utils/validation";
 
@@ -196,7 +197,8 @@ export function ChangeNameModal({
       setNewSecondName("");
       setUsernameExists(null);
       Alert.alert("Success", `Your ${type} has been updated.`);
-    } catch {
+    } catch (error) {
+      log(`Error Changing Name: ${error}`, "error");
       showErrorToast("Error Changing Name");
     }
   }, [

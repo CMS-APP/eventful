@@ -120,7 +120,8 @@ export function PhotoBoothPhoto() {
         width: result?.width,
         height: result?.height
       });
-    } catch {
+    } catch (error) {
+      log(`Error Uploading Photos: ${error}`, "error");
       showErrorToast("Error Uploading Photos");
     } finally {
       setUploading(false);
@@ -132,7 +133,8 @@ export function PhotoBoothPhoto() {
       setDownloading(true);
       await downloadCloudPhoto(photo, userId);
       setPhoto({ ...photo, type: "both" });
-    } catch {
+    } catch (error) {
+      log(`Error Downloading Photo: ${error}`, "error");
       showErrorToast("Error Downloading Photo");
     } finally {
       setDownloading(false);

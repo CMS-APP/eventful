@@ -16,6 +16,7 @@ import { colors } from "@/design-system/tokens/colors";
 import { createPostInDatabase } from "@/services/firebase/inspiration";
 import { UserState } from "@/store/UserSlice";
 import { Photo } from "@/types/Photo";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { UploadPhoto } from "../components/UploadPhoto";
@@ -41,7 +42,8 @@ export function CreatePostScreen({ navigation }: CreatePostScreenProps) {
       });
       setLoading(false);
       (navigation as StackNavigationProp<InspirationStackParamList>).goBack();
-    } catch {
+    } catch (error) {
+      log(`Error Creating Post: ${error}`, "error");
       showErrorToast("Error Creating Post");
     } finally {
       setLoading(false);

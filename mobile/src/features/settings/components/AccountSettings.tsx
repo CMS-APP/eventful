@@ -13,6 +13,7 @@ import { colors } from "@/design-system/tokens/colors";
 import { updateUserInfo } from "@/services/firebase/user";
 import { registerForPushNotificationsAsync } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { ChangeNameModal } from "./ChangeNameModal";
@@ -40,7 +41,8 @@ export function AccountSettings() {
         });
         Alert.alert("Success", "You are now registered for notifications.");
       }
-    } catch {
+    } catch (error) {
+      log(`Error Requesting Notifications: ${error}`, "error");
       showErrorToast("Error Requesting Notifications");
     }
   }, [userId]);
@@ -78,7 +80,8 @@ export function AccountSettings() {
   const handleManageSubscriptionPress = useCallback(async () => {
     try {
       await openSubscriptionManagement();
-    } catch {
+    } catch (error) {
+      log(`Error Opening Settings: ${error}`, "error");
       showErrorToast("Error Opening Settings");
     }
   }, []);

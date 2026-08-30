@@ -13,6 +13,7 @@ import { AllStackParamList, navigationRef } from "@/app/navigation";
 import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
 import { handleSignOut } from "@/services/firebase/auth";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 export function AccountButtons() {
@@ -25,7 +26,8 @@ export function AccountButtons() {
       setLoading(true);
       handleSignOut(dispatch);
       signOutNavigation();
-    } catch {
+    } catch (error) {
+      log(`Error Signing Out: ${error}`, "error");
       showErrorToast("Error Signing Out");
     } finally {
       setLoading(false);

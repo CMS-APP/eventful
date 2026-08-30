@@ -32,6 +32,7 @@ import { createNotificationsForEvents } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
 import { formatDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { SectionButton } from "../components/edit/SectionButton";
@@ -71,7 +72,8 @@ export function EventEditScreen({ navigation, route }: EventEditScreenProps) {
       await deleteEventInvitesFromDatabase(event.id);
       const { upcomingEvents } = await getEventsFromDatabase(userId);
       await createNotificationsForEvents(upcomingEvents);
-    } catch {
+    } catch (error) {
+      log(`Error Deleting Event: ${error}`, "error");
       showErrorToast("Error Deleting Event");
     } finally {
       setLoading(false);

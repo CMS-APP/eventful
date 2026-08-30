@@ -35,6 +35,7 @@ import {
 import { UserState, setProfilePictureHash } from "@/store/UserSlice";
 import { User } from "@/types/User";
 import { haptics } from "@/utils/haptics";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 export function AccountPicture() {
@@ -96,7 +97,8 @@ export function AccountPicture() {
           dispatch(setProfilePictureHash(imageHash));
         }
       }, 10);
-    } catch {
+    } catch (error) {
+      log(`Error Opening Photos: ${error}`, "error");
       showErrorToast("Error Opening Photos");
     } finally {
       setLoading(false);
@@ -126,7 +128,8 @@ export function AccountPicture() {
       });
       await deleteImageAsync(`${userId}/profilePicture`);
       dispatch(setProfilePictureHash(undefined));
-    } catch {
+    } catch (error) {
+      log(`Error Deleting Photo: ${error}`, "error");
       showErrorToast("Error Deleting Photo");
     } finally {
       setLoading(false);
@@ -197,6 +200,7 @@ export function AccountPicture() {
           source={{ uri: image }}
           style={styles.image}
           onError={() => {
+            log("Error Loading Photo", "error");
             showErrorToast("Error Loading Photo");
           }}
         />

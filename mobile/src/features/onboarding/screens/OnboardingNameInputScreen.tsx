@@ -27,6 +27,7 @@ import {
 } from "@/services/firebase/user";
 import { UserState, setUserData } from "@/store/UserSlice";
 import { User } from "@/types/User";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 import { capitalize, checkNames, checkUsernameValid } from "@/utils/validation";
 
@@ -103,7 +104,8 @@ export function OnboardingNameInputScreen({
       const dataWithMillis = convertTimestampsToMillis(data as User);
       dispatch(setUserData(dataWithMillis));
       navigation.navigate("OnboardingNotifications");
-    } catch {
+    } catch (error) {
+      log(`Error Creating Account: ${error}`, "error");
       showErrorToast("Error Creating Account");
     }
   }, [firstName, lastName, username, userId, dispatch, navigation, email]);

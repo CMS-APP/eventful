@@ -13,6 +13,7 @@ import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { useAccountProfilePicture } from "@/features/account/useAccountProfilePicture";
 import { UserState } from "@/store/UserSlice";
 import { haptics } from "@/utils/haptics";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 import { getInitials } from "@/utils/validation";
 
@@ -70,6 +71,7 @@ export function AccountButton({
                     source={{ uri: image }}
                     style={styles.image}
                     onError={() => {
+                      log("Error Loading Photo", "error");
                       showErrorToast("Error Loading Photo");
                     }}
                   />

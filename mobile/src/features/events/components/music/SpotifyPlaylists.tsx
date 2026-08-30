@@ -14,6 +14,7 @@ import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
 import { haptics } from "@/utils/haptics";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { SpotifyPlaylistItem } from "./SpotifyPlaylistItem";
@@ -59,7 +60,8 @@ export function SpotifyPlaylists({ event, setEvent }: SpotifyPlaylistsProps) {
       try {
         setLoading(true);
         await viewSpotifyPlaylist(playlist);
-      } catch {
+      } catch (error) {
+        log(`Error Opening Playlist: ${error}`, "error");
         showErrorToast("Error Opening Playlist");
       } finally {
         setLoading(false);

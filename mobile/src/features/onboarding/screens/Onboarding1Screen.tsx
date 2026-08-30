@@ -14,6 +14,7 @@ import {
   navigationRef
 } from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { FeatureView } from "../components/FeatureView";
@@ -29,7 +30,8 @@ export function Onboarding1Screen({ navigation }: Onboarding1ScreenProps) {
       const auth = getAuth();
       await signOut(auth);
       await signOutNavigation();
-    } catch {
+    } catch (error) {
+      log(`Error Signing Out: ${error}`, "error");
       showErrorToast("Error Signing Out");
     }
   }

@@ -24,6 +24,7 @@ import { deleteUpdateNotification } from "@/services/firebase/notifications";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { User } from "@/types/User";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 interface EventInviteGuestItemProps {
@@ -60,7 +61,8 @@ export function EventInviteGuestItem({
       await deleteInviteFromDatabase(inviteId ?? "");
       await deleteUpdateNotification(userId, guestId, event.id);
       refreshInvites();
-    } catch {
+    } catch (error) {
+      log(`Error Removing User: ${error}`, "error");
       showErrorToast("Error Removing User");
     }
   }, [event, guestId, inviteId, userId, refreshInvites]);

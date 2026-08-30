@@ -58,7 +58,8 @@ export function DataActionButtons() {
       });
       dispatch(clearSpotifyData());
       Alert.alert("Success", "Your Spotify data has been reset.");
-    } catch {
+    } catch (error) {
+      log(`Error Resetting Spotify Data: ${error}`, "error");
       showErrorToast("Error Resetting Spotify Data");
     } finally {
       setResettingSpotify(false);

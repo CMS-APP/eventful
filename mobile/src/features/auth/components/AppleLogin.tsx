@@ -21,6 +21,7 @@ import { dataInit } from "@/app/init/data";
 import { navigationRef } from "@/app/navigation";
 import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { saveAppleOnboardingName } from "../utils";
@@ -68,6 +69,7 @@ export function AppleLogin() {
       );
     } catch (error: any) {
       if (error.code !== "1001") {
+        log(`Error signing in with Apple: ${error}`, "error");
         showErrorToast("Error signing in with Apple");
       }
     } finally {

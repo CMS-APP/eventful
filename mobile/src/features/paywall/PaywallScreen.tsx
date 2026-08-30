@@ -21,6 +21,7 @@ import { SegmentedControl } from "@/design-system/components/buttons/SegmentedCo
 import { TextButton } from "@/design-system/components/buttons/TextButton";
 import { colors } from "@/design-system/tokens/colors";
 import { Subscription } from "@/types/Subscription";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { AllStackParamList } from "../../app/navigation";
@@ -86,7 +87,8 @@ export function PaywallScreen({ navigation, route }: PaywallScreenProps) {
         purchasePackage,
         navigation as StackNavigationProp<AppStackParamList>
       );
-    } catch {
+    } catch (error) {
+      log(`Error Subscribing: ${error}`, "error");
       showErrorToast("Error Subscribing");
     } finally {
       setLoading(false);

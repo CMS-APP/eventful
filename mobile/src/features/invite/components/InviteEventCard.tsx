@@ -21,6 +21,7 @@ import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
 import { formatDate, formatTime, parseDatabaseDate } from "@/utils/date";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { InviteEventCardResponse } from "./InviteEventCardResponse";
@@ -81,7 +82,8 @@ export function InviteEventCard({
       if (refresh) {
         setRefreshKey((prev: number) => prev + 1);
       }
-    } catch {
+    } catch (error) {
+      log(`Error Inviting User: ${error}`, "error");
       showErrorToast("Error Inviting User");
     }
   }, [host?.uid, host?.name, host?.username, user, event]);

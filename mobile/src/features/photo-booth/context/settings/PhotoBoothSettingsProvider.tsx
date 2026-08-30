@@ -3,14 +3,15 @@ import { useSelector } from "react-redux";
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { PhotoBoothSettingsContext } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 import type { PhotoBoothSettingsValue } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
+import { PhotoBoothSettingsContext } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 import {
   getPhotoBoothConfig,
   savePhotoBoothConfig
 } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { PB_CONFIG, PhotoBoothConfig } from "@/types/PhotoBoothConfig";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 type ConfigState = {
@@ -120,7 +121,8 @@ export function PhotoBoothSettingsProvider({
       const fetchedConfig = await getPhotoBoothConfig(userId);
       const appliedConfig = applyConfigWithDefaults(fetchedConfig, premium);
       setConfig(appliedConfig);
-    } catch {
+    } catch (error) {
+      log(`Error Loading Settings: ${error}`, "error");
       showErrorToast("Error Loading Settings");
       const defaultConfig = getDefaultConfig();
       setConfig(defaultConfig);

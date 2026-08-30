@@ -22,6 +22,7 @@ import {
 } from "@/services/local/cache";
 import { UserState, setProfilePictureHash } from "@/store/UserSlice";
 import { User } from "@/types/User";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 interface AccountPictureCameraModalProps {
@@ -45,6 +46,7 @@ export function AccountPictureCameraModal({
   async function savePhoto() {
     if (!photo?.uri) return;
     if (!userId || userId === "null") {
+      log("You're not signed in. Please sign in again.", "error");
       showErrorToast("You're not signed in. Please sign in again.");
       return;
     }
@@ -74,7 +76,8 @@ export function AccountPictureCameraModal({
       dispatch(setProfilePictureHash(imageHash));
 
       navigation.goBack();
-    } catch {
+    } catch (error) {
+      log(`Error Saving Photo: ${error}`, "error");
       showErrorToast("Error Saving Photo");
     } finally {
       setIsLoading(false);

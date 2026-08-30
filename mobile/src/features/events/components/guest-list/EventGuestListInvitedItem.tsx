@@ -17,6 +17,7 @@ import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
 import { haptics } from "@/utils/haptics";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 interface EventGuestListInvitedItemProps {
@@ -70,7 +71,8 @@ export function EventGuestListInvitedItem({
         (invited: string) => invited !== user.uid
       );
       await updateEventInDatabase(event);
-    } catch {
+    } catch (error) {
+      log(`Error Removing User: ${error}`, "error");
       showErrorToast("Error Removing User");
     }
   }, [invite, user, event]);

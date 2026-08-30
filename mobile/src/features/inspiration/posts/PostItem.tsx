@@ -30,6 +30,7 @@ import { Post } from "@/types/Post";
 import { User } from "@/types/User";
 import { calculateTimeAgo } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { PostImageCarousel } from "./PostImageCarousel";
@@ -97,7 +98,8 @@ export function PostItem({ post }: { post: Post }) {
         await togglePostLike(post.id, currentUserId);
         setIsLiked(true);
         setLikesCount((prev) => prev + 1);
-      } catch {
+      } catch (error) {
+        log(`Error Liking Post: ${error}`, "error");
         showErrorToast("Error Liking Post");
       }
     } else {

@@ -10,6 +10,7 @@ import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Input } from "@/design-system/components/inputs/Input";
 import { colors } from "@/design-system/tokens/colors";
 import { updateResponseInDatabase } from "@/services/firebase/invite";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 type Props = NativeStackScreenProps<
@@ -28,7 +29,8 @@ export function EventInviteFoodDrinkScreen({ navigation, route }: Props) {
           response: invite.response,
           dietary
         });
-      } catch {
+      } catch (error) {
+        log(`Error Updating Requirements: ${error}`, "error");
         showErrorToast("Error Updating Requirements");
       }
     }

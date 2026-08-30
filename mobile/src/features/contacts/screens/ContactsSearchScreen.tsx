@@ -15,6 +15,7 @@ import { colors } from "@/design-system/tokens/colors";
 import { ProfileButton } from "@/features/profile/components/ProfileButton";
 import { userSearch } from "@/services/firebase/backend";
 import { User } from "@/types/User";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { ContactsSearch } from "../components/ContactsSearch";
@@ -42,7 +43,8 @@ export function ContactsSearchScreen({ route }: ContactsSearchScreenProps) {
     try {
       const users = await userSearch(search, user as FirebaseAuthTypes.User);
       setUsers(users);
-    } catch {
+    } catch (error) {
+      log(`Error Loading Users: ${error}`, "error");
       showErrorToast("Error Loading Users");
     } finally {
       setLoading(false);

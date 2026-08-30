@@ -12,6 +12,7 @@ import { UserState } from "@/store/UserSlice";
 import { Poll } from "@/types/Poll";
 import { PollVote } from "@/types/PollVote";
 import { haptics } from "@/utils/haptics";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 import { generateUUID } from "@/utils/uuid";
 
@@ -91,6 +92,7 @@ export function PollOptionView({
     try {
       await voteForOptionInDatabase(poll, userId, option);
     } catch (error) {
+      log(`Error Voting: ${error}`, "error");
       showErrorToast("Error Voting");
       throw error;
     }

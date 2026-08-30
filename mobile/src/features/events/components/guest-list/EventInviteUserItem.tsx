@@ -25,6 +25,7 @@ import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
 import { UserInvite } from "@/types/UserInvite";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 interface EventInviteUserItemProps {
@@ -87,7 +88,8 @@ export function EventInviteUserItem({
         );
         await updateEventInDatabase(event);
         await deleteInviteFromDatabase(inviteId ?? "");
-      } catch {
+      } catch (error) {
+        log(`Error Removing User: ${error}`, "error");
         showErrorToast("Error Removing User");
       }
     } else if (invite.type === "link") {

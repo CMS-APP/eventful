@@ -21,6 +21,7 @@ import { HeaderArcs } from "@/features/auth/components/HeaderArcs";
 import { formStyles } from "@/features/auth/styles/formStyles";
 import { handleSignIn } from "@/services/firebase/auth";
 import { sendVerificationEmail } from "@/services/firebase/backend";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 interface FormErrors {
@@ -98,7 +99,8 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
           );
         }
       }
-    } catch {
+    } catch (error) {
+      log(`Error Sending Email: ${error}`, "error");
       showErrorToast("Error Sending Email");
       Alert.alert(
         "Error",
@@ -179,6 +181,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
           if (errorMessage) {
             setErrors({ password: errorMessage });
           } else {
+            log(`Error Logging In: ${error}`, "error");
             showErrorToast("Error Logging In");
           }
         }
