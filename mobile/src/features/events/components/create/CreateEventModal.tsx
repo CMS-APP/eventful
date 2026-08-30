@@ -14,6 +14,7 @@ import { Input } from "@/design-system/components/inputs/Input";
 import { ModalView } from "@/design-system/components/overlays/ModalView";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { EventDateTimeRangeEditor } from "@/features/events/components/edit/components/EventDateTimeRangeEditor";
 import { createEventInDatabase } from "@/services/firebase/event";
 import { UserState } from "@/store/UserSlice";
 import { Event, NewEvent } from "@/types/Event";
@@ -25,23 +26,33 @@ interface CreateEventModalProps {
   setShowModal: (showModal: boolean) => void;
 }
 
+function getDefaultEventDate() {
+  const date = new Date();
+  date.setDate(date.getDate() + 1);
+  date.setMinutes(date.getMinutes() + 5 - (date.getMinutes() % 5));
+  return date;
+}
+
 export function CreateEventModal({
   showModal,
   setShowModal
 }: CreateEventModalProps) {
   const userId = useSelector((state: UserState) => state.uid);
   const [eventName, setEventName] = useState("");
+  const [draftEvent, setDraftEvent] = useState<Event>(() =>
+    NewEvent(getDefaultEventDate(), userId, "")
+  );
   const fadeAnim = useState(new Animated.Value(0))[0];
   const navigation =
     useNavigation() as StackNavigationProp<EventsStackParamList>;
 
   const createEvent = useCallback(async () => {
     try {
-      const date = new Date();
-      date.setDate(date.getDate() + 1);
-      date.setMinutes(date.getMinutes() + 5 - (date.getMinutes() % 5));
-
-      const event: Event = NewEvent(date, userId, eventName);
+      const event: Event = {
+        ...draftEvent,
+        name: eventName,
+        userId
+      };
 
       setEventName("");
       setShowModal(false);
@@ -54,10 +65,11 @@ export function CreateEventModal({
       log(`Error Creating Event: ${error}`, "error");
       showErrorToast("Error Creating Event");
     }
-  }, [eventName, userId, navigation, setShowModal]);
+  }, [draftEvent, eventName, userId, navigation, setShowModal]);
 
   useEffect(() => {
     if (showModal) {
+      setDraftEvent(NewEvent(getDefaultEventDate(), userId, ""));
       fadeAnim.setValue(0);
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -65,7 +77,7 @@ export function CreateEventModal({
         useNativeDriver: true
       }).start();
     }
-  }, [showModal, fadeAnim]);
+  }, [showModal, fadeAnim, userId]);
 
   return (
     <ModalView
@@ -83,6 +95,14 @@ export function CreateEventModal({
         value={eventName}
         onChangeText={setEventName}
         dark
+      />
+
+      <EventDateTimeRangeEditor
+        event={draftEvent}
+        setEvent={setDraftEvent}
+        dark
+        handleSaveChanges={() => {}}
+        showSaveChanges={false}
       />
 
       <Button
