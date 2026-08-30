@@ -13,21 +13,25 @@ import { deleteDocument } from "../api/delete";
 import { incrementEventCount } from "./backend";
 
 export async function getEventInfo(event: Event): Promise<Event | null> {
+  log("Getting event info from database", "debug");
   const eventData = await getDocument(API_COLLECTIONS.EVENT, event.id || "");
   return (eventData as Event) || null;
 }
 
 export async function createEventInDatabase(data: Event, user: any) {
+  log("Creating event in database", "debug");
   await setDocument(data, API_COLLECTIONS.EVENT, data.id);
   await createNotificationForEvent(data);
   incrementEventCount(user);
 }
 
 export async function updateEventInDatabase(event: Partial<Event>) {
+  log("Updating event in database", "debug");
   await updateDocument(event, API_COLLECTIONS.EVENT, event?.id || "");
 }
 
 export async function deleteEventFromDatabase(eventId: string) {
+  log("Deleting event from database", "debug");
   await deleteDocument(API_COLLECTIONS.EVENT, eventId);
 }
 
