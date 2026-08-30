@@ -1,3 +1,5 @@
+import { PURCHASES_ERROR_CODE } from "react-native-purchases";
+
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
@@ -89,7 +91,12 @@ export function PaywallScreen({ navigation, route }: PaywallScreenProps) {
       );
     } catch (error) {
       log(`Error Subscribing: ${error}`, "error");
-      showErrorToast("Error Subscribing");
+      const errorCode = (error as { code?: string })?.code;
+      if (errorCode === PURCHASES_ERROR_CODE.PURCHASE_NOT_ALLOWED_ERROR) {
+        showErrorToast("Purchases aren't allowed on this device or account");
+      } else {
+        showErrorToast("Error Subscribing");
+      }
     } finally {
       setLoading(false);
     }
