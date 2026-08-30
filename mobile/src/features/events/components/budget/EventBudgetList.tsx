@@ -67,7 +67,7 @@ export function EventBudgetList({
     ]);
 
     setItemName("");
-    setItemCost("0");
+    setItemCost("");
   }, [itemName, itemCost, items, setItems]);
 
   const handleAddPress = useCallback(() => {
