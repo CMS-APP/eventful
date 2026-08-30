@@ -59,7 +59,7 @@ export function PhotoBoothLockModal({
       borderColor={colors.lightGray + "40"}
     >
       <Text type="header" color="white">
-        Lock
+        {locked ? "Unlock" : "Lock"} Photo Booth
       </Text>
 
       <Input

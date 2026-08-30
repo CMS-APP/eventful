@@ -20,6 +20,7 @@ export type PhotoBoothStackParamList = {
   PhotoBoothPhoto: {
     photo: GalleryPhoto;
   };
+  PhotoBoothGuidedAccessInfo: undefined;
 };
 
 export type PhotoBoothStackNavigation =

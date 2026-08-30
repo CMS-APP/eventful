@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
@@ -119,7 +119,7 @@ export function PhotoBoothHome() {
           />
 
           <Button
-            text={locked ? "Unlock Photo Booth" : "Lock Photo Booth"}
+            text={`${locked ? "Un" : ""}Lock Photo Booth `}
             leadingIcon={locked ? "unlock" : "lock"}
             onPress={() => {
               if (locked) {
@@ -131,6 +131,18 @@ export function PhotoBoothHome() {
             color={colors.primary}
             textColor={colors.white}
           />
+
+          {Platform.OS === "ios" && !locked && (
+            <Button
+              text="Guided Access Info"
+              leadingIcon="apple"
+              onPress={() => {
+                navigation.navigate("PhotoBoothGuidedAccessInfo");
+              }}
+              color={colors.primary}
+              textColor={colors.white}
+            />
+          )}
         </View>
       </Screen>
     </>

@@ -13,6 +13,7 @@ import { PhotoBoothColorPicker } from "./screens/PhotoBoothColorPicker";
 import { PhotoBoothCustomise } from "./screens/PhotoBoothCustomise";
 import { PhotoBoothEventGallery } from "./screens/PhotoBoothEventGallery";
 import { PhotoBoothGallery } from "./screens/PhotoBoothGallery";
+import { PhotoBoothGuidedAccessInfo } from "./screens/PhotoBoothGuidedAccessInfo";
 import { PhotoBoothHome } from "./screens/PhotoBoothHome";
 import { PhotoBoothLayout } from "./screens/PhotoBoothLayout";
 import { PhotoBoothPhoto } from "./screens/PhotoBoothPhoto";
@@ -62,12 +63,10 @@ export function PhotoBoothNavigator() {
         component={PhotoBoothRedoPhoto}
         options={{ gestureEnabled: false }}
       />
-
       <Stack.Screen
         name="PhotoBoothCustomise"
         component={PhotoBoothCustomise}
       />
-
       <Stack.Screen name="PhotoBoothLayout" component={PhotoBoothLayout} />
       <Stack.Screen name="PhotoBoothPreview" component={PhotoBoothPreview} />
       <Stack.Screen
@@ -79,20 +78,16 @@ export function PhotoBoothNavigator() {
         name="PhotoBoothColorPicker"
         component={PhotoBoothColorPicker}
       />
-
       <Stack.Screen name="PhotoBoothGallery" component={PhotoBoothGallery} />
-
       <Stack.Screen
         name="PhotoBoothEventGallery"
         component={PhotoBoothEventGallery}
       />
-
       <Stack.Screen name="PhotoBoothPhoto" component={PhotoBoothPhoto} />
-
-      {/* <Stack.Screen
+      <Stack.Screen
         name="PhotoBoothGuidedAccessInfo"
         component={PhotoBoothGuidedAccessInfo}
-      /> */}
+      />
     </Stack.Navigator>
   );
 }
