@@ -22,6 +22,7 @@ import { setUserData, setUserInSentry } from "@/store/UserSlice";
 import { User } from "@/types/User";
 import { log } from "@/utils/logging";
 
+import { notificationsInit } from "./notifications";
 import { checkIfUpdateRequired } from "./version";
 
 export async function dataInit(dispatch: Dispatch, nextStep?: () => void) {
@@ -96,6 +97,9 @@ export async function dataInit(dispatch: Dispatch, nextStep?: () => void) {
     ...finalData,
     ...(deviceInfo as Partial<User>)
   };
+
+  nextStep?.();
+  await notificationsInit(user.uid);
 
   delete (finalDataWithDeviceInfo as unknown as Record<string, unknown>)
     .lastLaunchedAt;

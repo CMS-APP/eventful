@@ -21,7 +21,10 @@ import {
 } from "@/services/api/get";
 import { setDocument, updateDocument } from "@/services/api/update";
 import { removeData } from "@/services/local/async";
-import { sendFollowNotification } from "@/services/pushNotifications";
+import {
+  getExpoToken,
+  sendFollowNotification
+} from "@/services/pushNotifications";
 import { Event } from "@/types/Event";
 import { EventLinkResponse } from "@/types/EventLinkResponse";
 import { Follower } from "@/types/Follower";
@@ -594,4 +597,16 @@ export async function getUsersFromFollowing(
 export async function isUserAdmin(userId: string) {
   const adminData = await getDocument(API_COLLECTIONS.ADMIN, "admin");
   return adminData?.uids?.includes(userId);
+}
+
+export async function removeExpoToken(userId: string) {
+  log("Removing expo token from user", "debug");
+  const user = await getUserInfo(userId);
+  const pushTokens = user?.pushTokens;
+  const expoToken = await getExpoToken();
+
+  if (expoToken && pushTokens) {
+    const newPushTokens = pushTokens.filter((token) => token !== expoToken);
+    await updateUserInfo(userId, { pushTokens: newPushTokens });
+  }
 }

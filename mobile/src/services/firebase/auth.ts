@@ -19,6 +19,7 @@ import { clearStorage } from "@/store/UserSlice";
 import { log } from "@/utils/logging";
 
 import { incrementUserCount } from "./backend";
+import { removeExpoToken } from "./user";
 
 export async function handleSignIn(
   email: string,
@@ -40,9 +41,10 @@ export async function handleSignIn(
 export async function handleSignOut(dispatch: Dispatch<Action>) {
   const auth = getAuth();
 
-  await clearNotifications();
-  await removeAllData();
   await clearCache();
+  await clearNotifications();
+  await removeExpoToken(auth.currentUser?.uid || "");
+  await removeAllData();
 
   dispatch(clearStorage());
 

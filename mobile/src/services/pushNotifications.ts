@@ -19,6 +19,25 @@ Notifications.setNotificationHandler({
   })
 });
 
+export async function getExpoToken() {
+  const projectId =
+    Constants?.expoConfig?.extra?.eas?.projectId ??
+    Constants?.easConfig?.projectId;
+  if (!projectId) {
+    return null;
+  }
+  return (
+    await Notifications.getExpoPushTokenAsync({
+      projectId
+    })
+  ).data;
+}
+
+export async function hasAcceptedNotifications() {
+  const { status } = await Notifications.getPermissionsAsync();
+  return status === "granted";
+}
+
 export async function registerForPushNotificationsAsync() {
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("myNotificationChannel", {
@@ -49,20 +68,6 @@ export async function registerForPushNotificationsAsync() {
   } else {
     return await getExpoToken();
   }
-}
-
-export async function getExpoToken() {
-  const projectId =
-    Constants?.expoConfig?.extra?.eas?.projectId ??
-    Constants?.easConfig?.projectId;
-  if (!projectId) {
-    return null;
-  }
-  return (
-    await Notifications.getExpoPushTokenAsync({
-      projectId
-    })
-  ).data;
 }
 
 async function scheduleLocalNotification(

@@ -4,11 +4,12 @@ import { BootContext } from "@/app/context/loading/BootContext";
 
 const steps = [
   "Initialising app...",
-  "Checking for auth...",
-  "Checking for updates...",
-  "Checking for onboarding...",
-  "Checking for paywall...",
-  "Updating your data...",
+  "Checking authentication...",
+  "Checking required updates...",
+  "Checking onboarding status...",
+  "Checking paywall status...",
+  "Updating your information...",
+  "Checking notifications...",
   "Finishing up..."
 ];
 
