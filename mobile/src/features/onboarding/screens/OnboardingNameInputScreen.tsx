@@ -207,6 +207,9 @@ export function OnboardingNameInputScreen({
             placeholder="Username"
             onChangeText={(text: string) => setUsername(text)}
             value={username}
+            autoCapitalize="none"
+            autoCorrect={false}
+            textContentType="username"
             dark
             backgroundColor={colors.lightGray}
             textColor={colors.black}

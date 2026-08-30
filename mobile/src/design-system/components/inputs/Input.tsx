@@ -4,6 +4,7 @@ import {
   KeyboardTypeOptions,
   StyleSheet,
   TextInput,
+  TextInputProps,
   TouchableOpacity,
   View
 } from "react-native";
@@ -29,6 +30,10 @@ interface InputProps {
     height?: number;
   };
   keyboardType?: KeyboardTypeOptions;
+  autoCapitalize?: TextInputProps["autoCapitalize"];
+  autoCorrect?: boolean;
+  autoComplete?: TextInputProps["autoComplete"];
+  textContentType?: TextInputProps["textContentType"];
   password?: boolean;
   editable?: boolean;
   children?: React.ReactNode;
@@ -44,6 +49,10 @@ export function Input({
   dark = false,
   multilineProps,
   keyboardType = "default",
+  autoCapitalize,
+  autoCorrect,
+  autoComplete,
+  textContentType,
   password = false,
   editable = true,
   children,
@@ -51,6 +60,17 @@ export function Input({
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
   const accessoryId = useRef(`input-${placeholder}`).current;
+  const isEmailInput = keyboardType === "email-address";
+  const resolvedAutoCapitalize =
+    autoCapitalize ?? (password || isEmailInput ? "none" : "sentences");
+  const resolvedAutoCorrect =
+    autoCorrect ?? !(password || isEmailInput);
+  const resolvedAutoComplete =
+    autoComplete ??
+    (password ? "password" : isEmailInput ? "email" : "off");
+  const resolvedTextContentType =
+    textContentType ??
+    (password ? "password" : isEmailInput ? "emailAddress" : undefined);
 
   const inputContainerStyle = {
     ...styles.inputContainer,
@@ -89,6 +109,10 @@ export function Input({
             placeholderTextColor={colors.gray}
             inputAccessoryViewID={accessoryId}
             keyboardType={keyboardType}
+            autoCapitalize={resolvedAutoCapitalize}
+            autoCorrect={resolvedAutoCorrect}
+            autoComplete={resolvedAutoComplete}
+            textContentType={resolvedTextContentType}
             secureTextEntry={password && !showPassword}
             editable={editable}
           />
@@ -127,10 +151,9 @@ const styles = StyleSheet.create({
     flex: 1
   },
   input: {
-    ...textStyles.body,
-    color: colors.white,
     flex: 1,
     fontFamily: "poppinsMediumItalic",
+    fontSize: textStyles.body.fontSize,
     letterSpacing: 1,
     paddingVertical: 16,
     textTransform: "none"

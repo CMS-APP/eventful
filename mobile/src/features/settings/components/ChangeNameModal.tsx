@@ -226,6 +226,9 @@ export function ChangeNameModal({
         placeholder={type === "name" ? "First Name" : "Username"}
         onChangeText={(text) => setNewName(text)}
         value={newName}
+        autoCapitalize={type === "username" ? "none" : "sentences"}
+        autoCorrect={type !== "username"}
+        textContentType={type === "username" ? "username" : "givenName"}
         dark
       />
 

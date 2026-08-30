@@ -119,6 +119,8 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
               backgroundColor={colors.lightGray}
               textColor={colors.black}
             />

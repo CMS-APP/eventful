@@ -206,6 +206,8 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
               backgroundColor={colors.lightGray}
               textColor={colors.black}
             />
