@@ -9,7 +9,6 @@ import { useNavigation } from "@react-navigation/native";
 
 import { PhotoResult } from "expo-camera";
 import * as ImageManipulator from "expo-image-manipulator";
-import { CameraType } from "expo-image-picker";
 
 import { Button } from "@/design-system/components/buttons/Button";
 import { ModalView } from "@/design-system/components/overlays/ModalView";
@@ -29,7 +28,7 @@ interface AccountPictureCameraModalProps {
   presentModal: boolean;
   setPresentModal: (presentModal: boolean) => void;
   photo: PhotoResult | null;
-  facing: CameraType;
+  facing: "front" | "back";
 }
 
 export function AccountPictureCameraModal({
@@ -103,10 +102,10 @@ export function AccountPictureCameraModal({
 
         {isLoading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={colors.white} />
             <Text type="body" color="white" style={styles.savingText}>
               Saving photo...
             </Text>
+            <ActivityIndicator size="large" color={colors.white} />
           </View>
         ) : (
           <>

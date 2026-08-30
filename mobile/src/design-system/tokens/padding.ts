@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export const padding = StyleSheet.create({
   largeWidget: {
     alignItems: "center",
-    borderRadius: 24,
+    borderRadius: 20,
     padding: 20
   },
   mediumWidget: {

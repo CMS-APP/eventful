@@ -1,11 +1,6 @@
 import { useCallback } from "react";
 
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-
-import { Text } from "@/design-system/components/text/Text";
-import { colors } from "@/design-system/tokens/colors";
-import { getHitSlop } from "@/design-system/tokens/hitSlop";
-import { shadows } from "@/design-system/tokens/shadows";
+import { CameraActionButton } from "@/components/camera/CameraActionButton";
 import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
 import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
 
@@ -21,13 +16,6 @@ export function PhotoBoothCaptureButton({
   const { isBoothRunning, setIsBoothRunning } = usePhotoBoothSession();
   const { isCameraReady, setPhotos } = usePhotoBoothCamera();
 
-  const buttonStyle = [
-    styles.buttonContainer,
-    {
-      opacity: disabled ? 0.5 : 1
-    }
-  ];
-
   const handlePress = useCallback(() => {
     setIsBoothRunning(!isBoothRunning);
     if (!redo) {
@@ -36,30 +24,10 @@ export function PhotoBoothCaptureButton({
   }, [isBoothRunning, redo, setIsBoothRunning, setPhotos]);
 
   return (
-    <TouchableOpacity
+    <CameraActionButton
+      label={isBoothRunning ? "Stop" : "Capture"}
       onPress={handlePress}
-      disabled={!isCameraReady}
-      hitSlop={getHitSlop("small")}
-    >
-      <View style={buttonStyle}>
-        <Text type="subHeader" color={colors.white}>
-          {isBoothRunning ? "Stop" : "Capture"}
-        </Text>
-      </View>
-    </TouchableOpacity>
+      disabled={disabled || !isCameraReady}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  buttonContainer: {
-    alignItems: "center",
-    backgroundColor: colors.black,
-    borderColor: colors.buttonBorder,
-    borderRadius: 12,
-    borderWidth: 0.5,
-    justifyContent: "center",
-    minHeight: 50,
-    padding: 12,
-    ...shadows.buttonShadow
-  }
-});

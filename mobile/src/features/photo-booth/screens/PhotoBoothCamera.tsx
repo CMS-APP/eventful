@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { Platform, StyleSheet, View } from "react-native";
+import { Platform } from "react-native";
 
 import {
   useFocusEffect,
@@ -10,7 +10,10 @@ import {
 
 import { CameraView } from "expo-camera";
 
-import { colors } from "@/design-system/tokens/colors";
+import {
+  CameraScreenLayout,
+  cameraPreviewStyle
+} from "@/components/camera/CameraScreenLayout";
 import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
 import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
@@ -114,60 +117,45 @@ export function PhotoBoothCamera() {
   }
 
   return (
-    <View
-      style={styles.container}
+    <CameraScreenLayout
       onLayout={() => {
         setIsLayoutReady(true);
       }}
+      preview={
+        isLayoutReady && isFocused && canRenderCamera ? (
+          <CameraView
+            key={`${facing}-${cameraSessionKey}`}
+            ref={cameraRef}
+            facing={facing}
+            flash={flashMode}
+            mirror={facing === "front"}
+            onCameraReady={() => {
+              setIsCameraReady(true);
+            }}
+            style={cameraPreviewStyle}
+          />
+        ) : null
+      }
     >
-      {isLayoutReady && isFocused && canRenderCamera ? (
-        <CameraView
-          key={`${facing}-${cameraSessionKey}`}
-          ref={cameraRef}
-          facing={facing}
-          flash={flashMode}
-          mirror={facing === "front"}
-          onCameraReady={() => {
-            setIsCameraReady(true);
-          }}
-          style={[StyleSheet.absoluteFill, styles.camera]}
+      <CameraHeader
+        show={showCustomiseCollageModal}
+        setShow={setShowCustomiseCollageModal}
+      />
+
+      {isBoothRunning ? (
+        <PhotoBoothTimer
+          ref={photoBoothTimerRef}
+          durationMs={timerDuration * 1000}
+          onComplete={onTimerComplete}
+          prompt={currentPhotoPrompt}
         />
       ) : null}
 
-      <View pointerEvents="box-none" style={styles.overlay}>
-        <CameraHeader
-          show={showCustomiseCollageModal}
-          setShow={setShowCustomiseCollageModal}
-        />
+      <CameraPictureRow />
 
-        {isBoothRunning ? (
-          <PhotoBoothTimer
-            ref={photoBoothTimerRef}
-            durationMs={timerDuration * 1000}
-            onComplete={onTimerComplete}
-            prompt={currentPhotoPrompt}
-          />
-        ) : null}
-
-        <CameraPictureRow />
-
-        <PhotoBoothButtons
-          setShowCustomiseCollageModal={setShowCustomiseCollageModal}
-        />
-      </View>
-    </View>
+      <PhotoBoothButtons
+        setShowCustomiseCollageModal={setShowCustomiseCollageModal}
+      />
+    </CameraScreenLayout>
   );
 }
-
-const styles = StyleSheet.create({
-  camera: {
-    backgroundColor: colors.black
-  },
-  container: {
-    backgroundColor: colors.black,
-    flex: 1
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject
-  }
-});

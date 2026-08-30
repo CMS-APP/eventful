@@ -17,6 +17,21 @@ import { haptics } from "@/utils/haptics";
 
 import { MainTabBarIcon } from "./MainTabBarIcon";
 
+const FULL_SCREEN_ROUTE_NAMES = ["PhotoBooth", "AccountPictureCamera"];
+
+function hasNestedRouteName(
+  routes: NavigationState["routes"] | undefined,
+  names: string[]
+): boolean {
+  if (!routes) return false;
+
+  return routes.some((route) => {
+    if (names.includes(route.name)) return true;
+    const nestedState = route.state as NavigationState | undefined;
+    return hasNestedRouteName(nestedState?.routes, names);
+  });
+}
+
 interface MainTabBarProps {
   state: BottomTabBarProps["state"];
   navigation: BottomTabBarProps["navigation"];
@@ -27,10 +42,9 @@ export function MainTabBar({ state, navigation }: MainTabBarProps) {
   const notifications = useInAppNotificationBadges(userId);
   const safeArea = useSafeAreaStyles().safeArea;
 
-  const isPhotoBoothActive = state.routes.some((route) =>
-    route.state?.routes?.some(
-      (nestedRoute) => nestedRoute.name === "PhotoBooth"
-    )
+  const isFullScreenRouteActive = hasNestedRouteName(
+    state.routes,
+    FULL_SCREEN_ROUTE_NAMES
   );
 
   const modalScreenNames = [
@@ -97,7 +111,7 @@ export function MainTabBar({ state, navigation }: MainTabBarProps) {
     [navigation]
   );
 
-  if (isPhotoBoothActive || hasModalActive) {
+  if (isFullScreenRouteActive || hasModalActive) {
     return null;
   }
 

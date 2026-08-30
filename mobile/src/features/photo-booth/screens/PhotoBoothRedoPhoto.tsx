@@ -1,8 +1,6 @@
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { Platform, StyleSheet, View } from "react-native";
+import { Platform } from "react-native";
 
 import {
   type RouteProp,
@@ -14,9 +12,11 @@ import {
 
 import { CameraView, PhotoResult } from "expo-camera";
 
-import { Text } from "@/design-system/components/text/Text";
-import { colors } from "@/design-system/tokens/colors";
-import { padding } from "@/design-system/tokens/padding";
+import { CameraOverlayHeader } from "@/components/camera/CameraOverlayHeader";
+import {
+  CameraScreenLayout,
+  cameraPreviewStyle
+} from "@/components/camera/CameraScreenLayout";
 import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
 import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
@@ -38,7 +38,6 @@ type RedoPhotoRoute = RouteProp<
 
 export function PhotoBoothRedoPhoto() {
   const navigation = useNavigation<PhotoBoothStackNavigation>();
-  const { top } = useSafeAreaInsets();
   const isFocused = useIsFocused();
 
   const { params } = useRoute<RedoPhotoRoute>();
@@ -110,66 +109,41 @@ export function PhotoBoothRedoPhoto() {
   }
 
   return (
-    <View
-      style={styles.container}
+    <CameraScreenLayout
       onLayout={() => {
         setIsLayoutReady(true);
       }}
+      preview={
+        isLayoutReady && isFocused && canRenderCamera ? (
+          <CameraView
+            key={`${facing}-${cameraSessionKey}`}
+            ref={cameraRef}
+            facing={facing}
+            flash={flashMode}
+            mirror={facing === "front"}
+            onCameraReady={() => {
+              setIsCameraReady(true);
+            }}
+            style={cameraPreviewStyle}
+          />
+        ) : null
+      }
     >
-      {isLayoutReady && isFocused && canRenderCamera ? (
-        <CameraView
-          key={`${facing}-${cameraSessionKey}`}
-          ref={cameraRef}
-          facing={facing}
-          flash={flashMode}
-          mirror={facing === "front"}
-          onCameraReady={() => {
-            setIsCameraReady(true);
-          }}
-          style={StyleSheet.absoluteFill}
+      <CameraOverlayHeader
+        title="Photo Booth"
+        subtitle={`Redo Photo ${index + 1}`}
+        visible={!isBoothRunning}
+      />
+
+      {isBoothRunning ? (
+        <PhotoBoothTimer
+          ref={photoBoothTimerRef}
+          durationMs={timerDuration * 1000}
+          onComplete={onTimerComplete}
         />
       ) : null}
 
-      <View pointerEvents="box-none" style={styles.overlay}>
-        {!isBoothRunning && (
-          <View style={[padding.largeWidget, { top }]}>
-            <View style={styles.headerContent}>
-              <Text type="header" color={colors.white}>
-                Photo Booth
-              </Text>
-              <Text type="subHeader" color={colors.white}>
-                Redo Photo {index + 1}
-              </Text>
-            </View>
-          </View>
-        )}
-
-        {isBoothRunning ? (
-          <PhotoBoothTimer
-            ref={photoBoothTimerRef}
-            durationMs={timerDuration * 1000}
-            onComplete={onTimerComplete}
-          />
-        ) : null}
-
-        <PhotoBoothButtons redo setShowCustomiseCollageModal={() => {}} />
-      </View>
-    </View>
+      <PhotoBoothButtons redo setShowCustomiseCollageModal={() => {}} />
+    </CameraScreenLayout>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  headerContent: {
-    alignItems: "center",
-    backgroundColor: colors.black,
-    borderRadius: 24,
-    opacity: 0.8,
-    padding: 20
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject
-  }
-});

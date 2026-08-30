@@ -1,54 +1,49 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { FontAwesome5 } from "@expo/vector-icons";
-
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { shadows } from "@/design-system/tokens/shadows";
 
-interface PhotoBoothButtonProps {
+interface CameraActionButtonProps {
+  label: string;
   onPress: () => void;
-  icon: keyof typeof FontAwesome5.glyphMap;
-  color: string;
-  textColor: string;
   disabled?: boolean;
 }
 
-export function PhotoBoothButton({
+export function CameraActionButton({
+  label,
   onPress,
-  icon,
-  color,
-  textColor,
   disabled = false
-}: PhotoBoothButtonProps) {
-  const buttonStyle = [
-    styles.buttonContainer,
-    { backgroundColor: color, opacity: disabled ? 0.5 : 1 }
-  ];
-
+}: CameraActionButtonProps) {
   return (
     <TouchableOpacity
       onPress={onPress}
-      hitSlop={getHitSlop("small")}
       disabled={disabled}
+      hitSlop={getHitSlop("small")}
     >
-      <View style={buttonStyle}>
-        <FontAwesome5 name={icon} size={20} color={textColor} />
+      <View style={[styles.button, disabled && styles.disabled]}>
+        <Text type="subHeader" color={colors.white}>
+          {label}
+        </Text>
       </View>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  buttonContainer: {
+  button: {
     alignItems: "center",
+    backgroundColor: colors.black,
     borderColor: colors.buttonBorder,
     borderRadius: 12,
     borderWidth: 0.5,
-    height: 50,
     justifyContent: "center",
+    minHeight: 50,
     padding: 12,
-    width: 60,
     ...shadows.buttonShadow
+  },
+  disabled: {
+    opacity: 0.5
   }
 });
