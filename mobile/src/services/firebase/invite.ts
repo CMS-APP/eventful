@@ -62,6 +62,7 @@ export async function sendInvite(
 
   const createdInvite = await createDocument(invite, API_COLLECTIONS.INVITE);
   const inviteId = createdInvite;
+  invite.id = inviteId;
 
   await createUpdateNotification(
     userId,

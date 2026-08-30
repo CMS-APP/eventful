@@ -1,8 +1,9 @@
 from firebase_admin import initialize_app
-from firebase_functions import https_fn, options
+from firebase_functions import firestore_fn, https_fn, options
 from firebase_functions.options import set_global_options
 from firebase_functions.params import SecretParam
 
+from services.followers import handle_sync_following
 from services.google_places import handle_location_search_request
 
 set_global_options(max_instances=10)
@@ -23,3 +24,15 @@ GOOGLE_PLACES_API_KEY = SecretParam("GOOGLE_PLACES_API_KEY")
 )
 def locationSearch(req: https_fn.Request) -> https_fn.Response:
     return handle_location_search_request(req, GOOGLE_PLACES_API_KEY.value)
+
+
+@firestore_fn.on_document_written(
+    document="followers/{userId}/followers/{followerId}",
+    region="europe-west2",
+)
+def syncFollowing(
+    event: firestore_fn.Event[
+        firestore_fn.Change[firestore_fn.DocumentSnapshot | None]
+    ],
+) -> None:
+    handle_sync_following(event)

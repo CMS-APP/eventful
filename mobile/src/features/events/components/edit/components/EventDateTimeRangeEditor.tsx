@@ -2,16 +2,13 @@ import { Timestamp } from "@react-native-firebase/firestore";
 
 import { useCallback, useMemo, useState } from "react";
 
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-
-import { FontAwesome5 } from "@expo/vector-icons";
+import { StyleSheet, View } from "react-native";
 
 import { Button } from "@/design-system/components/buttons/Button";
 import { SwitchButton } from "@/design-system/components/buttons/SwitchButton";
 import { DateTimeSelector } from "@/design-system/components/inputs/DateTimeSelector";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { Event } from "@/types/Event";
 import { formatDate, formatTime, parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
@@ -138,45 +135,15 @@ export function EventDateTimeRangeEditor({
       <Text type="body" color="white">
         Date
       </Text>
-      <View style={styles.row}>
-        <Button
-          size="small"
-          color={colors.primaryTint3}
-          textColor={colors.white}
-          text={formatDate(startDate)}
-          onPress={handleDatePress}
-          flex={1}
-          leadingIcon="calendar-alt"
-        />
 
-        <Button
-          size="small"
-          color={colors.primaryTint3}
-          textColor={colors.white}
-          text={formatTime(startDate)}
-          onPress={handleTimePress}
-          flex={1}
-          leadingIcon="clock"
-        />
-      </View>
-
-      <View style={styles.column}>
-        <SwitchButton
-          isChecked={multiDate}
-          onChange={handleSwitchChange}
-          title={"Multi-Day Event?"}
-          dark={dark}
-        />
-      </View>
-
-      {multiDate && endDate && (
+      <View style={styles.content}>
         <View style={styles.row}>
           <Button
             size="small"
             color={colors.primaryTint3}
             textColor={colors.white}
-            text={formatDate(endDate)}
-            onPress={handleEndDatePress}
+            text={formatDate(startDate)}
+            onPress={handleDatePress}
             flex={1}
             leadingIcon="calendar-alt"
           />
@@ -185,13 +152,44 @@ export function EventDateTimeRangeEditor({
             size="small"
             color={colors.primaryTint3}
             textColor={colors.white}
-            text={formatTime(endDate)}
-            onPress={handleEndTimePress}
+            text={formatTime(startDate)}
+            onPress={handleTimePress}
             flex={1}
             leadingIcon="clock"
           />
         </View>
-      )}
+
+        <SwitchButton
+          isChecked={multiDate}
+          onChange={handleSwitchChange}
+          title={"Multi-Day Event?"}
+          dark={dark}
+        />
+
+        {multiDate && endDate && (
+          <View style={styles.row}>
+            <Button
+              size="small"
+              color={colors.primaryTint3}
+              textColor={colors.white}
+              text={formatDate(endDate)}
+              onPress={handleEndDatePress}
+              flex={1}
+              leadingIcon="calendar-alt"
+            />
+
+            <Button
+              size="small"
+              color={colors.primaryTint3}
+              textColor={colors.white}
+              text={formatTime(endDate)}
+              onPress={handleEndTimePress}
+              flex={1}
+              leadingIcon="clock"
+            />
+          </View>
+        )}
+      </View>
 
       {!!activePicker && (
         <DateTimeSelector
@@ -212,17 +210,15 @@ export function EventDateTimeRangeEditor({
           <Text type="body" color="white">
             Save Changes
           </Text>
-          <TouchableOpacity
+
+          <Button
+            text="Save Changes"
             onPress={handleSaveChanges}
-            hitSlop={getHitSlop("medium")}
-          >
-            <View style={[styles.itemRow, styles.dateText]}>
-              <FontAwesome5 name="check" size={12} color={colors.white} />
-              <Text type="body" color="white" center>
-                Save Changes
-              </Text>
-            </View>
-          </TouchableOpacity>
+            color={colors.primaryTint}
+            textColor={colors.white}
+            size="small"
+            leadingIcon="check"
+          />
         </View>
       )}
     </View>
@@ -237,6 +233,9 @@ const styles = StyleSheet.create({
   },
   container: {
     gap: 6
+  },
+  content: {
+    gap: 12
   },
   dateText: {
     backgroundColor: colors.primaryTint3,

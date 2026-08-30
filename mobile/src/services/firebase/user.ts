@@ -29,8 +29,11 @@ import { InAppNotification } from "@/types/InAppNotification";
 import { Invite } from "@/types/Invite";
 import { PB_CONFIG, PhotoBoothConfig } from "@/types/PhotoBoothConfig";
 import { PollVote } from "@/types/PollVote";
+import { PostLike } from "@/types/PostLike";
 import { User } from "@/types/User";
 import { log } from "@/utils/logging";
+
+import { deleteUserImageAsnyc } from "./storage";
 
 export function convertTimestampsToMillis(user: User) {
   try {
@@ -139,25 +142,13 @@ async function deleteUserFollowers(userId: string) {
     API_FOLLOWERS_COLLECTIONS.FOLLOWERS
   );
 
-  // Each follower's own following/{followerId}/following/{userId} doc is the
-  // source of truth for their side of the relationship. Deleting this user's
-  // followers subcollection never touches it, so it would otherwise be left
-  // pointing at a deleted account forever — remove it directly here.
   const followersDeletePromises = followersDocs.map((doc: any) =>
-    Promise.all([
-      deleteDocument(
-        API_COLLECTIONS.FOLLOWERS,
-        userId,
-        API_FOLLOWERS_COLLECTIONS.FOLLOWERS,
-        doc.id
-      ),
-      deleteDocument(
-        API_COLLECTIONS.FOLLOWING,
-        doc.id,
-        API_FOLLOWING_COLLECTIONS.FOLLOWING,
-        userId
-      )
-    ])
+    deleteDocument(
+      API_COLLECTIONS.FOLLOWERS,
+      userId,
+      API_FOLLOWERS_COLLECTIONS.FOLLOWERS,
+      doc.id
+    )
   );
 
   await Promise.all(followersDeletePromises);
@@ -202,6 +193,24 @@ async function deleteUserPollVotes(userId: string) {
   }
 }
 
+async function deleteUserPostLikes(userId: string) {
+  try {
+    const postLikes = (await getDocumentsByQuery(
+      [where("userId", "==", userId)],
+      API_COLLECTIONS.POST_LIKES
+    )) as PostLike[];
+
+    const deletePromises = postLikes.map((postLike) =>
+      deleteDocument(API_COLLECTIONS.POST_LIKES, postLike.id)
+    );
+
+    await Promise.all(deletePromises);
+  } catch (error) {
+    log(`Error deleting user post likes: ${error}`, "error");
+    throw error;
+  }
+}
+
 async function deleteUserPhotoBoothConfig(userId: string) {
   try {
     await deleteDocument(API_COLLECTIONS.PHOTO_BOOTH_CONFIG, userId);
@@ -220,7 +229,9 @@ export async function deleteUserData(userId: string): Promise<void> {
       deleteUserFollowers(userId),
       deleteUserNotifications(userId),
       deleteUserPollVotes(userId),
-      deleteUserPhotoBoothConfig(userId)
+      deleteUserPostLikes(userId),
+      deleteUserPhotoBoothConfig(userId),
+      deleteUserImageAsnyc(userId)
     ]);
 
     await removeData("spotifyData");
@@ -567,20 +578,20 @@ export async function getUsersFromFollowing(
   following: Follower[],
   type: string
 ) {
-  try {
-    const users = await Promise.all(
-      following.map(
-        async (follower) =>
-          await getUserInfo(
-            type === "Followers"
-              ? follower.followerId || ""
-              : follower.followingId || ""
-          )
-      )
-    );
-    return users.filter((user: User | null) => user !== null);
-  } catch (error) {
-    log(`Error getting users from following: ${error}`, "error");
-    return [];
-  }
+  const users = await Promise.all(
+    following.map(
+      async (follower) =>
+        await getUserInfo(
+          type === "Followers"
+            ? follower.followerId || ""
+            : follower.followingId || ""
+        )
+    )
+  );
+  return users.filter((user: User | null) => user !== null);
+}
+
+export async function isUserAdmin(userId: string) {
+  const adminData = await getDocument(API_COLLECTIONS.ADMIN, "admin");
+  return adminData?.uids?.includes(userId);
 }

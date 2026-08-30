@@ -50,7 +50,7 @@ export function InviteProfilePictures({ event }: InviteProfilePicturesProps) {
 
         {users.length === 0 && (
           <View style={styles.placeholderContainer}>
-            <FontAwesome5 name="user-plus" size={20} color={colors.white} />
+            <FontAwesome5 name="user-plus" size={14} color={colors.white} />
           </View>
         )}
 

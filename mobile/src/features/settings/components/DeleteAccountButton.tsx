@@ -24,13 +24,20 @@ import {
   getAppleCredentialForReauthentication,
   revokeSignInWithAppleToken
 } from "@/features/settings/utils/apple";
-import { deleteImageAsync } from "@/services/firebase/storage";
 import { deleteUserData } from "@/services/firebase/user";
 import { removeAllData } from "@/services/local/async";
 import { UserState, clearStorage } from "@/store/UserSlice";
+import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { SettingsPasswordModal } from "./SettingsPasswordModal";
+
+type ReauthMethod = "google" | "apple" | "password";
+
+const REAUTH_METHOD_LABEL: Record<"google" | "apple", string> = {
+  google: "Google",
+  apple: "Apple"
+};
 
 export function DeleteAccountButton() {
   const userId = useSelector((state: UserState) => state.uid);
@@ -62,14 +69,7 @@ export function DeleteAccountButton() {
   }, [navigation]);
 
   const finalizeAccountDeletion = useCallback(
-    async (user: FirebaseAuthTypes.User) => {
-      const storageString = `${user.uid}/profilePicture`;
-
-      try {
-        await deleteImageAsync(storageString);
-      } catch {
-        // ignore
-      }
+    async (user: FirebaseAuthTypes.User, appleAuthorizationCode?: string) => {
       await removeAllData();
       await deleteAllUserData();
 
@@ -85,17 +85,20 @@ export function DeleteAccountButton() {
         Platform.OS === "ios" &&
         user.providerData?.some(
           (provider) => provider.providerId === "apple.com"
-        )
+        ) &&
+        appleAuthorizationCode
       ) {
         try {
-          await revokeSignInWithAppleToken();
-        } catch {
-          // ignore
+          await revokeSignInWithAppleToken(appleAuthorizationCode);
+        } catch (error) {
+          log(
+            `Error revoking Apple token (continuing anyway): ${error}`,
+            "warn"
+          );
         }
       }
 
       await deleteUser(user);
-
       dispatch(clearStorage());
       signOutNavigation();
 
@@ -107,54 +110,46 @@ export function DeleteAccountButton() {
     [deleteAllUserData, dispatch, signOutNavigation]
   );
 
-  const deleteAccountWithGoogle = useCallback(async () => {
-    try {
-      setDeleting(true);
-      const auth = getAuth();
-      const user = auth.currentUser;
-      if (!user) {
-        return;
-      }
+  const reauthAndDelete = useCallback(
+    async (method: "google" | "apple") => {
+      try {
+        setDeleting(true);
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (!user) {
+          return;
+        }
 
-      await GoogleSignin.hasPlayServices();
-      const signInResult = await GoogleSignin.signIn();
-      const idToken = signInResult.data?.idToken;
-      if (!idToken) {
-        throw new Error("No ID token found");
+        if (method === "google") {
+          await GoogleSignin.hasPlayServices();
+          const signInResult = await GoogleSignin.signIn();
+          const idToken = signInResult.data?.idToken;
+          if (!idToken) {
+            throw new Error("No ID token found");
+          }
+          await reauthenticateWithCredential(
+            user,
+            GoogleAuthProvider.credential(idToken)
+          );
+          await finalizeAccountDeletion(user);
+        } else {
+          const { identityToken, nonce, authorizationCode } =
+            await getAppleCredentialForReauthentication();
+          await reauthenticateWithCredential(
+            user,
+            AppleAuthProvider.credential(identityToken, nonce)
+          );
+          await finalizeAccountDeletion(user, authorizationCode ?? undefined);
+        }
+      } catch (error) {
+        log(`Error Deleting Account (${method}): ${error}`, "error");
+        showErrorToast("Error Deleting Account");
+      } finally {
+        setDeleting(false);
       }
-      const googleCredential = GoogleAuthProvider.credential(idToken);
-      await reauthenticateWithCredential(user, googleCredential);
-      await finalizeAccountDeletion(user);
-    } catch {
-      showErrorToast("Error Deleting Account");
-    } finally {
-      setDeleting(false);
-    }
-  }, [finalizeAccountDeletion]);
-
-  const deleteAccountWithApple = useCallback(async () => {
-    try {
-      setDeleting(true);
-      const auth = getAuth();
-      const user = auth.currentUser;
-      if (!user) {
-        return;
-      }
-
-      const { identityToken, nonce } =
-        await getAppleCredentialForReauthentication();
-      const appleCredential = AppleAuthProvider.credential(
-        identityToken,
-        nonce
-      );
-      await reauthenticateWithCredential(user, appleCredential);
-      await finalizeAccountDeletion(user);
-    } catch {
-      showErrorToast("Error Deleting Account");
-    } finally {
-      setDeleting(false);
-    }
-  }, [finalizeAccountDeletion]);
+    },
+    [finalizeAccountDeletion]
+  );
 
   const handleDeleteAccount = useCallback(() => {
     const auth = getAuth();
@@ -167,40 +162,36 @@ export function DeleteAccountButton() {
       (provider) => provider.providerId
     );
 
-    if (providerIds.includes("password")) {
+    const method: ReauthMethod | null = providerIds.includes("google.com")
+      ? "google"
+      : Platform.OS === "ios" && providerIds.includes("apple.com")
+        ? "apple"
+        : providerIds.includes("password")
+          ? "password"
+          : null;
+
+    if (!method) {
+      Alert.alert(
+        "Unable to delete account",
+        "We could not determine how you signed in. Please contact support for help."
+      );
+      return;
+    }
+
+    if (method === "password") {
       setPresentPasswordModal(true);
       return;
     }
 
-    if (providerIds.includes("google.com")) {
-      Alert.alert(
-        "Delete account",
-        "You will need to sign in with Google again to confirm deletion.",
-        [
-          { text: "Cancel", style: "cancel" },
-          { text: "Continue", onPress: () => void deleteAccountWithGoogle() }
-        ]
-      );
-      return;
-    }
-
-    if (Platform.OS === "ios" && providerIds.includes("apple.com")) {
-      Alert.alert(
-        "Delete account",
-        "You will need to sign in with Apple again to confirm deletion.",
-        [
-          { text: "Cancel", style: "cancel" },
-          { text: "Continue", onPress: () => void deleteAccountWithApple() }
-        ]
-      );
-      return;
-    }
-
     Alert.alert(
-      "Unable to delete account",
-      "We could not determine how you signed in. Please contact support for help."
+      "Delete account",
+      `You will need to sign in with ${REAUTH_METHOD_LABEL[method]} again to confirm deletion.`,
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Continue", onPress: () => void reauthAndDelete(method) }
+      ]
     );
-  }, [deleteAccountWithApple, deleteAccountWithGoogle]);
+  }, [reauthAndDelete]);
 
   const deleteAccount = useCallback(async () => {
     try {
@@ -224,6 +215,7 @@ export function DeleteAccountButton() {
       ) {
         Alert.alert("Error", "Incorrect password, please try again.");
       } else {
+        log(`Error Deleting Account (password): ${error}`, "error");
         showErrorToast("Error Deleting Account");
       }
     } finally {

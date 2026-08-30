@@ -191,3 +191,45 @@ export type AllStackParamList =
   | MainStackParamList
   | OnboardingStackParamList
   | PhotoBoothStackParamList;
+
+export interface NestedResetStep {
+  name: string;
+  params?: object;
+  fallback?: string;
+}
+
+function buildRoute(steps: NestedResetStep[], index: number): any {
+  if (index >= steps.length) {
+    return undefined;
+  }
+
+  const step = steps[index];
+  const nextRoute = buildRoute(steps, index + 1);
+
+  const state = nextRoute
+    ? step.fallback
+      ? { index: 1, routes: [{ name: step.fallback }, nextRoute] }
+      : { index: 0, routes: [nextRoute] }
+    : undefined;
+
+  return {
+    name: step.name,
+    ...(step.params ? { params: step.params } : {}),
+    ...(state ? { state } : {})
+  };
+}
+
+export function buildNestedResetState(
+  steps: NestedResetStep[],
+  options?: { background?: string }
+) {
+  const chainRoute = buildRoute(steps, 0);
+  const routes = options?.background
+    ? [{ name: options.background }, chainRoute]
+    : [chainRoute];
+
+  return {
+    index: routes.length - 1,
+    routes
+  };
+}

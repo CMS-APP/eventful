@@ -25,6 +25,7 @@ export function AccountScreen() {
   const userId = useSelector((state: UserState) => state.uid);
   const name = useSelector((state: UserState) => state.name);
   const username = useSelector((state: UserState) => state.username);
+  const email = useSelector((state: UserState) => state.email);
   const photoBooth = useSelector((state: UserState) => state.photoBooth);
   const premium = useSelector((state: UserState) => state.premium);
   const navigation =
@@ -145,6 +146,10 @@ export function AccountScreen() {
             </Text>
             <Text type="body" color={colors.gray}>
               Username: {username}
+            </Text>
+
+            <Text type="body" color={colors.gray}>
+              Email: {email}
             </Text>
           </View>
         </View>

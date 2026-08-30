@@ -13,7 +13,7 @@ export const padding = StyleSheet.create({
   },
   smallWidget: {
     alignItems: "center",
-    borderRadius: 12,
+    borderRadius: 6,
     padding: 6
   }
 });

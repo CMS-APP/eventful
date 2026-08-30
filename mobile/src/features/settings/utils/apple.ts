@@ -4,20 +4,19 @@ import auth from "@react-native-firebase/auth";
 
 import { Platform } from "react-native";
 
-export async function revokeSignInWithAppleToken() {
-  if (Platform.OS !== "ios") {
-    throw new Error("Apple Sign In is not available on this platform");
+import { log } from "@/utils/logging";
+
+export async function revokeSignInWithAppleToken(authorizationCode: string) {
+  try {
+    if (Platform.OS !== "ios") {
+      throw new Error("Apple Sign In is not available on this platform");
+    }
+
+    await auth().revokeToken(authorizationCode);
+  } catch (error) {
+    log(`Error revoking Apple token: ${error}`, "error");
+    throw error;
   }
-
-  const { authorizationCode } = await appleAuth.performRequest({
-    requestedOperation: appleAuth.Operation.REFRESH
-  });
-
-  if (!authorizationCode) {
-    throw new Error("Apple Revocation failed - no authorizationCode returned");
-  }
-
-  return auth().revokeToken(authorizationCode);
 }
 
 export async function getAppleCredentialForReauthentication() {
@@ -36,6 +35,7 @@ export async function getAppleCredentialForReauthentication() {
 
   return {
     identityToken: response.identityToken,
-    nonce: response.nonce
+    nonce: response.nonce,
+    authorizationCode: response.authorizationCode
   };
 }

@@ -63,6 +63,8 @@ export function PostItem({ post }: { post: Post }) {
   }
 
   useEffect(() => {
+    if (!currentUserId) return;
+
     fetchAuthor();
     loadLikeData();
     // eslint-disable-next-line react-hooks/exhaustive-deps

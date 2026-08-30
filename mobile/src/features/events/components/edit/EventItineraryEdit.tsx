@@ -113,7 +113,6 @@ export function EventItineraryEdit({
       {!editEventDateTime && (
         <>
           <ItineraryQuickAdd onQuickAdd={handleQuickAdd} />
-
           <ItineraryList
             event={event}
             itinerary={itinerary}
@@ -122,13 +121,14 @@ export function EventItineraryEdit({
 
           <View style={styles.buttonContainer}>
             <Button
-              text="Add Item"
+              text="Add Activity"
               onPress={handleAddActivity}
               color={colors.primaryTint}
               textColor={colors.white}
               flex={undefined}
               leadingIcon="plus"
               loading={false}
+              size="small"
             />
           </View>
         </>

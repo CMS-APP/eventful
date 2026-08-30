@@ -113,7 +113,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
         "Email Not Verified",
         "Your email has not been verified. Would you like us to send you a verification email?",
         [
-          { text: "No", style: "destructive" },
+          { text: "No" },
           {
             text: "Send Link",
             onPress: () => {

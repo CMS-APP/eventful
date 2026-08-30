@@ -67,3 +67,16 @@ export async function deleteImageAsync(storageString: string) {
   const storageRef = ref(FIREBASE_STORAGE, storageString + ".jpg");
   await deleteObject(storageRef);
 }
+
+export async function deleteUserImageAsnyc(userId: string) {
+  try {
+    await deleteImageAsync(`${userId}/profilePicture`);
+  } catch (error) {
+    if ((error as any).code === "storage/object-not-found") {
+      log(`User image "${userId}" does not exist`, "warn");
+      return;
+    }
+    log(`Error deleting user image "${userId}": ${error}`, "error");
+    throw error;
+  }
+}

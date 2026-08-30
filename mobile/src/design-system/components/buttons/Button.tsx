@@ -53,7 +53,7 @@ interface ButtonProps {
   textColor: string;
   size?: buttonSizes;
   onPress: () => void;
-  flex?: number;
+  flex?: number | null;
   leadingIcon?: keyof typeof FontAwesome5.glyphMap;
   disabled?: boolean;
   loading?: boolean;
@@ -75,7 +75,12 @@ export function Button({
     haptics.soft();
   };
 
-  const flexContainer = flex ? styles.flexContainer : undefined;
+  const containerStyle =
+    flex === null
+      ? styles.compactContainer
+      : flex
+        ? [styles.container, styles.flexContainer]
+        : styles.container;
   const buttonStyle = buttonStyles[size];
   const iconSize = iconSizes[size];
   const textStyle = buttonTextStyles[size];
@@ -85,7 +90,7 @@ export function Button({
     <TouchableOpacity
       onPress={handlePress}
       disabled={disabled}
-      style={[styles.container, flexContainer]}
+      style={containerStyle}
       activeOpacity={0.5}
       hitSlop={getHitSlop("large")}
     >
@@ -120,6 +125,10 @@ const styles = StyleSheet.create({
     gap: 8,
     justifyContent: "center",
     padding: 16
+  },
+  compactContainer: {
+    alignItems: "center",
+    alignSelf: "flex-start"
   },
   container: {
     alignItems: "center",

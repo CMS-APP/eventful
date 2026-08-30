@@ -19,6 +19,8 @@ import { User } from "@/types/User";
 import { log } from "@/utils/logging";
 import { generateUUID } from "@/utils/uuid";
 
+import { isUserAdmin } from "./user";
+
 export async function createPostInDatabase(
   postTitle: string,
   postDescription: string,
@@ -26,10 +28,7 @@ export async function createPostInDatabase(
   user: Partial<User>
 ) {
   const postId = generateUUID();
-  const adminData = await getDocument(API_COLLECTIONS.ADMIN, "admin");
-  const isUserAdmin = adminData?.uids?.includes(user.uid);
-
-  if (!isUserAdmin) {
+  if (!(await isUserAdmin(user.uid || ""))) {
     throw new Error("User is not admin");
   }
 
@@ -202,30 +201,20 @@ export async function togglePostLike(postId: string, userId: string) {
 }
 
 export async function getPostLikesCount(postId: string): Promise<number> {
-  try {
-    const likes = await getDocumentsByQuery(
-      [where("postId", "==", postId)],
-      API_COLLECTIONS.POST_LIKES
-    );
-    return likes.length;
-  } catch (error) {
-    log(`Error getting post likes count: ${error}`, "error");
-    return 0;
-  }
+  const likes = await getDocumentsByQuery(
+    [where("postId", "==", postId)],
+    API_COLLECTIONS.POST_LIKES
+  );
+  return likes.length;
 }
 
 export async function hasUserLikedPost(
   postId: string,
   userId: string
 ): Promise<boolean> {
-  try {
-    const likes = await getDocumentsByQuery(
-      [where("postId", "==", postId), where("userId", "==", userId)],
-      API_COLLECTIONS.POST_LIKES
-    );
-    return likes.length > 0;
-  } catch (error) {
-    log(`Error checking if user liked post: ${error}`, "error");
-    return false;
-  }
+  const likes = await getDocumentsByQuery(
+    [where("postId", "==", postId), where("userId", "==", userId)],
+    API_COLLECTIONS.POST_LIKES
+  );
+  return likes.length > 0;
 }

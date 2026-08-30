@@ -21,7 +21,7 @@ import { log } from "@/utils/logging";
 import { generateUUID } from "@/utils/uuid";
 
 import { getPhotosDataLocally } from "./localPhotos";
-import { convertEventTitleToHash } from "./utils";
+import { convertEventTitleToHash, getPhotoIdSplit } from "./utils";
 
 async function getCloudPhotos(userId: string) {
   try {
@@ -128,8 +128,27 @@ export async function downloadCloudPhoto(photo: GalleryPhoto, userId: string) {
   await AsyncStorage.setItem("photosData", JSON.stringify(photoData));
 }
 
+async function findStorageIdForPhoto(photo: GalleryPhoto, userId: string) {
+  const matches = await getDocumentsByQuery(
+    [
+      where("userId", "==", userId),
+      where("eventTitle", "==", photo.eventTitle),
+      where("photoId", "==", getPhotoIdSplit(photo))
+    ],
+    API_COLLECTIONS.PHOTO_BOOTH_PHOTOS
+  );
+
+  return matches[0]?.id;
+}
+
 export async function deletePhotoCloud(photo: GalleryPhoto, userId: string) {
-  const storageId = photo.storageId ?? photo.photoId.split("/")[0];
+  const storageId =
+    photo.storageId ?? (await findStorageIdForPhoto(photo, userId));
+
+  if (!storageId) {
+    return;
+  }
+
   const eventTitleHash = await convertEventTitleToHash(photo.eventTitle);
   const storagePath = `gallery/${userId}/${eventTitleHash}/${storageId}.jpg`;
 
@@ -182,5 +201,25 @@ export async function uploadPhotosToCloud(
     };
   });
 
-  return await Promise.all(uploadPromises);
+  const results = await Promise.all(uploadPromises);
+
+  const resultsByPhotoId = new Map(
+    results.map((result) => [result.photoId, result])
+  );
+  const photoData = await getPhotosDataLocally();
+  const updatedPhotoData = photoData.map((localPhoto: GalleryPhoto) => {
+    const result = resultsByPhotoId.get(getPhotoIdSplit(localPhoto));
+    return result
+      ? {
+          ...localPhoto,
+          storageId: result.storageId,
+          url: result.url,
+          width: result.width,
+          height: result.height
+        }
+      : localPhoto;
+  });
+  await AsyncStorage.setItem("photosData", JSON.stringify(updatedPhotoData));
+
+  return results;
 }

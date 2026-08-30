@@ -1,10 +1,10 @@
 import { ActivityIndicator } from "react-native-paper";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useFocusEffect } from "@react-navigation/native";
 
 import { ProfileStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
@@ -16,6 +16,8 @@ import {
   getUsersFromFollowing
 } from "@/services/firebase/user";
 import { User } from "@/types/User";
+import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 import { ProfileButton } from "../components/ProfileButton";
 
@@ -29,22 +31,30 @@ export function ProfileFollowersScreen({ route }: ProfileFollowersScreenProps) {
   const [loading, setLoading] = useState(true);
 
   const getUsers = useCallback(async () => {
-    setLoading(true);
-    let users: User[] = [];
-    if (type === "Followers") {
-      const followers = await getUserFollowers(user.uid);
-      users = await getUsersFromFollowing(followers, type);
-    } else if (type === "Following") {
-      const following = await getUserFollowing(user.uid);
-      users = await getUsersFromFollowing(following, type);
+    try {
+      setLoading(true);
+      let users: User[] = [];
+      if (type === "Followers") {
+        const followers = await getUserFollowers(user.uid);
+        users = await getUsersFromFollowing(followers, type);
+      } else if (type === "Following") {
+        const following = await getUserFollowing(user.uid);
+        users = await getUsersFromFollowing(following, type);
+      }
+      setUsers(users);
+    } catch (error) {
+      log("Error getting users: " + error, "error");
+      showErrorToast("Error getting users");
+    } finally {
+      setLoading(false);
     }
-    setUsers(users);
-    setLoading(false);
   }, [user.uid, type]);
 
-  useEffect(() => {
-    getUsers();
-  }, [getUsers]);
+  useFocusEffect(
+    useCallback(() => {
+      getUsers();
+    }, [getUsers])
+  );
 
   return (
     <Screen

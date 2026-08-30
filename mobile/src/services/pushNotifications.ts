@@ -117,13 +117,13 @@ async function schedulePushNotification(
 export async function sendFollowNotification(user: User, sender: User) {
   const data = {
     screen: "ContactView",
-    params: { user: user, type: "contact" }
+    params: { user: sender.uid, type: "contact" }
   };
 
   await schedulePushNotification(
     user,
     `${sender.name} (${sender.username}) followed you!`,
-    "Open the app to see their profile",
+    "Open the app to follow them back",
     data
   );
 }
@@ -140,7 +140,7 @@ export async function sendInviteNotification(
     `${host.name} (${host.username}) invited you to a new event`,
     {
       screen: "EventInvite",
-      params: { event, invite, host }
+      params: { event, invite, host: host.uid }
     }
   );
 }

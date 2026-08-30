@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Event } from "@/types/Event";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
+import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 import {
   addPlaylistToEvent,
@@ -30,8 +32,19 @@ export function useSpotifyPlaylists({
   }, [event.playlists]);
 
   const getPlaylists = useCallback(async (accessToken: string) => {
-    const playlistData = await fetchSpotifyPlaylists(accessToken);
-    setPlaylists(playlistData);
+    try {
+      const playlistData = await fetchSpotifyPlaylists(accessToken);
+      setPlaylists(playlistData);
+    } catch (error) {
+      log("Error Loading Playlists: " + error, "error");
+      if ((error as { status?: number })?.status === 403) {
+        showErrorToast(
+          "A Spotify Premium account is required for this feature"
+        );
+      } else {
+        showErrorToast("Error Loading Playlists");
+      }
+    }
   }, []);
 
   const addPlaylist = useCallback(

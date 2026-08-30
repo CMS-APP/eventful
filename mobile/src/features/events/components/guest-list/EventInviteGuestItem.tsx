@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AccountStackParamList } from "@/app/navigation";
+import { Button } from "@/design-system/components/buttons/Button";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
@@ -143,13 +144,15 @@ export function EventInviteGuestItem({
               {user.username}
             </Text>
           </View>
-          <TouchableOpacity onPress={inviteUser} hitSlop={getHitSlop("medium")}>
-            <View style={[padding.smallWidget, styles.inviteButton]}>
-              <Text type="body" color="white">
-                {alreadyInvited ? "Remove" : "Invite"}
-              </Text>
-            </View>
-          </TouchableOpacity>
+
+          <Button
+            text={alreadyInvited ? "Remove" : "Invite"}
+            onPress={inviteUser}
+            color={colors.primary}
+            textColor={colors.white}
+            size="small"
+            flex={null}
+          />
         </View>
       </View>
     </TouchableOpacity>
@@ -160,9 +163,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.lightGray,
     width: "100%"
-  },
-  inviteButton: {
-    backgroundColor: colors.primary
   },
   userInfo: {
     flex: 1

@@ -1,8 +1,10 @@
 import { useSelector } from "react-redux";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { Alert, View } from "react-native";
+
+import { useFocusEffect } from "@react-navigation/native";
 
 import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
@@ -16,6 +18,8 @@ import { UserState } from "@/store/UserSlice";
 import { Follower } from "@/types/Follower";
 import { User } from "@/types/User";
 import { haptics } from "@/utils/haptics";
+import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 interface FollowButtonProps {
   user: User;
@@ -55,8 +59,13 @@ export function FollowButton({ user, flex = undefined }: FollowButtonProps) {
       setFollowing(
         following.filter((follow) => follow.followingId !== user.uid)
       );
+      const isFollowingMe = following.some(
+        (follow) => follow.followingId === userId && follow.status === "active"
+      );
+      setContactText(isFollowingMe ? "Follow Back" : "Follow");
     } catch {
-      // ignore
+      log("Failed to unfollow user", "error");
+      showErrorToast("Failed to unfollow user");
     }
   }, [userId, user.uid, following]);
 
@@ -83,9 +92,11 @@ export function FollowButton({ user, flex = undefined }: FollowButtonProps) {
     getContactText(followers, following);
   }, [user.uid, getContactText]);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [fetchData])
+  );
 
   const handlePress = useCallback(async () => {
     if (contactText === "Follow" || contactText === "Follow Back") {
