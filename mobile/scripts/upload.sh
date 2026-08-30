@@ -1,6 +1,6 @@
 echo "Building Eventful App"
 
-source "$(dirname "$0")/deploy-utils.sh"
+source "$(dirname "$0")/utils.sh"
 
 env_var() {
   grep -E "^$1=" .env 2>/dev/null | tail -n1 | cut -d '=' -f2-
