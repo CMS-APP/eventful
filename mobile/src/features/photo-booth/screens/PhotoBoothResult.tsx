@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 8,
     marginHorizontal: 24,
-    marginTop: 24,
+    marginVertical: 12,
     paddingVertical: 16
   },
   resultsButtonsContainer: {
