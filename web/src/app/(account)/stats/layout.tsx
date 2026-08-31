@@ -1,7 +1,7 @@
 import AccountAuthGuard from "@/components/AccountAuthGuard";
 
 export default function StatsLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {

@@ -1,32 +1,35 @@
 "use client";
 
-import { checkAdmin } from "@/app/account/database/utils";
-import Loading from "@/components/Loading";
-import UnauthorizedAccess from "@/components/UnauthorizedAccess";
-import { useUser } from "@/contexts/UserContext";
 import {
   faArrowLeft,
   faChartColumn,
   faChartLine,
   faLaptop,
   faMapMarkerAlt,
-  faMobileScreen,
+  faMobileScreen
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
+
 import { useEffect, useMemo, useRef, useState } from "react";
+
+import { checkAdmin } from "@/app/account/database/utils";
+import Loading from "@/components/Loading";
+import UnauthorizedAccess from "@/components/UnauthorizedAccess";
+import { useUser } from "@/contexts/UserContext";
+
 import {
-  getActiveUserStatsHistory,
-  getUsersForDeviceStats,
   type ActiveUserStatsPoint,
   type UserDeviceStatsRow,
+  getActiveUserStatsHistory,
+  getUsersForDeviceStats
 } from "../database/utils";
 import "./users.css";
 
 const ACTIVE_USER_METRICS = [
   { key: "dau", label: "Daily active users" },
   { key: "wau", label: "Weekly active users" },
-  { key: "mau", label: "Monthly active users" },
+  { key: "mau", label: "Monthly active users" }
 ] as const;
 
 type ActiveUserMetric = (typeof ACTIVE_USER_METRICS)[number]["key"];
@@ -36,13 +39,13 @@ function formatShortDate(dateStr: string): string {
   return date.toLocaleDateString(undefined, {
     month: "short",
     day: "numeric",
-    timeZone: "UTC",
+    timeZone: "UTC"
   });
 }
 
 function ActiveUsersChart({
   history,
-  metric,
+  metric
 }: {
   history: ActiveUserStatsPoint[];
   metric: ActiveUserMetric;
@@ -97,7 +100,7 @@ function ActiveUsersChart({
 
   const gridLines = [0, 0.5, 1];
   const labelIndexes = Array.from(
-    new Set([0, Math.floor((history.length - 1) / 2), history.length - 1]),
+    new Set([0, Math.floor((history.length - 1) / 2), history.length - 1])
   );
 
   return (
@@ -156,7 +159,11 @@ function ActiveUsersChart({
             x={points[index].x}
             y={height - 6}
             textAnchor={
-              i === 0 ? "start" : i === labelIndexes.length - 1 ? "end" : "middle"
+              i === 0
+                ? "start"
+                : i === labelIndexes.length - 1
+                  ? "end"
+                  : "middle"
             }
             className="user-activity-axis-label user-activity-axis-label-x"
           >
@@ -170,7 +177,7 @@ function ActiveUsersChart({
 
 function aggregateBy(
   rows: UserDeviceStatsRow[],
-  field: keyof UserDeviceStatsRow,
+  field: keyof UserDeviceStatsRow
 ): { value: string; count: number }[] {
   const map = new Map<string, number>();
   for (const row of rows) {
@@ -232,7 +239,7 @@ export default function UserStatsPage() {
       try {
         const [list, history] = await Promise.all([
           getUsersForDeviceStats(),
-          getActiveUserStatsHistory(),
+          getActiveUserStatsHistory()
         ]);
         setRows(list);
         setActiveUserHistory(history);
@@ -249,7 +256,7 @@ export default function UserStatsPage() {
     const total = rows.length;
     const byPlatform = aggregateBy(rows, "platform");
     const byAppVersion = aggregateBy(rows, "appVersion").sort((a, b) =>
-      compareVersionsDescending(a.value, b.value),
+      compareVersionsDescending(a.value, b.value)
     );
     const byRegion = aggregateBy(rows, "region");
     const byDeviceModel = aggregateBy(rows, "deviceModel");
@@ -259,7 +266,7 @@ export default function UserStatsPage() {
       byPlatform,
       byAppVersion,
       byRegion,
-      byDeviceModel,
+      byDeviceModel
     };
   }, [rows]);
 
