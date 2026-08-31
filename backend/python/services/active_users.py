@@ -26,12 +26,7 @@ def snapshot_active_users() -> None:
             mau += 1
 
     date = now.strftime("%Y-%m-%d")
+    snapshot = {"date": date, "dau": dau, "wau": wau, "mau": mau}
     db.collection("activeUserStats").document(date).set(
-        {
-            "date": date,
-            "dau": dau,
-            "wau": wau,
-            "mau": mau,
-            "createdAt": firestore.SERVER_TIMESTAMP,
-        }
+        {**snapshot, "createdAt": firestore.SERVER_TIMESTAMP}
     )
