@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { Platform } from "react-native";
+import { AppState, Platform } from "react-native";
 
 import {
   type RouteProp,
@@ -67,6 +67,16 @@ export function PhotoBoothRedoPhoto() {
     if (!isBoothRunning) return;
     photoBoothTimerRef.current?.start();
   }, [isBoothRunning]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (nextAppState !== "background" || !isBoothRunning) return;
+      photoBoothTimerRef.current?.stop();
+      setIsBoothRunning(false);
+    });
+
+    return () => subscription.remove();
+  }, [isBoothRunning, setIsBoothRunning]);
 
   useEffect(() => {
     setIsCameraReady(false);

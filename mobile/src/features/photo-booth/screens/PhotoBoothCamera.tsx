@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { Platform } from "react-native";
+import { AppState, Platform } from "react-native";
 
 import {
   useFocusEffect,
@@ -64,6 +64,17 @@ export function PhotoBoothCamera() {
     if (!isBoothRunning) return;
     photoBoothTimerRef.current?.start();
   }, [isBoothRunning]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (nextAppState !== "background" || !isBoothRunning) return;
+      photoBoothTimerRef.current?.stop();
+      setIsBoothRunning(false);
+      setPhotos([]);
+    });
+
+    return () => subscription.remove();
+  }, [isBoothRunning, setIsBoothRunning, setPhotos]);
 
   useEffect(() => {
     if (!isBoothRunning || !photoPromptsEnabled) return;
