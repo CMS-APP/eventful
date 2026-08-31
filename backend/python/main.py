@@ -1,8 +1,9 @@
 from firebase_admin import initialize_app
-from firebase_functions import firestore_fn, https_fn, options
+from firebase_functions import firestore_fn, https_fn, options, scheduler_fn
 from firebase_functions.options import set_global_options
 from firebase_functions.params import SecretParam
 
+from services.active_users import snapshot_active_users
 from services.followers import handle_sync_following
 from services.google_places import handle_location_search_request
 
@@ -36,3 +37,8 @@ def syncFollowing(
     ],
 ) -> None:
     handle_sync_following(event)
+
+
+@scheduler_fn.on_schedule(schedule="every 24 hours")
+def snapshotActiveUsers(event: scheduler_fn.ScheduledEvent) -> None:
+    snapshot_active_users()

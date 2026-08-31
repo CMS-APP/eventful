@@ -1,4 +1,9 @@
-function createDeleteOldPhotosHandler({ admin, db, storage, getStoragePathFromUrl }) {
+function createDeleteOldPhotosHandler({
+  admin,
+  db,
+  storage,
+  getStoragePathFromUrl
+}) {
   return async () => {
     const now = admin.firestore.Timestamp.now();
     const cutoff = new Date(now.toDate().getTime() - 30 * 24 * 60 * 60 * 1000);
