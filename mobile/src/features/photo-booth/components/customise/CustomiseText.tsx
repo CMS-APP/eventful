@@ -29,10 +29,7 @@ export function CustomiseText() {
     setCustomSubTitleFontSize
   } = usePhotoBoothSettings();
 
-  const fontSizes = [
-    10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46,
-    48, 50
-  ];
+  const fontSizes = [10, 11, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48];
 
   const [isFontPickerVisible, setIsFontPickerVisible] = useState(false);
   const [selectedFont, setSelectedFont] = useState<string | null>(null);
