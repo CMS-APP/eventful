@@ -1,5 +1,7 @@
 {
   "eslint.workingDirectories": ["mobile", "web", "backend/node"],
+  "typescript.tsdk": "web/node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
@@ -48,5 +50,6 @@
     "mobile/android": true,
     "web/.next/": true,
     "web/next-env.d.ts": true
-  }
+  },
+  "js/ts.tsdk.path": "web/node_modules/typescript/lib"
 }
