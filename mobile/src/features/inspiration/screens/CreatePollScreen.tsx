@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -16,6 +16,7 @@ import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
 import { createPollInDatabase } from "@/services/firebase/inspiration";
+import { showOptionsAlert } from "@/utils/alertModal";
 
 interface CreatePollScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;
@@ -38,7 +39,7 @@ export function CreatePollScreen({ navigation }: CreatePollScreenProps) {
       return;
     }
 
-    Alert.alert("Are you sure?", "This will replace your current poll", [
+    showOptionsAlert("Are you sure?", "This will replace your current poll", [
       {
         text: "Cancel",
         style: "cancel"

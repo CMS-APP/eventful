@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 
-import { Alert, StatusBar, StyleSheet, View } from "react-native";
+import { StatusBar, StyleSheet, View } from "react-native";
 
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -13,6 +13,7 @@ import { AllStackParamList, navigationRef } from "@/app/navigation";
 import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
 import { handleSignOut } from "@/services/firebase/auth";
+import { showOptionsAlert } from "@/utils/alertModal";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
@@ -35,7 +36,7 @@ export function AccountButtons() {
   }
 
   function signOutAlert() {
-    Alert.alert("Sign Out", "Are you sure you want to sign out?", [
+    showOptionsAlert("Sign Out", "Are you sure you want to sign out?", [
       {
         text: "Yes",
         style: "destructive",

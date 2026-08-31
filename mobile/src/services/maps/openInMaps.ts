@@ -1,5 +1,6 @@
-import { Alert, Linking, Platform } from "react-native";
+import { Linking, Platform } from "react-native";
 
+import { showOptionsAlert } from "@/utils/alertModal";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
@@ -37,7 +38,7 @@ export async function openInMaps(address: string) {
       return;
     }
 
-    Alert.alert("Open Directions", "Choose an app", [
+    showOptionsAlert("Open Directions", "Choose an app", [
       {
         text: "Apple Maps",
         onPress: () => openOrShowError(() => openAppleMaps(address))

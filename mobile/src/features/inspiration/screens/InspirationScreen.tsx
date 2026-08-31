@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 
 import { useCallback, useEffect, useState } from "react";
 
-import { Alert, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -13,6 +13,7 @@ import { IconButton } from "@/design-system/components/buttons/IconButton";
 import { colors } from "@/design-system/tokens/colors";
 import { isUserAdmin } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
+import { showOptionsAlert } from "@/utils/alertModal";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
@@ -43,7 +44,7 @@ export function InspirationScreen() {
     useNavigation<StackNavigationProp<InspirationStackParamList>>();
 
   function newItemAction() {
-    Alert.alert("New Item", "Select the type of item you want to create", [
+    showOptionsAlert("New Item", "Select the type of item you want to create", [
       {
         text: "Poll",
         onPress: () => {

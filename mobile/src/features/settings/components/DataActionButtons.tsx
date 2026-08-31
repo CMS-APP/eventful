@@ -9,6 +9,7 @@ import { colors } from "@/design-system/tokens/colors";
 import { updateUserInfo } from "@/services/firebase/user";
 import { clearCache as clearImageCache } from "@/services/local/cache";
 import { UserState, clearSpotifyData } from "@/store/UserSlice";
+import { showOptionsAlert } from "@/utils/alertModal";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
@@ -33,7 +34,7 @@ export function DataActionButtons() {
   }, []);
 
   const clearCacheAlert = useCallback(() => {
-    Alert.alert(
+    showOptionsAlert(
       "Clear Cache",
       "Are you sure? This will remove all cached images and cached data.",
       [
@@ -67,7 +68,7 @@ export function DataActionButtons() {
   }, [dispatch, userId]);
 
   const resetSpotifyDataAlert = useCallback(() => {
-    Alert.alert(
+    showOptionsAlert(
       "Reset Spotify Data",
       "This will remove all your Spotify authentication data from the app. Are you sure?",
       [

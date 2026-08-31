@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 
 import {
-  Alert,
   NativeScrollEvent,
   NativeSyntheticEvent,
   StyleSheet,
@@ -30,6 +29,7 @@ import {
 import { deleteEventInvitesFromDatabase } from "@/services/firebase/invite";
 import { createNotificationsForEvents } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
+import { showOptionsAlert } from "@/utils/alertModal";
 import { formatDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
 import { log } from "@/utils/logging";
@@ -81,21 +81,25 @@ export function EventEditScreen({ navigation, route }: EventEditScreenProps) {
   }
 
   function deleteEventAlert() {
-    Alert.alert("Delete Event", "Are you sure you want to delete this event?", [
-      {
-        text: "Cancel",
-        style: "cancel"
-      },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: () => {
-          deleteEvent();
-          navigation.goBack();
-          haptics.error();
+    showOptionsAlert(
+      "Delete Event",
+      "Are you sure you want to delete this event?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            deleteEvent();
+            navigation.goBack();
+            haptics.error();
+          }
         }
-      }
-    ]);
+      ]
+    );
   }
 
   if (!event) {

@@ -27,6 +27,7 @@ import {
 import { deleteUserData } from "@/services/firebase/user";
 import { removeAllData } from "@/services/local/async";
 import { UserState, clearStorage } from "@/store/UserSlice";
+import { showOptionsAlert } from "@/utils/alertModal";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
@@ -183,7 +184,7 @@ export function DeleteAccountButton() {
       return;
     }
 
-    Alert.alert(
+    showOptionsAlert(
       "Delete account",
       `You will need to sign in with ${REAUTH_METHOD_LABEL[method]} again to confirm deletion.`,
       [

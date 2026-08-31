@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 
 import { useCallback, useState } from "react";
 
-import { Alert, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -16,6 +16,7 @@ import { colors } from "@/design-system/tokens/colors";
 import { createPostInDatabase } from "@/services/firebase/inspiration";
 import { UserState } from "@/store/UserSlice";
 import { Photo } from "@/types/Photo";
+import { showOptionsAlert } from "@/utils/alertModal";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
@@ -55,7 +56,7 @@ export function CreatePostScreen({ navigation }: CreatePostScreenProps) {
       return;
     }
 
-    Alert.alert("Are you sure?", "This will be visible to all users", [
+    showOptionsAlert("Are you sure?", "This will be visible to all users", [
       {
         text: "Cancel",
         style: "cancel"

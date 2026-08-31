@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 
 import { useCallback, useState } from "react";
 
-import { Alert, View } from "react-native";
+import { View } from "react-native";
 
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -17,6 +17,7 @@ import {
 import { UserState } from "@/store/UserSlice";
 import { Follower } from "@/types/Follower";
 import { User } from "@/types/User";
+import { showOptionsAlert } from "@/utils/alertModal";
 import { haptics } from "@/utils/haptics";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
@@ -71,7 +72,7 @@ export function FollowButton({ user, flex = undefined }: FollowButtonProps) {
 
   const unFollowUserAlert = useCallback(async () => {
     haptics.error();
-    Alert.alert(
+    showOptionsAlert(
       "Unfollow User",
       "Are you sure you want to unfollow this user?",
       [

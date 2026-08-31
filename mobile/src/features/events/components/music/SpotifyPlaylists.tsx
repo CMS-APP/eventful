@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 
 import { useCallback, useEffect, useState } from "react";
 
-import { Alert, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import {
   ILoadingModalContext,
@@ -13,6 +13,7 @@ import { colors } from "@/design-system/tokens/colors";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
+import { showOptionsAlert } from "@/utils/alertModal";
 import { haptics } from "@/utils/haptics";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
@@ -72,7 +73,7 @@ export function SpotifyPlaylists({ event, setEvent }: SpotifyPlaylistsProps) {
 
   const addedPlaylistPressAlert = useCallback(
     (playlist: SpotifyPlaylist) => {
-      Alert.alert(
+      showOptionsAlert(
         "Spotify Playlist",
         `Would you like to remove or view the playlist: ${playlist.name}?`,
         [
@@ -97,7 +98,7 @@ export function SpotifyPlaylists({ event, setEvent }: SpotifyPlaylistsProps) {
 
   const playlistPressAlert = useCallback(
     (playlist: SpotifyPlaylist) => {
-      Alert.alert(
+      showOptionsAlert(
         "Spotify Playlist",
         `Would you like to add or view the playlist: ${playlist.name}?`,
         [

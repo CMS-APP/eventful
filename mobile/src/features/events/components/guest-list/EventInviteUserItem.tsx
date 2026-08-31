@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { Alert, Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -12,6 +12,10 @@ import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
+import type {
+  DeleteGuestManual,
+  SetResponseManual
+} from "@/features/events/components/guest-list/EventInvitesRSVPUserList";
 import { updateEventInDatabase } from "@/services/firebase/event";
 import {
   checkInvitedToEvent,
@@ -24,7 +28,7 @@ import { AlertOptions } from "@/types/AlertOptions";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
-import { UserInvite } from "@/types/UserInvite";
+import { showOptionsAlert } from "@/utils/alertModal";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
@@ -33,8 +37,8 @@ interface EventInviteUserItemProps {
   invite: Invite;
   event: Event;
   refreshUsers: () => void;
-  deleteGuestManual: (user: UserInvite) => void;
-  setResponseManual: (user: UserInvite, response: string) => void;
+  deleteGuestManual: DeleteGuestManual;
+  setResponseManual: SetResponseManual;
 }
 
 export function EventInviteUserItem({
@@ -95,7 +99,7 @@ export function EventInviteUserItem({
     } else if (invite.type === "link") {
       await deleteEventLinkResponse(invite.id);
     } else if (invite.type === "manual") {
-      deleteGuestManual({ user, invite });
+      await deleteGuestManual({ user, invite });
     }
 
     if (refreshUsers) {
@@ -108,7 +112,7 @@ export function EventInviteUserItem({
       if (invite.type === "link") {
         await updateEventLinkResponse(invite.id, response);
       } else if (invite.type === "manual") {
-        setResponseManual({ user, invite }, response);
+        await setResponseManual({ user, invite }, response);
       }
       if (refreshUsers) {
         refreshUsers();
@@ -119,7 +123,7 @@ export function EventInviteUserItem({
 
   const onEllipsisPress = useCallback(() => {
     if (appUser) {
-      Alert.alert(
+      showOptionsAlert(
         "Remove User",
         "Are you sure you want to remove this user from the event?",
         [
@@ -132,8 +136,7 @@ export function EventInviteUserItem({
             text: "Cancel",
             style: "cancel"
           }
-        ],
-        { cancelable: true }
+        ]
       );
     } else {
       const allResponses = ["accept", "maybe", "decline"];
@@ -163,9 +166,7 @@ export function EventInviteUserItem({
         onPress: deleteGuest
       });
 
-      Alert.alert("User Options", "Select an option", allOptions, {
-        cancelable: true
-      });
+      showOptionsAlert("User Options", "Select an option", allOptions);
     }
   }, [appUser, invite.response, moveToResponse, deleteGuest]);
 

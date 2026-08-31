@@ -225,8 +225,8 @@ export function EventInviteGuestLinkScreen({
                     event={event}
                     refreshUsers={refreshLinks}
                     invite={user.invite}
-                    deleteGuestManual={() => {}}
-                    setResponseManual={() => {}}
+                    deleteGuestManual={async () => {}}
+                    setResponseManual={async () => {}}
                   />
                 );
               })}

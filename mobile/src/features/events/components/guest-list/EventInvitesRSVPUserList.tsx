@@ -5,6 +5,7 @@ import { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { colors } from "@/design-system/tokens/colors";
+import { updateEventInDatabase } from "@/services/firebase/event";
 import { Event } from "@/types/Event";
 import { UserInvite } from "@/types/UserInvite";
 
@@ -18,6 +19,12 @@ interface EventInvitesRSVPUserListProps {
   fetchData: () => void;
 }
 
+export type SetResponseManual = (
+  user: UserInvite,
+  response: string
+) => Promise<void>;
+export type DeleteGuestManual = (user: UserInvite) => Promise<void>;
+
 export function EventInvitesRSVPUserList({
   event,
   setEvent,
@@ -26,24 +33,24 @@ export function EventInvitesRSVPUserList({
   fetchData
 }: EventInvitesRSVPUserListProps) {
   const setResponseManual = useCallback(
-    (user: UserInvite, response: string) => {
-      const guestList = event.guestList || [];
-      const guest = guestList.find((guest) => guest.id === user.user.uid);
-      if (guest) {
-        guest.response = response;
-      }
-      setEvent({ ...event, guestList: guestList });
+    async (user: UserInvite, response: string) => {
+      const guestList = (event.guestList || []).map((guest) =>
+        guest.id === user.user.uid ? { ...guest, response } : guest
+      );
+      const updatedEvent = { ...event, guestList };
+      setEvent(updatedEvent);
+      await updateEventInDatabase({ id: event.id, guestList });
     },
     [event, setEvent]
   );
 
   const deleteGuestManual = useCallback(
-    (user: UserInvite) => {
-      const guestList = event.guestList || [];
-      const newGuestList = guestList.filter(
+    async (user: UserInvite) => {
+      const guestList = (event.guestList || []).filter(
         (guest) => guest.id !== user.user.uid
       );
-      setEvent({ ...event, guestList: newGuestList });
+      setEvent({ ...event, guestList });
+      await updateEventInDatabase({ id: event.id, guestList });
     },
     [event, setEvent]
   );

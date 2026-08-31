@@ -21,6 +21,7 @@ import { HeaderArcs } from "@/features/auth/components/HeaderArcs";
 import { formStyles } from "@/features/auth/styles/formStyles";
 import { handleSignIn } from "@/services/firebase/auth";
 import { sendVerificationEmail } from "@/services/firebase/backend";
+import { showOptionsAlert } from "@/utils/alertModal";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
@@ -108,11 +109,11 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
 
   const emailVerificationAlert = useCallback(
     (user: any) => {
-      Alert.alert(
+      showOptionsAlert(
         "Email Not Verified",
         "Your email has not been verified. Would you like us to send you a verification email?",
         [
-          { text: "No" },
+          { text: "No", style: "cancel" },
           {
             text: "Send Link",
             onPress: () => {

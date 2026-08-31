@@ -6,6 +6,7 @@ import React from "react";
 
 import { StyleSheet } from "react-native";
 
+import { AlertModalProvider } from "@/app/context/alertModal/AlertModalProvider";
 import { ErrorBoundary } from "@/app/context/error/ErrorBoundary";
 import { BootProvider } from "@/app/context/loading/BootProvider";
 import { LoadingModalProvider } from "@/app/context/loading/LoadingModalProvider";
@@ -19,15 +20,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       <SafeAreaProvider>
         <Provider store={userStore}>
           <ToastProvider>
-            <LoadingModalProvider>
-              <PaymentProvider>
-                <BootProvider>
-                  <GestureHandlerRootView style={styles.gestureHandlerRootView}>
-                    {children}
-                  </GestureHandlerRootView>
-                </BootProvider>
-              </PaymentProvider>
-            </LoadingModalProvider>
+            <AlertModalProvider>
+              <LoadingModalProvider>
+                <PaymentProvider>
+                  <BootProvider>
+                    <GestureHandlerRootView
+                      style={styles.gestureHandlerRootView}
+                    >
+                      {children}
+                    </GestureHandlerRootView>
+                  </BootProvider>
+                </PaymentProvider>
+              </LoadingModalProvider>
+            </AlertModalProvider>
           </ToastProvider>
         </Provider>
       </SafeAreaProvider>

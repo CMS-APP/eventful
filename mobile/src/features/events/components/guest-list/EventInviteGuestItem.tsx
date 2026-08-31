@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 
 import { useCallback, useEffect, useState } from "react";
 
-import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -24,6 +24,7 @@ import { deleteUpdateNotification } from "@/services/firebase/notifications";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { User } from "@/types/User";
+import { showOptionsAlert } from "@/utils/alertModal";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
@@ -68,7 +69,7 @@ export function EventInviteGuestItem({
   }, [event, guestId, inviteId, userId, refreshInvites]);
 
   const removeUserAlert = useCallback(() => {
-    Alert.alert(
+    showOptionsAlert(
       "Remove User",
       "Are you sure you want to remove this user from the event?",
       [
@@ -81,8 +82,7 @@ export function EventInviteGuestItem({
           style: "destructive",
           onPress: removeUserFromEvent
         }
-      ],
-      { cancelable: true }
+      ]
     );
   }, [removeUserFromEvent]);
 

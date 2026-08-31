@@ -20,6 +20,7 @@ import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
+import { showOptionsAlert } from "@/utils/alertModal";
 import { formatDate, formatTime, parseDatabaseDate } from "@/utils/date";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
@@ -89,7 +90,7 @@ export function InviteEventCard({
   }, [host?.uid, host?.name, host?.username, user, event]);
 
   const inviteToEventAlert = useCallback(() => {
-    Alert.alert(
+    showOptionsAlert(
       "Invite to event",
       `Are you sure you want to invite ${user?.name} to this event?`,
       [

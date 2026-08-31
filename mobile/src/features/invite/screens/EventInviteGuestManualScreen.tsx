@@ -46,7 +46,7 @@ export function EventInviteGuestManualScreen({
   const userId = useSelector((state: UserState) => state.uid);
 
   const setResponse = useCallback(
-    (user: UserInvite, response: string) => {
+    async (user: UserInvite, response: string) => {
       const newGuestList = [...guestList];
       const index = newGuestList.findIndex(
         (guest) => guest.id === user.user.uid
@@ -74,7 +74,7 @@ export function EventInviteGuestManualScreen({
   );
 
   const deleteGuest = useCallback(
-    (user: UserInvite) => {
+    async (user: UserInvite) => {
       const newGuestList = [...guestList];
       const index = newGuestList.findIndex(
         (guest: Guest) => guest.id === user.user.uid

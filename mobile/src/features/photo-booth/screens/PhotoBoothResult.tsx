@@ -2,7 +2,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { type RefObject, useMemo, useRef, useState } from "react";
 
-import { Alert, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 
@@ -16,6 +16,7 @@ import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
+import { showOptionsAlert } from "@/utils/alertModal";
 
 import { PhotoBoothColumnCollage } from "../components/result/PhotoBoothColumnCollage";
 import { PhotoBoothGridCollage } from "../components/result/PhotoBoothGridCollage";
@@ -50,13 +51,17 @@ export function PhotoBoothResult() {
   }
 
   function handlePhotoPress(index: number) {
-    Alert.alert("Redo Photo", `Would you like to redo photo ${index + 1}?`, [
-      {
-        text: "Yes",
-        onPress: () => navigation.navigate("PhotoBoothRedoPhoto", { index })
-      },
-      { text: "No", style: "cancel" }
-    ]);
+    showOptionsAlert(
+      "Redo Photo",
+      `Would you like to redo photo ${index + 1}?`,
+      [
+        {
+          text: "Yes",
+          onPress: () => navigation.navigate("PhotoBoothRedoPhoto", { index })
+        },
+        { text: "No", style: "cancel" }
+      ]
+    );
   }
 
   return (

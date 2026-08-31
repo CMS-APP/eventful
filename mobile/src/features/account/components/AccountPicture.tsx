@@ -34,6 +34,7 @@ import {
 } from "@/services/local/cache";
 import { UserState, setProfilePictureHash } from "@/store/UserSlice";
 import { User } from "@/types/User";
+import { showOptionsAlert } from "@/utils/alertModal";
 import { haptics } from "@/utils/haptics";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
@@ -154,19 +155,19 @@ export function AccountPicture() {
   }, [permission, navigation, requestPermission]);
 
   const buttonPress = useCallback(() => {
-    Alert.alert(
+    showOptionsAlert(
       "Profile Picture",
       "Would you like to use your camera or photo library?",
       [
         { text: "Camera", onPress: cameraAlertButton },
         { text: "Photo Library", onPress: requestPermissions },
-        { text: "Cancel", style: "destructive" }
+        { text: "Cancel", style: "cancel" }
       ]
     );
   }, [cameraAlertButton, requestPermissions]);
 
   const photoAlert = useCallback(() => {
-    Alert.alert(
+    showOptionsAlert(
       "Profile Picture",
       "Would you like to edit or remove your picture?",
       [

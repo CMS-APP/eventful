@@ -2,7 +2,7 @@ import { deleteField } from "@react-native-firebase/firestore";
 
 import { useCallback } from "react";
 
-import { Alert, Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
@@ -12,6 +12,7 @@ import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
 import { updateUserInfo } from "@/services/firebase/user";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
+import { showOptionsAlert } from "@/utils/alertModal";
 import { haptics } from "@/utils/haptics";
 
 import { useSpotifyAuth } from "./functions/useSpotifyAuth";
@@ -56,17 +57,21 @@ export function SpotifySignInButton({
 
   const signOutOfSpotifyAlert = useCallback(() => {
     haptics.soft();
-    Alert.alert("Sign Out", "Are you sure you want to sign out of Spotify?", [
-      {
-        text: "Cancel",
-        style: "cancel"
-      },
-      {
-        text: "Sign Out",
-        style: "destructive",
-        onPress: signOutOfSpotify
-      }
-    ]);
+    showOptionsAlert(
+      "Sign Out",
+      "Are you sure you want to sign out of Spotify?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "Sign Out",
+          style: "destructive",
+          onPress: signOutOfSpotify
+        }
+      ]
+    );
   }, [signOutOfSpotify]);
 
   return (

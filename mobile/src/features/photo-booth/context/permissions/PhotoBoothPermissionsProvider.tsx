@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { useCallback } from "react";
 
-import { Alert, Linking } from "react-native";
+import { Linking } from "react-native";
 
 import {
   PermissionResponse,
@@ -12,6 +12,7 @@ import * as MediaLibrary from "expo-media-library";
 
 import { PhotoBoothPermissionsContext } from "@/features/photo-booth/context/permissions/PhotoBoothPermissionsContext";
 import type { PhotoBoothPermissionsContextValue } from "@/features/photo-booth/context/permissions/PhotoBoothPermissionsContext";
+import { showOptionsAlert } from "@/utils/alertModal";
 
 const defaultCameraPermission = {
   status: PermissionStatus.UNDETERMINED,
@@ -59,7 +60,7 @@ export function PhotoBoothPermissionsProvider({
   }, [cameraPermission, photoLibraryPermission]);
 
   const photoBoothPermissionAlert = useCallback(() => {
-    Alert.alert(
+    showOptionsAlert(
       "Photo Booth Permissions",
       "We need your permission to use your camera and photo library",
       [

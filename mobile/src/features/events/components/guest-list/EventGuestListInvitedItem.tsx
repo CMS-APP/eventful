@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { Alert, Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -16,6 +16,7 @@ import { syncUserPicture } from "@/services/local/cache";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
+import { showOptionsAlert } from "@/utils/alertModal";
 import { haptics } from "@/utils/haptics";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
@@ -78,26 +79,21 @@ export function EventGuestListInvitedItem({
   }, [invite, user, event]);
 
   const onPressAlert = useCallback(() => {
-    Alert.alert(
-      "Guest Options",
-      "What would you like to do?",
-      [
-        {
-          text: "Cancel",
-          style: "cancel"
-        },
-        {
-          text: "View Profile",
-          onPress: viewProfile
-        },
-        {
-          text: "Remove",
-          style: "destructive",
-          onPress: removeUserFromEvent
-        }
-      ],
-      { cancelable: true }
-    );
+    showOptionsAlert("Guest Options", "What would you like to do?", [
+      {
+        text: "Cancel",
+        style: "cancel"
+      },
+      {
+        text: "View Profile",
+        onPress: viewProfile
+      },
+      {
+        text: "Remove",
+        style: "destructive",
+        onPress: removeUserFromEvent
+      }
+    ]);
   }, [viewProfile, removeUserFromEvent]);
 
   const responseColor = useCallback(() => {

@@ -21,6 +21,7 @@ import {
   sharePhoto
 } from "@/services/photo-booth/localPhotos";
 import { UserState } from "@/store/UserSlice";
+import { showOptionsAlert } from "@/utils/alertModal";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
@@ -80,14 +81,18 @@ export function PhotoBoothPhoto() {
   }, [navigation, userId, photo]);
 
   const deletePhotoAlert = useCallback(() => {
-    Alert.alert("Delete Photo", "Are you sure you want to delete this photo?", [
-      { text: "Cancel", style: "cancel" },
-      { text: "Delete", style: "destructive", onPress: handleDelete }
-    ]);
+    showOptionsAlert(
+      "Delete Photo",
+      "Are you sure you want to delete this photo?",
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Delete", style: "destructive", onPress: handleDelete }
+      ]
+    );
   }, [handleDelete]);
 
   const handlePhotoPress = useCallback(() => {
-    Alert.alert("Photo Booth Photo", "Choose an action", [
+    showOptionsAlert("Photo Booth Photo", "Choose an action", [
       {
         text: "Share",
         onPress: handleShare
