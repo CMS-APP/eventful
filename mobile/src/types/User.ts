@@ -1,4 +1,4 @@
-import { Timestamp } from "@react-native-firebase/firestore";
+import { FieldValue, Timestamp } from "@react-native-firebase/firestore";
 
 export interface User {
   uid: string;
@@ -23,6 +23,7 @@ export interface User {
   region?: string;
   locale?: string;
   databaseUpdate?: string;
+  lastLaunchedAt?: Timestamp | FieldValue;
   profilePictureHash?: string;
   spotifyData?: {
     spotifyAccessToken: string;

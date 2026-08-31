@@ -1,4 +1,5 @@
 import { reload, signOut } from "@react-native-firebase/auth";
+import { serverTimestamp } from "@react-native-firebase/firestore";
 import { Dispatch } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 
@@ -92,7 +93,10 @@ export async function dataInit(dispatch: Dispatch, nextStep?: () => void) {
 
   nextStep?.();
   const deviceInfo = getDeviceInfo();
-  await updateUserInfo(user.uid, deviceInfo);
+  await updateUserInfo(user.uid, {
+    ...deviceInfo,
+    lastLaunchedAt: serverTimestamp()
+  });
   const finalDataWithDeviceInfo: User = {
     ...finalData,
     ...(deviceInfo as Partial<User>)

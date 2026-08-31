@@ -82,11 +82,6 @@ export function PhotoBoothRedoPhoto() {
     setIsCameraReady(false);
   }, [facing, isFocused, setIsCameraReady]);
 
-  // On Android the native camera view can size itself against a stale
-  // parent layout right after a screen transition, filling only part of
-  // the screen. Remounting it once the container's real layout has
-  // settled forces it to re-measure correctly. See PhotoBoothCamera.tsx
-  // for the same workaround.
   useEffect(() => {
     if (!isLayoutReady || !isFocused) return;
     if (Platform.OS !== "android") return;
