@@ -8,7 +8,6 @@ import {
   faCalendarAlt,
   faCheck,
   faCommentDots,
-  faCreditCard,
   faPhotoFilm,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
@@ -99,6 +98,21 @@ export default function Stats() {
             <p className="stats-subtitle">Platform stats and overview</p>
           </div>
 
+          <div className="stats-grid stats-grid-full">
+            <Link
+              href="/stats/feedback"
+              className="stat-card stat-card-feedback stat-card-link"
+            >
+              <div className="stat-icon-wrapper">
+                <FontAwesomeIcon icon={faCommentDots} className="stat-icon" />
+              </div>
+              <div className="stat-content">
+                <h2 className="stat-label">App Feedback</h2>
+                <p className="stat-value stat-value-link">View all</p>
+              </div>
+            </Link>
+          </div>
+
           <div className="stats-grid">
             <Link
               href="/stats/users"
@@ -110,10 +124,6 @@ export default function Stats() {
               <div className="stat-content">
                 <h2 className="stat-label">Total Users</h2>
                 <p className="stat-value">{totalUser.toLocaleString()}</p>
-                <p className="stat-description">
-                  Registered users on the platform — click for version & device
-                  stats
-                </p>
               </div>
             </Link>
 
@@ -124,7 +134,6 @@ export default function Stats() {
               <div className="stat-content">
                 <h2 className="stat-label">Total Events</h2>
                 <p className="stat-value">{totalEvent.toLocaleString()}</p>
-                <p className="stat-description">Events created by users</p>
               </div>
             </div>
           </div>
@@ -139,9 +148,6 @@ export default function Stats() {
                 <p className="stat-value">
                   {totalEventResponses.toLocaleString()}
                 </p>
-                <p className="stat-description">
-                  Number of responses to events
-                </p>
               </div>
             </div>
 
@@ -154,41 +160,8 @@ export default function Stats() {
                 <p className="stat-value">
                   {totalPhotoBoothConfigs.toLocaleString()}
                 </p>
-                <p className="stat-description">Number of photo booth users</p>
               </div>
             </div>
-          </div>
-
-          <div className="stats-grid">
-            <Link
-              href="/stats/feedback"
-              className="stat-card stat-card-feedback stat-card-link"
-            >
-              <div className="stat-icon-wrapper">
-                <FontAwesomeIcon icon={faCommentDots} className="stat-icon" />
-              </div>
-              <div className="stat-content">
-                <h2 className="stat-label">App Feedback</h2>
-                <p className="stat-value stat-value-link">View all</p>
-                <p className="stat-description">User feedback about the app</p>
-              </div>
-            </Link>
-
-            <Link
-              href="/stats/subscribers"
-              className="stat-card stat-card-link"
-            >
-              <div className="stat-icon-wrapper">
-                <FontAwesomeIcon icon={faCreditCard} className="stat-icon" />
-              </div>
-              <div className="stat-content">
-                <h2 className="stat-label">Subscribers</h2>
-                <p className="stat-value stat-value-link">View all</p>
-                <p className="stat-description">
-                  Users with active or past subscriptions
-                </p>
-              </div>
-            </Link>
           </div>
         </div>
     </main>
