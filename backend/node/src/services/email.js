@@ -89,6 +89,14 @@ export async function sendFeedbackEmailMailJet(
         Email: "help@eventfulapp.com",
         Name: "Eventful Support",
       },
+      {
+        Email: "christopher.sharp@hotmail.co.uk",
+        Name: "Chris Sharp",
+      },
+      {
+        Email: "harrietrparsons@hotmail.com",
+        Name: "Harriet Parsons",
+      },
     ],
     "Subject": "New Feedback Received",
     "Html-part": feedbackEmailTemplate(feedbackData),
