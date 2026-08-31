@@ -6,6 +6,7 @@ const BASE_URL = "https://api.eventfulapp.com";
 
 const ENDPOINTS = {
   sendVerificationEmail: `${BASE_URL}/sendVerificationEmail`,
+  forgotPassword: `${BASE_URL}/forgotPassword`,
   incrementUserCount: `${BASE_URL}/incrementUserCount`,
   incrementEventCount: `${BASE_URL}/incrementEventCount`,
   userSearch: `${BASE_URL}/searchUsers`,
@@ -38,6 +39,14 @@ export async function sendVerificationEmail(user: FirebaseAuthTypes.User) {
   return await post(
     ENDPOINTS.sendVerificationEmail,
     { email: user.email },
+    { throwOnError: false }
+  );
+}
+
+export async function forgotPassword(email: string) {
+  return await post(
+    ENDPOINTS.forgotPassword,
+    { email },
     { throwOnError: false }
   );
 }

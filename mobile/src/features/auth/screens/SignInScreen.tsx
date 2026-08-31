@@ -67,10 +67,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
   };
 
   const handleForgotPassword = () => {
-    navigation.navigate("ForgotPassword", {
-      title: "Forgot Password",
-      uri: "https://app.eventfulapp.com/forgot-password-headerless"
-    });
+    navigation.navigate("ForgotPassword");
   };
 
   const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {

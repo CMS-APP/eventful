@@ -66,7 +66,7 @@ export type AccountStackParamList = {
 export type AuthStackParamList = {
   SignIn: { email?: string; password?: string };
   SignUp: undefined;
-  ForgotPassword: { title: string; uri: string };
+  ForgotPassword: undefined;
   Welcome: undefined;
 };
 

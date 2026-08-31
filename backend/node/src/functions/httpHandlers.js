@@ -5,6 +5,7 @@ const {
   sendVerificationEmailMailJet,
   sendForgotPasswordEmailMailJet
 } = require("../services/email");
+const { buildAuthActionLink } = require("../utils/authActionLinks");
 
 function createRespondToEventHandler({ admin, db, RECAPTCHA_SECRET }) {
   return async (request, response) => {
@@ -206,9 +207,16 @@ function createSendVerificationEmailHandler({ admin, MJ_API_KEY, MJ_SECRET }) {
 
         let link;
         try {
-          link = await admin.auth().generateEmailVerificationLink(email, {
-            url: "https://app.eventfulapp.com/verify-email"
-          });
+          const adminLink = await admin
+            .auth()
+            .generateEmailVerificationLink(email, {
+              url: "https://app.eventfulapp.com/verify-email"
+            });
+          link = buildAuthActionLink(
+            "https://app.eventfulapp.com/verify-email",
+            "verifyEmail",
+            adminLink
+          );
         } catch (err) {
           if (
             err.code === "auth/too-many-requests" ||
@@ -252,31 +260,53 @@ function createForgotPasswordHandler({
     try {
       const { email, recaptchaToken } = request.body;
 
-      if (!email || !recaptchaToken) {
+      if (!email) {
         response.status(400).send("Missing required fields");
         return;
       }
 
-      const secretKey = RECAPTCHA_SECRET.value();
-      const recaptchaResponse = await fetch(
-        "https://www.google.com/recaptcha/api/siteverify",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: `secret=${secretKey}&response=${recaptchaToken}`
-        }
-      ).then((res) => res.json());
+      const appCheckToken = request.header("X-Firebase-AppCheck");
 
-      if (!recaptchaResponse.success || recaptchaResponse.score < 0.5) {
-        response.status(403).send("reCAPTCHA validation failed");
-        return;
+      if (appCheckToken) {
+        try {
+          await admin.appCheck().verifyToken(appCheckToken);
+        } catch (error) {
+          console.error("App Check verification failed:", error);
+          response.status(401).send("Unauthorized");
+          return;
+        }
+      } else {
+        if (!recaptchaToken) {
+          response.status(400).send("Missing required fields");
+          return;
+        }
+
+        const secretKey = RECAPTCHA_SECRET.value();
+        const recaptchaResponse = await fetch(
+          "https://www.google.com/recaptcha/api/siteverify",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `secret=${secretKey}&response=${recaptchaToken}`
+          }
+        ).then((res) => res.json());
+
+        if (!recaptchaResponse.success || recaptchaResponse.score < 0.5) {
+          response.status(403).send("reCAPTCHA validation failed");
+          return;
+        }
       }
 
       const user = await admin.auth().getUserByEmail(email);
       if (user) {
-        const link = await admin.auth().generatePasswordResetLink(email, {
-          url: "https://app.eventfulapp.com/"
+        const adminLink = await admin.auth().generatePasswordResetLink(email, {
+          url: "https://app.eventfulapp.com/reset-password"
         });
+        const link = buildAuthActionLink(
+          "https://app.eventfulapp.com/reset-password",
+          "resetPassword",
+          adminLink
+        );
 
         await sendForgotPasswordEmailMailJet(
           MJ_API_KEY,
@@ -364,11 +394,16 @@ function createSignUpHandler({ admin, MJ_API_KEY, MJ_SECRET }) {
         result.data && result.data.email ? result.data.email : email;
 
       try {
-        const link = await admin
+        const adminLink = await admin
           .auth()
           .generateEmailVerificationLink(createdEmail, {
             url: "https://app.eventfulapp.com/verify-email"
           });
+        const link = buildAuthActionLink(
+          "https://app.eventfulapp.com/verify-email",
+          "verifyEmail",
+          adminLink
+        );
         await sendVerificationEmailMailJet(
           MJ_API_KEY,
           MJ_SECRET,
