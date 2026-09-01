@@ -15,6 +15,10 @@ import { appDatabaseUpdate } from "@/app/init/migration";
 import { storeInit } from "@/app/init/store";
 import { navigationRef } from "@/app/navigation";
 import {
+  initAnalytics,
+  setAnalyticsUserId
+} from "@/services/analytics/analytics";
+import {
   cleanupOrphanedData,
   getUserInfo,
   updateUserInfo
@@ -27,6 +31,8 @@ import { notificationsInit } from "./notifications";
 import { checkIfUpdateRequired } from "./version";
 
 export async function dataInit(dispatch: Dispatch, nextStep?: () => void) {
+  await initAnalytics();
+
   nextStep?.();
   const needsUpdate = await checkIfUpdateRequired();
   if (needsUpdate) {
@@ -109,6 +115,7 @@ export async function dataInit(dispatch: Dispatch, nextStep?: () => void) {
     .lastLaunchedAt;
 
   setUserInSentry(finalDataWithDeviceInfo);
+  setAnalyticsUserId(user.uid);
   dispatch(setUserData(finalDataWithDeviceInfo));
 
   return "Main";

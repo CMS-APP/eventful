@@ -11,6 +11,7 @@ import { AppStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
+import { trackPhotoBoothPhotoShared } from "@/services/analytics/events";
 import {
   deletePhotoCloud,
   downloadCloudPhoto,
@@ -62,6 +63,7 @@ export function PhotoBoothPhoto() {
       Alert.alert("Share", "No image is available to share.");
       return;
     }
+    trackPhotoBoothPhotoShared();
     void sharePhoto(source);
   }, [photo]);
 

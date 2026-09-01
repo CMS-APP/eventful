@@ -8,6 +8,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { colors } from "@/design-system/tokens/colors";
+import { trackEventUpdated } from "@/services/analytics/events";
 import { getEventInfo, updateEventInDatabase } from "@/services/firebase/event";
 import { updateEventLinkInDatabase } from "@/services/firebase/invite";
 import { updateNotificationsForEvent } from "@/services/pushNotifications";
@@ -75,6 +76,7 @@ export function EventSectionScreen({
       }
 
       await updateEventInDatabase(event);
+      trackEventUpdated();
       setOriginalEvent(event);
 
       if (event.eventLinkEnabled) {

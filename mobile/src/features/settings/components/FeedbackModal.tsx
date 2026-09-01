@@ -9,6 +9,7 @@ import { Input } from "@/design-system/components/inputs/Input";
 import { ModalView } from "@/design-system/components/overlays/ModalView";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { trackFeedbackSubmitted } from "@/services/analytics/events";
 import { sendFeedbackToDatabase } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { User } from "@/types/User";
@@ -42,6 +43,7 @@ export function FeedbackModal({
       title,
       inputText
     );
+    trackFeedbackSubmitted(title);
     setPresentModal(false);
     setInputText("");
 

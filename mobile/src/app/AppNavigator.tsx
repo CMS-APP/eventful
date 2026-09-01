@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -10,6 +10,7 @@ import { ErrorFallback } from "@/app/context/error/ErrorFallback";
 import { useBackButtonHandler } from "@/app/hooks/useBackButtonHandler";
 import { useDataInit } from "@/app/init/data";
 import { AppStackParamList, navigationRef } from "@/app/navigation";
+import { trackScreen } from "@/services/analytics/analytics";
 
 import { AuthNavigator } from "../features/auth/AuthNavigator";
 import { EventInviteNavigator } from "../features/invite/EventInviteNavigator";
@@ -35,6 +36,7 @@ const modalOptions: NativeStackNavigationOptions = {
 
 export function AppNavigator() {
   const { initialize, bootError } = useDataInit();
+  const routeNameRef = useRef<string | undefined>(undefined);
 
   useBackButtonHandler();
 
@@ -43,7 +45,17 @@ export function AppNavigator() {
   }
 
   return (
-    <NavigationContainer ref={navigationRef} onReady={initialize}>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={initialize}
+      onStateChange={() => {
+        const next = navigationRef.getCurrentRoute()?.name;
+        if (next && next !== routeNameRef.current) {
+          routeNameRef.current = next;
+          trackScreen(next);
+        }
+      }}
+    >
       <Stack.Navigator screenOptions={stackOptions}>
         <Stack.Screen name="LoadingScreen" component={LoadingScreen} />
         <Stack.Screen name="Auth" component={AuthNavigator} />

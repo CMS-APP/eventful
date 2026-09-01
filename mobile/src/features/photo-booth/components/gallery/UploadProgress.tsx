@@ -11,6 +11,7 @@ import { AppStackParamList } from "@/app/navigation";
 import { Button } from "@/design-system/components/buttons/Button";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { trackPhotoBoothPhotosUploaded } from "@/services/analytics/events";
 import {
   downloadCloudPhotos,
   uploadPhotosToCloud
@@ -79,6 +80,7 @@ export function UploadProgress({
     try {
       setUploading(true);
       await uploadPhotosToCloud(userId, event.eventTitle, photoState.local);
+      trackPhotoBoothPhotosUploaded(photoState.local.length);
       await refreshEvent(event);
     } catch (error) {
       log(`Error Uploading Photos: ${error}`, "error");

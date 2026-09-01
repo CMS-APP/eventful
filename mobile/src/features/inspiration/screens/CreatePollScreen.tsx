@@ -15,6 +15,7 @@ import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
+import { trackPollCreated } from "@/services/analytics/events";
 import { createPollInDatabase } from "@/services/firebase/inspiration";
 import { showOptionsAlert } from "@/utils/alertModal";
 
@@ -48,6 +49,7 @@ export function CreatePollScreen({ navigation }: CreatePollScreenProps) {
         text: "Create Poll",
         onPress: () => {
           createPollInDatabase(pollTitle, pollSubtitle, pollOptions);
+          trackPollCreated();
           (
             navigation as StackNavigationProp<InspirationStackParamList>
           ).navigate("InspirationHome", { refresh: true });

@@ -15,6 +15,7 @@ import { ModalView } from "@/design-system/components/overlays/ModalView";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { EventDateTimeRangeEditor } from "@/features/events/components/edit/components/EventDateTimeRangeEditor";
+import { trackEventCreated } from "@/services/analytics/events";
 import { createEventInDatabase } from "@/services/firebase/event";
 import { UserState } from "@/store/UserSlice";
 import { Event, NewEvent } from "@/types/Event";
@@ -59,6 +60,7 @@ export function CreateEventModal({
 
       const user = getAuth().currentUser;
       await createEventInDatabase(event, user);
+      trackEventCreated();
 
       navigation.navigate("EventEdit", { event });
     } catch (error) {

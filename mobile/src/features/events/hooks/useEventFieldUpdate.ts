@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 
 import { useFocusEffect } from "@react-navigation/native";
 
+import { trackEventUpdated } from "@/services/analytics/events";
 import { getEventInfo, updateEventInDatabase } from "@/services/firebase/event";
 import { Event } from "@/types/Event";
 
@@ -38,6 +39,7 @@ export function useEventFieldUpdate(
 
       setEvent(updatedEvent);
       await updateEventInDatabase(updatedEvent);
+      trackEventUpdated();
     },
     [event, fieldName]
   );

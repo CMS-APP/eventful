@@ -10,6 +10,7 @@ import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
+import { trackSpotifyDisconnected } from "@/services/analytics/events";
 import { updateUserInfo } from "@/services/firebase/user";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
 import { showOptionsAlert } from "@/utils/alertModal";
@@ -46,6 +47,7 @@ export function SpotifySignInButton({
     updateUserInfo(userId, {
       spotifyData: deleteField() as any
     });
+    trackSpotifyDisconnected();
     setSignedIn(false);
     setPlaylists([]);
   }, [userId, setSignedIn, setPlaylists, resetProcessedResponse]);

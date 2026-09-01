@@ -13,6 +13,7 @@ import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Button } from "@/design-system/components/buttons/Button";
 import { Input } from "@/design-system/components/inputs/Input";
 import { colors } from "@/design-system/tokens/colors";
+import { trackPostCreated } from "@/services/analytics/events";
 import { createPostInDatabase } from "@/services/firebase/inspiration";
 import { UserState } from "@/store/UserSlice";
 import { Photo } from "@/types/Photo";
@@ -41,6 +42,7 @@ export function CreatePostScreen({ navigation }: CreatePostScreenProps) {
         name: name,
         uid: userId
       });
+      trackPostCreated();
       setLoading(false);
       (navigation as StackNavigationProp<InspirationStackParamList>).goBack();
     } catch (error) {

@@ -14,6 +14,10 @@ import { colors } from "@/design-system/tokens/colors";
 import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 import {
+  trackPhotoBoothPhotoSaved,
+  trackPhotoBoothPhotoShared
+} from "@/services/analytics/events";
+import {
   savePhotoDataLocally,
   sharePhoto
 } from "@/services/photo-booth/localPhotos";
@@ -78,6 +82,7 @@ export function PhotoBoothResultsButtons({
         combinedAsset.uri
       );
 
+      trackPhotoBoothPhotoSaved();
       Alert.alert(
         "Photo saved",
         "Your photo has been saved to your camera roll"
@@ -102,6 +107,7 @@ export function PhotoBoothResultsButtons({
       });
 
       await sharePhoto(capturedUri);
+      trackPhotoBoothPhotoShared();
     } catch {
       Alert.alert("Error", "Failed to share photo");
     }

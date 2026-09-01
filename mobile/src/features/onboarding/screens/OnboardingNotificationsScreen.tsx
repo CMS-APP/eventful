@@ -7,6 +7,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AllStackParamList } from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
+import { trackOnboardingCompleted } from "@/services/analytics/events";
 import { updateUserInfo } from "@/services/firebase/user";
 import { registerForPushNotificationsAsync } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
@@ -45,6 +46,7 @@ export function OnboardingNotificationsScreen({
         {
           text: "OK",
           onPress: () => {
+            trackOnboardingCompleted();
             navigation.navigate("Main" as never);
           }
         }
@@ -63,6 +65,7 @@ export function OnboardingNotificationsScreen({
 
       <OnboardingButtons
         exit={() => {
+          trackOnboardingCompleted();
           navigation.navigate("Main" as never);
         }}
         next={() => {

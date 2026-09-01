@@ -19,6 +19,7 @@ import { dataInit } from "@/app/init/data";
 import { navigationRef } from "@/app/navigation";
 import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
+import { trackAuthSignIn } from "@/services/analytics/events";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
@@ -50,6 +51,7 @@ export function GoogleLogin() {
 
       const user = await signInWithCredential(getAuth(), googleCredential);
       const result = await dataInit(dispatch);
+      trackAuthSignIn();
 
       if (user.additionalUserInfo?.profile) {
         await saveGoogleOnboardingName(

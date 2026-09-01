@@ -17,6 +17,10 @@ import {
   checkIfPhotoBoothSubscription,
   checkIfPremiumSubscription
 } from "@/app/context/payment/const";
+import {
+  trackSubscriptionPurchased,
+  trackSubscriptionRestored
+} from "@/services/analytics/events";
 
 import { UserState, setPhotoBooth, setPremium } from "../../../store/UserSlice";
 
@@ -105,6 +109,7 @@ export function PaymentProvider({ children }: { children: React.ReactNode }) {
     try {
       const customer = await Purchases.restorePurchases();
       await updateUserInfo(customer);
+      trackSubscriptionRestored(customer.activeSubscriptions.length > 0);
 
       if (customer.activeSubscriptions.length > 0) {
         Alert.alert(
@@ -136,6 +141,7 @@ export function PaymentProvider({ children }: { children: React.ReactNode }) {
           dispatch(setPhotoBooth(false));
         }
 
+        trackSubscriptionPurchased(type);
         return "success";
       } catch (error) {
         if ((error as { code: string }).code === "1") {

@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 
+import {
+  trackSpotifyPlaylistAdded,
+  trackSpotifyPlaylistRemoved
+} from "@/services/analytics/events";
 import { Event } from "@/types/Event";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
 import { log } from "@/utils/logging";
@@ -51,6 +55,7 @@ export function useSpotifyPlaylists({
     (playlist: SpotifyPlaylist) => {
       setAddedPlaylists((prev) => [...prev, playlist]);
       addPlaylistToEvent(playlist, event, setEvent);
+      trackSpotifyPlaylistAdded();
     },
     [event, setEvent]
   );
@@ -61,6 +66,7 @@ export function useSpotifyPlaylists({
         prev.filter((item) => item.id !== playlist.id)
       );
       removePlaylistFromEvent(playlist, event, setEvent);
+      trackSpotifyPlaylistRemoved();
     },
     [event, setEvent]
   );

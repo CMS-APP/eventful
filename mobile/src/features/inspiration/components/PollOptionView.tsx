@@ -7,6 +7,7 @@ import { Animated, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { trackPollVoted } from "@/services/analytics/events";
 import { voteForOptionInDatabase } from "@/services/firebase/inspiration";
 import { UserState } from "@/store/UserSlice";
 import { Poll } from "@/types/Poll";
@@ -91,6 +92,7 @@ export function PollOptionView({
 
     try {
       await voteForOptionInDatabase(poll, userId, option);
+      trackPollVoted();
     } catch (error) {
       log(`Error Voting: ${error}`, "error");
       showErrorToast("Error Voting");

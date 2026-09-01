@@ -21,6 +21,7 @@ import { dataInit } from "@/app/init/data";
 import { navigationRef } from "@/app/navigation";
 import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
+import { trackAuthSignIn } from "@/services/analytics/events";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
@@ -56,6 +57,7 @@ export function AppleLogin() {
 
       const user = await signInWithCredential(getAuth(), appleCredential);
       const result = await dataInit(dispatch);
+      trackAuthSignIn();
 
       if (fullName?.givenName && fullName?.familyName) {
         await saveAppleOnboardingName(user.user, fullName);

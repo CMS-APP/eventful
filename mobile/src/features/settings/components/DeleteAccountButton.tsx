@@ -24,6 +24,7 @@ import {
   getAppleCredentialForReauthentication,
   revokeSignInWithAppleToken
 } from "@/features/settings/utils/apple";
+import { trackAuthAccountDeleted } from "@/services/analytics/events";
 import { deleteUserData } from "@/services/firebase/user";
 import { removeAllData } from "@/services/local/async";
 import { UserState, clearStorage } from "@/store/UserSlice";
@@ -100,6 +101,7 @@ export function DeleteAccountButton() {
       }
 
       await deleteUser(user);
+      trackAuthAccountDeleted();
       dispatch(clearStorage());
       signOutNavigation();
 

@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 
 import * as AuthSession from "expo-auth-session";
 
+import { trackSpotifyConnected } from "@/services/analytics/events";
 import { updateUserInfo } from "@/services/firebase/user";
 import { setSpotifyData } from "@/store/UserSlice";
 import { log } from "@/utils/logging";
@@ -59,6 +60,7 @@ export function useSpotifyAuth({ userId, onSuccess }: UseSpotifyAuthOptions) {
           });
 
           dispatch(setSpotifyData(data));
+          trackSpotifyConnected();
           onSuccess(tokenData.accessToken);
         }
       } catch (error) {

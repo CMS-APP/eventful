@@ -15,8 +15,8 @@ export default ({ config }: ConfigContext) => {
     slug: "Eventful",
     scheme: "eventful",
     owner: "chrissharp",
-    version: "6.5.0",
-    runtimeVersion: "6.5.0",
+    version: "6.6.0",
+    runtimeVersion: "6.6.0",
     orientation: "portrait",
     icon: "./src/assets/logos/eventful-logo.png",
     userInterfaceStyle: "light",
@@ -28,7 +28,7 @@ export default ({ config }: ConfigContext) => {
     android: {
       package: bundleId,
       icon: "./src/assets/logos/eventful-logo-android.png",
-      versionCode: 330,
+      versionCode: 331,
       softwareKeyboardLayoutMode: "pan",
       permissions: [
         "android.permission.READ_EXTERNAL_STORAGE",
@@ -43,7 +43,7 @@ export default ({ config }: ConfigContext) => {
     ios: {
       bundleIdentifier: bundleId,
       icon: "./src/assets/logos/eventful-logo.png",
-      buildNumber: "335",
+      buildNumber: "336",
       supportsTablet: true,
       infoPlist: {
         NSPhotoLibraryUsageDescription:
@@ -124,6 +124,7 @@ export default ({ config }: ConfigContext) => {
             useFrameworks: "static",
             forceStaticLinking: [
               "RNFBApp",
+              "RNFBAnalytics",
               "RNFBAppCheck",
               "RNFBAuth",
               "RNFBCrashlytics",
@@ -136,6 +137,7 @@ export default ({ config }: ConfigContext) => {
       "./plugins/withBoringSSLHeaderFix"
     ],
     extra: {
+      appVariant: IS_DEV ? "development" : "production",
       eas: {
         projectId: "8a843ae2-e39e-46ef-8eea-47724de6edf0"
       }

@@ -12,6 +12,12 @@ import { Platform } from "react-native";
 
 import { setBadgeCountAsync } from "expo-notifications";
 
+import { setAnalyticsUserId } from "@/services/analytics/analytics";
+import {
+  trackAuthSignIn,
+  trackAuthSignOut,
+  trackAuthSignUp
+} from "@/services/analytics/events";
 import { removeAllData } from "@/services/local/async";
 import { clearCache } from "@/services/local/cache";
 import { clearNotifications } from "@/services/pushNotifications";
@@ -32,6 +38,7 @@ export async function handleSignIn(
       email,
       password
     );
+    trackAuthSignIn();
     return userCredential.user;
   } catch {
     return null;
@@ -58,6 +65,8 @@ export async function handleSignOut(dispatch: Dispatch<Action>) {
     log(`Error signing out from Google Sign-In: ${error}`, "error");
   }
 
+  trackAuthSignOut();
+  setAnalyticsUserId(null);
   await signOut(auth);
 }
 
@@ -73,6 +82,7 @@ export async function handleSignUp(
       password
     );
     incrementUserCount(userCredential.user);
+    trackAuthSignUp();
     return userCredential.user;
   } catch (error) {
     if ((error as { code: string }).code === "auth/email-already-in-use") {

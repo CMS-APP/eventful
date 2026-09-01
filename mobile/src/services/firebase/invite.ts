@@ -3,6 +3,7 @@ import { Timestamp, where } from "@react-native-firebase/firestore";
 import { Alert } from "react-native";
 
 import { formatEventAddressDisplay } from "@/services/address/eventAddress";
+import { trackInviteSent } from "@/services/analytics/events";
 import { API_COLLECTIONS } from "@/services/api/constants";
 import { deleteDocument } from "@/services/api/delete";
 import { getDocument, getDocumentsByQuery } from "@/services/api/get";
@@ -63,6 +64,7 @@ export async function sendInvite(
   const createdInvite = await createDocument(invite, API_COLLECTIONS.INVITE);
   const inviteId = createdInvite;
   invite.id = inviteId;
+  trackInviteSent("app");
 
   await createUpdateNotification(
     userId,

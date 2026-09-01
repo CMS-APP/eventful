@@ -9,6 +9,10 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
 import {
+  trackUserFollowed,
+  trackUserUnfollowed
+} from "@/services/analytics/events";
+import {
   followUser,
   getUserFollowers,
   getUserFollowing,
@@ -56,6 +60,7 @@ export function FollowButton({ user, flex = undefined }: FollowButtonProps) {
   const handleUnfollow = useCallback(async () => {
     try {
       await unFollowUser(userId, user.uid);
+      trackUserUnfollowed();
       haptics.error();
       setFollowing(
         following.filter((follow) => follow.followingId !== user.uid)
@@ -104,6 +109,7 @@ export function FollowButton({ user, flex = undefined }: FollowButtonProps) {
       haptics.success();
       setContactText("Following");
       await followUser(userId, user.uid);
+      trackUserFollowed();
     } else {
       await unFollowUserAlert();
     }

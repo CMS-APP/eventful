@@ -16,6 +16,7 @@ import type {
   DeleteGuestManual,
   SetResponseManual
 } from "@/features/events/components/guest-list/EventInvitesRSVPUserList";
+import { trackInviteResponseChanged } from "@/services/analytics/events";
 import { updateEventInDatabase } from "@/services/firebase/event";
 import {
   checkInvitedToEvent,
@@ -114,6 +115,7 @@ export function EventInviteUserItem({
       } else if (invite.type === "manual") {
         await setResponseManual({ user, invite }, response);
       }
+      trackInviteResponseChanged(response);
       if (refreshUsers) {
         refreshUsers();
       }
