@@ -21,7 +21,12 @@ import {
   savePhotoDataLocally,
   sharePhoto
 } from "@/services/photo-booth/localPhotos";
-import { saveIndividualPhoto } from "@/services/photo-booth/photos";
+import {
+  isOutOfStorageError,
+  saveIndividualPhoto
+} from "@/services/photo-booth/photos";
+import { log } from "@/utils/logging";
+import { showErrorToast } from "@/utils/toast";
 
 import type { PhotoBoothStackNavigation } from "../../photoBoothStackParams";
 import { PhotoBoothResultsButton } from "./PhotoBoothResultsButton";
@@ -87,8 +92,15 @@ export function PhotoBoothResultsButtons({
         "Photo saved",
         "Your photo has been saved to your camera roll"
       );
-    } catch {
-      Alert.alert("Error", "Failed to save photo");
+    } catch (error) {
+      if (isOutOfStorageError(error)) {
+        log("Error saving photo: device is out of storage", "error");
+        showErrorToast(
+          "Your device is out of storage space. Free up some space and try saving again."
+        );
+      } else {
+        Alert.alert("Error", "Failed to save photo");
+      }
     } finally {
       setLoading(false);
     }
