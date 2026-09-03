@@ -3,8 +3,10 @@
   "main": "expo/AppEntry",
   "version": "1.0.0",
   "scripts": {
+    "android": "expo run:android",
     "android:build": "bash ./scripts/dev-android.sh",
     "android:dev": "APP_VARIANT=development expo prebuild --clean --platform android && APP_VARIANT=development expo run:android",
+    "ios": "expo run:ios",
     "ios:dev": "APP_VARIANT=development expo prebuild --clean --platform ios && APP_VARIANT=development expo run:ios",
     "ios:build": "bash ./scripts/dev-ios.sh",
     "lint": "expo lint",
