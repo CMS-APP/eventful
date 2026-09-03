@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 
 import { colors } from "@/design-system/tokens/colors";
 
-export const RAISED_CIRCLE_SIZE = 64;
+export const RAISED_CIRCLE_SIZE = 52;
 export const RAISED_CIRCLE_TOP_OFFSET = 8;
 
 const NOTCH_GAP = 6;

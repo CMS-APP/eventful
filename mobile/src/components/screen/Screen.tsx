@@ -156,6 +156,9 @@ export function Screen({
           <BlurView
             intensity={blurOverlay.intensity ?? 40}
             tint={blurOverlay.tint ?? "light"}
+            experimentalBlurMethod={
+              Platform.OS === "android" ? "dimezisBlurView" : undefined
+            }
             style={styles.blurOverlay}
             pointerEvents="none"
           />
