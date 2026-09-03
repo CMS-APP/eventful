@@ -24,9 +24,10 @@ function createRespondToEventHandler({ admin, db, RECAPTCHA_SECRET }) {
       deviceId
     } = request.body;
     const ip = request.headers["x-forwarded-for"] || "unknown-ip";
-    if (!userResponse || !name || !email || !recaptchaToken || !deviceId) {
+    if (!userResponse || !name || !recaptchaToken || !deviceId) {
       return response.status(400).send("Missing required fields");
     }
+    const responderLabel = email ? `${name} (${email})` : name;
 
     try {
       const COOLDOWN_PERIOD_MS = 5 * 60 * 1000;
@@ -45,13 +46,15 @@ function createRespondToEventHandler({ admin, db, RECAPTCHA_SECRET }) {
         return response.status(403).send("reCAPTCHA validation failed");
       }
 
-      const emailSnapshot = await db
-        .collection("eventResponses")
-        .where("email", "==", email)
-        .where("eventId", "==", eventId)
-        .orderBy("responseTimestamp", "desc")
-        .limit(1)
-        .get();
+      const emailSnapshot = email
+        ? await db
+            .collection("eventResponses")
+            .where("email", "==", email)
+            .where("eventId", "==", eventId)
+            .orderBy("responseTimestamp", "desc")
+            .limit(1)
+            .get()
+        : null;
 
       const deviceSnapshot = await db
         .collection("eventResponses")
@@ -61,9 +64,10 @@ function createRespondToEventHandler({ admin, db, RECAPTCHA_SECRET }) {
         .limit(1)
         .get();
 
-      const lastEmailResponse = emailSnapshot.empty
-        ? null
-        : emailSnapshot.docs[0].data();
+      const lastEmailResponse =
+        !emailSnapshot || emailSnapshot.empty
+          ? null
+          : emailSnapshot.docs[0].data();
       const lastDeviceResponse = deviceSnapshot.empty
         ? null
         : deviceSnapshot.docs[0].data();
@@ -122,7 +126,7 @@ function createRespondToEventHandler({ admin, db, RECAPTCHA_SECRET }) {
           db,
           hostId,
           "New Event Response",
-          `${name} (${email}) just responded to your event (${eventName}).`
+          `${responderLabel} just responded to your event (${eventName}).`
         );
         return response.status(200).send("Response updated");
       }

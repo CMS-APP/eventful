@@ -72,8 +72,14 @@ export default function EventResponse() {
     const name = nameInput.value;
     const email = emailInput.value;
 
-    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      alert("Please enter a valid name and email.");
+    if (!name) {
+      alert("Please enter your name.");
+      setIsLoading(false);
+      return;
+    }
+
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      alert("Please enter a valid email.");
       setIsLoading(false);
       return;
     }
@@ -108,7 +114,7 @@ export default function EventResponse() {
           eventId,
           response: response.toLowerCase(),
           name,
-          email: email.toLowerCase(),
+          email: email ? email.toLowerCase() : "",
           recaptchaToken,
           deviceId,
         }),
@@ -228,12 +234,11 @@ export default function EventResponse() {
                 placeholder="Enter your name"
                 required
               />
-              <p className="event-response-field-label">Email</p>
+              <p className="event-response-field-label">Email (optional)</p>
               <input
                 type="email"
                 className="event-response-input"
                 placeholder="Enter your email"
-                required
               />
 
               <div className="event-response-rsvp-buttons">
