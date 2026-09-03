@@ -237,17 +237,6 @@ const styles = StyleSheet.create({
   content: {
     gap: 12
   },
-  dateText: {
-    backgroundColor: colors.primaryTint3,
-    borderRadius: 12,
-    paddingVertical: 12
-  },
-  itemRow: {
-    alignItems: "center",
-    flexDirection: "row",
-    gap: 6,
-    justifyContent: "center"
-  },
   row: {
     flexDirection: "row",
     gap: 6
