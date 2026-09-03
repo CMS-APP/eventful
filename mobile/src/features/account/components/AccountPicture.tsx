@@ -14,10 +14,6 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { useCameraPermissions } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 
-import {
-  ILoadingModalContext,
-  useLoadingModal
-} from "@/app/context/loading/LoadingModalContext";
 import { AllStackParamList } from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
@@ -44,7 +40,6 @@ export function AccountPicture() {
   const [image, setImage] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState(true);
 
-  const { setLoading } = useLoadingModal() as ILoadingModalContext;
   const userId = useSelector((state: UserState) => state.uid);
   const dispatch = useDispatch();
 
@@ -54,7 +49,6 @@ export function AccountPicture() {
     setImage(null);
 
     if (!userId) {
-      setLoading(false);
       setImageLoading(false);
       return;
     }
@@ -62,9 +56,8 @@ export function AccountPicture() {
     const user = (await getUserInfo(userId)) as User;
     const imageUri = await syncUserPicture(user, true);
     setImage(imageUri as string);
-    setLoading(false);
     setImageLoading(false);
-  }, [userId, setLoading, setImageLoading]);
+  }, [userId, setImageLoading]);
 
   useFocusEffect(
     useCallback(() => {
@@ -74,7 +67,6 @@ export function AccountPicture() {
 
   const openImagePicker = useCallback(async () => {
     try {
-      setLoading(true);
       setImageLoading(true);
 
       setTimeout(async () => {
@@ -102,10 +94,9 @@ export function AccountPicture() {
       log(`Error Opening Photos: ${error}`, "error");
       showErrorToast("Error Opening Photos");
     } finally {
-      setLoading(false);
       setImageLoading(false);
     }
-  }, [userId, setLoading, dispatch]);
+  }, [userId, dispatch]);
 
   const requestPermissions = useCallback(async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -121,7 +112,7 @@ export function AccountPicture() {
 
   const deleteImage = useCallback(async () => {
     try {
-      setLoading(true);
+      setImageLoading(true);
       setImage(null);
       await deleteCachedImage("profilePicture");
       await updateUserInfo(userId, {
@@ -133,9 +124,9 @@ export function AccountPicture() {
       log(`Error Deleting Photo: ${error}`, "error");
       showErrorToast("Error Deleting Photo");
     } finally {
-      setLoading(false);
+      setImageLoading(false);
     }
-  }, [userId, setLoading, dispatch]);
+  }, [userId, dispatch]);
 
   const cameraAlertButton = useCallback(async () => {
     if (permission?.granted) {

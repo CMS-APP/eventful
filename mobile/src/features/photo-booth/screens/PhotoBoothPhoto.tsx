@@ -18,8 +18,8 @@ import {
   uploadPhotosToCloud
 } from "@/services/photo-booth/cloudPhotos";
 import {
-  deletePhotoLocally,
   PhotoDeletionCancelledError,
+  deletePhotoLocally,
   sharePhoto
 } from "@/services/photo-booth/localPhotos";
 import { UserState } from "@/store/UserSlice";
@@ -155,7 +155,7 @@ export function PhotoBoothPhoto() {
 
   return (
     <Screen
-      contentConfig={{ tabBarPresent: false }}
+      contentConfig={{ tabBarPresent: true }}
       headerConfig={{
         type: "curvy",
         curvyHeaderProps: {

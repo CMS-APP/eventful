@@ -11,7 +11,8 @@
     "ios": "expo run:ios",
     "ios:dev": "APP_VARIANT=development expo prebuild --clean --platform ios && APP_VARIANT=development expo run:ios",
     "ios:build": "APP_VARIANT=development eas build --profile development --platform ios --local --non-interactive",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "deploy": "bash ./scripts/upload.sh"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -37,6 +38,7 @@
     "expo": "~54.0.37",
     "expo-asset": "~12.0.13",
     "expo-auth-session": "~7.0.11",
+    "expo-blur": "~15.0.8",
     "expo-build-properties": "~1.0.10",
     "expo-camera": "~17.0.10",
     "expo-constants": "~18.0.14",

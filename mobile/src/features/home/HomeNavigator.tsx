@@ -2,23 +2,15 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { HomeStackParamList } from "@/app/navigation";
 import { accountNavigatorGestureOptions } from "@/features/account/accountNavigatorScreenOptions";
-import { PhotoBoothProvider } from "@/features/photo-booth/context/PhotoBoothProvider";
 import { profileNavigatorGestureOptions } from "@/features/profile/profileNavigatorScreenOptions";
 
 import { AccountNavigator } from "../account/AccountNavigator";
-import { PhotoBoothNavigator } from "../photo-booth/PhotoBoothNavigator";
+import { CreatePollScreen } from "../inspiration/screens/CreatePollScreen";
+import { CreatePostScreen } from "../inspiration/screens/CreatePostScreen";
 import { ProfileNavigator } from "../profile/ProfileNavigator";
 import { HomeFollowsScreen } from "./screens/HomeFollowsScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { HomeUpdatesScreen } from "./screens/HomeUpdatesScreen";
-
-function PhotoBoothWithProvider() {
-  return (
-    <PhotoBoothProvider>
-      <PhotoBoothNavigator />
-    </PhotoBoothProvider>
-  );
-}
 
 export function HomeNavigator() {
   const Stack = createNativeStackNavigator<HomeStackParamList>();
@@ -34,9 +26,15 @@ export function HomeNavigator() {
       <Stack.Screen name="HomeFollows" component={HomeFollowsScreen} />
 
       <Stack.Screen
-        name="PhotoBooth"
-        component={PhotoBoothWithProvider}
-        options={{ gestureEnabled: true }}
+        name="CreatePoll"
+        component={CreatePollScreen}
+        options={{ presentation: "modal", gestureEnabled: false }}
+      />
+
+      <Stack.Screen
+        name="CreatePost"
+        component={CreatePostScreen}
+        options={{ presentation: "modal", gestureEnabled: false }}
       />
 
       <Stack.Screen

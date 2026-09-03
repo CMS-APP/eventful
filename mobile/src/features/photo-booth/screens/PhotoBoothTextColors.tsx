@@ -14,7 +14,7 @@ export function PhotoBoothTextColors() {
 
   return (
     <Screen
-      contentConfig={{ tabBarPresent: false }}
+      contentConfig={{ tabBarPresent: true }}
       headerConfig={{
         type: "curvy",
         curvyHeaderProps: {

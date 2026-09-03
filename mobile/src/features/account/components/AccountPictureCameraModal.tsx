@@ -105,7 +105,7 @@ export function AccountPictureCameraModal({
 
         {isLoading ? (
           <View style={styles.loadingContainer}>
-            <Text type="body" color="white" style={styles.savingText}>
+            <Text type="body" color="white">
               Saving photo...
             </Text>
             <ActivityIndicator size="large" color={colors.white} />
@@ -149,9 +149,6 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     alignItems: "center",
-    marginTop: 24
-  },
-  savingText: {
-    marginTop: 12
+    gap: 12
   }
 });

@@ -4,20 +4,20 @@ import {
 } from "@react-navigation/bottom-tabs";
 
 import { MainStackParamList } from "@/app/navigation";
+import { PhotoBoothWithProvider } from "@/features/photo-booth/PhotoBoothWithProvider";
 
 import { CalendarNavigator } from "../calendar/CalendarNavigator";
 import { ContactsNavigator } from "../contacts/navigators/ContactsNavigator";
 import { EventsNavigator } from "../events/EventsNavigator";
 import { HomeNavigator } from "../home/HomeNavigator";
-import { InspirationNavigator } from "../inspiration/InspirationNavigator";
-import { MainTabBar } from "./components/MainTabBar";
+import { TabBar } from "./components/TabBar";
 
 const Tab = createBottomTabNavigator<MainStackParamList>();
 
 export function MainNavigator() {
   return (
     <Tab.Navigator
-      tabBar={(props: BottomTabBarProps) => <MainTabBar {...props} />}
+      tabBar={(props: BottomTabBarProps) => <TabBar {...props} />}
       screenOptions={{ headerShown: false }}
     >
       <Tab.Screen
@@ -31,8 +31,8 @@ export function MainNavigator() {
         options={{ lazy: true }}
       />
       <Tab.Screen
-        name="Inspiration"
-        component={InspirationNavigator}
+        name="PhotoBooth"
+        component={PhotoBoothWithProvider}
         options={{ lazy: false }}
       />
       <Tab.Screen

@@ -48,15 +48,11 @@ export function HomeButtons({ scrollY }: HomeButtonsProps) {
   }
 
   function onPhotoBoothPress() {
-    if (photoBooth || premium) {
-      navigation.navigate("PhotoBooth");
-    } else {
-      navigation.navigate("Paywall", { type: "photoBooth" });
-    }
+    navigation.navigate("PhotoBooth");
   }
 
-  function onInspirationPress() {
-    navigation.navigate("Inspiration");
+  function onContactsPress() {
+    navigation.navigate("Contacts");
   }
 
   function onCalendarPress() {
@@ -81,11 +77,11 @@ export function HomeButtons({ scrollY }: HomeButtonsProps) {
               />
 
               <HomePageButton
-                icon="lightbulb"
-                text={"Inspiration"}
+                icon="users"
+                text={"Contacts"}
                 color={colors.gray}
                 textColor={colors.white}
-                buttonAction={onInspirationPress}
+                buttonAction={onContactsPress}
                 style={{ height: buttonHeight }}
               />
             </View>

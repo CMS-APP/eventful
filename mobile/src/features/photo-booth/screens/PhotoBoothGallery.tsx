@@ -8,7 +8,7 @@ import { GalleryEventList } from "../components/gallery/GalleryEventList";
 export function PhotoBoothGallery() {
   return (
     <Screen
-      contentConfig={{ tabBarPresent: false }}
+      contentConfig={{ tabBarPresent: true }}
       headerConfig={{
         type: "curvy",
         curvyHeaderProps: {

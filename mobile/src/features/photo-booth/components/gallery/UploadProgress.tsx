@@ -199,7 +199,7 @@ export function UploadProgress({
 
   return (
     <View style={styles.container}>
-      <Text type="subHeader">Sync status</Text>
+      <Text type="subHeader">Sync Status</Text>
 
       {statusSection}
       {canCopyWebGalleryLink && (

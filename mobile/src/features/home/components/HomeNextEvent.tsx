@@ -80,70 +80,70 @@ export function HomeNextEvent({
     }
   }, [navigation, edit, nextEvent, eventNav]);
 
+  if (!nextEvent) return null;
+
   return (
     <TouchableWithoutFeedback onPress={goToEvent}>
-      <View style={styles.container}>
-        {nextEvent && (
-          <View style={styles.contentContainer}>
-            {title && (
-              <Text
-                type="header"
-                color={colors.black}
-                numberOfLines={1}
-                style={styles.headerText}
-              >
-                {nextEvent.name.trim() || "Event"}
+      {nextEvent && (
+        <View style={styles.contentContainer}>
+          {title && (
+            <Text
+              type="header"
+              color={colors.black}
+              numberOfLines={1}
+              style={styles.headerText}
+            >
+              {nextEvent.name.trim() || "Event"}
+            </Text>
+          )}
+
+          <View style={styles.invitesRow}>
+            <View style={styles.invitesLeftEdge} />
+            <View style={styles.invitesButton}>
+              <FontAwesome5 name="envelope" size={20} color={colors.black} />
+              <Text type="body" color={colors.black}>
+                Invites
               </Text>
-            )}
+            </View>
 
-            <View style={styles.invitesRow}>
-              <View style={styles.invitesLeftEdge} />
-              <View style={styles.invitesButton}>
-                <FontAwesome5 name="envelope" size={20} color={colors.black} />
-                <Text type="body" color={colors.black}>
-                  Invites
-                </Text>
-              </View>
-
-              <TouchableOpacity
-                onPress={goToUserInvites}
-                hitSlop={getHitSlop("medium")}
-              >
-                {accepted.length > 0 ? (
-                  <HomeNextEventPictureRow accepted={accepted} />
-                ) : (
-                  <View style={styles.addGuestsRow}>
-                    <View style={styles.addGuestsIcon}>
-                      <FontAwesome5
-                        name="user-plus"
-                        size={20}
-                        color={colors.white}
-                      />
-                    </View>
-                    <Text type="body" color={colors.black}>
-                      Add Guests...
-                    </Text>
+            <TouchableOpacity
+              onPress={goToUserInvites}
+              hitSlop={getHitSlop("medium")}
+            >
+              {accepted.length > 0 ? (
+                <HomeNextEventPictureRow accepted={accepted} />
+              ) : (
+                <View style={styles.addGuestsRow}>
+                  <View style={styles.addGuestsIcon}>
+                    <FontAwesome5
+                      name="user-plus"
+                      size={20}
+                      color={colors.white}
+                    />
                   </View>
-                )}
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.row}>
-              <NextEventCountdown event={nextEvent} />
-              <SemiCircleProgressBar
-                percentage={percentageComplete}
-                title="Progress"
-                showProgress={true}
-                colorScheme={[
-                  colors.primary,
-                  colors.primaryTint,
-                  colors.transparent
-                ]}
-              />
-            </View>
+                  <Text type="body" color={colors.black}>
+                    Add Guests...
+                  </Text>
+                </View>
+              )}
+            </TouchableOpacity>
           </View>
-        )}
-      </View>
+
+          <View style={styles.row}>
+            <NextEventCountdown event={nextEvent} />
+            <SemiCircleProgressBar
+              percentage={percentageComplete}
+              title="Progress"
+              showProgress={true}
+              colorScheme={[
+                colors.primary,
+                colors.primaryTint,
+                colors.transparent
+              ]}
+            />
+          </View>
+        </View>
+      )}
     </TouchableWithoutFeedback>
   );
 }
@@ -161,9 +161,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     gap: 12
-  },
-  container: {
-    marginBottom: 12
   },
   contentContainer: {
     gap: 4,

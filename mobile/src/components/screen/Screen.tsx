@@ -8,6 +8,8 @@ import {
   View
 } from "react-native";
 
+import { BlurView } from "expo-blur";
+
 import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
 import { colors } from "@/design-system/tokens/colors";
 
@@ -37,6 +39,13 @@ interface NonScrollProps {
   paddingTop?: number;
 }
 
+interface BlurOverlayProps {
+  visible: boolean;
+  intensity?: number;
+  tint?: "light" | "dark" | "default";
+  children?: ReactNode;
+}
+
 interface ScreenProps {
   children?: ReactNode;
   headerConfig?: HeaderProps;
@@ -44,6 +53,7 @@ interface ScreenProps {
   nonScrollConfig?: NonScrollProps;
   nonScrollChildren?: ReactNode;
   handleScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  blurOverlay?: BlurOverlayProps;
 }
 
 export function Screen({
@@ -56,7 +66,8 @@ export function Screen({
   },
   nonScrollChildren,
   nonScrollConfig,
-  handleScroll
+  handleScroll,
+  blurOverlay
 }: ScreenProps) {
   const [scrollY, setScrollY] = useState(0);
   const safeArea = useSafeAreaStyles().safeArea;
@@ -139,6 +150,23 @@ export function Screen({
           {children}
         </KeyboardScrollView>
       </View>
+
+      {blurOverlay?.visible && (
+        <>
+          <BlurView
+            intensity={blurOverlay.intensity ?? 40}
+            tint={blurOverlay.tint ?? "light"}
+            style={styles.blurOverlay}
+            pointerEvents="none"
+          />
+
+          {blurOverlay.children && (
+            <View style={styles.blurOverlayContent}>
+              {blurOverlay.children}
+            </View>
+          )}
+        </>
+      )}
     </View>
   );
 }
@@ -150,6 +178,18 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
     zIndex: 0
+  },
+  blurOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 2000
+  },
+  blurOverlayContent: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: "center",
+    gap: 12,
+    justifyContent: "center",
+    paddingHorizontal: 24,
+    zIndex: 2001
   },
   content: {
     flex: 1

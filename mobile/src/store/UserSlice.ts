@@ -33,6 +33,7 @@ export interface UserState {
   };
   premium: boolean;
   photoBooth: boolean;
+  photoBoothLocked: boolean;
   googleOnboardingName: GoogleOnboardingName | null;
   appleOnboardingName: AppleOnboardingName | null;
 }
@@ -66,7 +67,8 @@ const userSlice = createSlice({
     usernameUpdateDate: null,
     spotify: null,
     premium: __DEV__,
-    photoBooth: false
+    photoBooth: false,
+    photoBoothLocked: false
   },
   reducers: {
     setUserData: (state, action) => {
@@ -117,12 +119,16 @@ const userSlice = createSlice({
       state.spotify = null;
       state.premium = __DEV__;
       state.photoBooth = false;
+      state.photoBoothLocked = false;
     },
     setPremium: (state, action) => {
       state.premium = action.payload;
     },
     setPhotoBooth: (state, action) => {
       state.photoBooth = action.payload;
+    },
+    setPhotoBoothLocked: (state, action) => {
+      state.photoBoothLocked = action.payload;
     }
   }
 });
@@ -139,7 +145,8 @@ export const {
   setSpotifyData,
   clearSpotifyData,
   setPremium,
-  setPhotoBooth
+  setPhotoBooth,
+  setPhotoBoothLocked
 } = userSlice.actions;
 
 export const userStore = configureStore({

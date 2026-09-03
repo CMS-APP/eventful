@@ -4,8 +4,11 @@ import { useCallback, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { HomeStackParamList } from "@/app/navigation";
+import { IconButton } from "@/design-system/components/buttons/IconButton";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import {
@@ -19,11 +22,16 @@ import { PollVote } from "@/types/PollVote";
 
 import { PollOptionView } from "./PollOptionView";
 
-export function PollView() {
+interface PollViewProps {
+  isAdmin: boolean;
+}
+
+export function PollView({ isAdmin }: PollViewProps) {
   const [poll, setPoll] = useState<Poll | null>(null);
   const [votes, setVotes] = useState<PollVote[]>([]);
   const [userVote, setUserVote] = useState<PollVote | null>(null);
   const userId = useSelector((state: UserState) => state.uid);
+  const navigation = useNavigation<StackNavigationProp<HomeStackParamList>>();
 
   const fetchPoll = useCallback(async () => {
     const poll = await getPollInDatabase();
@@ -43,55 +51,72 @@ export function PollView() {
     }, [fetchPoll])
   );
 
-  if (!poll || poll.options.length === 0) return;
-
   return (
     <View style={styles.container}>
-      <Text type="header" color={colors.black}>
-        Poll
-      </Text>
-      <View style={styles.contentContainer}>
-        <Text type="subHeader" color={colors.black}>
-          {poll.title}
+      <View style={styles.header}>
+        <Text type="header" color={colors.black}>
+          Poll
         </Text>
-        <Text type="body" color={colors.black}>
-          {poll.subtitle}
-        </Text>
-
-        <View style={styles.optionsContainer}>
-          {poll?.options?.map((option: string, index: number) => (
-            <PollOptionView
-              key={`option-${option}-${index}`}
-              poll={poll}
-              votes={votes}
-              setVotes={setVotes}
-              option={option}
-              userVote={userVote}
-              setUserVote={setUserVote}
-            />
-          ))}
-
-          <Text type="body" italic color={colors.gray}>
-            Total Votes: {votes.length}
-          </Text>
-        </View>
+        {isAdmin && (
+          <IconButton
+            iconName="plus"
+            onPress={() => navigation.navigate("CreatePoll")}
+            color={colors.white}
+            size="small"
+            marginBottom={0}
+            marginTop={0}
+          />
+        )}
       </View>
+
+      {poll && poll.options.length > 0 && (
+        <View style={styles.contentContainer}>
+          <Text type="subHeader" color={colors.black}>
+            {poll.title}
+          </Text>
+          <Text type="body" color={colors.black}>
+            {poll.subtitle}
+          </Text>
+
+          <View style={styles.optionsContainer}>
+            {poll?.options?.map((option: string, index: number) => (
+              <PollOptionView
+                key={`option-${option}-${index}`}
+                poll={poll}
+                votes={votes}
+                setVotes={setVotes}
+                option={option}
+                userVote={userVote}
+                setUserVote={setUserVote}
+              />
+            ))}
+
+            <Text type="body" italic color={colors.gray}>
+              Total Votes: {votes.length}
+            </Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     gap: 12
   },
   contentContainer: {
-    backgroundColor: colors.lightGray,
+    backgroundColor: colors.white,
     borderRadius: 16,
-    padding: 20
+    padding: 16
+  },
+  header: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between"
   },
   optionsContainer: {
     gap: 12,
-    marginTop: 6
+    marginTop: 8
   }
 });

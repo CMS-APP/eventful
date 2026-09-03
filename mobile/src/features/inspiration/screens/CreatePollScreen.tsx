@@ -4,7 +4,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AllStackParamList, InspirationStackParamList } from "@/app/navigation";
+import { AllStackParamList } from "@/app/navigation";
 import { FlatHeader } from "@/components/screen/FlatHeader";
 import { FlatHeaderProps } from "@/components/screen/props";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
@@ -50,9 +50,7 @@ export function CreatePollScreen({ navigation }: CreatePollScreenProps) {
         onPress: () => {
           createPollInDatabase(pollTitle, pollSubtitle, pollOptions);
           trackPollCreated();
-          (
-            navigation as StackNavigationProp<InspirationStackParamList>
-          ).navigate("InspirationHome", { refresh: true });
+          navigation.goBack();
         }
       }
     ]);

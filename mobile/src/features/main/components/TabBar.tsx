@@ -1,8 +1,15 @@
 import { useSelector } from "react-redux";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 
-import { Animated, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Animated,
+  Dimensions,
+  LayoutChangeEvent,
+  StyleSheet,
+  TouchableOpacity,
+  View
+} from "react-native";
 
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { NavigationState, StackActions } from "@react-navigation/native";
@@ -15,9 +22,17 @@ import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { UserState } from "@/store/UserSlice";
 import { haptics } from "@/utils/haptics";
 
-import { MainTabBarIcon } from "./MainTabBarIcon";
+import { TabBarBorder } from "./TabBarBorder";
+import { TabBarCamera } from "./TabBarCamera";
+import { TabBarIcon } from "./TabBarIcon";
 
-const FULL_SCREEN_ROUTE_NAMES = ["PhotoBooth", "AccountPictureCamera"];
+const RAISED_TAB_ROUTE_NAME = "PhotoBooth";
+
+const FULL_SCREEN_ROUTE_NAMES = [
+  "AccountPictureCamera",
+  "PhotoBoothCamera",
+  "PhotoBoothRedoPhoto"
+];
 
 function hasNestedRouteName(
   routes: NavigationState["routes"] | undefined,
@@ -32,15 +47,26 @@ function hasNestedRouteName(
   });
 }
 
-interface MainTabBarProps {
+interface TabBarProps {
   state: BottomTabBarProps["state"];
   navigation: BottomTabBarProps["navigation"];
 }
 
-export function MainTabBar({ state, navigation }: MainTabBarProps) {
+export function TabBar({ state, navigation }: TabBarProps) {
   const userId = useSelector((state: UserState) => state.uid);
+  const photoBoothLocked = useSelector(
+    (state: UserState) => state.photoBoothLocked
+  );
+  const premium = useSelector((state: UserState) => state.premium);
+  const photoBooth = useSelector((state: UserState) => state.photoBooth);
+  const hasPhotoBoothAccess = premium || photoBooth;
   const notifications = useInAppNotificationBadges(userId);
   const safeArea = useSafeAreaStyles().safeArea;
+  const [barWidth, setBarWidth] = useState(Dimensions.get("window").width);
+
+  const onBarLayout = useCallback((event: LayoutChangeEvent) => {
+    setBarWidth(event.nativeEvent.layout.width);
+  }, []);
 
   const isFullScreenRouteActive = hasNestedRouteName(
     state.routes,
@@ -111,7 +137,7 @@ export function MainTabBar({ state, navigation }: MainTabBarProps) {
     [navigation]
   );
 
-  if (isFullScreenRouteActive || hasModalActive) {
+  if (isFullScreenRouteActive || hasModalActive || photoBoothLocked) {
     return null;
   }
 
@@ -121,10 +147,13 @@ export function MainTabBar({ state, navigation }: MainTabBarProps) {
   };
 
   return (
-    <View style={mainContainerStyle}>
+    <View style={mainContainerStyle} onLayout={onBarLayout}>
+      <TabBarBorder width={barWidth} />
+
       {state.routes.map((route, index: number) => {
         const isFocused = state.index === index;
         const scale = scaleValues[index];
+        const isRaised = route.name === RAISED_TAB_ROUTE_NAME;
 
         return (
           <TouchableOpacity
@@ -133,15 +162,19 @@ export function MainTabBar({ state, navigation }: MainTabBarProps) {
             onPress={() => onPress(route, isFocused, scale)}
             hitSlop={getHitSlop("medium")}
           >
-            <Animated.View style={{ transform: [{ scale }] }}>
-              <MainTabBarIcon
-                route={route.name}
-                isFocused={isFocused}
-                notifications={
-                  notifications[route.name as keyof typeof notifications] || 0
-                }
-              />
-            </Animated.View>
+            {isRaised ? (
+              <TabBarCamera scale={scale} hasAccess={hasPhotoBoothAccess} />
+            ) : (
+              <Animated.View style={{ transform: [{ scale }] }}>
+                <TabBarIcon
+                  route={route.name}
+                  isFocused={isFocused}
+                  notifications={
+                    notifications[route.name as keyof typeof notifications] || 0
+                  }
+                />
+              </Animated.View>
+            )}
           </TouchableOpacity>
         );
       })}
@@ -157,14 +190,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     flexDirection: "row",
     height: 72,
-    paddingBottom: 0,
-    paddingHorizontal: 12,
     position: "absolute",
     width: "100%"
   },
   mainItemContainer: {
     alignItems: "center",
     flex: 1,
-    padding: 12
+    paddingVertical: 12
   }
 });

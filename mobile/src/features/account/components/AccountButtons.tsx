@@ -1,14 +1,12 @@
 import { useDispatch } from "react-redux";
 
+import { useState } from "react";
+
 import { StatusBar, StyleSheet, View } from "react-native";
 
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import {
-  ILoadingModalContext,
-  useLoadingModal
-} from "@/app/context/loading/LoadingModalContext";
 import { AllStackParamList, navigationRef } from "@/app/navigation";
 import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
@@ -18,20 +16,20 @@ import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 export function AccountButtons() {
-  const { setLoading } = useLoadingModal() as ILoadingModalContext;
+  const [signingOut, setSigningOut] = useState(false);
   const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<AllStackParamList>>();
 
   async function signOut() {
     try {
-      setLoading(true);
+      setSigningOut(true);
       handleSignOut(dispatch);
       signOutNavigation();
     } catch (error) {
       log(`Error Signing Out: ${error}`, "error");
       showErrorToast("Error Signing Out");
     } finally {
-      setLoading(false);
+      setSigningOut(false);
     }
   }
 
@@ -96,6 +94,7 @@ export function AccountButtons() {
         onPress={() => {
           signOutAlert();
         }}
+        loading={signingOut}
       />
     </View>
   );

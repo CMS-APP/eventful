@@ -113,20 +113,14 @@ export type HomeStackParamList = {
     screen: "ProfileView";
     params: { user: User };
   };
-  Account: undefined;
-  PhotoBooth: undefined;
-};
-
-export type InspirationStackParamList = {
-  InspirationHome: { refresh: boolean };
+  Account:
+    | {
+        screen: "Profile";
+        params: { screen: "ProfileView"; params: { user: User } };
+      }
+    | undefined;
   CreatePoll: undefined;
   CreatePost: undefined;
-  Profile: undefined;
-  Account: {
-    screen: "Profile";
-    params: { screen: "ProfileView"; params: { user: User } };
-  };
-  PollView: { refresh: boolean };
 };
 
 export type MainStackParamList = {
@@ -134,7 +128,7 @@ export type MainStackParamList = {
   Contacts:
     | { screen: string; params: { open: boolean } | undefined }
     | undefined;
-  Inspiration: undefined;
+  PhotoBooth: undefined;
   Events: { screen: string; params: { event: Event | null } } | undefined;
   Calendar: undefined;
 };
@@ -186,7 +180,6 @@ export type AllStackParamList =
   | ProfileStackParamList
   | CalendarStackParamList
   | ContactsStackParamList
-  | InspirationStackParamList
   | HomeStackParamList
   | MainStackParamList
   | OnboardingStackParamList

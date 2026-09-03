@@ -8,23 +8,19 @@ import { colors } from "@/design-system/tokens/colors";
 const iconNames = {
   Home: "home",
   Contacts: "users",
-  Inspiration: "lightbulb",
+  PhotoBooth: "camera",
   Calendar: "calendar",
   Events: "book",
   Account: "user"
 };
 
-interface MainTabBarIconProps {
+interface TabBarIconProps {
   route: string;
   isFocused: boolean;
   notifications: number;
 }
 
-export function MainTabBarIcon({
-  route,
-  isFocused,
-  notifications
-}: MainTabBarIconProps) {
+export function TabBarIcon({ route, isFocused, notifications }: TabBarIconProps) {
   const iconName = iconNames[route as keyof typeof iconNames];
   const iconColor = isFocused ? colors.secondary : colors.black;
 

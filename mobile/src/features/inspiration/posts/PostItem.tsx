@@ -14,7 +14,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome } from "@expo/vector-icons";
 
-import { InspirationStackParamList } from "@/app/navigation";
+import { HomeStackParamList } from "@/app/navigation";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
@@ -44,8 +44,7 @@ export function PostItem({ post }: { post: Post }) {
   const tapTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const currentUserId = useSelector((state: UserState) => state.uid);
-  const navigation =
-    useNavigation() as StackNavigationProp<InspirationStackParamList>;
+  const navigation = useNavigation() as StackNavigationProp<HomeStackParamList>;
 
   const loadLikeData = async () => {
     const [count, liked] = await Promise.all([
@@ -192,7 +191,7 @@ export function PostItem({ post }: { post: Post }) {
               size={20}
               color={isLiked ? colors.secondary : colors.gray}
             />
-            <Text style={[styles.likeText, isLiked && styles.likedText]}>
+            <Text type="body" style={isLiked && styles.likedText}>
               {likesCount}
             </Text>
           </TouchableOpacity>
@@ -226,10 +225,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6
   },
-  likeText: {
-    color: colors.black,
-    fontSize: 16
-  },
   likedButton: {
     backgroundColor: colors.primary
   },
@@ -239,14 +234,8 @@ const styles = StyleSheet.create({
   postItem: {
     backgroundColor: colors.white,
     borderRadius: 16,
-    elevation: 6,
     gap: 12,
     padding: 16,
-    shadowColor: colors.black,
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
     shadowOpacity: 0.1,
     shadowRadius: 4
   },

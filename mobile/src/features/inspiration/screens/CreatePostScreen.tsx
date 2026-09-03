@@ -6,7 +6,7 @@ import { StyleSheet, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AllStackParamList, InspirationStackParamList } from "@/app/navigation";
+import { AllStackParamList } from "@/app/navigation";
 import { FlatHeader } from "@/components/screen/FlatHeader";
 import { FlatHeaderProps } from "@/components/screen/props";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
@@ -44,7 +44,7 @@ export function CreatePostScreen({ navigation }: CreatePostScreenProps) {
       });
       trackPostCreated();
       setLoading(false);
-      (navigation as StackNavigationProp<InspirationStackParamList>).goBack();
+      navigation.goBack();
     } catch (error) {
       log(`Error Creating Post: ${error}`, "error");
       showErrorToast("Error Creating Post");

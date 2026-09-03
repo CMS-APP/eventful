@@ -91,7 +91,7 @@ export function PhotoBoothGuidedAccessInfo() {
         type: "curvy",
         curvyHeaderProps: {
           title: "Photo Booth",
-          subTitle: "Home",
+          subTitle: "Guided Access Info",
           icon: "camera",
           color: colors.white,
           accountButton: false,
@@ -100,7 +100,7 @@ export function PhotoBoothGuidedAccessInfo() {
         }
       }}
       contentConfig={{
-        tabBarPresent: false
+        tabBarPresent: true
       }}
     >
       <View
