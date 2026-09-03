@@ -19,12 +19,13 @@ import {
 } from "@/services/photo-booth/cloudPhotos";
 import {
   deletePhotoLocally,
+  PhotoDeletionCancelledError,
   sharePhoto
 } from "@/services/photo-booth/localPhotos";
 import { UserState } from "@/store/UserSlice";
 import { showOptionsAlert } from "@/utils/alertModal";
 import { log } from "@/utils/logging";
-import { showErrorToast } from "@/utils/toast";
+import { showErrorToast, showWarningToast } from "@/utils/toast";
 
 import { GalleryPhotoItem } from "../components/gallery/GalleryPhotoItem";
 import {
@@ -69,14 +70,18 @@ export function PhotoBoothPhoto() {
 
   const handleDelete = useCallback(async () => {
     try {
-      if (photo.type === "cloud" || photo.type === "both") {
-        await deletePhotoCloud(photo, userId);
-      }
       if (photo.type === "local" || photo.type === "both") {
         await deletePhotoLocally(photo);
       }
+      if (photo.type === "cloud" || photo.type === "both") {
+        await deletePhotoCloud(photo, userId);
+      }
       navigation.goBack();
     } catch (error) {
+      if (error instanceof PhotoDeletionCancelledError) {
+        showWarningToast("Photo deletion cancelled");
+        return;
+      }
       log(`Error deleting photo: ${error} ${JSON.stringify(photo)}`, "error");
       showErrorToast("Error Deleting Photo");
     }

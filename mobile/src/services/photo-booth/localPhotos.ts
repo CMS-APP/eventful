@@ -12,6 +12,13 @@ import { showErrorToast } from "@/utils/toast";
 
 import { getPhotoIdSplit } from "./utils";
 
+export class PhotoDeletionCancelledError extends Error {
+  constructor() {
+    super("Photo deletion was cancelled");
+    this.name = "PhotoDeletionCancelledError";
+  }
+}
+
 function mediaLibraryAssetRef(
   photo: GalleryPhoto & { id?: string; uri?: string }
 ) {
@@ -83,7 +90,15 @@ export async function deletePhotoLocally(photo: GalleryPhoto): Promise<void> {
     await MediaLibrary.deleteAssetsAsync([mediaLibraryAssetRef(photo)]);
     await AsyncStorage.setItem("photosData", JSON.stringify(filteredPhotoData));
   } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message.includes("PHPhotosErrorDomain error 3072")
+    ) {
+      throw new PhotoDeletionCancelledError();
+    }
+
     log(`Error deleting photo data: ${error}`, "error");
+    throw error;
   }
 }
 

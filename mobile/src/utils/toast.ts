@@ -26,3 +26,11 @@ export function showErrorToast(message: string) {
     toastQueue.push({ message, type: "error" });
   }
 }
+
+export function showWarningToast(message: string) {
+  if (globalShowToast) {
+    globalShowToast(message, "warning");
+  } else {
+    toastQueue.push({ message, type: "warning" });
+  }
+}
