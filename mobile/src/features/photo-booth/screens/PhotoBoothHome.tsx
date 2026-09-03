@@ -86,10 +86,8 @@ export function PhotoBoothHome() {
           visible: !hasAccess,
           children: (
             <>
-              <View style={styles.lockedIconGlow}>
-                <View style={styles.lockedIconCircle}>
-                  <FontAwesome5 name="crown" size={26} color={colors.white} />
-                </View>
+              <View style={styles.lockedIconCircle}>
+                <FontAwesome5 name="crown" size={26} color={colors.white} />
               </View>
 
               <Text type="subHeader" color={colors.black} center>

@@ -163,7 +163,11 @@ export function TabBar({ state, navigation }: TabBarProps) {
             hitSlop={getHitSlop("medium")}
           >
             {isRaised ? (
-              <TabBarCamera scale={scale} hasAccess={hasPhotoBoothAccess} />
+              <TabBarCamera
+                scale={scale}
+                hasAccess={hasPhotoBoothAccess}
+                isFocused={isFocused}
+              />
             ) : (
               <Animated.View style={{ transform: [{ scale }] }}>
                 <TabBarIcon
