@@ -40,13 +40,31 @@
 
 .user-stats-loading {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 12px;
   padding: 60px 20px;
   color: rgba(255, 255, 255, 0.8);
   font-family: var(--font-poppins-regular);
+}
+
+.user-stats-spinner {
+  width: 22px;
+  height: 22px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top: 3px solid var(--color-secondary);
+  border-radius: 50%;
+  animation: user-stats-spin 1s linear infinite;
+}
+
+@keyframes user-stats-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .user-stats-grid {

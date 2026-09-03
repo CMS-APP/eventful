@@ -9,6 +9,7 @@ import {
   orderBy,
   query,
   Timestamp,
+  where,
 } from "firebase/firestore";
 
 export interface FeedbackItem {
@@ -64,10 +65,17 @@ export interface UserDeviceStatsRow {
   lastLaunchedAt: string | null;
 }
 
+/** Matches the 30-day MAU window used by the snapshotActiveUsers scheduled function. */
+const DEVICE_STATS_ACTIVE_WINDOW_DAYS = 30;
+
 export async function getUsersForDeviceStats(): Promise<UserDeviceStatsRow[]> {
   try {
     const usersRef = collection(FIRESTORE_DB, "user");
-    const snapshot = await getDocs(usersRef);
+    const cutoff = Timestamp.fromMillis(
+      Date.now() - DEVICE_STATS_ACTIVE_WINDOW_DAYS * 24 * 60 * 60 * 1000,
+    );
+    const q = query(usersRef, where("lastLaunchedAt", ">=", cutoff));
+    const snapshot = await getDocs(q);
     return snapshot.docs.map((d) => {
       const data = d.data();
       const uid = d.id;

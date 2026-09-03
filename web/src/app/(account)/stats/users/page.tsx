@@ -285,7 +285,6 @@ export default function UserStatsPage() {
 
   return (
     <>
-      {loadingData && <Loading message="Loading user stats..." />}
       <main className="flex flex-1 flex-col p-10">
         <div className="user-stats-container">
           <div className="user-stats-header">
@@ -296,9 +295,16 @@ export default function UserStatsPage() {
             <h1>User stats</h1>
             <p className="user-stats-subtitle">
               Platform, version, region and device breakdown ({stats.total}{" "}
-              users)
+              users active in the last 30 days)
             </p>
           </div>
+
+          {loadingData && (
+            <div className="user-stats-loading" role="status" aria-live="polite">
+              <span className="user-stats-spinner" aria-hidden />
+              <span>Loading user stats...</span>
+            </div>
+          )}
 
           {!loadingData && (
             <div className="user-stats-grid">
