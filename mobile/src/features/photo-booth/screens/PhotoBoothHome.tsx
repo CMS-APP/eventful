@@ -211,14 +211,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 10,
     width: 64
-  },
-  lockedIconGlow: {
-    alignItems: "center",
-    backgroundColor: colors.primary + "20",
-    borderRadius: 48,
-    height: 96,
-    justifyContent: "center",
-    marginBottom: 4,
-    width: 96
   }
 });
