@@ -3,9 +3,9 @@ from datetime import datetime, timedelta, timezone
 from firebase_admin import firestore
 
 
-def snapshot_active_users() -> None:
+def snapshot_active_users(as_of: datetime | None = None) -> None:
     db = firestore.client()
-    now = datetime.now(timezone.utc)
+    now = as_of or datetime.now(timezone.utc)
     day = timedelta(days=1)
 
     dau = 0
@@ -25,7 +25,7 @@ def snapshot_active_users() -> None:
         if age <= 30 * day:
             mau += 1
 
-    date = now.strftime("%Y-%m-%d")
+    date = (now - day).strftime("%Y-%m-%d")
     snapshot = {"date": date, "dau": dau, "wau": wau, "mau": mau}
     db.collection("activeUserStats").document(date).set(
         {**snapshot, "createdAt": firestore.SERVER_TIMESTAMP}

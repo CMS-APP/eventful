@@ -39,6 +39,9 @@ def syncFollowing(
     handle_sync_following(event)
 
 
-@scheduler_fn.on_schedule(schedule="every 24 hours")
+@scheduler_fn.on_schedule(
+    schedule="0 0 * * *",
+    timezone=scheduler_fn.Timezone("UTC"),
+)
 def snapshotActiveUsers(event: scheduler_fn.ScheduledEvent) -> None:
-    snapshot_active_users()
+    snapshot_active_users(event.schedule_time)
