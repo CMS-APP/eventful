@@ -16,7 +16,7 @@ export function PhotoBoothStatsRow({
   return (
     <View style={styles.container}>
       <PhotoBoothStatTile value={photosTaken} label="Photos Taken" />
-      <PhotoBoothStatTile value={inTheCloud} label="In The Cloud" />
+      <PhotoBoothStatTile value={inTheCloud} label="Uploaded" />
       <PhotoBoothStatTile
         value={events}
         label={events > 1 ? "Events" : "Event"}

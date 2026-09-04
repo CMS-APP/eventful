@@ -46,10 +46,10 @@ export function DateTimeSelector({
     <ModalView
       show={showPicker}
       setShow={setShowPicker}
-      backgroundColor={colors.primary}
+      backgroundColor={colors.white}
       borderColor={colors.lightGray + "40"}
     >
-      <Text type="header" color="white">
+      <Text type="header" color={colors.black}>
         {getTitle()}
       </Text>
       {Platform.OS === "android" && (
@@ -67,12 +67,12 @@ export function DateTimeSelector({
       <View style={styles.pickerContainer}>
         {(show || Platform.OS === "ios") && (
           <DateTimePicker
-            themeVariant={"dark"}
+            themeVariant={"light"}
             value={date}
             mode={mode}
             display={mode === "date" ? "inline" : "spinner"}
             minuteInterval={1}
-            accentColor={colors.secondary}
+            accentColor={colors.primary}
             onChange={(event, value) => {
               if (Platform.OS === "android") {
                 setShow(false);
@@ -86,7 +86,7 @@ export function DateTimeSelector({
       <Button
         text="Save"
         textColor={colors.white}
-        color={colors.primaryTint}
+        color={colors.primary}
         onPress={() => setShowPicker(false)}
         leadingIcon="check"
       />

@@ -132,7 +132,7 @@ export function EventDateTimeRangeEditor({
 
   return (
     <View style={styles.container}>
-      <Text type="body" color="white">
+      <Text type="body" color={dark ? colors.white : colors.black}>
         Date
       </Text>
 
@@ -140,8 +140,8 @@ export function EventDateTimeRangeEditor({
         <View style={styles.row}>
           <Button
             size="small"
-            color={colors.primaryTint3}
-            textColor={colors.white}
+            color={dark ? colors.primaryTint3 : colors.lightGray}
+            textColor={dark ? colors.white : colors.black}
             text={formatDate(startDate)}
             onPress={handleDatePress}
             flex={1}
@@ -150,8 +150,8 @@ export function EventDateTimeRangeEditor({
 
           <Button
             size="small"
-            color={colors.primaryTint3}
-            textColor={colors.white}
+            color={dark ? colors.primaryTint3 : colors.lightGray}
+            textColor={dark ? colors.white : colors.black}
             text={formatTime(startDate)}
             onPress={handleTimePress}
             flex={1}
@@ -170,8 +170,8 @@ export function EventDateTimeRangeEditor({
           <View style={styles.row}>
             <Button
               size="small"
-              color={colors.primaryTint3}
-              textColor={colors.white}
+              color={dark ? colors.primaryTint3 : colors.lightGray}
+              textColor={dark ? colors.white : colors.black}
               text={formatDate(endDate)}
               onPress={handleEndDatePress}
               flex={1}
@@ -180,8 +180,8 @@ export function EventDateTimeRangeEditor({
 
             <Button
               size="small"
-              color={colors.primaryTint3}
-              textColor={colors.white}
+              color={dark ? colors.primaryTint3 : colors.lightGray}
+              textColor={dark ? colors.white : colors.black}
               text={formatTime(endDate)}
               onPress={handleEndTimePress}
               flex={1}

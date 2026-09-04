@@ -78,8 +78,8 @@ export function ChangeNameModal({
     } else if (type === "username") {
       const username = checkValueUtil(newName, "username");
       if (username?.valid === null) {
-        setUsernameExists(null);
-        setHelperText("");
+        setUsernameExists(true);
+        setHelperText("Username is required");
       } else if (!username?.valid) {
         setUsernameExists(true);
         setHelperText(username?.message || "");
@@ -217,10 +217,10 @@ export function ChangeNameModal({
     <ModalView
       show={presentModal}
       setShow={setPresentModal}
-      backgroundColor={colors.primary}
+      backgroundColor={colors.white}
       borderColor={colors.lightGray + "40"}
     >
-      <Text type="header" color={colors.white}>
+      <Text type="header" color={colors.black}>
         Change {type === "name" ? "Name" : "Username"}
       </Text>
 
@@ -231,7 +231,8 @@ export function ChangeNameModal({
         autoCapitalize={type === "username" ? "none" : "sentences"}
         autoCorrect={type !== "username"}
         textContentType={type === "username" ? "username" : "givenName"}
-        dark
+        backgroundColor={colors.lightGray}
+        textColor={colors.black}
       />
 
       {type === "username" ? null : (
@@ -239,7 +240,8 @@ export function ChangeNameModal({
           placeholder={type === "name" ? "Last Name" : "Username"}
           onChangeText={(text) => setNewSecondName(text)}
           value={newSecondName}
-          dark
+          backgroundColor={colors.lightGray}
+          textColor={colors.black}
         />
       )}
 
@@ -265,7 +267,7 @@ export function ChangeNameModal({
 
       <Button
         text={"Change " + type}
-        color={colors.primaryTint}
+        color={colors.primary}
         textColor={colors.white}
         onPress={changeName}
         leadingIcon="check"

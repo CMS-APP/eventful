@@ -25,10 +25,10 @@ export function SettingsPasswordModal({
     <ModalView
       show={presentPasswordModal}
       setShow={setPresentPasswordModal}
-      backgroundColor={colors.primary}
+      backgroundColor={colors.white}
       borderColor={colors.lightGray + "40"}
     >
-      <Text type="header" color={colors.white}>
+      <Text type="header" color={colors.black}>
         Delete Account
       </Text>
 
@@ -37,13 +37,14 @@ export function SettingsPasswordModal({
           placeholder="Password"
           value={inputText}
           onChangeText={setInputText}
-          dark
+          backgroundColor={colors.lightGray}
+          textColor={colors.black}
           password
         />
 
         <Button
           text="Delete"
-          color={colors.primaryTint}
+          color={colors.primary}
           textColor={colors.white}
           onPress={() => {
             setPresentPasswordModal(false);

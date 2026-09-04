@@ -28,6 +28,7 @@ export function DateTimeButton({
   };
 
   const textColor = dark ? colors.white : colors.black;
+  const backgroundColor = dark ? colors.primaryTint3 : colors.lightGray;
 
   return (
     <View style={styles.flex1}>
@@ -36,7 +37,7 @@ export function DateTimeButton({
       </Text>
 
       <TouchableOpacity onPress={handlePress} hitSlop={getHitSlop("small")}>
-        <View style={[padding.largeWidget, styles.button]}>
+        <View style={[padding.largeWidget, styles.button, { backgroundColor }]}>
           <Text type="body" italic color={textColor}>
             {type === "Time" ? formatTime(date) : formatDate(date)}
           </Text>
@@ -48,7 +49,6 @@ export function DateTimeButton({
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: colors.primaryTint3,
     borderRadius: 12,
     padding: 12
   },

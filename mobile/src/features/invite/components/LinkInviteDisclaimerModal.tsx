@@ -18,13 +18,13 @@ export function LinkInviteDisclaimerModal({
     <ModalView
       show={presentModal}
       setShow={setPresentModal}
-      backgroundColor={colors.primary}
+      backgroundColor={colors.white}
     >
-      <Text type="header" color={colors.white}>
+      <Text type="header" color={colors.black}>
         Enable Link Invite
       </Text>
 
-      <Text type="body" color={colors.white}>
+      <Text type="body" color={colors.black}>
         This link will allow anyone to RSVP to your event and view the event
         details. Anyone with the link will be able to see details such as the
         location, time and date.
@@ -33,7 +33,7 @@ export function LinkInviteDisclaimerModal({
       <Button
         text="Accept"
         onPress={onAccept}
-        color={colors.primaryTint}
+        color={colors.primary}
         textColor={colors.white}
       />
 

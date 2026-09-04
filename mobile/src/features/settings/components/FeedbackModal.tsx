@@ -54,10 +54,9 @@ export function FeedbackModal({
     <ModalView
       show={presentModal}
       setShow={setPresentModal}
-      backgroundColor={colors.primary}
-      borderColor={colors.lightGray + "40"}
+      backgroundColor={colors.white}
     >
-      <Text type="header" color={colors.white}>
+      <Text type="header" color={colors.black}>
         {title}
       </Text>
 
@@ -65,16 +64,17 @@ export function FeedbackModal({
         placeholder={title}
         value={inputText}
         onChangeText={setInputText}
-        dark
         multilineProps={{
           numberOfLines: 10,
           height: 200
         }}
+        backgroundColor={colors.lightGray}
+        textColor={colors.black}
       />
 
       <Button
         text="Submit"
-        color={colors.primaryTint}
+        color={colors.primary}
         textColor={colors.white}
         onPress={handleSubmit}
         leadingIcon="paper-plane"

@@ -168,9 +168,7 @@ export function PhotoBoothHome() {
                   <Button
                     leadingIcon="cog"
                     text="Customise"
-                    color={
-                      locked || !hasAccess ? colors.gray : colors.lightGray
-                    }
+                    color={colors.lightGray}
                     textColor={colors.primary}
                     onPress={() => {
                       navigation.navigate("PhotoBoothCustomise");
@@ -183,9 +181,7 @@ export function PhotoBoothHome() {
                   <Button
                     leadingIcon="cloud"
                     text="Gallery"
-                    color={
-                      locked || !hasAccess ? colors.gray : colors.lightGray
-                    }
+                    color={colors.lightGray}
                     textColor={colors.primary}
                     onPress={async () => {
                       const hasPermissions = await ensurePermissions();
@@ -204,7 +200,7 @@ export function PhotoBoothHome() {
                   <Button
                     leadingIcon={locked ? "unlock" : "lock"}
                     text={`${locked ? "Un" : ""}Lock`}
-                    color={!hasAccess ? colors.gray : colors.lightGray}
+                    color={colors.lightGray}
                     textColor={colors.primary}
                     disabled={!hasAccess}
                     onPress={() => {
@@ -222,9 +218,7 @@ export function PhotoBoothHome() {
                     <Button
                       leadingIcon="apple"
                       text="Access"
-                      color={
-                        locked || !hasAccess ? colors.gray : colors.lightGray
-                      }
+                      color={colors.lightGray}
                       textColor={colors.primary}
                       onPress={() => {
                         navigation.navigate("PhotoBoothGuidedAccessInfo");

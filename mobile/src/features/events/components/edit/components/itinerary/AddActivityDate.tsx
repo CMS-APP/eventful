@@ -77,7 +77,6 @@ export function AddActivityDate({
           title={"Start Date"}
           type={"Date"}
           onPress={handleDatePress}
-          dark
         />
 
         <DateTimeButton
@@ -85,7 +84,6 @@ export function AddActivityDate({
           title={"Start Time"}
           type={"Time"}
           onPress={handleTimePress}
-          dark
         />
       </View>
 
@@ -100,7 +98,8 @@ export function AddActivityDate({
         value={durationMinutesText}
         onChangeText={setDurationMinutesText}
         keyboardType="number-pad"
-        dark
+        backgroundColor={colors.lightGray}
+        textColor={colors.black}
       />
 
       <Text type="footnote" style={styles.endTimeText}>
@@ -136,7 +135,7 @@ const styles = StyleSheet.create({
     width: "100%"
   },
   endTimeText: {
-    color: colors.white,
+    color: colors.black,
     marginTop: 2,
     opacity: 0.8
   },

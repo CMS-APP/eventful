@@ -18,11 +18,11 @@ export function CustomiseCollageModal({
     <ModalView
       show={show}
       setShow={setShow}
-      backgroundColor={colors.primary}
+      backgroundColor={colors.white}
       borderColor={colors.lightGray + "40"}
     >
       <View style={styles.container}>
-        <Text type="header" color={colors.white}>
+        <Text type="header" color={colors.black}>
           Customise Collage
         </Text>
 
@@ -34,7 +34,7 @@ export function CustomiseCollageModal({
             onPress={() => {
               setShow(false);
             }}
-            color={colors.primaryTint}
+            color={colors.primary}
             textColor={colors.white}
             flex={1}
             leadingIcon="check"

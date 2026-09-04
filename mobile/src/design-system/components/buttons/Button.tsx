@@ -1,6 +1,8 @@
 import { ActivityIndicator } from "react-native-paper";
 
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import React from "react";
+
+import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
@@ -88,12 +90,16 @@ export function Button({
     haptics.soft();
   };
 
-  const containerStyle =
-    flex === null
-      ? styles.compactContainer
-      : flex
-        ? [styles.container, styles.flexContainer]
-        : styles.container;
+  const style: ViewStyle = {};
+  if (flex) {
+    style.flex = flex;
+  }
+
+  if (disabled) {
+    style.opacity = 0.5;
+  }
+
+  const containerStyle = [styles.container, style];
   const buttonStyle = buttonStyles[size];
   let iconSize = iconSizes[size];
 
@@ -153,17 +159,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 16
   },
-  compactContainer: {
-    alignItems: "center",
-    alignSelf: "flex-start"
-  },
   container: {
     alignItems: "center",
     width: "100%"
-  },
-  flexContainer: {
-    flex: 1,
-    width: "auto"
   },
   text: {
     flexShrink: 1,

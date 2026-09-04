@@ -91,13 +91,13 @@ export function AddActivityModal({
     <ModalView
       show={visible}
       setShow={setVisible}
-      backgroundColor={colors.primary}
+      backgroundColor={colors.white}
       borderColor={colors.lightGray + "40"}
     >
       <View style={styles.headerContainer}>
         <View style={styles.flex} />
 
-        <Text type="header" color="white">
+        <Text type="header" color={colors.black}>
           {isEditing ? "Edit Activity" : "Add Activity"}
         </Text>
 
@@ -107,7 +107,7 @@ export function AddActivityModal({
               onPress={handleDelete}
               hitSlop={getHitSlop("medium")}
             >
-              <FontAwesome5 name="trash" size={24} color={colors.white} />
+              <FontAwesome5 name="trash" size={24} color={colors.black} />
             </TouchableOpacity>
           )}
         </View>
@@ -122,14 +122,16 @@ export function AddActivityModal({
           placeholder="Activity Name"
           value={name}
           onChangeText={setName}
-          dark
+          backgroundColor={colors.lightGray}
+          textColor={colors.black}
         />
 
         <Input
           placeholder="Location"
           value={location}
           onChangeText={setLocation}
-          dark
+          backgroundColor={colors.lightGray}
+          textColor={colors.black}
         />
 
         <AddActivityDate
@@ -144,14 +146,15 @@ export function AddActivityModal({
           placeholder="Notes"
           value={notes}
           onChangeText={setNotes}
-          dark
+          backgroundColor={colors.lightGray}
+          textColor={colors.black}
           multilineProps={{ numberOfLines: 10, height: 100 }}
         />
 
         <Button
           text={isEditing ? "Save Changes" : "Add Activity"}
           onPress={handleSave}
-          color={colors.primaryTint}
+          color={colors.primary}
           textColor={colors.white}
           leadingIcon={isEditing ? "check" : "plus"}
         />

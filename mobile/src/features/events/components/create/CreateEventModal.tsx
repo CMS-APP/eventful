@@ -85,10 +85,10 @@ export function CreateEventModal({
     <ModalView
       show={showModal}
       setShow={setShowModal}
-      backgroundColor={colors.primary}
+      backgroundColor={colors.white}
       borderColor={colors.lightGray + "40"}
     >
-      <Text type="header" color="white">
+      <Text type="header" color={colors.black}>
         Create New Event
       </Text>
 
@@ -96,13 +96,13 @@ export function CreateEventModal({
         placeholder="Event Name"
         value={eventName}
         onChangeText={setEventName}
-        dark
+        backgroundColor={colors.lightGray}
+        textColor={colors.black}
       />
 
       <EventDateTimeRangeEditor
         event={draftEvent}
         setEvent={setDraftEvent}
-        dark
         handleSaveChanges={() => {}}
         showSaveChanges={false}
       />
@@ -110,7 +110,7 @@ export function CreateEventModal({
       <Button
         text="Create Event"
         onPress={createEvent}
-        color={colors.primaryTint}
+        color={colors.primary}
         textColor={colors.white}
         leadingIcon="plus"
       />

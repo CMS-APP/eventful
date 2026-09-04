@@ -61,10 +61,10 @@ export function PhotoBoothUnlockModal({
     <ModalView
       show={presentModal}
       setShow={setPresentModal}
-      backgroundColor={colors.primary}
+      backgroundColor={colors.white}
       borderColor={colors.lightGray + "40"}
     >
-      <Text type="header" color="white">
+      <Text type="header" color={colors.black}>
         Unlock
       </Text>
 
@@ -74,14 +74,15 @@ export function PhotoBoothUnlockModal({
         onChangeText={setInput}
         keyboardType="number-pad"
         password
-        dark
+        backgroundColor={colors.lightGray}
+        textColor={colors.black}
       />
 
       <Button
         text="Unlock"
         leadingIcon="unlock"
         onPress={unlockButtonAction}
-        color={colors.primaryTint}
+        color={colors.primary}
         textColor={colors.white}
       />
 

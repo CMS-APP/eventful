@@ -55,10 +55,10 @@ export function PhotoBoothLockModal({
     <ModalView
       show={presentModal}
       setShow={setPresentModal}
-      backgroundColor={colors.primary}
+      backgroundColor={colors.white}
       borderColor={colors.lightGray + "40"}
     >
-      <Text type="header" color="white">
+      <Text type="header" color={colors.black}>
         {locked ? "Unlock" : "Lock"} Photo Booth
       </Text>
 
@@ -68,13 +68,14 @@ export function PhotoBoothLockModal({
         onChangeText={setInput}
         keyboardType="number-pad"
         password
-        dark
+        backgroundColor={colors.lightGray}
+        textColor={colors.black}
       />
 
       <Button
         text="Lock"
         onPress={lockButtonAction}
-        color={colors.primaryTint}
+        color={colors.primary}
         leadingIcon="lock"
         textColor={colors.white}
       />

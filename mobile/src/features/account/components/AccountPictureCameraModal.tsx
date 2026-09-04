@@ -89,11 +89,11 @@ export function AccountPictureCameraModal({
     <ModalView
       show={presentModal}
       setShow={setPresentModal}
-      backgroundColor={colors.primary}
+      backgroundColor={colors.white}
       borderColor={colors.lightGray + "40"}
     >
       <View style={styles.container}>
-        <Text type="header" color="white">
+        <Text type="header" color={colors.black}>
           New Profile Picture
         </Text>
         {photo && (
@@ -105,17 +105,17 @@ export function AccountPictureCameraModal({
 
         {isLoading ? (
           <View style={styles.loadingContainer}>
-            <Text type="body" color="white">
+            <Text type="body" color={colors.black}>
               Saving photo...
             </Text>
-            <ActivityIndicator size="large" color={colors.white} />
+            <ActivityIndicator size="large" color={colors.black} />
           </View>
         ) : (
           <>
             <Button
               text="Save"
               onPress={savePhoto}
-              color={colors.primaryTint}
+              color={colors.primary}
               textColor={colors.white}
               leadingIcon="check"
             />
