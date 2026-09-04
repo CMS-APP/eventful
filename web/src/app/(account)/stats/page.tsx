@@ -8,6 +8,7 @@ import {
   faCalendarAlt,
   faCheck,
   faCommentDots,
+  faCreditCard,
   faPhotoFilm,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
@@ -109,6 +110,19 @@ export default function Stats() {
               <div className="stat-content">
                 <h2 className="stat-label">App Feedback</h2>
                 <p className="stat-value stat-value-link">View all</p>
+              </div>
+            </Link>
+
+            <Link
+              href="/stats/subscriptions"
+              className="stat-card stat-card-subscriptions stat-card-link"
+            >
+              <div className="stat-icon-wrapper">
+                <FontAwesomeIcon icon={faCreditCard} className="stat-icon" />
+              </div>
+              <div className="stat-content">
+                <h2 className="stat-label">Subscriptions</h2>
+                <p className="stat-value stat-value-link">Live view</p>
               </div>
             </Link>
           </div>

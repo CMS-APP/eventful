@@ -133,6 +133,22 @@
   );
 }
 
+.stat-card-subscriptions {
+  background: linear-gradient(
+    135deg,
+    rgba(110, 231, 183, 0.15) 0%,
+    rgba(110, 231, 183, 0.05) 100%
+  );
+}
+
+.stat-card-subscriptions::before {
+  background: linear-gradient(
+    90deg,
+    rgba(110, 231, 183, 0.9),
+    rgba(160, 240, 210, 0.9)
+  );
+}
+
 .stat-icon-wrapper {
   flex-shrink: 0;
   width: 60px;

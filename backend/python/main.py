@@ -6,6 +6,7 @@ from firebase_functions.params import SecretParam
 from services.active_users import snapshot_active_users
 from services.followers import handle_sync_following
 from services.google_places import handle_location_search_request
+from services.revenuecat import handle_revenuecat_webhook
 
 set_global_options(max_instances=10)
 initialize_app()
@@ -16,6 +17,7 @@ EVENTFUL_CORS = options.CorsOptions(
 )
 
 GOOGLE_PLACES_API_KEY = SecretParam("GOOGLE_PLACES_API_KEY")
+REVENUECAT_WEBHOOK_SECRET = SecretParam("REVENUECAT_WEBHOOK_SECRET")
 
 
 @https_fn.on_request(
@@ -25,6 +27,13 @@ GOOGLE_PLACES_API_KEY = SecretParam("GOOGLE_PLACES_API_KEY")
 )
 def locationSearch(req: https_fn.Request) -> https_fn.Response:
     return handle_location_search_request(req, GOOGLE_PLACES_API_KEY.value)
+
+
+@https_fn.on_request(
+    secrets=[REVENUECAT_WEBHOOK_SECRET],
+)
+def revenuecatWebhook(req: https_fn.Request) -> https_fn.Response:
+    return handle_revenuecat_webhook(req, REVENUECAT_WEBHOOK_SECRET.value)
 
 
 @firestore_fn.on_document_written(
