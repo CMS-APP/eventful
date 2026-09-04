@@ -75,7 +75,6 @@ function createAlgoliaUserSearchHandler({
           typoTolerance: true,
           queryType: "prefixLast",
           removeWordsIfNoResults: "lastWords",
-          restrictSearchableAttributes: ["username", "name", "searchName"],
           attributesToRetrieve: ["uid", "username", "name", "searchName"],
         },
       });
