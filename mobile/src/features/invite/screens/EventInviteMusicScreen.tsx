@@ -57,7 +57,7 @@ export function EventInviteMusicScreen({ navigation, route }: Props) {
             Playlists
           </Text>
 
-          {event.playlists.length > 0 ? (
+          {event.playlists?.length > 0 ? (
             event.playlists.map((playlist) => (
               <SpotifyPlaylistItem
                 key={playlist.id}

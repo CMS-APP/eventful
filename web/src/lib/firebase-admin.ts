@@ -44,3 +44,8 @@ export function getAdminFirestore(): admin.firestore.Firestore {
   getFirebaseAdminApp();
   return admin.firestore();
 }
+
+export function getAdminAuth(): admin.auth.Auth {
+  getFirebaseAdminApp();
+  return admin.auth();
+}

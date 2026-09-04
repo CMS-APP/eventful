@@ -3,7 +3,6 @@
 import {
   faArrowLeft,
   faChartColumn,
-  faChartLine,
   faLaptop,
   faMapMarkerAlt,
   faMobileScreen
@@ -11,169 +10,15 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import { checkAdmin } from "@/app/account/database/utils";
 import Loading from "@/components/Loading";
 import UnauthorizedAccess from "@/components/UnauthorizedAccess";
 import { useUser } from "@/contexts/UserContext";
 
-import {
-  type ActiveUserStatsPoint,
-  type UserDeviceStatsRow,
-  getActiveUserStatsHistory,
-  getUsersForDeviceStats
-} from "../database/utils";
+import { type UserDeviceStatsRow, getUsersForDeviceStats } from "../database/utils";
 import "./users.css";
-
-const ACTIVE_USER_METRICS = [
-  { key: "dau", label: "Daily active users" },
-  { key: "wau", label: "Weekly active users" },
-  { key: "mau", label: "Monthly active users" }
-] as const;
-
-type ActiveUserMetric = (typeof ACTIVE_USER_METRICS)[number]["key"];
-
-function formatShortDate(dateStr: string): string {
-  const date = new Date(`${dateStr}T00:00:00Z`);
-  return date.toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    timeZone: "UTC"
-  });
-}
-
-function ActiveUsersChart({
-  history,
-  metric
-}: {
-  history: ActiveUserStatsPoint[];
-  metric: ActiveUserMetric;
-}) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(800);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const observer = new ResizeObserver((entries) => {
-      const measured = entries[0]?.contentRect.width;
-      if (measured) setWidth(measured);
-    });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  if (history.length === 0) {
-    return (
-      <p className="user-activity-empty">
-        No activity history yet — daily tracking started today. Check back
-        tomorrow to see the trend build up.
-      </p>
-    );
-  }
-
-  const values = history.map((p) => p[metric]);
-  const max = Math.max(...values, 1);
-  const latest = values[values.length - 1];
-
-  const height = 180;
-  const marginLeft = 36;
-  const marginBottom = 24;
-  const marginTop = 10;
-  const plotWidth = width - marginLeft;
-  const plotHeight = height - marginBottom - marginTop;
-
-  const points = history.map((point, index) => {
-    const x =
-      marginLeft +
-      (history.length === 1
-        ? plotWidth / 2
-        : (index / (history.length - 1)) * plotWidth);
-    const y = marginTop + plotHeight - (point[metric] / max) * plotHeight;
-    return { x, y, point };
-  });
-
-  const linePath = points
-    .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`)
-    .join(" ");
-
-  const gridLines = [0, 0.5, 1];
-  const labelIndexes = Array.from(
-    new Set([0, Math.floor((history.length - 1) / 2), history.length - 1])
-  );
-
-  return (
-    <div ref={containerRef}>
-      <div className="user-activity-summary">
-        <span className="user-activity-summary-value">
-          {latest.toLocaleString()}
-        </span>
-        <span className="user-activity-summary-label">
-          as of {formatShortDate(history[history.length - 1].date)}
-        </span>
-      </div>
-      <svg
-        className="user-activity-svg"
-        width={width}
-        height={height}
-        viewBox={`0 0 ${width} ${height}`}
-      >
-        {gridLines.map((fraction) => {
-          const y = marginTop + plotHeight - fraction * plotHeight;
-          return (
-            <g key={fraction}>
-              <line
-                x1={marginLeft}
-                x2={width}
-                y1={y}
-                y2={y}
-                className="user-activity-gridline"
-              />
-              <text x={0} y={y + 4} className="user-activity-axis-label">
-                {Math.round(max * fraction).toLocaleString()}
-              </text>
-            </g>
-          );
-        })}
-
-        <path d={linePath} className="user-activity-line" fill="none" />
-
-        {points.map(({ x, y, point }, index) => (
-          <circle
-            key={point.date}
-            cx={x}
-            cy={y}
-            r={index === points.length - 1 ? 6 : 3.5}
-            className="user-activity-dot"
-          >
-            <title>
-              {formatShortDate(point.date)}: {point[metric].toLocaleString()}
-            </title>
-          </circle>
-        ))}
-
-        {labelIndexes.map((index, i) => (
-          <text
-            key={index}
-            x={points[index].x}
-            y={height - 6}
-            textAnchor={
-              i === 0
-                ? "start"
-                : i === labelIndexes.length - 1
-                  ? "end"
-                  : "middle"
-            }
-            className="user-activity-axis-label user-activity-axis-label-x"
-          >
-            {formatShortDate(history[index].date)}
-          </text>
-        ))}
-      </svg>
-    </div>
-  );
-}
 
 function aggregateBy(
   rows: UserDeviceStatsRow[],
@@ -211,9 +56,6 @@ export default function UserStatsPage() {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [checkingAdmin, setCheckingAdmin] = useState(true);
   const [rows, setRows] = useState<UserDeviceStatsRow[]>([]);
-  const [activeUserHistory, setActiveUserHistory] = useState<
-    ActiveUserStatsPoint[]
-  >([]);
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
@@ -237,12 +79,8 @@ export default function UserStatsPage() {
     async function fetchData() {
       setLoadingData(true);
       try {
-        const [list, history] = await Promise.all([
-          getUsersForDeviceStats(),
-          getActiveUserStatsHistory()
-        ]);
+        const list = await getUsersForDeviceStats();
         setRows(list);
-        setActiveUserHistory(history);
       } catch (error) {
         console.error("Error fetching user stats:", error);
       } finally {
@@ -308,16 +146,6 @@ export default function UserStatsPage() {
 
           {!loadingData && (
             <div className="user-stats-grid">
-              {ACTIVE_USER_METRICS.map(({ key, label }) => (
-                <section className="user-stats-card" key={key}>
-                  <h2 className="user-stats-card-title">
-                    <FontAwesomeIcon icon={faChartLine} />
-                    {label}
-                  </h2>
-                  <ActiveUsersChart history={activeUserHistory} metric={key} />
-                </section>
-              ))}
-
               <section className="user-stats-card">
                 <h2 className="user-stats-card-title">
                   <FontAwesomeIcon icon={faMobileScreen} />

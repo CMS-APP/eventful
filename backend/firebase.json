@@ -79,13 +79,6 @@
           "functionId": "locationSearch",
           "region": "us-central1"
         }
-      },
-      {
-        "source": "/revenuecatWebhook",
-        "function": {
-          "functionId": "revenuecatWebhook",
-          "region": "us-central1"
-        }
       }
     ]
   },
