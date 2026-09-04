@@ -49,7 +49,8 @@
     "mobile/ios": true,
     "mobile/android": true,
     "web/.next/": true,
-    "web/next-env.d.ts": true
+    "web/next-env.d.ts": true,
+    "mobile/screenshots": true
   },
   "js/ts.tsdk.path": "web/node_modules/typescript/lib"
 }
