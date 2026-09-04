@@ -6,13 +6,12 @@ import { useNavigation } from "@react-navigation/native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
+import { PhotoBoothStackNavigation } from "@/app/navigation";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { GalleryEvent } from "@/types/photoBoothGallery";
 import { formatDate } from "@/utils/date";
-
-import { PhotoBoothStackNavigation } from "../../photoBoothStackParams";
 
 interface GalleryEventListItemProps {
   event: GalleryEvent;

@@ -1,5 +1,6 @@
-import { getAdminAuth, getAdminFirestore } from "@/lib/firebase-admin";
 import { NextRequest, NextResponse } from "next/server";
+
+import { isAdminRequest } from "@/lib/admin-request";
 
 const REVENUECAT_API_BASE = "https://api.revenuecat.com/v2";
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -24,12 +25,15 @@ function extractPoints(raw: unknown): ChartPoint[] {
       (entry): entry is Record<string, unknown> =>
         !!entry &&
         typeof entry === "object" &&
-        (entry as Record<string, unknown>).measure === PRIMARY_MEASURE_INDEX,
+        (entry as Record<string, unknown>).measure === PRIMARY_MEASURE_INDEX
     )
     .map((entry) => {
       const cohort = typeof entry.cohort === "number" ? entry.cohort : 0;
       const value = typeof entry.value === "number" ? entry.value : 0;
-      return { date: new Date(cohort * 1000).toISOString().slice(0, 10), value };
+      return {
+        date: new Date(cohort * 1000).toISOString().slice(0, 10),
+        value
+      };
     })
     .sort((a, b) => a.date.localeCompare(b.date));
 }
@@ -39,10 +43,10 @@ async function fetchChart(
   projectId: string,
   apiKey: string,
   startDate: string,
-  endDate: string,
+  endDate: string
 ): Promise<ChartPoint[]> {
   const url = new URL(
-    `${REVENUECAT_API_BASE}/projects/${projectId}/charts/${chartName}`,
+    `${REVENUECAT_API_BASE}/projects/${projectId}/charts/${chartName}`
   );
   url.searchParams.set("start_date", startDate);
   url.searchParams.set("end_date", endDate);
@@ -51,33 +55,49 @@ async function fetchChart(
 
   const res = await fetch(url.toString(), {
     headers: { Authorization: `Bearer ${apiKey}` },
-    cache: "no-store",
+    cache: "no-store"
   });
 
   if (!res.ok) {
     const body = await res.text();
-    throw new Error(`RevenueCat ${chartName} chart failed: ${res.status} ${body}`);
+    throw new Error(
+      `RevenueCat ${chartName} chart failed: ${res.status} ${body}`
+    );
   }
 
   return extractPoints(await res.json());
 }
 
-async function isAdminRequest(request: NextRequest): Promise<boolean> {
-  const authHeader = request.headers.get("Authorization") || "";
-  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
-  if (!token) return false;
+async function fetchActiveSubscriptions(
+  projectId: string,
+  apiKey: string
+): Promise<number | null> {
+  const url = `${REVENUECAT_API_BASE}/projects/${projectId}/metrics/overview`;
 
-  try {
-    const decoded = await getAdminAuth().verifyIdToken(token);
-    const adminDoc = await getAdminFirestore()
-      .collection("admin")
-      .doc("admin")
-      .get();
-    const uids = (adminDoc.data()?.uids as string[] | undefined) ?? [];
-    return uids.includes(decoded.uid);
-  } catch {
-    return false;
+  const res = await fetch(url, {
+    headers: { Authorization: `Bearer ${apiKey}` },
+    cache: "no-store"
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(
+      `RevenueCat overview metrics failed: ${res.status} ${body}`
+    );
   }
+
+  const raw = (await res.json()) as Record<string, unknown>;
+  const metrics = Array.isArray(raw.metrics) ? raw.metrics : [];
+  const activeSubscriptions = metrics.find(
+    (metric): metric is Record<string, unknown> =>
+      !!metric &&
+      typeof metric === "object" &&
+      (metric as Record<string, unknown>).id === "active_subscriptions"
+  );
+
+  return typeof activeSubscriptions?.value === "number"
+    ? activeSubscriptions.value
+    : null;
 }
 
 export async function GET(request: NextRequest) {
@@ -90,7 +110,7 @@ export async function GET(request: NextRequest) {
   if (!apiKey || !projectId) {
     return NextResponse.json(
       { error: "RevenueCat is not configured on the server" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 
@@ -102,24 +122,25 @@ export async function GET(request: NextRequest) {
   const endDate = end.toISOString().slice(0, 10);
 
   try {
-    const [mrr, revenue] = await Promise.all([
+    const [mrr, revenue, activeSubscriptions] = await Promise.all([
       fetchChart("mrr", projectId, apiKey, startDate, endDate),
       fetchChart("revenue", projectId, apiKey, startDate, endDate),
+      fetchActiveSubscriptions(projectId, apiKey)
     ]);
 
     const revenueByDate = new Map(revenue.map((p) => [p.date, p.value]));
     const history = mrr.map((p) => ({
       date: p.date,
       mrr: p.value,
-      revenue: revenueByDate.get(p.date) ?? 0,
+      revenue: revenueByDate.get(p.date) ?? 0
     }));
 
-    return NextResponse.json({ history });
+    return NextResponse.json({ history, activeSubscriptions });
   } catch (error) {
     console.error("RevenueCat charts fetch failed:", error);
     return NextResponse.json(
       { error: "Failed to fetch RevenueCat data" },
-      { status: 502 },
+      { status: 502 }
     );
   }
 }

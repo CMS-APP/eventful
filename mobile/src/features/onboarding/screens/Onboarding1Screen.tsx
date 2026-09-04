@@ -14,6 +14,7 @@ import {
   navigationRef
 } from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
+import { trackOnboardingStarted } from "@/services/analytics/events";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
@@ -60,6 +61,7 @@ export function Onboarding1Screen({ navigation }: Onboarding1ScreenProps) {
 
   useEffect(() => {
     StatusBar.setBarStyle("light-content");
+    trackOnboardingStarted();
   }, []);
 
   return (

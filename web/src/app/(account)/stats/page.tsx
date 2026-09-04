@@ -4,6 +4,7 @@ import {
   faChartLine,
   faCoins,
   faCommentDots,
+  faFilter,
   faUsers
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,9 +26,10 @@ import { checkAdmin } from "@/app/account/database/utils";
 import Loading from "@/components/Loading";
 import UnauthorizedAccess from "@/components/UnauthorizedAccess";
 import { useUser } from "@/contexts/UserContext";
+import { type FunnelStep, getFunnelStats } from "@/lib/analytics";
 import {
   type RevenueCatDailyStat,
-  getRevenueCatHistory
+  getRevenueCatStats
 } from "@/lib/subscriptions";
 
 import {
@@ -158,6 +160,123 @@ function TrendChart<T extends { date: string }>({
   );
 }
 
+// Segments taper by fixed opacity steps on the same hue (GROWTH_COLOR) rather
+// than a new color per step — this is a single-series magnitude comparison.
+const FUNNEL_STEP_OPACITY = [1, 0.72, 0.48, 0.32];
+
+const FUNNEL_CHART_WIDTH = 1000;
+const FUNNEL_CHART_HEIGHT = 220;
+const FUNNEL_MAX_BAR_HEIGHT = 180;
+
+function FunnelChart({
+  steps,
+  loading
+}: {
+  steps: FunnelStep[];
+  loading: boolean;
+}) {
+  if (loading) {
+    return (
+      <div className="chart-card-loading" role="status" aria-live="polite">
+        <span className="chart-card-spinner" aria-hidden />
+        <span>Loading...</span>
+      </div>
+    );
+  }
+
+  if (steps.length === 0 || steps.every((step) => step.users === 0)) {
+    return (
+      <p className="chart-card-empty">
+        No funnel data yet from Firebase Analytics for this range.
+      </p>
+    );
+  }
+
+  const maxUsers = Math.max(...steps.map((step) => step.users), 1);
+
+  const segmentWidth = FUNNEL_CHART_WIDTH / steps.length;
+  const midY = FUNNEL_CHART_HEIGHT / 2;
+  const barHeights = steps.map(
+    (step) => Math.max(step.users / maxUsers, 0.03) * FUNNEL_MAX_BAR_HEIGHT
+  );
+
+  return (
+    <div>
+      <div className="funnel">
+        <svg
+          className="funnel-svg"
+          viewBox={`0 0 ${FUNNEL_CHART_WIDTH} ${FUNNEL_CHART_HEIGHT}`}
+          preserveAspectRatio="none"
+          aria-hidden
+        >
+          {steps.map((step, index) => {
+            const xStart = index * segmentWidth;
+            const xEnd = xStart + segmentWidth;
+            const xMid = (xStart + xEnd) / 2;
+            const hStart = barHeights[index];
+            const hEnd = barHeights[index + 1] ?? barHeights[index];
+            const topStart = midY - hStart / 2;
+            const topEnd = midY - hEnd / 2;
+            const bottomStart = midY + hStart / 2;
+            const bottomEnd = midY + hEnd / 2;
+            const path = [
+              `M ${xStart} ${topStart}`,
+              `C ${xMid} ${topStart}, ${xMid} ${topEnd}, ${xEnd} ${topEnd}`,
+              `L ${xEnd} ${bottomEnd}`,
+              `C ${xMid} ${bottomEnd}, ${xMid} ${bottomStart}, ${xStart} ${bottomStart}`,
+              "Z"
+            ].join(" ");
+
+            return (
+              <path
+                key={step.id}
+                d={path}
+                fill={GROWTH_COLOR}
+                opacity={FUNNEL_STEP_OPACITY[index] ?? 0.32}
+              />
+            );
+          })}
+          {steps.slice(1).map((step, index) => (
+            <line
+              key={step.id}
+              x1={(index + 1) * segmentWidth}
+              y1={0}
+              x2={(index + 1) * segmentWidth}
+              y2={FUNNEL_CHART_HEIGHT}
+              stroke="rgba(10, 26, 20, 0.35)"
+              strokeWidth={2}
+              vectorEffect="non-scaling-stroke"
+            />
+          ))}
+        </svg>
+        <div className="funnel-labels">
+          {steps.map((step, index) => {
+            const previous = index > 0 ? steps[index - 1] : null;
+            const conversionFromPrevious =
+              previous && previous.users > 0
+                ? (step.users / previous.users) * 100
+                : null;
+
+            return (
+              <div className="funnel-label" key={step.id}>
+                <span className="funnel-label-name">{step.label}</span>
+                <span className="funnel-label-value">
+                  {step.users.toLocaleString()}
+                </span>
+                {conversionFromPrevious !== null && (
+                  <span className="funnel-label-conversion">
+                    {conversionFromPrevious.toFixed(0)}% of previous step
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const ACTIVE_USER_METRICS = [
   { key: "dau", label: "Daily active users" },
   { key: "mau", label: "Monthly active users" }
@@ -174,8 +293,13 @@ export default function Stats() {
   const [subscriptionHistory, setSubscriptionHistory] = useState<
     RevenueCatDailyStat[]
   >([]);
+  const [activeSubscriptions, setActiveSubscriptions] = useState<
+    number | null
+  >(null);
+  const [funnelSteps, setFunnelSteps] = useState<FunnelStep[]>([]);
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [loadingSubscriptions, setLoadingSubscriptions] = useState(true);
+  const [loadingFunnel, setLoadingFunnel] = useState(true);
 
   useEffect(() => {
     async function verifyAdmin() {
@@ -221,8 +345,12 @@ export default function Stats() {
     async function getSubscriptionStats() {
       try {
         const idToken = await user!.getIdToken();
-        const subscriptionStats = await getRevenueCatHistory(idToken, 30);
-        setSubscriptionHistory(subscriptionStats);
+        const { history, activeSubscriptions } = await getRevenueCatStats(
+          idToken,
+          30
+        );
+        setSubscriptionHistory(history);
+        setActiveSubscriptions(activeSubscriptions);
       } catch (error) {
         console.error("Error fetching subscription stats:", error);
       } finally {
@@ -230,9 +358,22 @@ export default function Stats() {
       }
     }
 
-    // Fired independently so the slower of the two doesn't hold up the other's chart.
+    async function getFunnelData() {
+      try {
+        const idToken = await user!.getIdToken();
+        const steps = await getFunnelStats(idToken, 30);
+        setFunnelSteps(steps);
+      } catch (error) {
+        console.error("Error fetching funnel stats:", error);
+      } finally {
+        setLoadingFunnel(false);
+      }
+    }
+
+    // Fired independently so the slower of the three doesn't hold up the others' charts.
     getUserStats();
     getSubscriptionStats();
+    getFunnelData();
   }, [isAdmin, checkingAdmin, user]);
 
   // Show loading state while checking
@@ -295,6 +436,12 @@ export default function Stats() {
                 <FontAwesomeIcon icon={faCoins} />
                 MRR (last 30 days)
               </h2>
+              {!loadingSubscriptions && activeSubscriptions !== null && (
+                <p className="chart-card-active-subs">
+                  <FontAwesomeIcon icon={faUsers} />
+                  {activeSubscriptions.toLocaleString()} active subscriptions
+                </p>
+              )}
               <TrendChart
                 history={subscriptionHistory}
                 metric="mrr"
@@ -342,6 +489,17 @@ export default function Stats() {
               </section>
             ))}
           </div>
+        </div>
+
+        <div className="charts-section">
+          <h2 className="charts-section-title">Acquisition funnel</h2>
+          <section className="chart-card chart-card-full">
+            <h2 className="chart-card-title">
+              <FontAwesomeIcon icon={faFilter} />
+              Downloads → Signup → Onboarding (last 30 days)
+            </h2>
+            <FunnelChart steps={funnelSteps} loading={loadingFunnel} />
+          </section>
         </div>
       </div>
     </main>

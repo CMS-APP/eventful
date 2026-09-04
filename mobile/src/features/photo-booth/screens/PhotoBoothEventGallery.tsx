@@ -11,6 +11,10 @@ import {
   useRoute
 } from "@react-navigation/native";
 
+import {
+  PhotoBoothStackNavigation,
+  PhotoBoothStackParamList
+} from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { colors } from "@/design-system/tokens/colors";
 import { getEvent } from "@/services/photo-booth/events";
@@ -19,10 +23,6 @@ import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
 
 import { GalleryPhotoItem } from "../components/gallery/GalleryPhotoItem";
 import { UploadProgress } from "../components/gallery/UploadProgress";
-import {
-  PhotoBoothStackNavigation,
-  PhotoBoothStackParamList
-} from "../photoBoothStackParams";
 
 export function PhotoBoothEventGallery() {
   const { event: initialEvent } =

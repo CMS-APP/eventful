@@ -4,10 +4,15 @@ export interface RevenueCatDailyStat {
   revenue: number;
 }
 
-export async function getRevenueCatHistory(
+export interface RevenueCatStats {
+  history: RevenueCatDailyStat[];
+  activeSubscriptions: number | null;
+}
+
+export async function getRevenueCatStats(
   idToken: string,
   days = 30,
-): Promise<RevenueCatDailyStat[]> {
+): Promise<RevenueCatStats> {
   const res = await fetch(`/api/subscriptions?days=${days}`, {
     headers: { Authorization: `Bearer ${idToken}` },
   });
@@ -17,5 +22,11 @@ export async function getRevenueCatHistory(
   }
 
   const data = await res.json();
-  return Array.isArray(data.history) ? data.history : [];
+  return {
+    history: Array.isArray(data.history) ? data.history : [],
+    activeSubscriptions:
+      typeof data.activeSubscriptions === "number"
+        ? data.activeSubscriptions
+        : null,
+  };
 }

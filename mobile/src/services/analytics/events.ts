@@ -20,6 +20,10 @@ export function trackAuthAccountDeleted() {
 
 // Onboarding
 
+export function trackOnboardingStarted() {
+  track("onboarding_started");
+}
+
 export function trackOnboardingCompleted() {
   track("onboarding_completed");
 }

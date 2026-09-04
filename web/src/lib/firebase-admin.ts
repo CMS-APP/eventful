@@ -1,6 +1,16 @@
 import * as admin from "firebase-admin";
 
-function getFirebaseAdminCredential(): admin.credential.Credential | undefined {
+export interface ServiceAccountCredentials {
+  projectId?: string;
+  clientEmail?: string;
+  privateKey?: string;
+}
+
+// Also consumed by lib/ga4.ts — the same service account is granted Viewer
+// access on the GA4 property, so no separate credential is needed there.
+export function getServiceAccountCredentials():
+  | ServiceAccountCredentials
+  | undefined {
   const key = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
   if (!key) return undefined;
   try {
@@ -10,17 +20,26 @@ function getFirebaseAdminCredential(): admin.credential.Credential | undefined {
       private_key?: string;
     };
     if (parsed.private_key) {
-      const privateKey = parsed.private_key.replace(/\\n/g, "\n");
-      return admin.credential.cert({
+      return {
         projectId: parsed.project_id,
         clientEmail: parsed.client_email,
-        privateKey,
-      });
+        privateKey: parsed.private_key.replace(/\\n/g, "\n"),
+      };
     }
   } catch {
     // ignore parse error
   }
   return undefined;
+}
+
+function getFirebaseAdminCredential(): admin.credential.Credential | undefined {
+  const credentials = getServiceAccountCredentials();
+  if (!credentials?.privateKey) return undefined;
+  return admin.credential.cert({
+    projectId: credentials.projectId,
+    clientEmail: credentials.clientEmail,
+    privateKey: credentials.privateKey,
+  });
 }
 
 function getFirebaseAdminApp(): admin.app.App {

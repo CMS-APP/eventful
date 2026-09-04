@@ -7,7 +7,11 @@ import { Alert, StyleSheet, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { AppStackParamList } from "@/app/navigation";
+import {
+  AppStackParamList,
+  PhotoBoothStackNavigation,
+  PhotoBoothStackParamList
+} from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
@@ -28,10 +32,6 @@ import { log } from "@/utils/logging";
 import { showErrorToast, showWarningToast } from "@/utils/toast";
 
 import { GalleryPhotoItem } from "../components/gallery/GalleryPhotoItem";
-import {
-  PhotoBoothStackNavigation,
-  PhotoBoothStackParamList
-} from "../photoBoothStackParams";
 
 export function PhotoBoothPhoto() {
   const { photo: initialPhoto } =
