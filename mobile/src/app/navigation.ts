@@ -1,12 +1,13 @@
 import { createNavigationContainerRef } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { Event } from "@/types/Event";
 import { InAppNotification } from "@/types/InAppNotification";
 import { Invite } from "@/types/Invite";
 import { Invites } from "@/types/Invites";
-import { Photo } from "@/types/Photo";
 import { User } from "@/types/User";
 import { UserInvite } from "@/types/UserInvite";
+import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
 
 export const navigationRef = createNavigationContainerRef<AppStackParamList>();
 
@@ -141,22 +142,25 @@ export type OnboardingStackParamList = {
   OnboardingNotifications: undefined;
 };
 
-type PhotoBoothStackParamList = {
-  PhotoBoothMain: undefined;
-  PhotoBoothColorPicker: { type: string; color: string };
-  PhotoBoothGalleryScreen: undefined;
-  PhotoBoothPreviousPhoto: { selectedPhoto: Photo };
+export type PhotoBoothStackParamList = {
+  PhotoBoothHome: undefined;
+  PhotoBoothCamera: undefined;
+  PhotoBoothResult: undefined;
+  PhotoBoothRedoPhoto: { index: number };
   PhotoBoothCustomise: undefined;
-  PhotoBoothCustomiseLayout: undefined;
-  PhotoBoothCustomiseTextColors: undefined;
-  PhotoBoothCustomiseSettings: undefined;
+  PhotoBoothLayout: undefined;
   PhotoBoothPreview: undefined;
-  PhotoBoothGuidedAccessInfo: undefined;
-  PhotoBoothGalleryEvent: {
-    title: string;
-    photos: Photo[];
-    eventId: string;
+  PhotoBoothTextColors: undefined;
+  PhotoBoothSettings: undefined;
+  PhotoBoothColorPicker: { type: string; color: string };
+  PhotoBoothGallery: undefined;
+  PhotoBoothEventGallery: {
+    event: GalleryEvent;
   };
+  PhotoBoothPhoto: {
+    photo: GalleryPhoto;
+  };
+  PhotoBoothGuidedAccessInfo: undefined;
 };
 
 export type ProfileStackParamList = {
@@ -184,6 +188,9 @@ export type AllStackParamList =
   | MainStackParamList
   | OnboardingStackParamList
   | PhotoBoothStackParamList;
+
+export type PhotoBoothStackNavigation =
+  NativeStackNavigationProp<PhotoBoothStackParamList>;
 
 export interface NestedResetStep {
   name: string;

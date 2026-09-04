@@ -9,6 +9,8 @@ export interface CurvyHeaderProps {
   arcCutoutColor?: string;
   accountButton?: boolean;
   icon?: keyof typeof FontAwesome5.glyphMap | null;
+  iconRight?: keyof typeof FontAwesome5.glyphMap;
+  iconRightAction?: () => void;
 }
 
 export interface FlatHeaderProps {

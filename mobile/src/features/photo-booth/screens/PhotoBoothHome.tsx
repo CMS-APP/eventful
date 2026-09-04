@@ -9,7 +9,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { AppStackParamList } from "@/app/navigation";
+import { AppStackParamList, PhotoBoothStackNavigation } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { Button } from "@/design-system/components/buttons/Button";
 import { Text } from "@/design-system/components/text/Text";
@@ -21,8 +21,6 @@ import { usePhotoBoothSession } from "@/features/photo-booth/context/session/Pho
 import { PhotoBoothLockModal } from "@/features/photo-booth/modals/PhotoBoothLockModal";
 import { PhotoBoothUnlockModal } from "@/features/photo-booth/modals/PhotoBoothUnlockModal";
 import { UserState } from "@/store/UserSlice";
-
-import type { PhotoBoothStackNavigation } from "../photoBoothStackParams";
 
 export function PhotoBoothHome() {
   const navigation = useNavigation<PhotoBoothStackNavigation>();

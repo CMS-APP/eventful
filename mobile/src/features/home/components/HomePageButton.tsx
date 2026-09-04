@@ -20,6 +20,7 @@ interface HomePageButtonProps {
   text: string;
   textColor: string;
   buttonAction: () => void;
+  disabled?: boolean;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -29,7 +30,8 @@ export function HomePageButton({
   text,
   textColor,
   buttonAction,
-  style
+  style,
+  disabled
 }: HomePageButtonProps) {
   const handlePress = useCallback(() => {
     haptics.soft();
@@ -41,6 +43,7 @@ export function HomePageButton({
       onPress={handlePress}
       style={styles.flexContainer}
       hitSlop={getHitSlop("medium")}
+      disabled={disabled}
     >
       <View style={[styles.container, { backgroundColor: color }, style]}>
         <FontAwesome5 name={icon} size={48} color={textColor} />

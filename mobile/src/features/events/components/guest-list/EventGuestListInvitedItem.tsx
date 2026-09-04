@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   userContainer: {
-    ...padding.largeWidget,
+    ...padding.mediumWidget,
     backgroundColor: colors.lightGray,
     flexDirection: "row",
     gap: 12
