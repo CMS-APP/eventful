@@ -15,6 +15,7 @@ import { PhotoBoothEventGallery } from "./screens/PhotoBoothEventGallery";
 import { PhotoBoothGallery } from "./screens/PhotoBoothGallery";
 import { PhotoBoothGuidedAccessInfo } from "./screens/PhotoBoothGuidedAccessInfo";
 import { PhotoBoothHome } from "./screens/PhotoBoothHome";
+import { PhotoBoothInspiration } from "./screens/PhotoBoothInspiration";
 import { PhotoBoothLayout } from "./screens/PhotoBoothLayout";
 import { PhotoBoothPhoto } from "./screens/PhotoBoothPhoto";
 import { PhotoBoothPreview } from "./screens/PhotoBoothPreview";
@@ -87,6 +88,10 @@ export function PhotoBoothNavigator() {
       <Stack.Screen
         name="PhotoBoothGuidedAccessInfo"
         component={PhotoBoothGuidedAccessInfo}
+      />
+      <Stack.Screen
+        name="PhotoBoothInspiration"
+        component={PhotoBoothInspiration}
       />
     </Stack.Navigator>
   );

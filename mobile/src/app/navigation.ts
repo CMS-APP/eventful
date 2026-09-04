@@ -160,6 +160,7 @@ export type PhotoBoothStackParamList = {
   PhotoBoothPhoto: {
     photo: GalleryPhoto;
   };
+  PhotoBoothInspiration: undefined;
   PhotoBoothGuidedAccessInfo: undefined;
 };
 

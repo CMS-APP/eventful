@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+
 import { useCallback, useEffect } from "react";
 
 import { StyleSheet, View } from "react-native";
@@ -9,7 +11,11 @@ import { AllStackParamList, HomeStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { colors } from "@/design-system/tokens/colors";
-import { readUpdateNotification } from "@/services/firebase/user";
+import {
+  decrementUnreadNotificationCount,
+  readUpdateNotification
+} from "@/services/firebase/user";
+import { UserState } from "@/store/UserSlice";
 import { InAppNotification } from "@/types/InAppNotification";
 
 import { HomeUpdateItem } from "../components/HomeUpdateItem";
@@ -24,14 +30,20 @@ export function HomeUpdatesScreen({
   route
 }: HomeUpdatesScreenProps) {
   const { updates } = route.params || [];
+  const userId = useSelector((state: UserState) => state.uid);
 
   const markUpdatesAsRead = useCallback(async () => {
-    if (updates.length !== 0) {
-      for (const update of updates) {
-        await readUpdateNotification(update.id);
-      }
+    const unread = updates.filter((update) => !update.read);
+    if (unread.length === 0) return;
+
+    for (const update of unread) {
+      await readUpdateNotification(update.id);
     }
-  }, [updates]);
+
+    if (userId) {
+      await decrementUnreadNotificationCount(userId, unread.length);
+    }
+  }, [updates, userId]);
 
   useEffect(() => {
     markUpdatesAsRead();

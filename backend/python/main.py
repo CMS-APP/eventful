@@ -6,6 +6,7 @@ from firebase_functions.params import SecretParam
 from services.active_users import snapshot_active_users
 from services.followers import handle_sync_following
 from services.google_places import handle_location_search_request
+from services.notifications import handle_invite_created, handle_notification_created
 
 set_global_options(max_instances=10)
 initialize_app()
@@ -37,6 +38,26 @@ def syncFollowing(
     ],
 ) -> None:
     handle_sync_following(event)
+
+
+@firestore_fn.on_document_created(
+    document="notifications/{notificationId}",
+    region="europe-west2",
+)
+def notificationCreated(
+    event: firestore_fn.Event[firestore_fn.DocumentSnapshot | None],
+) -> None:
+    handle_notification_created(event)
+
+
+@firestore_fn.on_document_created(
+    document="invite/{inviteId}",
+    region="europe-west2",
+)
+def inviteCreated(
+    event: firestore_fn.Event[firestore_fn.DocumentSnapshot | None],
+) -> None:
+    handle_invite_created(event)
 
 
 @scheduler_fn.on_schedule(

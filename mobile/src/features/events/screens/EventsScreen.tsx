@@ -66,6 +66,7 @@ export function EventsScreen({ navigation, route }: EventsScreenProps) {
             selections={["Upcoming", "Past", "Declined"]}
             selectedButton={selectedButton}
             setSelectedButton={setSelectedButton}
+            pressColor={colors.primary}
             nonPressColor={colors.gray}
           />
         </>
@@ -91,8 +92,7 @@ const styles = StyleSheet.create({
   viewSwitcherContainer: {
     alignItems: "center",
     flexDirection: "row",
-    gap: 12,
     marginHorizontal: 24,
-    marginVertical: 20
+    marginTop: 20
   }
 });

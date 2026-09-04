@@ -14,13 +14,14 @@ import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { textFormatter } from "@/design-system/tokens/fonts";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
-import { padding } from "@/design-system/tokens/padding";
 import { getInviteFromDatabase } from "@/services/firebase/invite";
 import { getUserInfo } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
-import { formatDate, formatTime } from "@/utils/date";
+import { formatTime, parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
+
+import { EventDateBadge } from "./EventDateBadge";
 
 interface EventsListItemProps {
   index: number;
@@ -30,68 +31,46 @@ interface EventsListItemProps {
 }
 
 export function EventsListItem({
-  index,
   event,
   isUpcoming,
   isDecline
 }: EventsListItemProps) {
   const userId = useSelector((state: UserState) => state.uid);
   const [host, setHost] = useState("");
-  const light = !isUpcoming && !isDecline && event.userId !== userId;
+  const isOwner = event.userId === userId;
   const navigation = useNavigation() as StackNavigationProp<AppStackParamList>;
   const navEvents =
     useNavigation() as StackNavigationProp<EventsStackParamList>;
 
-  const getBackgroundColor = useCallback(() => {
-    if (isUpcoming)
-      return event.userId === userId ? colors.primary : colors.secondary;
-    return isDecline
-      ? colors.secondary
-      : event.userId === userId
-        ? colors.primaryTint
-        : colors.lightGray;
-  }, [isUpcoming, isDecline, event.userId, userId]);
-
-  const getTextColor = useCallback(() => {
-    return light ? colors.black : colors.white;
-  }, [light]);
-
   const onPress = useCallback(async () => {
     haptics.soft();
 
-    if (event.userId === userId) {
+    if (isOwner) {
       navEvents.navigate("EventEdit", { event });
     } else if (isUpcoming || isDecline) {
       const userData = await getUserInfo(event.userId);
       const invite = await getInviteFromDatabase(event, userId);
 
       if (userData && invite) {
-        (navigation as StackNavigationProp<AppStackParamList>).navigate(
-          "EventInvite",
-          {
-            invite: invite,
-            event,
-            host: { ...userData }
-          }
-        );
+        navigation.navigate("EventInvite", {
+          invite: invite,
+          event,
+          host: { ...userData }
+        });
       }
     } else {
       Alert.alert("Past Event", "This event has already passed", [
         { text: "OK" }
       ]);
     }
-  }, [event, userId, navigation, navEvents, isUpcoming, isDecline]);
+  }, [event, userId, navigation, navEvents, isUpcoming, isDecline, isOwner]);
 
   async function fetchHostInfo() {
-    if (event.userId === userId) {
+    if (isOwner) {
       setHost("You");
     } else {
       const hostDocData = await getUserInfo(event.userId);
-      if (hostDocData) {
-        setHost(hostDocData.name + " (" + hostDocData.username + ")");
-      } else {
-        setHost("");
-      }
+      setHost(hostDocData ? hostDocData.name : "");
     }
   }
 
@@ -100,80 +79,75 @@ export function EventsListItem({
       fetchHostInfo();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [event, isUpcoming, userId, isDecline]);
+  }, [event, userId]);
+
+  const daysDuration =
+    event.multiDate && event.endDate
+      ? Math.round(
+          (parseDatabaseDate(event.endDate).getTime() -
+            parseDatabaseDate(event.date).getTime()) /
+            86400000
+        ) + 1
+      : null;
 
   return (
     <TouchableOpacity onPress={onPress} hitSlop={getHitSlop("large")}>
-      <View
-        style={[
-          styles.eventContainer,
-          { backgroundColor: getBackgroundColor() }
-        ]}
-      >
-        <Text type="header" color={getTextColor()} numberOfLines={2}>
-          {textFormatter(event.name.trim(), 50, "Event")}
-        </Text>
-        <View style={styles.detailsContainer}>
+      <View style={styles.eventContainer}>
+        <EventDateBadge
+          date={event.date}
+          endDate={event.endDate}
+          multiDate={event.multiDate}
+          color={isOwner ? colors.primary : colors.secondary}
+        />
+
+        <View style={styles.contentContainer}>
+          <Text type="subHeader" color={colors.black} numberOfLines={1}>
+            {textFormatter(event.name.trim(), 50, "Event")}
+          </Text>
           <View style={styles.detailRow}>
-            <FontAwesome5 name="user" size={16} color={getTextColor()} />
-            <View style={styles.hostContainer}>
-              <Text
-                type="body"
-                color={getTextColor()}
-                numberOfLines={1}
-                ellipsizeMode="tail"
-              >
-                {host}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.detailRow}>
-            <FontAwesome5
-              name="calendar-alt"
-              size={16}
-              color={getTextColor()}
-            />
-            <Text type="body" style={{ color: getTextColor() }}>
-              {formatDate(event.date)}
-              {event.multiDate && event.endDate
-                ? " - " + formatDate(event.endDate)
-                : ""}
+            <FontAwesome5 name="user" size={12} color={colors.gray} />
+            <Text type="caption" color={colors.black} numberOfLines={1}>
+              {host}
             </Text>
-          </View>
-          <View style={styles.detailRow}>
-            <FontAwesome5 name="clock" size={16} color={getTextColor()} />
-            <Text type="body" style={{ color: getTextColor() }}>
+            <FontAwesome5 name="clock" size={12} color={colors.gray} />
+            <Text type="caption" color={colors.black}>
               {formatTime(event.date)}
               {event.multiDate && event.endDate
-                ? " - " + formatTime(event.endDate)
+                ? ` → ${formatTime(event.endDate)}`
                 : ""}
             </Text>
           </View>
+          {daysDuration && (
+            <Text type="caption" color={colors.black}>
+              {daysDuration} DAY{daysDuration > 1 ? "S" : ""}
+            </Text>
+          )}
         </View>
+
+        <FontAwesome5 name="chevron-right" size={16} color={colors.gray} />
       </View>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
+  contentContainer: {
+    flex: 1,
+    gap: 6,
+    minWidth: 0
+  },
   detailRow: {
     alignItems: "center",
     flexDirection: "row",
-    gap: 12
-  },
-  detailsContainer: {
-    gap: 8,
-    marginTop: 8
+    gap: 8
   },
   eventContainer: {
-    ...padding.largeWidget,
-    alignItems: "stretch",
+    alignItems: "center",
+    backgroundColor: colors.lightGray,
+    borderRadius: 20,
+    flexDirection: "row",
+    gap: 16,
+    padding: 12,
     width: "100%"
-  },
-  hostContainer: {
-    alignItems: "flex-start",
-    flex: 1,
-    gap: 0,
-    minWidth: 0
   }
 });

@@ -47,6 +47,17 @@ const buttonTextStyles = {
   large: "header"
 };
 
+type buttonAlign = "left" | "center" | "right";
+
+const buttonAlignStyles: Record<
+  buttonAlign,
+  "flex-start" | "center" | "flex-end"
+> = {
+  left: "flex-start",
+  center: "center",
+  right: "flex-end"
+};
+
 interface ButtonProps {
   text: string;
   color: string;
@@ -57,6 +68,7 @@ interface ButtonProps {
   leadingIcon?: keyof typeof FontAwesome5.glyphMap;
   disabled?: boolean;
   loading?: boolean;
+  align?: buttonAlign;
 }
 
 export function Button({
@@ -68,7 +80,8 @@ export function Button({
   flex = 0,
   leadingIcon,
   disabled = false,
-  loading = false
+  loading = false,
+  align = "center"
 }: ButtonProps) {
   const handlePress = () => {
     onPress();
@@ -82,7 +95,12 @@ export function Button({
         ? [styles.container, styles.flexContainer]
         : styles.container;
   const buttonStyle = buttonStyles[size];
-  const iconSize = iconSizes[size];
+  let iconSize = iconSizes[size];
+
+  if (leadingIcon === "apple") {
+    iconSize *= 1.1;
+  }
+
   const textStyle = buttonTextStyles[size];
   const gap = buttonStyles[size].gap;
 
@@ -94,7 +112,16 @@ export function Button({
       activeOpacity={0.5}
       hitSlop={getHitSlop("large")}
     >
-      <View style={[styles.button, { backgroundColor: color, ...buttonStyle }]}>
+      <View
+        style={[
+          styles.button,
+          {
+            backgroundColor: color,
+            ...buttonStyle,
+            alignItems: buttonAlignStyles[align]
+          }
+        ]}
+      >
         <View style={[styles.textContainer, { gap }]}>
           {leadingIcon && (
             <FontAwesome5

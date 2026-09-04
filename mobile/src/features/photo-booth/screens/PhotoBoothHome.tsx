@@ -14,10 +14,13 @@ import { Screen } from "@/components/screen/Screen";
 import { Button } from "@/design-system/components/buttons/Button";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { PhotoBoothOpenCard } from "@/features/photo-booth/components/home/PhotoBoothOpenCard";
 import { PhotoBoothPaywallFeatures } from "@/features/photo-booth/components/home/PhotoBoothPaywallFeatures";
+import { PhotoBoothStatsRow } from "@/features/photo-booth/components/home/PhotoBoothStatsRow";
 import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
 import { usePhotoBoothPermissions } from "@/features/photo-booth/context/permissions/PhotoBoothPermissionsContext";
 import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
+import { usePhotoBoothStats } from "@/features/photo-booth/hooks/usePhotoBoothStats";
 import { PhotoBoothLockModal } from "@/features/photo-booth/modals/PhotoBoothLockModal";
 import { PhotoBoothUnlockModal } from "@/features/photo-booth/modals/PhotoBoothUnlockModal";
 import { UserState } from "@/store/UserSlice";
@@ -30,9 +33,11 @@ export function PhotoBoothHome() {
   const { locked, setLocked, lockPin, setLockPin } = usePhotoBoothSession();
   const { ensurePermissions } = usePhotoBoothPermissions();
 
+  const userId = useSelector((state: UserState) => state.uid);
   const premium = useSelector((state: UserState) => state.premium);
   const photoBooth = useSelector((state: UserState) => state.photoBooth);
   const hasAccess = premium || photoBooth;
+  const stats = usePhotoBoothStats(userId);
 
   const [presentLockModal, setPresentLockModal] = useState(false);
   const [presentUnlockModal, setPresentUnlockModal] = useState(false);
@@ -119,12 +124,17 @@ export function PhotoBoothHome() {
       >
         <View style={styles.container}>
           <View
-            style={styles.buttonsList}
+            style={styles.content}
             pointerEvents={hasAccess ? "auto" : "none"}
           >
-            <Button
-              text="Open Photo Booth"
-              leadingIcon="camera"
+            <PhotoBoothOpenCard
+              title="Open Photo Booth"
+              subtitle={
+                stats.lastSessionLabel
+                  ? `Last session ${stats.lastSessionLabel}`
+                  : "No sessions yet"
+              }
+              icon="camera"
               onPress={async () => {
                 const hasPermissions = await ensurePermissions();
                 if (!hasPermissions) {
@@ -133,63 +143,115 @@ export function PhotoBoothHome() {
                 navigation.navigate("PhotoBoothCamera");
               }}
               color={!hasAccess ? colors.gray : colors.primary}
-              textColor={colors.white}
+              accentColor={!hasAccess ? colors.lightGray : colors.secondary}
               disabled={!hasAccess}
             />
 
-            <Button
-              text="Customise"
-              leadingIcon="cog"
-              onPress={() => {
-                navigation.navigate("PhotoBoothCustomise");
-              }}
-              color={locked || !hasAccess ? colors.gray : colors.primary}
-              textColor={colors.white}
-              disabled={locked || !hasAccess}
-            />
-
-            <Button
-              text="Photo Gallery"
-              leadingIcon="cloud"
-              onPress={async () => {
-                const hasPermissions = await ensurePermissions();
-                if (!hasPermissions) {
-                  return;
-                }
-                navigation.navigate("PhotoBoothGallery");
-              }}
-              color={locked || !hasAccess ? colors.gray : colors.primary}
-              textColor={colors.white}
-              disabled={locked || !hasAccess}
-            />
-
-            <Button
-              text={`${locked ? "Un" : ""}Lock Photo Booth `}
-              leadingIcon={locked ? "unlock" : "lock"}
-              onPress={() => {
-                if (locked) {
-                  setPresentUnlockModal(true);
-                } else {
-                  setPresentLockModal(true);
-                }
-              }}
-              color={!hasAccess ? colors.gray : colors.primary}
-              textColor={colors.white}
-              disabled={!hasAccess}
-            />
-
-            {Platform.OS === "ios" && !locked && (
-              <Button
-                text="Guided Access Info"
-                leadingIcon="apple"
-                onPress={() => {
-                  navigation.navigate("PhotoBoothGuidedAccessInfo");
-                }}
-                color={!hasAccess ? colors.gray : colors.primary}
-                textColor={colors.white}
-                disabled={!hasAccess}
+            <View style={styles.section}>
+              <Text type="body" color={colors.gray}>
+                Overview
+              </Text>
+              <PhotoBoothStatsRow
+                photosTaken={stats.photosTaken}
+                inTheCloud={stats.inTheCloud}
+                events={stats.events}
               />
-            )}
+            </View>
+
+            <View style={styles.section}>
+              <Text type="body" color={colors.gray}>
+                Manage
+              </Text>
+
+              <View style={styles.grid}>
+                <View style={styles.gridRow}>
+                  <Button
+                    leadingIcon="cog"
+                    text="Customise"
+                    color={
+                      locked || !hasAccess ? colors.gray : colors.lightGray
+                    }
+                    textColor={colors.primary}
+                    onPress={() => {
+                      navigation.navigate("PhotoBoothCustomise");
+                    }}
+                    disabled={locked}
+                    flex={1}
+                    align="left"
+                  />
+
+                  <Button
+                    leadingIcon="cloud"
+                    text="Gallery"
+                    color={
+                      locked || !hasAccess ? colors.gray : colors.lightGray
+                    }
+                    textColor={colors.primary}
+                    onPress={async () => {
+                      const hasPermissions = await ensurePermissions();
+                      if (!hasPermissions) {
+                        return;
+                      }
+                      navigation.navigate("PhotoBoothGallery");
+                    }}
+                    disabled={locked}
+                    flex={1}
+                    align="left"
+                  />
+                </View>
+
+                <View style={styles.gridRow}>
+                  <Button
+                    leadingIcon={locked ? "unlock" : "lock"}
+                    text={`${locked ? "Un" : ""}Lock`}
+                    color={!hasAccess ? colors.gray : colors.lightGray}
+                    textColor={colors.primary}
+                    disabled={!hasAccess}
+                    onPress={() => {
+                      if (locked) {
+                        setPresentUnlockModal(true);
+                      } else {
+                        setPresentLockModal(true);
+                      }
+                    }}
+                    flex={1}
+                    align="left"
+                  />
+
+                  {Platform.OS === "ios" && (
+                    <Button
+                      leadingIcon="apple"
+                      text="Access"
+                      color={
+                        locked || !hasAccess ? colors.gray : colors.lightGray
+                      }
+                      textColor={colors.primary}
+                      onPress={() => {
+                        navigation.navigate("PhotoBoothGuidedAccessInfo");
+                      }}
+                      disabled={locked}
+                      flex={1}
+                      align="left"
+                    />
+                  )}
+                </View>
+
+                {/* <Text type="subHeader" color={colors.gray}>
+                  Inspiration
+                </Text>
+
+                <HomePageButton
+                  icon="star"
+                  text="Inspiration"
+                  color={colors.primary}
+                  textColor={colors.white}
+                  buttonAction={() => {
+                    navigation.navigate("PhotoBoothInspiration");
+                  }}
+                  disabled={locked || !hasAccess}
+                /> */}
+              </View>
+            </View>
           </View>
         </View>
       </Screen>
@@ -198,13 +260,21 @@ export function PhotoBoothHome() {
 }
 
 const styles = StyleSheet.create({
-  buttonsList: {
-    gap: 16
-  },
   container: {
     marginTop: 52,
     paddingHorizontal: 24,
     position: "relative"
+  },
+  content: {
+    gap: 16
+  },
+  grid: {
+    gap: 8
+  },
+  gridRow: {
+    flex: 1,
+    flexDirection: "row",
+    gap: 8
   },
   lockedIconCircle: {
     alignItems: "center",
@@ -217,5 +287,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 10,
     width: 64
+  },
+  section: {
+    gap: 12
   }
 });

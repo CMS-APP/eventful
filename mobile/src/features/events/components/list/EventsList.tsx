@@ -76,7 +76,7 @@ export function EventsList({
 const styles = StyleSheet.create({
   container: {
     gap: 12,
-    marginHorizontal: 24,
+    marginHorizontal: 16,
     marginTop: 12
   },
   listContainer: {
