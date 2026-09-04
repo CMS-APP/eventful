@@ -144,6 +144,8 @@ run_tracks() {
     fi
   done
 
+  rm -f "${status_files[@]}" "${phase_files[@]}"
+
   if [ "$failed" = true ]; then
     print_summary
     exit 1
@@ -159,6 +161,7 @@ _run_tracks_interrupt() {
   for pid in "${pids[@]}"; do
     wait "$pid" 2>/dev/null
   done
+  rm -f "${status_files[@]}" "${phase_files[@]}"
   exit 130
 }
 
