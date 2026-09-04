@@ -74,7 +74,15 @@ export function PhotoBoothHome() {
             icon: "camera",
             color: colors.white,
             accountButton: false,
-            backgroundColor: colors.primary
+            backgroundColor: colors.primary,
+            iconRight: locked ? "unlock" : "lock",
+            iconRightAction: () => {
+              if (locked) {
+                setPresentUnlockModal(true);
+              } else {
+                setPresentLockModal(true);
+              }
+            }
           }
         }}
         contentConfig={{

@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     ...padding.smallWidget,
     alignItems: "center",
     backgroundColor: colors.secondary,
+    borderRadius: 12,
     justifyContent: "center"
   }
 });

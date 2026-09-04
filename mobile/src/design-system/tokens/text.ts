@@ -26,7 +26,7 @@ const defaultText: Record<TextType, TextStyle> = {
   header: {
     fontFamily: "playfairRegular",
     fontSize: 24,
-    lineHeight: 30,
+    lineHeight: Platform.OS === "android" ? 28 : 24,
     textAlign: "center"
   },
   subHeader: {

@@ -6,6 +6,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/text/Text";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { haptics } from "@/utils/haptics";
 
 import { ArcCutout } from "../views/ArcCutout";
 import { CurvyHeaderProps } from "./props";
@@ -19,6 +20,11 @@ export function CurvyHeader({ ...props }: CurvyHeaderProps) {
     } else if (props?.backAction && typeof props?.backAction === "boolean") {
       nav.goBack();
     }
+  }
+
+  function handleIconRightAction() {
+    haptics.soft();
+    props?.iconRightAction?.();
   }
 
   return (
@@ -42,6 +48,15 @@ export function CurvyHeader({ ...props }: CurvyHeaderProps) {
           </Text>
         )}
       </View>
+
+      {props?.iconRight && (
+        <TouchableOpacity
+          onPress={handleIconRightAction}
+          hitSlop={getHitSlop("small")}
+        >
+          <FontAwesome5 name={props.iconRight} size={24} color={props?.color} />
+        </TouchableOpacity>
+      )}
 
       <ArcCutout
         color={props?.arcCutoutColor}

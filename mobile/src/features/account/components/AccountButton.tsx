@@ -77,7 +77,7 @@ export function AccountButton({
                   />
                 ) : (
                   <View style={styles.textBackground}>
-                    <Text type="subHeader" color={colors.white}>
+                    <Text type="subHeader" color={colors.primary}>
                       {getInitials(firstName, lastName, name)}
                     </Text>
                   </View>
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   textBackground: {
     alignItems: "center",
-    backgroundColor: colors.primaryTint,
+    backgroundColor: colors.white,
     borderRadius: 25,
     height: 50,
     justifyContent: "center",
