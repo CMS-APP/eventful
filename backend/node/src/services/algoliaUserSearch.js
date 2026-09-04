@@ -7,11 +7,18 @@ function parsePositiveInt(value, fallback) {
 
 function pickUserFields(hit) {
   return {
-    uid: hit.uid ?? hit.objectID ?? null,
+    uid: hit.uid || hit.objectID || null,
     username: hit.username ?? null,
     name: hit.name ?? null,
     searchName: hit.searchName ?? null,
   };
+}
+
+function isSearchableUser(user) {
+  if (!user?.uid) return false;
+  const name = typeof user.name === "string" ? user.name.trim() : "";
+  const username = typeof user.username === "string" ? user.username.trim() : "";
+  return Boolean(name || username);
 }
 
 function createAlgoliaUserSearchHandler({
@@ -67,17 +74,22 @@ function createAlgoliaUserSearchHandler({
           page,
           typoTolerance: true,
           queryType: "prefixLast",
-          removeWordsIfNoResults: "allOptional",
+          removeWordsIfNoResults: "lastWords",
+          restrictSearchableAttributes: ["username", "name", "searchName"],
           attributesToRetrieve: ["uid", "username", "name", "searchName"],
         },
       });
+
+      const hits = (result.hits || [])
+        .map(pickUserFields)
+        .filter(isSearchableUser);
 
       return res.status(200).json({
         query: q,
         hitsPerPage,
         page,
-        nbHits: result.nbHits,
-        hits: (result.hits || []).map(pickUserFields),
+        nbHits: hits.length,
+        hits,
       });
     } catch (err) {
       console.error("Algolia user search error:", err);
