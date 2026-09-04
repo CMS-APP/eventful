@@ -15,8 +15,8 @@ export default ({ config }: ConfigContext) => {
     slug: "Eventful",
     scheme: "eventful",
     owner: "chrissharp",
-    version: "6.8.0",
-    runtimeVersion: "6.8.0",
+    version: "6.9.0",
+    runtimeVersion: "6.9.0",
     orientation: "portrait",
     icon: "./src/assets/logos/eventful-logo.png",
     userInterfaceStyle: "light",
@@ -44,8 +44,9 @@ export default ({ config }: ConfigContext) => {
     ios: {
       bundleIdentifier: bundleId,
       icon: "./src/assets/logos/eventful-logo.png",
-      buildNumber: "347",
+      buildNumber: "349",
       supportsTablet: true,
+      appleTeamId: "4LMZHG2P3T",
       infoPlist: {
         NSPhotoLibraryUsageDescription:
           "This app needs access to your photo library to upload photos to your account and events.",
@@ -56,7 +57,8 @@ export default ({ config }: ConfigContext) => {
       },
       entitlements: {
         "com.apple.developer.applesignin": ["Default"],
-        "com.apple.developer.devicecheck.appattest-environment": "production"
+        "com.apple.developer.devicecheck.appattest-environment": "production",
+        "com.apple.security.application-groups": [`group.${bundleId}`]
       },
       googleServicesFile: IS_DEV
         ? "./firebase/GoogleService-Info-Dev.plist"
@@ -122,6 +124,7 @@ export default ({ config }: ConfigContext) => {
         "expo-build-properties",
         {
           ios: {
+            deploymentTarget: "16.4",
             useFrameworks: "static",
             forceStaticLinking: [
               "RNFBApp",
@@ -135,6 +138,7 @@ export default ({ config }: ConfigContext) => {
           }
         }
       ],
+      "@bacons/apple-targets",
       "./plugins/withBoringSSLHeaderFix"
     ],
     extra: {

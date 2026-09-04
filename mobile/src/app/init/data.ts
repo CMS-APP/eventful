@@ -23,6 +23,7 @@ import {
   getUserInfo,
   updateUserInfo
 } from "@/services/firebase/user";
+import { syncNextEventWidget } from "@/services/widget/nextEventWidget";
 import { setUserData, setUserInSentry } from "@/store/UserSlice";
 import { User } from "@/types/User";
 import { log } from "@/utils/logging";
@@ -74,6 +75,8 @@ export async function dataInit(dispatch: Dispatch, nextStep?: () => void) {
   if (!hasFederatedProvider && !user.emailVerified) {
     return "Auth";
   }
+
+  syncNextEventWidget(user.uid);
 
   await storeInit(user.uid);
   nextStep?.();

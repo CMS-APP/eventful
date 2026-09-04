@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+
 import React, { useRef } from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -8,9 +10,11 @@ import {
 
 import { ErrorFallback } from "@/app/context/error/ErrorFallback";
 import { useBackButtonHandler } from "@/app/hooks/useBackButtonHandler";
+import { useSyncEventWidget } from "@/app/hooks/useSyncEventWidget";
 import { useDataInit } from "@/app/init/data";
 import { AppStackParamList, navigationRef } from "@/app/navigation";
 import { trackScreen } from "@/services/analytics/analytics";
+import { UserState } from "@/store/UserSlice";
 
 import { AuthNavigator } from "../features/auth/AuthNavigator";
 import { EventInviteNavigator } from "../features/invite/EventInviteNavigator";
@@ -37,8 +41,10 @@ const modalOptions: NativeStackNavigationOptions = {
 export function AppNavigator() {
   const { initialize, bootError } = useDataInit();
   const routeNameRef = useRef<string | undefined>(undefined);
+  const userId = useSelector((state: UserState) => state.uid);
 
   useBackButtonHandler();
+  useSyncEventWidget(userId);
 
   if (bootError) {
     return <ErrorFallback error={bootError} resetError={initialize} />;
