@@ -58,6 +58,7 @@ npm run deploy:hosting
 ```
 
 Node functions (`backend/node/`):
+
 ```bash
 cd backend/node
 npm run lint        # runs automatically as a predeploy hook too
@@ -77,14 +78,17 @@ There is no local Firebase emulator flow wired up for day-to-day iteration on No
 Public clients call `api.eventfulapp.com/<path>`, never Cloud Functions URLs directly. `backend/firebase.json` `hosting.rewrites` maps each path to a specific function (`functionId` + `region`). Today all routes point at Node functions; Python functions are added one at a time and swapped in by only changing the rewrite's `functionId` — no client/app release is required. When adding a new HTTP endpoint, add both the function export and a corresponding hosting rewrite.
 
 Node HTTP handlers are written as factories that take dependencies (admin, db, secrets) and return an Express-style handler, then are wired up in `backend/node/index.js`:
+
 ```js
 exports.signUp = onRequest({ secrets: [...], cors: [...] }, createSignUpHandler({ admin, MJ_API_KEY, MJ_SECRET }));
 ```
+
 Handler implementations live under `backend/node/src/functions/` (`httpHandlers.js`, `firestoreHandlers.js`, `scheduledHandlers.js`), with cross-cutting logic in `backend/node/src/services/` (email, notifications, photos, Algolia user search, user helpers) and `backend/node/src/utils/`. Firestore-triggered functions (e.g. `syncFollowers`, `sendFeedbackEmail`) and the `deleteOldPhotos` scheduled function follow the same factory pattern. Secrets are declared via `defineSecret` and passed explicitly into handler factories rather than read globally.
 
 ### Mobile app structure
 
 Feature-first under `mobile/src/features/<feature>/{screens,components,hooks,...}` (e.g. `auth`, `events`, `photo-booth`, `calendar`, `contacts`, `invite`, `onboarding`, `profile`, `settings`). Cross-feature code lives in:
+
 - `src/services/firebase/` — one file per domain (`firebaseAuth.ts`, `firebaseEventFunctions.ts`, `firebaseInviteFunctions.ts`, `firebaseStorage.ts`, `firebaseListeners.ts`, etc.) — all direct Firestore/Auth/Storage access should go through these, not ad hoc calls in components.
 - `src/services/api/` — calls out to the backend HTTP gateway (`create.ts`, `get.ts`, `update.ts`, `delete.ts`, `constants.ts`).
 - `src/store/` — Redux Toolkit (currently just `UserSlice.ts`).
@@ -98,6 +102,7 @@ Native config (bundle IDs, permissions, plugins, fonts, Firebase config files) i
 ### Web app structure
 
 Next.js App Router with route groups under `web/src/app/`:
+
 - `(public)/(shell)` and `(public)/(headerless)` — public pages with/without the shared header layout.
 - `(account)/` — authenticated account area (`account/`, `stats/` admin dashboard with `feedback`, `subscribers`, `users` sub-pages, `forgot-password/`, `verify-email/`).
 - `api/` — route handlers (`download-image`, `subscriptions`).
