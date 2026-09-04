@@ -1,10 +1,5 @@
 "use client";
 
-import { checkAdmin } from "@/app/account/database/utils";
-import Loading from "@/components/Loading";
-import UnauthorizedAccess from "@/components/UnauthorizedAccess";
-import { useUser } from "@/contexts/UserContext";
-import { getRevenueCatHistory, type RevenueCatDailyStat } from "@/lib/subscriptions";
 import {
   faChartLine,
   faCoins,
@@ -13,7 +8,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import {
   CartesianGrid,
   Line,
@@ -24,6 +18,18 @@ import {
   XAxis,
   YAxis
 } from "recharts";
+
+import { useEffect, useState } from "react";
+
+import { checkAdmin } from "@/app/account/database/utils";
+import Loading from "@/components/Loading";
+import UnauthorizedAccess from "@/components/UnauthorizedAccess";
+import { useUser } from "@/contexts/UserContext";
+import {
+  type RevenueCatDailyStat,
+  getRevenueCatHistory
+} from "@/lib/subscriptions";
+
 import {
   type ActiveUserStatsPoint,
   getActiveUserStatsHistory,
@@ -67,14 +73,25 @@ function TrendChart<T extends { date: string }>({
   metric,
   color,
   formatValue,
-  emptyMessage
+  emptyMessage,
+  loading
 }: {
   history: T[];
   metric: keyof T;
   color: string;
   formatValue: (value: number) => string;
   emptyMessage: string;
+  loading: boolean;
 }) {
+  if (loading) {
+    return (
+      <div className="chart-card-loading" role="status" aria-live="polite">
+        <span className="chart-card-spinner" aria-hidden />
+        <span>Loading...</span>
+      </div>
+    );
+  }
+
   if (history.length === 0) {
     return <p className="chart-card-empty">{emptyMessage}</p>;
   }
@@ -86,20 +103,18 @@ function TrendChart<T extends { date: string }>({
   return (
     <div>
       <div className="chart-card-summary">
-        <span className="chart-card-summary-value">
-          {formatValue(latest)}
-        </span>
+        <span className="chart-card-summary-value">{formatValue(latest)}</span>
         <span className="chart-card-summary-label">
           on {formatShortDate(history[history.length - 1].date)} · avg{" "}
           {formatValue(average)}
         </span>
       </div>
       <ResponsiveContainer width="100%" height={180}>
-        <LineChart data={history} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
-          <CartesianGrid
-            stroke="rgba(255, 255, 255, 0.08)"
-            vertical={false}
-          />
+        <LineChart
+          data={history}
+          margin={{ top: 10, right: 12, left: 0, bottom: 0 }}
+        >
+          <CartesianGrid stroke="rgba(255, 255, 255, 0.08)" vertical={false} />
           <XAxis
             dataKey="date"
             tickFormatter={formatShortDate}
@@ -159,6 +174,8 @@ export default function Stats() {
   const [subscriptionHistory, setSubscriptionHistory] = useState<
     RevenueCatDailyStat[]
   >([]);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [loadingSubscriptions, setLoadingSubscriptions] = useState(true);
 
   useEffect(() => {
     async function verifyAdmin() {
@@ -186,7 +203,7 @@ export default function Stats() {
       return;
     }
 
-    async function getStats() {
+    async function getUserStats() {
       try {
         const [userCount, activeUserStats] = await Promise.all([
           getTotalUser(),
@@ -196,18 +213,26 @@ export default function Stats() {
         setActiveUserHistory(activeUserStats);
       } catch (error) {
         console.error("Error fetching stats:", error);
+      } finally {
+        setLoadingUsers(false);
       }
+    }
 
+    async function getSubscriptionStats() {
       try {
         const idToken = await user!.getIdToken();
         const subscriptionStats = await getRevenueCatHistory(idToken, 30);
         setSubscriptionHistory(subscriptionStats);
       } catch (error) {
         console.error("Error fetching subscription stats:", error);
+      } finally {
+        setLoadingSubscriptions(false);
       }
     }
 
-    getStats();
+    // Fired independently so the slower of the two doesn't hold up the other's chart.
+    getUserStats();
+    getSubscriptionStats();
   }, [isAdmin, checkingAdmin, user]);
 
   // Show loading state while checking
@@ -228,94 +253,97 @@ export default function Stats() {
   // Admin users can see the stats page
   return (
     <main className="flex flex-1 flex-col p-10">
-        <div className="stats-container">
-          <div className="stats-header">
-            <h1>Admin Panel</h1>
-            <p className="stats-subtitle">Platform stats and overview</p>
-          </div>
+      <div className="stats-container">
+        <div className="stats-header">
+          <h1>Admin Panel</h1>
+          <p className="stats-subtitle">Platform stats and overview</p>
+        </div>
 
-          <div className="stats-grid">
-            <Link
-              href="/stats/feedback"
-              className="stat-card stat-card-feedback stat-card-link"
-            >
-              <div className="stat-icon-wrapper">
-                <FontAwesomeIcon icon={faCommentDots} className="stat-icon" />
-              </div>
-              <div className="stat-content">
-                <h2 className="stat-label">App Feedback</h2>
-                <p className="stat-value stat-value-link">View all</p>
-              </div>
-            </Link>
-
-            <Link
-              href="/stats/users"
-              className="stat-card stat-card-users stat-card-link"
-            >
-              <div className="stat-icon-wrapper">
-                <FontAwesomeIcon icon={faUsers} className="stat-icon" />
-              </div>
-              <div className="stat-content">
-                <h2 className="stat-label">Total Users</h2>
-                <p className="stat-value">{totalUser.toLocaleString()}</p>
-              </div>
-            </Link>
-          </div>
-
-          <div className="charts-section">
-            <h2 className="charts-section-title">Revenue</h2>
-            <div className="charts-grid">
-              <section className="chart-card">
-                <h2 className="chart-card-title">
-                  <FontAwesomeIcon icon={faCoins} />
-                  MRR (last 30 days)
-                </h2>
-                <TrendChart
-                  history={subscriptionHistory}
-                  metric="mrr"
-                  color={REVENUE_COLOR}
-                  formatValue={formatCurrency}
-                  emptyMessage="No subscription data yet from RevenueCat for this range."
-                />
-              </section>
-
-              <section className="chart-card">
-                <h2 className="chart-card-title">
-                  <FontAwesomeIcon icon={faCoins} />
-                  Revenue per day (last 30 days)
-                </h2>
-                <TrendChart
-                  history={subscriptionHistory}
-                  metric="revenue"
-                  color={REVENUE_COLOR}
-                  formatValue={formatCurrency}
-                  emptyMessage="No subscription data yet from RevenueCat for this range."
-                />
-              </section>
+        <div className="stats-grid">
+          <Link
+            href="/stats/feedback"
+            className="stat-card stat-card-feedback stat-card-link"
+          >
+            <div className="stat-icon-wrapper">
+              <FontAwesomeIcon icon={faCommentDots} className="stat-icon" />
             </div>
-          </div>
-
-          <div className="charts-section">
-            <h2 className="charts-section-title">Active users</h2>
-            <div className="charts-grid">
-              {ACTIVE_USER_METRICS.map(({ key, label }) => (
-                <section className="chart-card" key={key}>
-                  <h2 className="chart-card-title">
-                    <FontAwesomeIcon icon={faChartLine} />
-                    {label}
-                  </h2>
-                  <TrendChart
-                    history={activeUserHistory}
-                    metric={key}
-                    color={GROWTH_COLOR}
-                    formatValue={(v) => v.toLocaleString()}
-                    emptyMessage="No activity history yet — daily tracking started today. Check back tomorrow to see the trend build up."
-                  />
-                </section>
-              ))}
+            <div className="stat-content">
+              <h2 className="stat-label">App Feedback</h2>
+              <p className="stat-value stat-value-link">View all</p>
             </div>
+          </Link>
+
+          <Link
+            href="/stats/users"
+            className="stat-card stat-card-users stat-card-link"
+          >
+            <div className="stat-icon-wrapper">
+              <FontAwesomeIcon icon={faUsers} className="stat-icon" />
+            </div>
+            <div className="stat-content">
+              <h2 className="stat-label">Total Users</h2>
+              <p className="stat-value">{totalUser.toLocaleString()}</p>
+            </div>
+          </Link>
+        </div>
+
+        <div className="charts-section">
+          <h2 className="charts-section-title">Revenue</h2>
+          <div className="charts-grid">
+            <section className="chart-card">
+              <h2 className="chart-card-title">
+                <FontAwesomeIcon icon={faCoins} />
+                MRR (last 30 days)
+              </h2>
+              <TrendChart
+                history={subscriptionHistory}
+                metric="mrr"
+                color={REVENUE_COLOR}
+                formatValue={formatCurrency}
+                emptyMessage="No subscription data yet from RevenueCat for this range."
+                loading={loadingSubscriptions}
+              />
+            </section>
+
+            <section className="chart-card">
+              <h2 className="chart-card-title">
+                <FontAwesomeIcon icon={faCoins} />
+                Revenue per day (last 30 days)
+              </h2>
+              <TrendChart
+                history={subscriptionHistory}
+                metric="revenue"
+                color={REVENUE_COLOR}
+                formatValue={formatCurrency}
+                emptyMessage="No subscription data yet from RevenueCat for this range."
+                loading={loadingSubscriptions}
+              />
+            </section>
           </div>
         </div>
+
+        <div className="charts-section">
+          <h2 className="charts-section-title">Active users</h2>
+          <div className="charts-grid">
+            {ACTIVE_USER_METRICS.map(({ key, label }) => (
+              <section className="chart-card" key={key}>
+                <h2 className="chart-card-title">
+                  <FontAwesomeIcon icon={faChartLine} />
+                  {label}
+                </h2>
+                <TrendChart
+                  history={activeUserHistory}
+                  metric={key}
+                  color={GROWTH_COLOR}
+                  formatValue={(v) => v.toLocaleString()}
+                  emptyMessage="No activity history yet — daily tracking started today. Check back tomorrow to see the trend build up."
+                  loading={loadingUsers}
+                />
+              </section>
+            ))}
+          </div>
+        </div>
+      </div>
     </main>
   );
 }

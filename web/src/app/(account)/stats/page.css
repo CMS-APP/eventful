@@ -222,6 +222,35 @@
   margin: 20px 0;
 }
 
+.chart-card-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 70px 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  font-family: var(--font-poppins-regular);
+}
+
+.chart-card-spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top: 3px solid var(--color-secondary);
+  border-radius: 50%;
+  animation: chart-card-spin 1s linear infinite;
+}
+
+@keyframes chart-card-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .chart-card-summary {
   display: flex;
   align-items: baseline;
