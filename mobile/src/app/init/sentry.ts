@@ -17,17 +17,7 @@ export function sentryInit(): void {
     release,
     dist,
     environment,
-    replaysSessionSampleRate: __DEV__ ? 1 : 0.1,
-    replaysOnErrorSampleRate: 1.0,
     tracesSampleRate: 1.0,
-    integrations: [
-      Sentry.mobileReplayIntegration({
-        maskAllText: true,
-        maskAllImages: true,
-        maskAllVectors: true
-      })
-    ],
-    ignoreErrors: [/auth\/network-request-failed/],
     enableLogs: __DEV__
   });
 }
