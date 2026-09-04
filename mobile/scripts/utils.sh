@@ -24,6 +24,7 @@ run_tracks() {
   local names=()
   local fns=()
   local log_files=()
+  local tmp_files=()
   local status_files=()
   local phase_files=()
   local prev_sizes=()
@@ -36,9 +37,9 @@ run_tracks() {
     shift 3
   done
 
-  # Snapshot each step's previous log size (if one exists from a prior run)
-  # before it gets truncated below, so the live display can estimate percent
-  # complete by comparing current size to it. No prior log just means no
+  # Snapshot each step's previous log size (the log file left over from its
+  # prior run) so the live display can estimate percent complete by
+  # comparing the in-progress log to it. No prior log just means no
   # estimate — the display falls back to showing whatever it has.
   for i in "${!names[@]}"; do
     local log_file="${log_files[$i]}"
@@ -52,14 +53,26 @@ run_tracks() {
   set -m
   for i in "${!names[@]}"; do
     local log_file="${log_files[$i]}"
+    local tmp_file="${log_file}.new"
     local status_file="${log_file%.log}.status"
     local phase_file="${log_file%.log}.phase"
-    rm -f "$status_file" "$phase_file"
+    rm -f "$status_file" "$phase_file" "$tmp_file"
+    tmp_files+=("$tmp_file")
     status_files+=("$status_file")
     phase_files+=("$phase_file")
 
     local fn="${fns[$i]}"
-    ("$fn" "$phase_file"; echo $? > "$status_file") > "$log_file" 2>&1 &
+    # Write to a sibling .new file and only swap it over the real log file
+    # once this run exits (normally or via the TERM trap below), so the
+    # previous run's log stays intact — and readable — for the whole
+    # duration of this run instead of being truncated the instant it starts.
+    (
+      trap 'mv -f "$tmp_file" "$log_file" 2>/dev/null; exit 143' TERM
+      "$fn" "$phase_file" > "$tmp_file" 2>&1
+      rc=$?
+      mv -f "$tmp_file" "$log_file" 2>/dev/null
+      echo "$rc" > "$status_file"
+    ) &
     local pid=$!
     pids+=("$pid")
     disown "$pid" 2>/dev/null
@@ -89,6 +102,7 @@ run_tracks() {
       local nm="${names[$i]}"
       local sf="${status_files[$i]}"
       local lf="${log_files[$i]}"
+      local tf="${tmp_files[$i]}"
       local pf="${phase_files[$i]}"
 
       if [ -f "$sf" ]; then
@@ -109,9 +123,9 @@ run_tracks() {
         local phase=""
         [ -n "$phase_raw" ] && phase=" — $phase_raw"
         local percent=""
-        if [ "${prev_sizes[$i]:-0}" -gt 0 ] && [ -f "$lf" ]; then
+        if [ "${prev_sizes[$i]:-0}" -gt 0 ] && [ -f "$tf" ]; then
           local cur_size
-          cur_size=$(stat -f%z "$lf" 2>/dev/null || echo 0)
+          cur_size=$(stat -f%z "$tf" 2>/dev/null || echo 0)
           local pct=$((cur_size * 100 / prev_sizes[$i]))
           [ "$pct" -gt 100 ] && pct=100
           percent=" (~${pct}%)"
@@ -144,7 +158,7 @@ run_tracks() {
     fi
   done
 
-  rm -f "${status_files[@]}" "${phase_files[@]}"
+  rm -f "${status_files[@]}" "${phase_files[@]}" "${tmp_files[@]}"
 
   if [ "$failed" = true ]; then
     print_summary
@@ -161,7 +175,7 @@ _run_tracks_interrupt() {
   for pid in "${pids[@]}"; do
     wait "$pid" 2>/dev/null
   done
-  rm -f "${status_files[@]}" "${phase_files[@]}"
+  rm -f "${status_files[@]}" "${phase_files[@]}" "${tmp_files[@]}"
   exit 130
 }
 

@@ -1,28 +1,27 @@
 #!/bin/bash
-set -e
 
-# Prebuild the app (development variant — separate bundle ID/name from production)
-APP_VARIANT=development npx expo prebuild --clean
+source "$(dirname "$0")/utils.sh"
 
-# Create Development Build
-echo "📦 Building iOS Development App..."
-IOS_START_TIME=$(date +%s)
-eas build --local --platform ios --profile development --non-interactive
-IOS_END_TIME=$(date +%s)
-IOS_DURATION=$((IOS_END_TIME - IOS_START_TIME))
-IOS_MINUTES=$((IOS_DURATION / 60))
-IOS_SECONDS=$((IOS_DURATION % 60))
-echo "✅ iOS build completed in ${IOS_MINUTES}m ${IOS_SECONDS}s"
-
-# Create dev build directory if it doesn't exist
 mkdir -p build/dev
+mkdir -p build/logs
 
-# Find and move iOS build files
-IOS_BUILD_FILE=$(find . -name "*.ipa" -not -path "./build/*" | head -1)
-if [ -n "$IOS_BUILD_FILE" ]; then
-    IOS_FILENAME="eventful_ios_dev.ipa"
-    mv "$IOS_BUILD_FILE" "build/dev/$IOS_FILENAME"
-    echo "✅ Moved iOS build to build/dev/$IOS_FILENAME"
-else
-    echo "⚠️  No iOS .ipa file found"
-fi
+ios_dev_pipeline() {
+  local phase_file=$1
+
+  echo "Prebuilding" > "$phase_file"
+  APP_VARIANT=development npx expo prebuild --clean || return $?
+
+  echo "Building" > "$phase_file"
+  eas build --local --platform ios --profile development --non-interactive || return $?
+
+  echo "Packaging" > "$phase_file"
+  local ios_build_file
+  ios_build_file=$(find . -name "*.ipa" -not -path "./build/*" -type f | head -1)
+  if [ -n "$ios_build_file" ]; then
+    mv "$ios_build_file" "build/dev/eventful_ios_dev.ipa"
+  fi
+}
+
+run_tracks "iOS Dev Build" ios_dev_pipeline "build/logs/ios-dev-build.log"
+print_summary
+echo "✅ iOS dev build completed"
