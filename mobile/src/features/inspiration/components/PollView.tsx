@@ -21,6 +21,7 @@ import { Poll } from "@/types/Poll";
 import { PollVote } from "@/types/PollVote";
 
 import { PollOptionView } from "./PollOptionView";
+import { PollViewSkeleton } from "./PollViewSkeleton";
 
 interface PollViewProps {
   isAdmin: boolean;
@@ -30,10 +31,12 @@ export function PollView({ isAdmin }: PollViewProps) {
   const [poll, setPoll] = useState<Poll | null>(null);
   const [votes, setVotes] = useState<PollVote[]>([]);
   const [userVote, setUserVote] = useState<PollVote | null>(null);
+  const [loading, setLoading] = useState(true);
   const userId = useSelector((state: UserState) => state.uid);
   const navigation = useNavigation<StackNavigationProp<HomeStackParamList>>();
 
   const fetchPoll = useCallback(async () => {
+    setLoading(true);
     const poll = await getPollInDatabase();
     setPoll(poll);
 
@@ -43,6 +46,7 @@ export function PollView({ isAdmin }: PollViewProps) {
       const userVote = await getVoteForUserInDatabase(poll, userId);
       setUserVote(userVote as PollVote | null);
     }
+    setLoading(false);
   }, [userId]);
 
   useFocusEffect(
@@ -69,7 +73,9 @@ export function PollView({ isAdmin }: PollViewProps) {
         )}
       </View>
 
-      {poll && poll.options.length > 0 && (
+      {loading && <PollViewSkeleton />}
+
+      {!loading && poll && poll.options.length > 0 && (
         <View style={styles.contentContainer}>
           <Text type="subHeader" color={colors.black}>
             {poll.title}

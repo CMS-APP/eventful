@@ -21,6 +21,7 @@ import { haptics } from "@/utils/haptics";
 
 import { useNextEvent } from "../hooks/useNextEvent";
 import { HomeNextEventPictureRow } from "./HomeNextEventPictureRow";
+import { HomeNextEventSkeleton } from "./HomeNextEventSkeleton";
 import { NextEventCountdown } from "./NextEventCountdown";
 import { SemiCircleProgressBar } from "./SemiCircleProgressBar";
 
@@ -37,7 +38,8 @@ export function HomeNextEvent({
 }: HomeNextEventProps) {
   const navigation = useNavigation() as StackNavigationProp<MainStackParamList>;
   const eventNav = useNavigation() as StackNavigationProp<EventsStackParamList>;
-  const { nextEvent, percentageComplete, accepted } = useNextEvent(event);
+  const { nextEvent, percentageComplete, accepted, loading } =
+    useNextEvent(event);
 
   const goToEvent = useCallback(() => {
     if (!navigation || edit) return;
@@ -79,6 +81,8 @@ export function HomeNextEvent({
       }
     }
   }, [navigation, edit, nextEvent, eventNav]);
+
+  if (loading) return <HomeNextEventSkeleton />;
 
   if (!nextEvent) return null;
 
