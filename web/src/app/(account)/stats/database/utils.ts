@@ -160,6 +160,34 @@ export interface ActiveUserStatsPoint {
   mau: number;
 }
 
+export interface TotalUserStatsPoint {
+  date: string;
+  totalUsers: number;
+}
+
+export async function getTotalUserStatsHistory(
+  maxDays = 365
+): Promise<TotalUserStatsPoint[]> {
+  try {
+    const ref = collection(FIRESTORE_DB, "totalUserStats");
+    const q = query(ref, orderBy("date", "desc"), limit(maxDays));
+    const snapshot = await getDocs(q);
+    return snapshot.docs
+      .map((d) => {
+        const data = d.data();
+        return {
+          date: typeof data.date === "string" ? data.date : d.id,
+          totalUsers:
+            typeof data.totalUsers === "number" ? data.totalUsers : 0
+        };
+      })
+      .sort((a, b) => a.date.localeCompare(b.date));
+  } catch (error) {
+    console.error("Error fetching total user stats history:", error);
+    return [];
+  }
+}
+
 export async function getActiveUserStatsHistory(
   maxDays = 90
 ): Promise<ActiveUserStatsPoint[]> {

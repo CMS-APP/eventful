@@ -34,8 +34,10 @@ import {
 
 import {
   type ActiveUserStatsPoint,
+  type TotalUserStatsPoint,
   getActiveUserStatsHistory,
-  getTotalUser
+  getTotalUser,
+  getTotalUserStatsHistory
 } from "./database/utils";
 import "./page.css";
 
@@ -304,6 +306,9 @@ export default function Stats() {
   const [activeUserHistory, setActiveUserHistory] = useState<
     ActiveUserStatsPoint[]
   >([]);
+  const [totalUserHistory, setTotalUserHistory] = useState<
+    TotalUserStatsPoint[]
+  >([]);
   const [subscriptionHistory, setSubscriptionHistory] = useState<
     RevenueCatDailyStat[]
   >([]);
@@ -345,12 +350,14 @@ export default function Stats() {
 
     async function getUserStats() {
       try {
-        const [userCount, activeUserStats] = await Promise.all([
+        const [userCount, activeUserStats, totalUserStats] = await Promise.all([
           getTotalUser(),
-          getActiveUserStatsHistory()
+          getActiveUserStatsHistory(),
+          getTotalUserStatsHistory()
         ]);
         setTotalUser(userCount);
         setActiveUserHistory(activeUserStats);
+        setTotalUserHistory(totalUserStats);
       } catch (error) {
         console.error("Error fetching stats:", error);
       } finally {
@@ -442,6 +449,26 @@ export default function Stats() {
               <p className="stat-value">{totalUser.toLocaleString()}</p>
             </div>
           </Link>
+        </div>
+
+        <div className="charts-section">
+          <h2 className="charts-section-title">Growth</h2>
+          <div className="charts-grid">
+            <section className="chart-card">
+              <h2 className="chart-card-title">
+                <FontAwesomeIcon icon={faUsers} />
+                Total users
+              </h2>
+              <TrendChart
+                history={totalUserHistory}
+                metric="totalUsers"
+                color={GROWTH_COLOR}
+                formatValue={(v) => v.toLocaleString()}
+                emptyMessage="No total user history yet — daily tracking started today. Check back tomorrow to see the trend build up."
+                loading={loadingUsers}
+              />
+            </section>
+          </div>
         </div>
 
         <div className="charts-section">

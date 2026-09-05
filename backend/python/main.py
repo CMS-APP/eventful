@@ -7,6 +7,7 @@ from services.active_users import snapshot_active_users
 from services.followers import handle_sync_following
 from services.google_places import handle_location_search_request
 from services.notifications import handle_invite_written, handle_notification_written
+from services.total_users import snapshot_total_users
 
 set_global_options(max_instances=10)
 initialize_app()
@@ -70,3 +71,11 @@ def inviteWritten(
 )
 def snapshotActiveUsers(event: scheduler_fn.ScheduledEvent) -> None:
     snapshot_active_users(event.schedule_time)
+
+
+@scheduler_fn.on_schedule(
+    schedule="0 0 * * *",
+    timezone=scheduler_fn.Timezone("UTC"),
+)
+def snapshotTotalUsers(event: scheduler_fn.ScheduledEvent) -> None:
+    snapshot_total_users(event.schedule_time)
