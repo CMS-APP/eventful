@@ -2,6 +2,13 @@ echo "Building Eventful App"
 
 source "$(dirname "$0")/utils.sh"
 
+echo "🔍 Running lint checks..."
+if ! npx eslint .; then
+  echo "❌ Lint errors found. Fix them before deploying."
+  exit 1
+fi
+echo "✅ No lint errors found"
+
 env_var() {
   grep -E "^$1=" .env 2>/dev/null | tail -n1 | cut -d '=' -f2-
 }
