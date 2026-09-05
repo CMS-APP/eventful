@@ -14,6 +14,7 @@ export function useNextEvent(event: Event | null) {
   const [nextEvent, setNextEvent] = useState<Event | null>(null);
   const [percentageComplete, setPercentageComplete] = useState(0);
   const [accepted, setAccepted] = useState<UserInvite[]>([]);
+  const [loading, setLoading] = useState(true);
   const userId = useSelector((state: UserState) => state.uid);
 
   const calculatePercentageComplete = useCallback((event: Event) => {
@@ -28,11 +29,13 @@ export function useNextEvent(event: Event | null) {
   }, []);
 
   const fetchData = useCallback(async () => {
+    setLoading(true);
     const nextEvent = event || (await getNextEvent(userId));
     setNextEvent(nextEvent);
     setPercentageComplete(calculatePercentageComplete(nextEvent));
     const responses = await getEventResponses(nextEvent);
     setAccepted(responses);
+    setLoading(false);
   }, [userId, event, calculatePercentageComplete]);
 
   useFocusEffect(
@@ -41,5 +44,5 @@ export function useNextEvent(event: Event | null) {
     }, [fetchData])
   );
 
-  return { nextEvent, percentageComplete, accepted };
+  return { nextEvent, percentageComplete, accepted, loading };
 }

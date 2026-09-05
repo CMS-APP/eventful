@@ -1,3 +1,5 @@
+import { ActivityIndicator } from "react-native-paper";
+
 import { useCallback, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
@@ -20,11 +22,14 @@ interface PostsViewProps {
 
 export function PostsView({ isAdmin }: PostsViewProps) {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation<StackNavigationProp<HomeStackParamList>>();
 
   const getPosts = useCallback(async () => {
+    setLoading(true);
     const posts = await getPostsFromDatabase();
     setPosts(posts || []);
+    setLoading(false);
   }, []);
 
   useFocusEffect(
@@ -49,15 +54,19 @@ export function PostsView({ isAdmin }: PostsViewProps) {
         )}
       </View>
 
-      {posts.length === 0 && (
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.secondary} />
+        </View>
+      )}
+
+      {!loading && posts.length === 0 && (
         <Text type="subHeader" style={styles.noPostsText}>
           No posts found
         </Text>
       )}
 
-      {posts.map((post) => (
-        <PostItem key={post.id} post={post} />
-      ))}
+      {!loading && posts.map((post) => <PostItem key={post.id} post={post} />)}
     </View>
   );
 }
@@ -70,6 +79,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between"
+  },
+  loadingContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 24
   },
   noPostsText: {
     textAlign: "center"

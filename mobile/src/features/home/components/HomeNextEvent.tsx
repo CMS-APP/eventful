@@ -1,3 +1,5 @@
+import { ActivityIndicator } from "react-native-paper";
+
 import { useCallback } from "react";
 
 import {
@@ -37,7 +39,8 @@ export function HomeNextEvent({
 }: HomeNextEventProps) {
   const navigation = useNavigation() as StackNavigationProp<MainStackParamList>;
   const eventNav = useNavigation() as StackNavigationProp<EventsStackParamList>;
-  const { nextEvent, percentageComplete, accepted } = useNextEvent(event);
+  const { nextEvent, percentageComplete, accepted, loading } =
+    useNextEvent(event);
 
   const goToEvent = useCallback(() => {
     if (!navigation || edit) return;
@@ -79,6 +82,13 @@ export function HomeNextEvent({
       }
     }
   }, [navigation, edit, nextEvent, eventNav]);
+
+  if (loading)
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={colors.secondary} />
+      </View>
+    );
 
   if (!nextEvent) return null;
 
@@ -192,6 +202,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 6,
     marginBottom: 12
+  },
+  loadingContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 24
   },
   row: {
     flexDirection: "row",
