@@ -12,10 +12,6 @@ import {
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import {
-  ILoadingModalContext,
-  useLoadingModal
-} from "@/app/context/loading/LoadingModalContext";
 import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { IconButton } from "@/design-system/components/buttons/IconButton";
@@ -49,7 +45,6 @@ export function EventEditScreen({ navigation, route }: EventEditScreenProps) {
   const { event } = useEventEdit(originalEvent, navigation);
 
   const [scrollY, setScrollY] = useState(0);
-  const { setLoading } = useLoadingModal() as ILoadingModalContext;
   const userId = useSelector((state: UserState) => state.uid);
 
   function goToSection(section: string) {
@@ -68,7 +63,6 @@ export function EventEditScreen({ navigation, route }: EventEditScreenProps) {
 
   async function deleteEvent() {
     try {
-      setLoading(true);
       await deleteEventFromDatabase(event.id);
       await deleteEventInvitesFromDatabase(event.id);
       trackEventDeleted();
@@ -77,8 +71,6 @@ export function EventEditScreen({ navigation, route }: EventEditScreenProps) {
     } catch (error) {
       log(`Error Deleting Event: ${error}`, "error");
       showErrorToast("Error Deleting Event");
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -94,8 +86,8 @@ export function EventEditScreen({ navigation, route }: EventEditScreenProps) {
         {
           text: "Delete",
           style: "destructive",
-          onPress: () => {
-            deleteEvent();
+          onPress: async () => {
+            await deleteEvent();
             navigation.goBack();
             haptics.error();
           }
