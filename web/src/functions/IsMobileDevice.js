@@ -2,7 +2,7 @@ import MobileDetect from "mobile-detect";
 
 export function isMobileDevice() {
   if (typeof window === "undefined") {
-    return false; // Default to false during SSR
+    return false;
   }
 
   const md = new MobileDetect(window.navigator.userAgent);

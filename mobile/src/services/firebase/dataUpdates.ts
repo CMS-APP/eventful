@@ -75,10 +75,8 @@ export async function convertEventInvites(userId: string) {
 export async function convertDateToTimestamp(userId: string) {
   const { upcomingEvents, pastEvents } = await getEventsFromDatabase(userId);
   const allEvents = [...upcomingEvents, ...pastEvents];
-  // Any here because the date is a string in the database
   const eventsWithDate = allEvents.filter((event: any) => event.date);
 
-  // Any here because the date is a string in the database
   const updatePromises = eventsWithDate.map((event: any) => {
     const docRef = doc(FIRESTORE_DB, "event", event.id);
 

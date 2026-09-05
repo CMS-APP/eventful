@@ -64,7 +64,7 @@ export function ContactsSearchScreen({ route }: ContactsSearchScreenProps) {
       getUsers();
     }, 500);
 
-    return () => clearTimeout(debounceTimeout); // Clear timeout on cleanup
+    return () => clearTimeout(debounceTimeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 

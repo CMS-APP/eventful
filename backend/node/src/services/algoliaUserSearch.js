@@ -10,30 +10,30 @@ function pickUserFields(hit) {
     uid: hit.uid || hit.objectID || null,
     username: hit.username ?? null,
     name: hit.name ?? null,
-    searchName: hit.searchName ?? null,
+    searchName: hit.searchName ?? null
   };
 }
 
 function isSearchableUser(user) {
   if (!user?.uid) return false;
   const name = typeof user.name === "string" ? user.name.trim() : "";
-  const username = typeof user.username === "string" ? user.username.trim() : "";
+  const username =
+    typeof user.username === "string" ? user.username.trim() : "";
   return Boolean(name || username);
 }
 
 function createAlgoliaUserSearchHandler({
   admin,
   ALGOLIA_APP_ID,
-  ALGOLIA_API_KEY,
+  ALGOLIA_API_KEY
 }) {
-  // Reuse a single Algolia client per instance to avoid creating one on every request
   let algoliaClient = null;
 
   function getClient() {
     if (!algoliaClient) {
       algoliaClient = algoliasearch(
         ALGOLIA_APP_ID.value(),
-        ALGOLIA_API_KEY.value(),
+        ALGOLIA_API_KEY.value()
       );
     }
     return algoliaClient;
@@ -61,7 +61,7 @@ function createAlgoliaUserSearchHandler({
 
     const hitsPerPage = Math.min(
       parsePositiveInt(req.query.limit ?? req.body?.limit, 20),
-      50,
+      50
     );
     const page = parsePositiveInt(req.query.page ?? req.body?.page, 0);
 
@@ -75,8 +75,8 @@ function createAlgoliaUserSearchHandler({
           typoTolerance: true,
           queryType: "prefixLast",
           removeWordsIfNoResults: "lastWords",
-          attributesToRetrieve: ["uid", "username", "name", "searchName"],
-        },
+          attributesToRetrieve: ["uid", "username", "name", "searchName"]
+        }
       });
 
       const hits = (result.hits || [])
@@ -88,7 +88,7 @@ function createAlgoliaUserSearchHandler({
         hitsPerPage,
         page,
         nbHits: hits.length,
-        hits,
+        hits
       });
     } catch (err) {
       console.error("Algolia user search error:", err);

@@ -1,8 +1,7 @@
 import "./layout.css";
 
-/** WebView / mobile: no site header or footer */
 export default function HeaderlessLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {

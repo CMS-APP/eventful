@@ -126,7 +126,7 @@ export function PostItem({ post }: { post: Post }) {
     try {
       await togglePostLike(post.id, currentUserId);
     } catch {
-      // ignore
+      log("Error Liking Post: ", "error");
     }
   };
 
@@ -134,7 +134,6 @@ export function PostItem({ post }: { post: Post }) {
     if (!author) return;
     haptics.soft();
 
-    // Navigate to Account in Inspiration stack, then to Profile in Account stack
     navigation.navigate("Account", {
       screen: "Profile",
       params: { screen: "ProfileView", params: { user: author as User } }

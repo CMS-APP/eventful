@@ -9,12 +9,10 @@ export async function viewSpotifyPlaylist(playlist: SpotifyPlaylist) {
   const fallbackUrl = `https://open.spotify.com/playlist/${playlist.id}`;
 
   try {
-    // Attempt to open in Spotify app
     const canOpen = await Linking.canOpenURL(spotifyUri);
     if (canOpen) {
       await Linking.openURL(spotifyUri);
     } else {
-      // Fallback to web URL
       await Linking.openURL(fallbackUrl);
     }
   } catch (error) {

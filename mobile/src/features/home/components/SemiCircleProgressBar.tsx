@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
   }
 });
 
-// Utility function to convert degrees to radians
 function polarToCartesian(
   centerX: number,
   centerY: number,
@@ -95,7 +94,6 @@ function polarToCartesian(
   };
 }
 
-// Function to describe the arc path
 function describeArc(
   x: number,
   y: number,
@@ -109,8 +107,8 @@ function describeArc(
   const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
 
   const d = [
-    `M ${start.x} ${start.y}`, // Move to start point
-    `A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y}` // Draw the arc
+    `M ${start.x} ${start.y}`,
+    `A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y}`
   ].join(" ");
 
   return d;
@@ -127,8 +125,8 @@ function ArcComponent({
   strokeColors: string[];
   strokeWidth: number;
 }) {
-  const centerX = 100; // X coordinate of the circle's center
-  const centerY = 36; // Y coordinate of the circle's center
+  const centerX = 100;
+  const centerY = 36;
 
   return (
     <View style={styles.arcContainer}>

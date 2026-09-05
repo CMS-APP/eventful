@@ -9,10 +9,9 @@ const firebaseConfig = {
   projectId: "eventful-23690",
   storageBucket: "eventful-23690.firebasestorage.app",
   messagingSenderId: "165003650822",
-  appId: "1:165003650822:web:88a7fa08ae63985891a087",
+  appId: "1:165003650822:web:88a7fa08ae63985891a087"
 };
 
-// Initialize Firebase
 export const FIREBASE_APP = initializeApp(firebaseConfig);
 export const FIRESTORE_DB = getFirestore(FIREBASE_APP);
 export const FIREBASE_AUTH = getAuth(FIREBASE_APP);

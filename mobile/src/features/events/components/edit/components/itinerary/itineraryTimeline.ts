@@ -82,7 +82,6 @@ export function buildItineraryTimelineBlocks(params: {
   };
 
   if (!sorted.length) {
-    // If the event is empty, show a free time block for the entire event.
     if (eventEnd && eventEnd > eventStart) {
       pushDayHeader(eventStart);
       blocks.push({
@@ -96,13 +95,11 @@ export function buildItineraryTimelineBlocks(params: {
     return { blocks, overlaps };
   }
 
-  // Iterate through the sorted activities and add them to the timeline.
   let cursor = eventStart;
   for (const activity of sorted) {
     const start = parseDatabaseDate(activity.startTime);
     const end = addMinutes(start, activity.durationMinutes || 60);
 
-    // If the activity starts after the current cursor, add a gap chunk.
     if (start > cursor) {
       addGapChunks(cursor, start);
     }
@@ -119,7 +116,6 @@ export function buildItineraryTimelineBlocks(params: {
     cursor = new Date(Math.max(cursor.getTime(), end.getTime()));
   }
 
-  // If the event end is after the current cursor, add a gap chunk.
   if (eventEnd && eventEnd > cursor) {
     pushDayHeader(cursor);
     addGapChunks(cursor, eventEnd);

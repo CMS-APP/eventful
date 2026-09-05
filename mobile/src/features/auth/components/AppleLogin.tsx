@@ -1,4 +1,3 @@
-/** @format */
 import { appleAuth } from "@invertase/react-native-apple-authentication";
 import {
   AppleAuthProvider,

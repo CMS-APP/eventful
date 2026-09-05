@@ -64,7 +64,6 @@ export function useSpotifyAuth({ userId, onSuccess }: UseSpotifyAuthOptions) {
           onSuccess(tokenData.accessToken);
         }
       } catch (error) {
-        // Reset processed ref on error
         if (response?.type === "success" && response.params?.code) {
           processedResponseRef.current = null;
         }

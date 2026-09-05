@@ -11,7 +11,6 @@ import SimpleTextInput from "@/components/SimpleTextInput";
 
 import "./page.css";
 
-// Add type declaration for grecaptcha
 declare global {
   interface Window {
     grecaptcha: {
@@ -71,11 +70,9 @@ export default function ForgotPassword() {
         type: "success"
       });
 
-      // Reset the form
       setEmail("");
       setRecaptchaToken("");
 
-      // Reset reCAPTCHA
       if (window.grecaptcha) {
         window.grecaptcha.reset();
       }
@@ -163,7 +160,7 @@ export default function ForgotPassword() {
             </button>
           </form>
         </div>
-    </main>
+      </main>
     </>
   );
 }

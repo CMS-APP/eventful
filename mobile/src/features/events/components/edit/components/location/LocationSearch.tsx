@@ -150,10 +150,6 @@ export function LocationSearch({ event, setEvent }: LocationSearchProps) {
     try {
       return formatAddress(nextCountryCode, nextCountryName, nextValues);
     } catch {
-      // formatAddress can throw for a handful of ISO codes (e.g. Antarctica)
-      // that aren't in i18n-postal-address's supported formats table even
-      // though they're in our own country list — fall back to a plain join
-      // so the address still saves instead of silently failing.
       return [...Object.values(nextValues), nextCountryName]
         .filter(Boolean)
         .join(", ");

@@ -21,6 +21,7 @@ import {
   trackSubscriptionPurchased,
   trackSubscriptionRestored
 } from "@/services/analytics/events";
+import { log } from "@/utils/logging";
 
 import { UserState, setPhotoBooth, setPremium } from "../../../store/UserSlice";
 
@@ -91,7 +92,7 @@ export function PaymentProvider({ children }: { children: React.ReactNode }) {
       getProducts();
       setIsReady(true);
     } catch {
-      // ignore
+      log("Error initializing Purchases", "error");
     } finally {
       setLoading(false);
     }

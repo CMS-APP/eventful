@@ -30,7 +30,6 @@ export function EventListEdit({
   const [newText, setNewText] = useState("");
 
   useEffect(() => {
-    // Check if listType is in event
     if (listType in event) {
       const data = (event as any)[listType];
       setItemList(data.map((item: { item: string }) => item.item));

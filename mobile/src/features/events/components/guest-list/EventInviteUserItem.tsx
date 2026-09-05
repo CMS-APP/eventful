@@ -68,7 +68,6 @@ export function EventInviteUserItem({
     setUserImage(imageUri ?? null);
   }, [user]);
 
-  // Fetch user image
   useEffect(() => {
     if (!user || !appUser) return;
 

@@ -49,7 +49,6 @@ export function EventItineraryEdit({
       if (end > lastEnd) lastEnd = end;
     }
 
-    // clamp within event if possible
     if (eventEnd && lastEnd > eventEnd) return eventEnd;
     return lastEnd;
   };

@@ -9,34 +9,30 @@ export async function GET(request: NextRequest) {
     if (!imageUrl) {
       return NextResponse.json(
         { error: "Image URL is required" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
-    // Fetch the image from Firebase Storage
     const response = await fetch(imageUrl);
 
     if (!response.ok) {
       return NextResponse.json(
         { error: "Failed to fetch image" },
-        { status: 404 },
+        { status: 404 }
       );
     }
 
-    // Get the image data
     const imageBuffer = await response.arrayBuffer();
 
-    // Get the content type from the original response
     const contentType = response.headers.get("content-type") || "image/jpeg";
 
-    // Create response with proper headers for download
     const downloadResponse = new NextResponse(imageBuffer, {
       status: 200,
       headers: {
         "Content-Type": contentType,
         "Content-Disposition": `attachment; filename="${fileName || "image.jpg"}"`,
-        "Cache-Control": "no-cache",
-      },
+        "Cache-Control": "no-cache"
+      }
     });
 
     return downloadResponse;
@@ -44,7 +40,7 @@ export async function GET(request: NextRequest) {
     console.error("Download error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

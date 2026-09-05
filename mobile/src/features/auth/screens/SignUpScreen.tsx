@@ -68,7 +68,7 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
 
   const signUp = useCallback(async () => {
     if (!validateForm()) {
-      return; // Don't show loading if validation fails
+      return;
     }
 
     setLoading(true);

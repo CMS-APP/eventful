@@ -39,7 +39,6 @@ import {
 } from "./database/utils";
 import "./page.css";
 
-// Validated against this app's dark surface (#0a3b2e) — see dataviz skill.
 const GROWTH_COLOR = "#199e70";
 const REVENUE_COLOR = "#c98500";
 
@@ -160,8 +159,6 @@ function TrendChart<T extends { date: string }>({
   );
 }
 
-// Segments taper by fixed opacity steps on the same hue (GROWTH_COLOR) rather
-// than a new color per step — this is a single-series magnitude comparison.
 const FUNNEL_STEP_OPACITY = [1, 0.72, 0.48, 0.32];
 
 const FUNNEL_CHART_WIDTH = 1000;
@@ -293,9 +290,9 @@ export default function Stats() {
   const [subscriptionHistory, setSubscriptionHistory] = useState<
     RevenueCatDailyStat[]
   >([]);
-  const [activeSubscriptions, setActiveSubscriptions] = useState<
-    number | null
-  >(null);
+  const [activeSubscriptions, setActiveSubscriptions] = useState<number | null>(
+    null
+  );
   const [funnelSteps, setFunnelSteps] = useState<FunnelStep[]>([]);
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [loadingSubscriptions, setLoadingSubscriptions] = useState(true);
@@ -322,7 +319,6 @@ export default function Stats() {
   }, [user, loading]);
 
   useEffect(() => {
-    // Only fetch stats if user is confirmed as admin
     if (!isAdmin || checkingAdmin || !user) {
       return;
     }
@@ -370,18 +366,15 @@ export default function Stats() {
       }
     }
 
-    // Fired independently so the slower of the three doesn't hold up the others' charts.
     getUserStats();
     getSubscriptionStats();
     getFunnelData();
   }, [isAdmin, checkingAdmin, user]);
 
-  // Show loading state while checking
   if (loading || checkingAdmin) {
     return <Loading />;
   }
 
-  // Show unauthorized access page if not admin
   if (!isAdmin) {
     return (
       <UnauthorizedAccess
@@ -391,7 +384,6 @@ export default function Stats() {
     );
   }
 
-  // Admin users can see the stats page
   return (
     <main className="flex flex-1 flex-col p-10">
       <div className="stats-container">

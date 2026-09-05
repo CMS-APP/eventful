@@ -1,9 +1,11 @@
 "use client";
 
+import { User, onAuthStateChanged } from "firebase/auth";
+
+import React, { createContext, useContext, useEffect, useState } from "react";
+
 import { FIREBASE_AUTH } from "@/app/Firebase.js";
 import { checkAdmin, getUserData } from "@/app/account/database/utils";
-import { User, onAuthStateChanged } from "firebase/auth";
-import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface UserData {
   email?: string;
@@ -22,7 +24,7 @@ const UserContext = createContext<UserContextType>({
   user: null,
   userData: null,
   loading: true,
-  isAdmin: false,
+  isAdmin: false
 });
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
@@ -38,7 +40,6 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       async (firebaseUser) => {
         if (firebaseUser) {
           setUser(firebaseUser);
-          // Fetch additional user data from Firestore
           try {
             const data = await getUserData(firebaseUser);
             setUserData(data);
@@ -53,7 +54,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
           setUserData(null);
         }
         setLoading(false);
-      },
+      }
     );
 
     return () => unsubscribe();

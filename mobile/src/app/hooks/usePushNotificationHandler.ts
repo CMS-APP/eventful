@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 
 import { StackActions } from "@react-navigation/native";
+
 import * as Notifications from "expo-notifications";
 import { NotificationResponse } from "expo-notifications";
 
@@ -15,10 +16,6 @@ export async function handleEventEditNavigation(params: any) {
 
   if (!event || !navigationRef) return;
 
-  // Only reset the outer stack when we're not already on "Main" (e.g. coming
-  // from Auth/LoadingScreen or a modal) — an unconditional reset would wipe
-  // the already-mounted tab navigator's internal state/keys, which is what
-  // caused the "POP not handled" error when tapping a tab bar item after.
   const currentRoot = navigationRef.getRootState();
   const alreadyOnMain = currentRoot?.routes[currentRoot.index]?.name === "Main";
 
@@ -26,9 +23,6 @@ export async function handleEventEditNavigation(params: any) {
     navigationRef.reset({ index: 0, routes: [{ name: "Main" }] });
   }
 
-  // Pop the Events tab's own stack back to its root using its live key,
-  // rather than redeclaring its state, so we don't fight the eagerly-mounted
-  // navigator over identity — then push EventEdit on top of a clean base.
   const mainRoute = navigationRef
     .getRootState()
     ?.routes.find((route) => route.name === "Main");

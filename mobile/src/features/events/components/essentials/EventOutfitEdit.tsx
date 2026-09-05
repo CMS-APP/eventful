@@ -23,7 +23,7 @@ export function EventOutfitEdit({ route }: EventOutfitEditProps) {
     if (outfitItems !== prevOutfitItemsRef.current) {
       setEvent((prevEvent) => {
         const updatedEvent = { ...prevEvent, outfitItems };
-        updateEventInDatabase(updatedEvent); // you can await here if you want
+        updateEventInDatabase(updatedEvent);
         return updatedEvent;
       });
       prevOutfitItemsRef.current = outfitItems;

@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 
+import { deleteUserAccount } from "@/app/account/database/utils";
 import DeleteAccountModal from "@/components/DeleteAccountModal.js";
 import SimpleButton from "@/components/SimpleButton";
 import { useUser } from "@/contexts/UserContext";
 import { isMobileDevice } from "@/functions/IsMobileDevice.js";
 
-import { deleteUserAccount } from "@/app/account/database/utils";
 import "./page.css";
 
 export default function Home() {
@@ -43,7 +43,6 @@ export default function Home() {
     await deleteUserAccount(user, password);
   }
 
-  // Get user data from context
   const email = userData?.email ?? "";
   const name = userData?.name ?? "";
   const username = userData?.username ?? "";
@@ -62,7 +61,6 @@ export default function Home() {
           </div>
 
           <div className="profile-content">
-            {/* Profile Info Card */}
             <div className="profile-card">
               <h2 className="profile-card-title">Profile Information</h2>
               <div className="profile-info-grid">

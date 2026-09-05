@@ -79,7 +79,6 @@ export function OnboardingNameInputScreen({
         throw error;
       }
 
-      // Ensure the token is fresh and emailVerified is reflected
       const currentUser = FIREBASE_AUTH.currentUser;
       if (!currentUser) {
         throw new Error("No authenticated user found");

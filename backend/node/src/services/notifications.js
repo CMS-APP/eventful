@@ -1,5 +1,4 @@
 export async function sendExpoNotifications(db, hostId, title, body) {
-  // Fetch host's Expo push tokens
   const hostDoc = await db.collection("user").doc(hostId).get();
 
   if (!hostDoc.exists) {
@@ -10,10 +9,9 @@ export async function sendExpoNotifications(db, hostId, title, body) {
   const hostData = hostDoc.data();
   const expoPushTokens = hostData.pushTokens || [];
 
-  // Filter valid tokens
   const validTokens = expoPushTokens.filter(
     (token) =>
-      typeof token === "string" && token.startsWith("ExponentPushToken"),
+      typeof token === "string" && token.startsWith("ExponentPushToken")
   );
 
   if (validTokens.length === 0) {
@@ -25,18 +23,18 @@ export async function sendExpoNotifications(db, hostId, title, body) {
     to: token,
     sound: "default",
     title: title,
-    body: body,
+    body: body
   }));
 
   try {
     const expoResponse = await fetch("https://exp.host/--/api/v2/push/send", {
       method: "POST",
       headers: {
-        "Accept": "application/json",
+        Accept: "application/json",
         "Accept-encoding": "gzip, deflate",
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify(messages),
+      body: JSON.stringify(messages)
     });
 
     const result = await expoResponse.json();

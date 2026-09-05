@@ -54,7 +54,6 @@ export function AccountPictureCameraModal({
     try {
       setIsLoading(true);
 
-      // Flip the image if using front camera
       let processedImage = photo;
       if (facing === "front") {
         processedImage = await ImageManipulator.manipulateAsync(

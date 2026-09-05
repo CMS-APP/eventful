@@ -69,10 +69,6 @@ struct Provider: TimelineProvider {
       return
     }
 
-    // Tick every minute in the final hour (so MINS visibly counts down live),
-    // every 5 minutes out to 3 hours, hourly further out — all without the
-    // app needing to be opened, since WidgetKit renders whichever precomputed
-    // entry's date has arrived on its own.
     let minuteWindow: TimeInterval = 60 * 60
     let minuteStep: TimeInterval = 60
     let fineWindow: TimeInterval = 3 * 60 * 60

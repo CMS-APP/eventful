@@ -27,7 +27,8 @@ export function EventInviteItineraryScreen({ route }: Props) {
         }
       }}
       contentConfig={{
-        backgroundColor: colors.primary
+        backgroundColor: colors.primary,
+        tabBarPresent: false
       }}
     >
       <ItineraryList

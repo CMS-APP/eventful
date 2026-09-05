@@ -94,7 +94,6 @@ export async function dataInit(dispatch: Dispatch, nextStep?: () => void) {
 
   nextStep?.();
 
-  // TODO: Move this to be a cron job in the backend
   cleanupOrphanedData(user.uid);
 
   nextStep?.();

@@ -1,9 +1,6 @@
 import { Event } from "@/types/Event";
 import { SpotifyPlaylist } from "@/types/SpotifyPlaylist";
 
-/**
- * Checks if a playlist is already in the added playlists list
- */
 export function isPlaylistAdded(
   playlist: SpotifyPlaylist,
   addedPlaylists: SpotifyPlaylist[]
@@ -12,9 +9,6 @@ export function isPlaylistAdded(
   return playlistIds.includes(playlist.id);
 }
 
-/**
- * Adds a playlist to an event
- */
 export function addPlaylistToEvent(
   playlist: SpotifyPlaylist,
   event: Event,
@@ -33,9 +27,6 @@ export function addPlaylistToEvent(
   return updatedEvent;
 }
 
-/**
- * Removes a playlist from an event
- */
 export function removePlaylistFromEvent(
   playlist: SpotifyPlaylist,
   event: Event,

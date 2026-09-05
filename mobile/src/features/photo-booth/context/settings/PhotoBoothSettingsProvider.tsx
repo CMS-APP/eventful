@@ -36,7 +36,6 @@ type ConfigState = {
   photoPromptsEnabled: boolean;
 };
 
-/** Map legacy/renamed font names to current font keys (e.g. Chloe or Tribune Bold → Gotham Bold) */
 const normalizeFontKey = (font: string): string => {
   if (font === "Chloe" || font === "Tribune Bold") return "Gotham Bold";
   return font;

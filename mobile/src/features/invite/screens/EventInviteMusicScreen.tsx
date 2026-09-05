@@ -38,7 +38,8 @@ export function EventInviteMusicScreen({ route }: Props) {
         }
       }}
       contentConfig={{
-        backgroundColor: colors.primary
+        backgroundColor: colors.primary,
+        tabBarPresent: false
       }}
     >
       <View style={styles.playlistsContainer}>

@@ -2,9 +2,10 @@ import {
   faApple,
   faGoogle,
   faInstagram,
-  faTiktok,
-} from "@fortawesome/free-brands-svg-icons"; // Import the specific icon
+  faTiktok
+} from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import "./Footer.css";
 
 export default function Footer() {
@@ -17,9 +18,7 @@ export default function Footer() {
 
   return (
     <footer>
-      <div
-        className="bg-primary text-white flex justify-center items-center w-full h-[75px] py-[10px] px-8"
-      >
+      <div className="bg-primary text-white flex justify-center items-center w-full h-[75px] py-[10px] px-8">
         <div className="flex flex-1 flex-row justify-center items-center">
           <div className="flex flex-1 justify-start items-center gap-[50px]">
             <p>© {new Date().getFullYear()} Eventful</p>

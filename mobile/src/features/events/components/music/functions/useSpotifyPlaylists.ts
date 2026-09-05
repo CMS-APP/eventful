@@ -30,7 +30,6 @@ export function useSpotifyPlaylists({
     event.playlists ?? []
   );
 
-  // Sync addedPlaylists when event.playlists changes
   useEffect(() => {
     setAddedPlaylists(event.playlists ?? []);
   }, [event.playlists]);

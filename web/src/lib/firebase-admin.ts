@@ -6,8 +6,6 @@ export interface ServiceAccountCredentials {
   privateKey?: string;
 }
 
-// Also consumed by lib/ga4.ts — the same service account is granted Viewer
-// access on the GA4 property, so no separate credential is needed there.
 export function getServiceAccountCredentials():
   | ServiceAccountCredentials
   | undefined {
@@ -23,11 +21,11 @@ export function getServiceAccountCredentials():
       return {
         projectId: parsed.project_id,
         clientEmail: parsed.client_email,
-        privateKey: parsed.private_key.replace(/\\n/g, "\n"),
+        privateKey: parsed.private_key.replace(/\\n/g, "\n")
       };
     }
   } catch {
-    // ignore parse error
+    console.error("Error parsing FIREBASE_SERVICE_ACCOUNT_KEY");
   }
   return undefined;
 }
@@ -38,7 +36,7 @@ function getFirebaseAdminCredential(): admin.credential.Credential | undefined {
   return admin.credential.cert({
     projectId: credentials.projectId,
     clientEmail: credentials.clientEmail,
-    privateKey: credentials.privateKey,
+    privateKey: credentials.privateKey
   });
 }
 
@@ -50,12 +48,12 @@ function getFirebaseAdminApp(): admin.app.App {
   const projectId = "eventful-23690";
   if (!credential) {
     throw new Error(
-      "Firebase Admin: Set FIREBASE_SERVICE_ACCOUNT_KEY (JSON string) or FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY",
+      "Firebase Admin: Set FIREBASE_SERVICE_ACCOUNT_KEY (JSON string) or FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY"
     );
   }
   return admin.initializeApp({
     credential,
-    projectId,
+    projectId
   });
 }
 

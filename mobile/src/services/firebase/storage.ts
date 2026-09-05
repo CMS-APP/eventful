@@ -50,7 +50,6 @@ export async function uploadImageAsync(
 
   let compressedUri = uri;
 
-  // Skip compression for small images (e.g., < 1MB)
   const blob = (await getBlob(uri)) as Blob;
   const sizeInMB = blob.size / (1024 * 1024);
 

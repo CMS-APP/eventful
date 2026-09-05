@@ -359,7 +359,6 @@ export async function deleteEventLinkResponse(eventLinkId: string) {
 
 export async function getRSVPAppUsers(event: Event): Promise<UserInvite[]> {
   try {
-    // Fetch the list of users who have RSVP'd to the event from the app
     const invites = await getEventRecipientInvites(event.id);
 
     const refactoredInvites = await Promise.all(
@@ -397,7 +396,6 @@ export async function getRSVPWebUsers(
   userId: string
 ): Promise<UserInvite[]> {
   try {
-    // Fetch the list of users who have RSVP'd to the event from the web
     const responses = await getEventLinkResponses(event.id, userId);
     const webUsers: UserInvite[] = responses.map((response: any) => {
       const user: User = {
@@ -433,7 +431,6 @@ export async function getRSVPWebUsers(
 }
 
 export async function getRSVPManualUsers(event: Event): Promise<UserInvite[]> {
-  // Fetch the list of users who have been manually added to the event
   const guestList = event.guestList || [];
 
   const refactoredGuestList: UserInvite[] = [];

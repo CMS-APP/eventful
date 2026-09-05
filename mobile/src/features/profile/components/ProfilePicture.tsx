@@ -6,6 +6,7 @@ import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { syncUserPicture } from "@/services/local/cache";
 import { User } from "@/types/User";
+import { log } from "@/utils/logging";
 import { getInitials } from "@/utils/validation";
 
 interface ProfilePictureProps {
@@ -40,7 +41,7 @@ export function ProfilePicture({
       setImage(imageUri || null);
       setLoading(false);
     } catch {
-      // ignore
+      log("Error Syncing Picture: ", "error");
     }
   }
 

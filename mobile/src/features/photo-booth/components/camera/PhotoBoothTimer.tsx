@@ -1,6 +1,6 @@
-import { forwardRef, useImperativeHandle, useRef } from "react";
-
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { forwardRef, useImperativeHandle, useRef } from "react";
 
 import { StyleSheet, View } from "react-native";
 
@@ -29,12 +29,6 @@ const PhotoBoothTimer = forwardRef<PhotoBoothTimerHandle, PhotoBoothTimerProps>(
     const { screenHeight } = useAppDimensions();
     const insets = useSafeAreaInsets();
 
-    // Anchored to the ring's bottom edge (not its center) so the ring's
-    // position never moves whether or not a prompt is shown above it — the
-    // prompt and ring are children of one column that grows upward from
-    // this fixed point, so "prompt sits above the ring" is guaranteed by
-    // normal layout instead of two components independently computing
-    // matching absolute positions.
     const safeHeight = screenHeight - insets.top - insets.bottom;
     const ringCenter = insets.top + safeHeight * 0.5;
     const bottomOffset = screenHeight - (ringCenter + TIMER_RING_SIZE / 2);

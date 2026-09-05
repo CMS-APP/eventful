@@ -1,4 +1,3 @@
-// components/AnimatedLogo.js
 import Svg, { Path } from "react-native-svg";
 
 import { useCallback, useEffect, useRef } from "react";
@@ -9,9 +8,7 @@ interface LoadingIndicatorProps {
   size?: number;
 }
 
-export function LoadingIndicator({
-  size = 100
-}: LoadingIndicatorProps) {
+export function LoadingIndicator({ size = 100 }: LoadingIndicatorProps) {
   const strokeDashoffset = useRef(new Animated.Value(800)).current;
 
   const animate = useCallback(() => {
@@ -27,7 +24,7 @@ export function LoadingIndicator({
         duration: 0,
         useNativeDriver: false
       })
-    ]).start(() => animate()); // loop
+    ]).start(() => animate());
   }, [strokeDashoffset]);
 
   useEffect(() => {

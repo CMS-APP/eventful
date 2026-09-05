@@ -23,7 +23,7 @@ export function EventDrinkEdit({ route }: EventDrinkEditProps) {
     if (drinkItems !== prevDrinkItemsRef.current) {
       setEvent((prevEvent) => {
         const updatedEvent = { ...prevEvent, drinkItems };
-        updateEventInDatabase(updatedEvent); // you can await here if you want
+        updateEventInDatabase(updatedEvent);
         return updatedEvent;
       });
       prevDrinkItemsRef.current = drinkItems;

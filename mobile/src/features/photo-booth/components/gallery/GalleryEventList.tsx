@@ -10,6 +10,7 @@ import { Text } from "@/design-system/components/text/Text";
 import { getEvents } from "@/services/photo-booth/events";
 import { UserState } from "@/store/UserSlice";
 import { GalleryEvent } from "@/types/photoBoothGallery";
+import { log } from "@/utils/logging";
 
 import { GalleryEventListItem } from "./GalleryEventListItem";
 
@@ -22,7 +23,7 @@ export function GalleryEventList() {
       const events = await getEvents(userId!);
       setEvents(events);
     } catch {
-      // ignore
+      log("Error Getting Events: ", "error");
     }
   }, [userId]);
 

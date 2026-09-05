@@ -1,4 +1,3 @@
-import { FIREBASE_APP, FIREBASE_STORAGE, FIRESTORE_DB } from "@/app/Firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import {
@@ -7,14 +6,16 @@ import {
   getMetadata,
   listAll,
   ref,
-  uploadBytes,
+  uploadBytes
 } from "firebase/storage";
+
+import { FIREBASE_APP, FIREBASE_STORAGE, FIRESTORE_DB } from "@/app/Firebase";
 
 export async function getUserInfo(user) {
   try {
     console.log(
       "FirebaseFunctions: Getting user info for user: " + user.uid,
-      "debug",
+      "debug"
     );
     const docRef = doc(FIRESTORE_DB, "user", user.uid);
     const docSnap = await getDoc(docRef);
@@ -24,7 +25,7 @@ export async function getUserInfo(user) {
       console.log(
         "FirebaseFunctions: User Details: " +
           JSON.stringify(docSnap.data(), null, 2),
-        "debug",
+        "debug"
       );
       return docSnap.data();
     } else {
@@ -35,13 +36,13 @@ export async function getUserInfo(user) {
     if (error.code === "permission-denied") {
       console.log(
         "FirebaseFunctions: Current User does not have user account",
-        "warn",
+        "warn"
       );
       return null;
     } else {
       console.log(
         "FirebaseFunctions: Error getting user details: " + error,
-        "error",
+        "error"
       );
       throw error;
     }
@@ -64,7 +65,7 @@ export async function checkEventLink(eventLinkId) {
   } catch (error) {
     console.log(
       "FirebaseFunctions: Error getting event link details: " + error,
-      "error",
+      "error"
     );
     return null;
   }
@@ -77,7 +78,7 @@ export async function sendForgotPasswordEmail(email, recaptchaToken) {
 
     const result = await forgotPasswordFunction({
       email,
-      recaptchaToken,
+      recaptchaToken
     });
 
     return result.data;
@@ -91,25 +92,21 @@ export async function uploadGalleryImage(
   imageFile,
   userId,
   eventId,
-  fileName = null,
+  fileName = null
 ) {
   try {
-    // Create a unique filename if not provided
     const timestamp = Date.now();
     const fileExtension = imageFile.name.split(".").pop();
     const finalFileName = fileName || `image_${timestamp}.${fileExtension}`;
 
-    // Create the storage reference with the folder structure: gallery/{user_id}/{event_id}/{filename}
     const storageRef = ref(
       FIREBASE_STORAGE,
-      `gallery/${userId}/${eventId}/${finalFileName}`,
+      `gallery/${userId}/${eventId}/${finalFileName}`
     );
 
-    // Upload the file
     const snapshot = await uploadBytes(storageRef, imageFile);
     console.log("Image uploaded successfully:", snapshot.metadata.name);
 
-    // Get the download URL
     const downloadURL = await getDownloadURL(snapshot.ref);
     console.log("Download URL:", downloadURL);
 
@@ -122,29 +119,26 @@ export async function uploadGalleryImage(
 
 export async function getGalleryImages(userId, eventId) {
   try {
-    // Create reference to the gallery folder for this user and event
     const galleryRef = ref(FIREBASE_STORAGE, `gallery/${userId}/${eventId}`);
 
-    // List all items in the folder
     const result = await listAll(galleryRef);
 
-    // Get download URLs and metadata for all images
     const imagePromises = result.items.map(async (itemRef) => {
       const [downloadURL, metadata] = await Promise.all([
         getDownloadURL(itemRef),
-        getMetadata(itemRef),
+        getMetadata(itemRef)
       ]);
       return {
         name: itemRef.name,
         url: downloadURL,
         fullPath: itemRef.fullPath,
-        size: metadata.size || 0,
+        size: metadata.size || 0
       };
     });
 
     const images = await Promise.all(imagePromises);
     console.log(
-      `Found ${images.length} images in gallery for user ${userId}, event ${eventId}`,
+      `Found ${images.length} images in gallery for user ${userId}, event ${eventId}`
     );
 
     return images;
@@ -156,13 +150,11 @@ export async function getGalleryImages(userId, eventId) {
 
 export async function deleteGalleryImage(userId, eventId, fileName) {
   try {
-    // Create reference to the specific file
     const imageRef = ref(
       FIREBASE_STORAGE,
-      `gallery/${userId}/${eventId}/${fileName}`,
+      `gallery/${userId}/${eventId}/${fileName}`
     );
 
-    // Delete the file
     await deleteObject(imageRef);
     console.log(`Image ${fileName} deleted successfully from gallery`);
   } catch (error) {
@@ -173,10 +165,8 @@ export async function deleteGalleryImage(userId, eventId, fileName) {
 
 export async function deleteAllGalleryImages(userId, eventId) {
   try {
-    // Get all images in the folder
     const images = await getGalleryImages(userId, eventId);
 
-    // Delete each image
     const deletePromises = images.map((image) => {
       const imageRef = ref(FIREBASE_STORAGE, image.fullPath);
       return deleteObject(imageRef);
@@ -208,13 +198,13 @@ export async function getGalleryStats(userId, eventId) {
     console.log("Gallery Stats:", {
       imageCount: images.length,
       totalSize: totalSize,
-      hasImages: images.length > 0,
+      hasImages: images.length > 0
     });
 
     return {
       imageCount: images.length,
       totalSize: totalSize,
-      hasImages: images.length > 0,
+      hasImages: images.length > 0
     };
   } catch (error) {
     console.error("Error getting gallery stats:", error);

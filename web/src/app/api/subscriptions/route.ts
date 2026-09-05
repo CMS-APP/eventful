@@ -5,10 +5,6 @@ import { isAdminRequest } from "@/lib/admin-request";
 const REVENUECAT_API_BASE = "https://api.revenuecat.com/v2";
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-// RevenueCat's docs don't specify this: /charts/{name} returns a flat array with
-// one entry per (day x measure), e.g. revenue has measure 0 = Revenue, 1 =
-// Transactions, 2 = Ad Impressions, all interleaved. `cohort` is epoch seconds.
-// Measure 0 is always the chart's primary chartable metric (confirmed live).
 const PRIMARY_MEASURE_INDEX = 0;
 
 interface ChartPoint {

@@ -23,7 +23,7 @@ export function EventDecorEdit({ route }: EventDecorEditProps) {
     if (decorItems !== prevDecorItemsRef.current) {
       setEvent((prevEvent) => {
         const updatedEvent = { ...prevEvent, decorItems };
-        updateEventInDatabase(updatedEvent); // you can await here if you want
+        updateEventInDatabase(updatedEvent);
         return updatedEvent;
       });
       prevDecorItemsRef.current = decorItems;

@@ -29,9 +29,6 @@ interface SpotifyTokenData {
   expirationDate: string;
 }
 
-/**
- * Exchanges an authorization code for an access token using PKCE
- */
 async function exchangeCodeForToken(
   code: string,
   codeVerifier: string,
@@ -77,9 +74,6 @@ async function exchangeCodeForToken(
   };
 }
 
-/**
- * Processes the auth response and returns token data if successful
- */
 export async function processAuthResponse(
   response: ReturnType<typeof AuthSession.useAuthRequest>[1],
   request: ReturnType<typeof AuthSession.useAuthRequest>[0],
@@ -93,13 +87,11 @@ export async function processAuthResponse(
   if (response.type === "success" && request.codeVerifier) {
     const { code } = response.params;
 
-    // Prevent duplicate processing
     const responseKey = `${code}-${response.type}`;
     if (processedResponseRef.current === responseKey) {
       return null;
     }
 
-    // Mark as being processed
     processedResponseRef.current = responseKey;
 
     try {
@@ -110,7 +102,6 @@ export async function processAuthResponse(
       );
       return tokenData;
     } catch (error) {
-      // Reset on error so we can retry
       processedResponseRef.current = null;
       throw error;
     }

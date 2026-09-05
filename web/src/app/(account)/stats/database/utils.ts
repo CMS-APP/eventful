@@ -1,5 +1,5 @@
-import { FIRESTORE_DB } from "@/app/Firebase";
 import {
+  Timestamp,
   collection,
   deleteDoc,
   doc,
@@ -8,9 +8,10 @@ import {
   limit,
   orderBy,
   query,
-  Timestamp,
-  where,
+  where
 } from "firebase/firestore";
+
+import { FIRESTORE_DB } from "@/app/Firebase";
 
 export interface FeedbackItem {
   id: string;
@@ -36,7 +37,7 @@ export async function getAllFeedback(): Promise<FeedbackItem[]> {
         type: data.type ?? "general",
         username: data.username ?? "Anonymous",
         timestamp:
-          timestamp?.toDate?.()?.toISOString?.() ?? new Date().toISOString(),
+          timestamp?.toDate?.()?.toISOString?.() ?? new Date().toISOString()
       };
     });
   } catch (error) {
@@ -50,7 +51,6 @@ export async function deleteFeedback(feedbackId: string): Promise<void> {
   await deleteDoc(feedbackDoc);
 }
 
-/** Minimal user fields used for device/platform/locale stats (from app user store). */
 export interface UserDeviceStatsRow {
   uid: string;
   platform: string;
@@ -65,14 +65,13 @@ export interface UserDeviceStatsRow {
   lastLaunchedAt: string | null;
 }
 
-/** Matches the 30-day MAU window used by the snapshotActiveUsers scheduled function. */
 const DEVICE_STATS_ACTIVE_WINDOW_DAYS = 30;
 
 export async function getUsersForDeviceStats(): Promise<UserDeviceStatsRow[]> {
   try {
     const usersRef = collection(FIRESTORE_DB, "user");
     const cutoff = Timestamp.fromMillis(
-      Date.now() - DEVICE_STATS_ACTIVE_WINDOW_DAYS * 24 * 60 * 60 * 1000,
+      Date.now() - DEVICE_STATS_ACTIVE_WINDOW_DAYS * 24 * 60 * 60 * 1000
     );
     const q = query(usersRef, where("lastLaunchedAt", ">=", cutoff));
     const snapshot = await getDocs(q);
@@ -101,7 +100,7 @@ export async function getUsersForDeviceStats(): Promise<UserDeviceStatsRow[]> {
         region: typeof data.region === "string" ? data.region : "unknown",
         osVersion:
           typeof data.osVersion === "string" ? data.osVersion : "unknown",
-        lastLaunchedAt: lastLaunched?.toDate?.()?.toISOString?.() ?? null,
+        lastLaunchedAt: lastLaunched?.toDate?.()?.toISOString?.() ?? null
       };
     });
   } catch (error) {
@@ -154,7 +153,6 @@ export async function getTotalPhotoBoothConfigs() {
   }
 }
 
-/** One day's active-user snapshot (from the activeUserStats collection, written daily by the snapshotActiveUsers scheduled function). */
 export interface ActiveUserStatsPoint {
   date: string;
   dau: number;
@@ -163,7 +161,7 @@ export interface ActiveUserStatsPoint {
 }
 
 export async function getActiveUserStatsHistory(
-  maxDays = 90,
+  maxDays = 90
 ): Promise<ActiveUserStatsPoint[]> {
   try {
     const ref = collection(FIRESTORE_DB, "activeUserStats");
@@ -176,7 +174,7 @@ export async function getActiveUserStatsHistory(
           date: typeof data.date === "string" ? data.date : d.id,
           dau: typeof data.dau === "number" ? data.dau : 0,
           wau: typeof data.wau === "number" ? data.wau : 0,
-          mau: typeof data.mau === "number" ? data.mau : 0,
+          mau: typeof data.mau === "number" ? data.mau : 0
         };
       })
       .sort((a, b) => a.date.localeCompare(b.date));

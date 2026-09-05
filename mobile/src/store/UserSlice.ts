@@ -7,7 +7,6 @@ import { Platform } from "react-native";
 import { User } from "../types/User";
 import { log } from "../utils/logging";
 
-/** Name from Sign in with Apple (only provided on first auth). Used to pre-fill onboarding so we don't ask for name again. */
 interface AppleOnboardingName {
   firstName: string;
   lastName: string;
@@ -46,7 +45,6 @@ const sentryReduxMiddleware = (_store: any) => (next: any) => (action: any) => {
       level: "info"
     });
   } catch {
-    // Silently handle Sentry breadcrumb errors to avoid breaking the app
     log("Error adding Sentry breadcrumb", "error");
   }
 

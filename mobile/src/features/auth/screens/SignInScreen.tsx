@@ -38,7 +38,6 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
   const emailRef = useRef(email);
   const passwordRef = useRef(password);
 
-  // Update refs when state changes
   emailRef.current = email;
   passwordRef.current = password;
 

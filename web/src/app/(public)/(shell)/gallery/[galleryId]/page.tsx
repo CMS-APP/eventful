@@ -1,25 +1,25 @@
 "use client";
 
 import {
-  galleryExists,
-  getGalleryImages,
-  getGalleryStats,
-} from "@/services/FirebaseFunctions";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
-
-import {
   faDownload,
   faImage,
-  faImages,
+  faImages
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import JSZip from "jszip";
 import Link from "next/link";
+
+import { useEffect, useState } from "react";
+
 import Loading from "@/components/Loading";
+import {
+  galleryExists,
+  getGalleryImages,
+  getGalleryStats
+} from "@/services/FirebaseFunctions";
 
 import GalleryImageView from "./GalleryImageView";
 import SelectedImageView from "./SelectedImageView";
-
 import "./page.css";
 
 export interface GalleryImage {
@@ -61,7 +61,6 @@ export default function Gallery() {
     const extractedUserId = idList[0];
     const extractedEventId = idList[1];
 
-    // Load gallery data
     getGallery(extractedUserId, extractedEventId);
   }, []);
 
@@ -70,7 +69,6 @@ export default function Gallery() {
       setIsLoading(true);
       setError(null);
 
-      // Check if gallery exists
       const exists = await galleryExists(userId, eventId);
 
       if (!exists) {
@@ -81,11 +79,9 @@ export default function Gallery() {
         return;
       }
 
-      // Get gallery images
       const images = await getGalleryImages(userId, eventId);
       setGalleryImages(images);
 
-      // Get gallery statistics
       const stats = (await getGalleryStats(userId, eventId)) as GalleryStats;
       setGalleryStats(stats);
 
@@ -106,7 +102,6 @@ export default function Gallery() {
     const zip = new JSZip();
     const totalImages = images.length;
 
-    // Process images one by one to show progress
     for (let i = 0; i < images.length; i++) {
       const image = images[i];
       const apiUrl = `/api/download-image?url=${encodeURIComponent(image.url)}&fileName=${encodeURIComponent(image.name)}`;
@@ -114,7 +109,6 @@ export default function Gallery() {
       const blob = await response.blob();
       zip.file(image.name, blob);
 
-      // Update progress
       setDownloadProgress(((i + 1) / totalImages) * 100);
     }
 
@@ -248,7 +242,6 @@ export default function Gallery() {
           )}
         </div>
       </main>
-
     </>
   );
 }

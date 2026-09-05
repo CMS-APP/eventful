@@ -72,6 +72,9 @@ export function EventInviteHomeScreen({
             backAction: true
           }
         }}
+        contentConfig={{
+          tabBarPresent: false
+        }}
       >
         <View style={styles.container}>
           <Text type="subHeader" style={styles.eventText} center>

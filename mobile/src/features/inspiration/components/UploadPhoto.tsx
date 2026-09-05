@@ -129,11 +129,9 @@ export function UploadPhoto({
     [pickImage, loading]
   );
 
-  // Create grid layout with photos and add button
   const renderGrid = () => {
     const allItems = [...photos];
 
-    // Add the add button if there's space
     if (photos.length < maxPhotos) {
       allItems.push({
         id: "add_button",
@@ -145,7 +143,6 @@ export function UploadPhoto({
 
     const rows = [];
 
-    // Create rows of 3 items each
     for (let i = 0; i < allItems.length; i += 3) {
       const rowItems = allItems.slice(i, i + 3);
       const row = (
@@ -157,7 +154,6 @@ export function UploadPhoto({
               return renderPhoto(item);
             }
           })}
-          {/* Fill remaining slots with empty views to maintain grid */}
           {Array.from({ length: 3 - rowItems.length }, (_, index) => (
             <View key={`empty_${i}_${index}`} style={styles.photoContainer} />
           ))}

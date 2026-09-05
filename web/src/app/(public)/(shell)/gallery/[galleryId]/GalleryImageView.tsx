@@ -1,6 +1,7 @@
 import { faDownload, faImage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
+
 import { GalleryImage } from "./page";
 
 export default function GalleryImageView({
@@ -9,7 +10,7 @@ export default function GalleryImageView({
   index,
   downloadingImage,
   setDownloadingImage,
-  setSelectedImage,
+  setSelectedImage
 }: {
   url: string;
   name: string;
@@ -20,25 +21,18 @@ export default function GalleryImageView({
 }) {
   async function downloadImage(image: GalleryImage) {
     try {
-      console.log("Downloading image:", image.name);
       setDownloadingImage(image.name);
 
-      // Use the API route to download the image (avoids CORS issues)
       const downloadUrl = `/api/download-image?url=${encodeURIComponent(image.url)}&fileName=${encodeURIComponent(image.name)}`;
 
-      // Create a download link
       const link = document.createElement("a");
       link.href = downloadUrl;
       link.download = image.name;
 
-      // Trigger download
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
-      console.log(`Downloaded: ${image.name}`);
-    } catch (error) {
-      console.error("Download failed:", error);
+    } catch {
       alert("Failed to download image. Please try again.");
     } finally {
       setDownloadingImage(null);
@@ -78,7 +72,6 @@ export default function GalleryImageView({
         </button>
       </div>
 
-      {/* Image Info */}
       <div className="absolute bottom-2 left-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         <div className="bg-black/70 text-white text-xs font-poppins px-2 py-1 rounded">
           {name}

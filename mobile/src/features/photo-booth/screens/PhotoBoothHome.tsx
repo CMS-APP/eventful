@@ -229,21 +229,6 @@ export function PhotoBoothHome() {
                     />
                   )}
                 </View>
-
-                {/* <Text type="subHeader" color={colors.gray}>
-                  Inspiration
-                </Text>
-
-                <HomePageButton
-                  icon="star"
-                  text="Inspiration"
-                  color={colors.primary}
-                  textColor={colors.white}
-                  buttonAction={() => {
-                    navigation.navigate("PhotoBoothInspiration");
-                  }}
-                  disabled={locked || !hasAccess}
-                /> */}
               </View>
             </View>
           </View>

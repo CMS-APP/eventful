@@ -1,10 +1,11 @@
 import {
   faArrowLeft,
   faArrowRight,
-  faDownload,
+  faDownload
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
+
 import { GalleryImage } from "./page";
 
 export default function SelectedImageView({
@@ -13,7 +14,7 @@ export default function SelectedImageView({
   index,
   galleryImages,
   setDownloadingImage,
-  setSelectedImage,
+  setSelectedImage
 }: {
   url: string;
   name: string;
@@ -28,15 +29,12 @@ export default function SelectedImageView({
       console.log("Downloading image:", image.name);
       setDownloadingImage(image.name);
 
-      // Use the API route to download the image (avoids CORS issues)
       const downloadUrl = `/api/download-image?url=${encodeURIComponent(image.url)}&fileName=${encodeURIComponent(image.name)}`;
 
-      // Create a download link
       const link = document.createElement("a");
       link.href = downloadUrl;
       link.download = image.name;
 
-      // Trigger download
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

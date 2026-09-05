@@ -29,7 +29,8 @@ export function EventInviteGuestsScreen({ route }: Props) {
         }
       }}
       contentConfig={{
-        backgroundColor: colors.primary
+        backgroundColor: colors.primary,
+        tabBarPresent: false
       }}
     >
       <EventGuestListInvited event={event} host={host} />

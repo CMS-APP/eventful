@@ -1,14 +1,5 @@
 "use client";
 
-import Loading from "@/components/Loading";
-import StyledButton from "@/components/StyledButton";
-import StyledButtonFlex from "@/components/StyledButtonFlex";
-import { checkEventLink } from "@/services/FirebaseFunctions";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useRef, useState } from "react";
-
-import ReCAPTCHA from "react-google-recaptcha";
-
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import {
   faCalendar,
@@ -17,9 +8,18 @@ import {
   faShirt,
   faTag,
   faUser,
-  faUserGroup,
+  faUserGroup
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
+import ReCAPTCHA from "react-google-recaptcha";
+
+import { useEffect, useRef, useState } from "react";
+
+import Loading from "@/components/Loading";
+import StyledButton from "@/components/StyledButton";
+import StyledButtonFlex from "@/components/StyledButtonFlex";
+import { checkEventLink } from "@/services/FirebaseFunctions";
 
 import "./page.css";
 
@@ -53,20 +53,20 @@ export default function EventResponse() {
       month: "long",
       day: "numeric",
       hour: "2-digit",
-      minute: "2-digit",
+      minute: "2-digit"
     };
     return date.toLocaleDateString("en-US", options);
   }
 
   async function sendResponse() {
-    if (isLoading) return; // Prevent multiple submits
+    if (isLoading) return;
     setIsLoading(true);
 
     const nameInput = document.querySelector(
-      'input[type="text"]',
+      'input[type="text"]'
     ) as HTMLInputElement;
     const emailInput = document.querySelector(
-      'input[type="email"]',
+      'input[type="email"]'
     ) as HTMLInputElement;
 
     const name = nameInput.value;
@@ -105,20 +105,23 @@ export default function EventResponse() {
     const deviceId = getOrCreateDeviceId();
 
     try {
-      const res = await fetch("https://respondtoevent-iuxeocrkta-uc.a.run.app", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          hostId,
-          eventName,
-          eventId,
-          response: response.toLowerCase(),
-          name,
-          email: email ? email.toLowerCase() : "",
-          recaptchaToken,
-          deviceId,
-        }),
-      });
+      const res = await fetch(
+        "https://respondtoevent-iuxeocrkta-uc.a.run.app",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            hostId,
+            eventName,
+            eventId,
+            response: response.toLowerCase(),
+            name,
+            email: email ? email.toLowerCase() : "",
+            recaptchaToken,
+            deviceId
+          })
+        }
+      );
 
       const data = await res.text();
       if (!res.ok) {
@@ -146,7 +149,7 @@ export default function EventResponse() {
   function getOrCreateDeviceId() {
     let deviceId = localStorage.getItem("deviceId");
     if (!deviceId) {
-      deviceId = crypto.randomUUID(); // Generate a new UUID
+      deviceId = crypto.randomUUID();
       localStorage.setItem("deviceId", deviceId);
     }
     return deviceId;
@@ -172,7 +175,6 @@ export default function EventResponse() {
       }
     }
 
-    console.log("Checking event link...");
     const urlPath = window.location.pathname;
     const parts = urlPath.split("/");
     const eventId = parts[parts.length - 1];
@@ -200,91 +202,91 @@ export default function EventResponse() {
     <>
       {isLoading && <Loading message="Sending..." />}
       <main className="event-response-page">
-      <div className="event-response-page-inner">
-        <div className="event-response-card-outer">
-          <div className="event-response-card">
-            <p className="event-response-invite-label">You&apos;re invited</p>
-            <form className="event-response-form">
-              {infoRow("Host:", hostName, faUser)}
-              {infoRow("Event:", eventName, faTag)}
-              {infoRow("Date:", eventDate, faCalendar)}
-              {infoRow("Theme:", eventTheme, faShirt)}
-              {infoRow("Location:", eventAddress, faLocationPin)}
-              {infoRow("Directions:", eventDirections, faLocationArrow)}
+        <div className="event-response-page-inner">
+          <div className="event-response-card-outer">
+            <div className="event-response-card">
+              <p className="event-response-invite-label">You&apos;re invited</p>
+              <form className="event-response-form">
+                {infoRow("Host:", hostName, faUser)}
+                {infoRow("Event:", eventName, faTag)}
+                {infoRow("Date:", eventDate, faCalendar)}
+                {infoRow("Theme:", eventTheme, faShirt)}
+                {infoRow("Location:", eventAddress, faLocationPin)}
+                {infoRow("Directions:", eventDirections, faLocationArrow)}
 
-              <p className="event-response-info-label">
-                <FontAwesomeIcon
-                  icon={faUserGroup}
-                  className="event-response-info-icon"
-                />
-                To see who&apos;s going —{" "}
-                <Link href="/" className="event-response-app-link">
-                  Download the app!
-                </Link>
-              </p>
-
-              <div className="event-response-divider" />
-
-              <p className="event-response-section-label">RSVP</p>
-
-              <p className="event-response-field-label">Name</p>
-              <input
-                type="text"
-                className="event-response-input"
-                placeholder="Enter your name"
-                required
-              />
-              <p className="event-response-field-label">Email (optional)</p>
-              <input
-                type="email"
-                className="event-response-input"
-                placeholder="Enter your email"
-              />
-
-              <div className="event-response-rsvp-buttons">
-                <StyledButtonFlex
-                  color="#6E9975"
-                  hoverColor="#5E8263"
-                  text="Accept"
-                  onClickAction={() => handleResponse("Accept")}
-                  selected={response === "Accept"}
-                />
-                <StyledButtonFlex
-                  color="#FEBA12"
-                  hoverColor="#E4A710"
-                  text="Maybe"
-                  onClickAction={() => handleResponse("Maybe")}
-                  selected={response === "Maybe"}
-                />
-                <StyledButtonFlex
-                  color="#66101F"
-                  hoverColor="#550E1B"
-                  text="Decline"
-                  onClickAction={() => handleResponse("Decline")}
-                  selected={response === "Decline"}
-                />
-              </div>
-
-              {response && (
-                <div>
-                  <ReCAPTCHA
-                    ref={recaptchaRef}
-                    sitekey={RECAPTCHA_SITE_KEY}
-                    size="invisible"
+                <p className="event-response-info-label">
+                  <FontAwesomeIcon
+                    icon={faUserGroup}
+                    className="event-response-info-icon"
                   />
-                  <StyledButton
-                    color="var(--primary)"
-                    hoverColor="var(--primaryTint)"
-                    text="Submit"
-                    onClickAction={sendResponse}
+                  To see who&apos;s going —{" "}
+                  <Link href="/" className="event-response-app-link">
+                    Download the app!
+                  </Link>
+                </p>
+
+                <div className="event-response-divider" />
+
+                <p className="event-response-section-label">RSVP</p>
+
+                <p className="event-response-field-label">Name</p>
+                <input
+                  type="text"
+                  className="event-response-input"
+                  placeholder="Enter your name"
+                  required
+                />
+                <p className="event-response-field-label">Email (optional)</p>
+                <input
+                  type="email"
+                  className="event-response-input"
+                  placeholder="Enter your email"
+                />
+
+                <div className="event-response-rsvp-buttons">
+                  <StyledButtonFlex
+                    color="#6E9975"
+                    hoverColor="#5E8263"
+                    text="Accept"
+                    onClickAction={() => handleResponse("Accept")}
+                    selected={response === "Accept"}
+                  />
+                  <StyledButtonFlex
+                    color="#FEBA12"
+                    hoverColor="#E4A710"
+                    text="Maybe"
+                    onClickAction={() => handleResponse("Maybe")}
+                    selected={response === "Maybe"}
+                  />
+                  <StyledButtonFlex
+                    color="#66101F"
+                    hoverColor="#550E1B"
+                    text="Decline"
+                    onClickAction={() => handleResponse("Decline")}
+                    selected={response === "Decline"}
                   />
                 </div>
-              )}
-            </form>
+
+                {response && (
+                  <div>
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={RECAPTCHA_SITE_KEY}
+                      size="invisible"
+                    />
+                    <StyledButton
+                      color="var(--primary)"
+                      hoverColor="var(--primaryTint)"
+                      text="Submit"
+                      onClickAction={sendResponse}
+                    />
+                  </div>
+                )}
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-    </main>
+      </main>
     </>
   );
 }

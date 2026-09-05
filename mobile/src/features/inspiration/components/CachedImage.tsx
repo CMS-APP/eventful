@@ -44,12 +44,10 @@ export function CachedImage({
       let cachedUri: string | null = null;
       let cacheFilename: string;
 
-      // Use post-specific caching if postId and imageIndex are provided
       if (postId !== undefined && imageIndex !== undefined) {
         cacheFilename = `post_${postId}_${imageIndex}`;
         cachedUri = await getImageFromCache(cacheFilename);
       } else {
-        // Fallback to generic caching
         cacheFilename =
           photo.id || photo.uri.split("/").pop()?.split("?")[0] || "image";
         cachedUri = await getImageFromCache(cacheFilename);
@@ -61,7 +59,6 @@ export function CachedImage({
         return;
       }
 
-      // If not in cache, download and cache it
       let cachedPath: string | null = null;
 
       if (postId !== undefined && imageIndex !== undefined) {
@@ -73,12 +70,10 @@ export function CachedImage({
       if (cachedPath) {
         setImageUri(cachedPath);
       } else {
-        // Fallback to original URI if caching fails
         setImageUri(photo.uri);
       }
     } catch {
       setError(true);
-      // Fallback to original URI
       setImageUri(photo.uri);
     } finally {
       setLoading(false);

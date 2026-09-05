@@ -3,14 +3,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin-request";
 import { getGa4Client } from "@/lib/ga4";
 
-// Ordered acquisition journey. `event` is the underlying GA4 event name —
-// first_open is auto-collected by the Firebase SDK, the rest are logged
-// from mobile/src/services/analytics/events.ts.
 const FUNNEL_STEPS = [
   { id: "downloads", label: "Downloads", event: "first_open" },
   { id: "signup", label: "Signup", event: "auth_sign_up" },
-  { id: "onboarding_started", label: "Onboarding started", event: "onboarding_started" },
-  { id: "onboarding_completed", label: "Onboarding completed", event: "onboarding_completed" },
+  {
+    id: "onboarding_started",
+    label: "Onboarding started",
+    event: "onboarding_started"
+  },
+  {
+    id: "onboarding_completed",
+    label: "Onboarding completed",
+    event: "onboarding_completed"
+  }
 ] as const;
 
 export async function GET(request: NextRequest) {
@@ -23,7 +28,7 @@ export async function GET(request: NextRequest) {
   if (!propertyId || !client) {
     return NextResponse.json(
       { error: "Firebase Analytics is not configured on the server" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 
@@ -39,9 +44,9 @@ export async function GET(request: NextRequest) {
       dimensionFilter: {
         filter: {
           fieldName: "eventName",
-          inListFilter: { values: FUNNEL_STEPS.map((step) => step.event) },
-        },
-      },
+          inListFilter: { values: FUNNEL_STEPS.map((step) => step.event) }
+        }
+      }
     });
 
     const usersByEvent = new Map<string, number>();
@@ -54,7 +59,7 @@ export async function GET(request: NextRequest) {
     const steps = FUNNEL_STEPS.map((step) => ({
       id: step.id,
       label: step.label,
-      users: usersByEvent.get(step.event) ?? 0,
+      users: usersByEvent.get(step.event) ?? 0
     }));
 
     return NextResponse.json({ steps });
@@ -62,7 +67,7 @@ export async function GET(request: NextRequest) {
     console.error("GA4 funnel report failed:", error);
     return NextResponse.json(
       { error: "Failed to fetch Firebase Analytics data" },
-      { status: 502 },
+      { status: 502 }
     );
   }
 }
