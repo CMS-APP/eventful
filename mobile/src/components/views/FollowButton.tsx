@@ -14,12 +14,10 @@ import {
 } from "@/services/analytics/events";
 import {
   followUser,
-  getUserFollowers,
-  getUserFollowing,
+  isFollowingUser,
   unFollowUser
 } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
-import { Follower } from "@/types/Follower";
 import { User } from "@/types/User";
 import { showOptionsAlert } from "@/utils/alertModal";
 import { haptics } from "@/utils/haptics";
@@ -29,51 +27,30 @@ import { showErrorToast } from "@/utils/toast";
 interface FollowButtonProps {
   user: User;
   flex?: number | undefined;
+  onFollowingChange?: (isFollowing: boolean) => void;
 }
 
-export function FollowButton({ user, flex = undefined }: FollowButtonProps) {
+export function FollowButton({
+  user,
+  flex = undefined,
+  onFollowingChange
+}: FollowButtonProps) {
   const [contactText, setContactText] = useState("Follow");
-  const [following, setFollowing] = useState<Follower[]>([]);
+  const [isFollowingMe, setIsFollowingMe] = useState(false);
   const userId = useSelector((state: UserState) => state.uid);
-
-  const getContactText = useCallback(
-    async (followers: Follower[], following: Follower[]) => {
-      const isFollowingMe = following.some(
-        (follow) => follow.followingId === userId && follow.status === "active"
-      );
-      const isFollowing = followers.some(
-        (follower) =>
-          follower.followerId === userId && follower.status === "active"
-      );
-
-      if (isFollowing) {
-        setContactText("Following");
-      } else if (isFollowingMe) {
-        setContactText("Follow Back");
-      } else {
-        setContactText("Follow");
-      }
-    },
-    [userId]
-  );
 
   const handleUnfollow = useCallback(async () => {
     try {
       await unFollowUser(userId, user.uid);
       trackUserUnfollowed();
       haptics.error();
-      setFollowing(
-        following.filter((follow) => follow.followingId !== user.uid)
-      );
-      const isFollowingMe = following.some(
-        (follow) => follow.followingId === userId && follow.status === "active"
-      );
       setContactText(isFollowingMe ? "Follow Back" : "Follow");
+      onFollowingChange?.(false);
     } catch {
       log("Failed to unfollow user", "error");
       showErrorToast("Failed to unfollow user");
     }
-  }, [userId, user.uid, following]);
+  }, [userId, user.uid, isFollowingMe, onFollowingChange]);
 
   const unFollowUserAlert = useCallback(async () => {
     haptics.error();
@@ -92,11 +69,17 @@ export function FollowButton({ user, flex = undefined }: FollowButtonProps) {
   }, [handleUnfollow]);
 
   const fetchData = useCallback(async () => {
-    const followers = await getUserFollowers(user.uid);
-    const following = await getUserFollowing(user.uid);
-    setFollowing(following);
-    getContactText(followers, following);
-  }, [user.uid, getContactText]);
+    const [isFollowing, followingMe] = await Promise.all([
+      isFollowingUser(userId, user.uid),
+      isFollowingUser(user.uid, userId)
+    ]);
+
+    setIsFollowingMe(followingMe);
+    setContactText(
+      isFollowing ? "Following" : followingMe ? "Follow Back" : "Follow"
+    );
+    onFollowingChange?.(isFollowing);
+  }, [userId, user.uid, onFollowingChange]);
 
   useFocusEffect(
     useCallback(() => {
@@ -108,12 +91,13 @@ export function FollowButton({ user, flex = undefined }: FollowButtonProps) {
     if (contactText === "Follow" || contactText === "Follow Back") {
       haptics.success();
       setContactText("Following");
+      onFollowingChange?.(true);
       await followUser(userId, user.uid);
       trackUserFollowed();
     } else {
       await unFollowUserAlert();
     }
-  }, [contactText, userId, user.uid, unFollowUserAlert]);
+  }, [contactText, userId, user.uid, unFollowUserAlert, onFollowingChange]);
 
   if (user.uid === userId) {
     return null;
@@ -125,7 +109,9 @@ export function FollowButton({ user, flex = undefined }: FollowButtonProps) {
         size="small"
         text={contactText}
         onPress={handlePress}
-        color={colors.secondary}
+        color={
+          contactText === "Following" ? colors.primaryTint : colors.secondary
+        }
         textColor={colors.white}
         flex={flex}
         leadingIcon={contactText === "Following" ? "check" : "user-plus"}
