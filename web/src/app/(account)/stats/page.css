@@ -180,6 +180,13 @@
   font-family: var(--font-poppins-bold);
 }
 
+.charts-section-subtitle {
+  margin: -12px 0 16px 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--font-poppins-regular);
+}
+
 .charts-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

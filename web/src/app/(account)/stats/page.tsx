@@ -62,6 +62,16 @@ function formatShortDate(dateStr: string): string {
   });
 }
 
+function formatLastUpdated(dateStr: string): string {
+  const date = new Date(`${dateStr}T00:00:00Z`);
+  return date.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC"
+  });
+}
+
 function formatCurrency(value: number): string {
   return value.toLocaleString("en-GB", {
     style: "currency",
@@ -346,6 +356,15 @@ export default function Stats() {
     return diffs.slice(-30);
   }, [totalUserHistory]);
 
+  const growthLastUpdated = useMemo(() => {
+    const dates = [
+      totalUserHistory.at(-1)?.date,
+      activeUserHistory.at(-1)?.date
+    ].filter((date): date is string => Boolean(date));
+    if (dates.length === 0) return null;
+    return dates.sort().at(-1) ?? null;
+  }, [totalUserHistory, activeUserHistory]);
+
   useEffect(() => {
     async function verifyAdmin() {
       if (loading || !user) {
@@ -521,6 +540,12 @@ export default function Stats() {
 
         <div className="charts-section">
           <h2 className="charts-section-title">Growth</h2>
+          <p className="charts-section-subtitle">
+            Updates daily at 12:00 UTC
+            {growthLastUpdated
+              ? ` · Data last updated ${formatLastUpdated(growthLastUpdated)}`
+              : ""}
+          </p>
           <div className="charts-grid">
             <section className="chart-card">
               <h2 className="chart-card-title">
@@ -552,12 +577,7 @@ export default function Stats() {
                 loading={loadingUsers}
               />
             </section>
-          </div>
-        </div>
 
-        <div className="charts-section">
-          <h2 className="charts-section-title">Active users</h2>
-          <div className="charts-grid">
             {ACTIVE_USER_METRICS.map(({ key, label }) => (
               <section className="chart-card" key={key}>
                 <h2 className="chart-card-title">
