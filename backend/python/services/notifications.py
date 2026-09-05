@@ -49,40 +49,60 @@ def send_expo_notifications(
         print(f"Error sending Expo notifications: {exc}")
 
 
-def increment_badge_and_notify(user_id: str) -> None:
-    db = firestore.client()
-    user_ref = db.collection("user").document(user_id)
-    user_ref.set(
-        {"unreadNotificationCount": firestore.Increment(1)}, merge=True
+def _count_unread_notifications(db, user_id: str) -> int:
+    docs = db.collection("notifications").where("userId", "==", user_id).stream()
+    return sum(1 for doc in docs if doc.to_dict().get("read") is False)
+
+
+def _count_pending_invites(db, user_id: str) -> int:
+    docs = db.collection("invite").where("recipient", "==", user_id).stream()
+    return sum(
+        1 for doc in docs if doc.to_dict().get("response") in ("pending", "maybe")
     )
-    badge = (user_ref.get().to_dict() or {}).get("unreadNotificationCount", 0)
-
-    send_expo_notifications(user_id, badge=badge)
 
 
-def handle_notification_created(
-    event: firestore_fn.Event[firestore_fn.DocumentSnapshot | None],
+def recompute_unread_badge(user_id: str) -> int:
+    db = firestore.client()
+    badge = _count_unread_notifications(db, user_id) + _count_pending_invites(
+        db, user_id
+    )
+    db.collection("user").document(user_id).set(
+        {"unreadNotificationCount": badge}, merge=True
+    )
+    return badge
+
+
+def handle_notification_written(
+    event: firestore_fn.Event[
+        firestore_fn.Change[firestore_fn.DocumentSnapshot | None]
+    ],
 ) -> None:
-    notification = (event.data.to_dict() if event.data else None) or {}
-    user_id = notification.get("userId")
+    after = event.data.after.to_dict() if event.data.after else None
+    before = event.data.before.to_dict() if event.data.before else None
+    user_id = (after or before or {}).get("userId")
     if not user_id:
         return
 
     try:
-        increment_badge_and_notify(user_id)
+        badge = recompute_unread_badge(user_id)
+        send_expo_notifications(user_id, badge=badge)
     except Exception as exc:
         print(f"Error updating badge for notification: {exc}")
 
 
-def handle_invite_created(
-    event: firestore_fn.Event[firestore_fn.DocumentSnapshot | None],
+def handle_invite_written(
+    event: firestore_fn.Event[
+        firestore_fn.Change[firestore_fn.DocumentSnapshot | None]
+    ],
 ) -> None:
-    invite = (event.data.to_dict() if event.data else None) or {}
-    recipient = invite.get("recipient")
+    after = event.data.after.to_dict() if event.data.after else None
+    before = event.data.before.to_dict() if event.data.before else None
+    recipient = (after or before or {}).get("recipient")
     if not recipient:
         return
 
     try:
-        increment_badge_and_notify(recipient)
+        badge = recompute_unread_badge(recipient)
+        send_expo_notifications(recipient, badge=badge)
     except Exception as exc:
         print(f"Error updating badge for invite: {exc}")
