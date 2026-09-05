@@ -598,11 +598,13 @@ export default function Stats() {
         </div>
 
         <div className="charts-section">
-          <h2 className="charts-section-title">Acquisition funnel</h2>
+          <h2 className="charts-section-title">
+            Acquisition funnel (last 30 days)
+          </h2>
           <section className="chart-card chart-card-full">
             <h2 className="chart-card-title">
               <FontAwesomeIcon icon={faFilter} />
-              Downloads → Signup → Onboarding
+              Downloads → Signup → Onboarding (last 30 days)
             </h2>
             <FunnelChart steps={funnelSteps} loading={loadingFunnel} />
           </section>
