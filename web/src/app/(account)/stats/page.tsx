@@ -20,7 +20,7 @@ import {
   YAxis
 } from "recharts";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { checkAdmin } from "@/app/account/database/utils";
 import Loading from "@/components/Loading";
@@ -34,8 +34,10 @@ import {
 
 import {
   type ActiveUserStatsPoint,
+  type TotalUserStatsPoint,
   getActiveUserStatsHistory,
-  getTotalUser
+  getTotalUser,
+  getTotalUserStatsHistory
 } from "./database/utils";
 import "./page.css";
 
@@ -90,7 +92,8 @@ function TrendChart<T extends { date: string }>({
   formatValue,
   emptyMessage,
   loading,
-  changePercent
+  changePercent,
+  showAverage = true
 }: {
   history: T[];
   metric: keyof T;
@@ -99,6 +102,7 @@ function TrendChart<T extends { date: string }>({
   emptyMessage: string;
   loading: boolean;
   changePercent?: number | null;
+  showAverage?: boolean;
 }) {
   if (loading) {
     return (
@@ -121,10 +125,12 @@ function TrendChart<T extends { date: string }>({
     <div>
       <div className="chart-card-summary">
         <span className="chart-card-summary-value">{formatValue(latest)}</span>
-        {changePercent !== undefined && <PercentChangeBadge value={changePercent} />}
+        {changePercent !== undefined && (
+          <PercentChangeBadge value={changePercent} />
+        )}
         <span className="chart-card-summary-label">
-          on {formatShortDate(history[history.length - 1].date)} · avg{" "}
-          {formatValue(average)}
+          on {formatShortDate(history[history.length - 1].date)}
+          {showAverage && <> · avg {formatValue(average)}</>}
         </span>
       </div>
       <ResponsiveContainer width="100%" height={180}>
@@ -155,13 +161,15 @@ function TrendChart<T extends { date: string }>({
             labelFormatter={(label) => formatShortDate(String(label))}
             formatter={(value) => [formatValue(Number(value)), ""]}
           />
-          <ReferenceLine
-            y={average}
-            stroke="rgba(255, 255, 255, 0.4)"
-            strokeDasharray="4 4"
-            strokeWidth={1.5}
-            ifOverflow="extendDomain"
-          />
+          {showAverage && (
+            <ReferenceLine
+              y={average}
+              stroke="rgba(255, 255, 255, 0.4)"
+              strokeDasharray="4 4"
+              strokeWidth={1.5}
+              ifOverflow="extendDomain"
+            />
+          )}
           <Line
             type="monotone"
             dataKey={metric as string}
@@ -304,6 +312,9 @@ export default function Stats() {
   const [activeUserHistory, setActiveUserHistory] = useState<
     ActiveUserStatsPoint[]
   >([]);
+  const [totalUserHistory, setTotalUserHistory] = useState<
+    TotalUserStatsPoint[]
+  >([]);
   const [subscriptionHistory, setSubscriptionHistory] = useState<
     RevenueCatDailyStat[]
   >([]);
@@ -311,12 +322,29 @@ export default function Stats() {
     null
   );
   const [mrrChangePercent, setMrrChangePercent] = useState<number | null>(null);
-  const [activeSubscriptionsChangePercent, setActiveSubscriptionsChangePercent] =
-    useState<number | null>(null);
+  const [
+    activeSubscriptionsChangePercent,
+    setActiveSubscriptionsChangePercent
+  ] = useState<number | null>(null);
   const [funnelSteps, setFunnelSteps] = useState<FunnelStep[]>([]);
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [loadingSubscriptions, setLoadingSubscriptions] = useState(true);
   const [loadingFunnel, setLoadingFunnel] = useState(true);
+
+  const totalUserWeeklyHistory = useMemo(() => {
+    return totalUserHistory.filter((point) => {
+      const dayOfWeek = new Date(`${point.date}T00:00:00Z`).getUTCDay();
+      return dayOfWeek === 0;
+    });
+  }, [totalUserHistory]);
+
+  const newUserHistory = useMemo(() => {
+    const diffs = totalUserHistory.slice(1).map((point, index) => ({
+      date: point.date,
+      newUsers: point.totalUsers - totalUserHistory[index].totalUsers
+    }));
+    return diffs.slice(-30);
+  }, [totalUserHistory]);
 
   useEffect(() => {
     async function verifyAdmin() {
@@ -345,12 +373,14 @@ export default function Stats() {
 
     async function getUserStats() {
       try {
-        const [userCount, activeUserStats] = await Promise.all([
+        const [userCount, activeUserStats, totalUserStats] = await Promise.all([
           getTotalUser(),
-          getActiveUserStatsHistory()
+          getActiveUserStatsHistory(),
+          getTotalUserStatsHistory()
         ]);
         setTotalUser(userCount);
         setActiveUserHistory(activeUserStats);
+        setTotalUserHistory(totalUserStats);
       } catch (error) {
         console.error("Error fetching stats:", error);
       } finally {
@@ -456,7 +486,9 @@ export default function Stats() {
                 <p className="chart-card-active-subs">
                   <FontAwesomeIcon icon={faUsers} />
                   {activeSubscriptions.toLocaleString()} active subscriptions
-                  <PercentChangeBadge value={activeSubscriptionsChangePercent} />
+                  <PercentChangeBadge
+                    value={activeSubscriptionsChangePercent}
+                  />
                 </p>
               )}
               <TrendChart
@@ -482,6 +514,42 @@ export default function Stats() {
                 formatValue={formatCurrency}
                 emptyMessage="No subscription data yet from RevenueCat for this range."
                 loading={loadingSubscriptions}
+              />
+            </section>
+          </div>
+        </div>
+
+        <div className="charts-section">
+          <h2 className="charts-section-title">Growth</h2>
+          <div className="charts-grid">
+            <section className="chart-card">
+              <h2 className="chart-card-title">
+                <FontAwesomeIcon icon={faUsers} />
+                Total users (weekly)
+              </h2>
+              <TrendChart
+                history={totalUserWeeklyHistory}
+                metric="totalUsers"
+                color={GROWTH_COLOR}
+                formatValue={(v) => v.toLocaleString()}
+                emptyMessage="No total user history yet — daily tracking started today. Check back tomorrow to see the trend build up."
+                loading={loadingUsers}
+                showAverage={false}
+              />
+            </section>
+
+            <section className="chart-card">
+              <h2 className="chart-card-title">
+                <FontAwesomeIcon icon={faUsers} />
+                New users per day (last 30 days)
+              </h2>
+              <TrendChart
+                history={newUserHistory}
+                metric="newUsers"
+                color={GROWTH_COLOR}
+                formatValue={(v) => v.toLocaleString()}
+                emptyMessage="No new-user history yet — daily tracking started today. Check back tomorrow to see the trend build up."
+                loading={loadingUsers}
               />
             </section>
           </div>
@@ -514,7 +582,7 @@ export default function Stats() {
           <section className="chart-card chart-card-full">
             <h2 className="chart-card-title">
               <FontAwesomeIcon icon={faFilter} />
-              Downloads → Signup → Onboarding (last 30 days)
+              Downloads → Signup → Onboarding
             </h2>
             <FunnelChart steps={funnelSteps} loading={loadingFunnel} />
           </section>
