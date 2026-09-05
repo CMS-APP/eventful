@@ -2,7 +2,6 @@ import {
   FieldValue,
   Timestamp,
   doc,
-  increment,
   updateDoc,
   where
 } from "@react-native-firebase/firestore";
@@ -430,21 +429,6 @@ export async function readUpdateNotification(notificationId: string) {
     );
   } catch (error) {
     log(`Error reading update notification: ${error}`, "error");
-  }
-}
-
-export async function decrementUnreadNotificationCount(
-  userId: string,
-  amount: number = 1
-) {
-  try {
-    await updateDocument(
-      { unreadNotificationCount: increment(-amount) },
-      API_COLLECTIONS.USER,
-      userId
-    );
-  } catch (error) {
-    log(`Error decrementing unread notification count: ${error}`, "error");
   }
 }
 

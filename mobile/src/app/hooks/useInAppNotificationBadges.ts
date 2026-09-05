@@ -1,12 +1,9 @@
-import { doc, onSnapshot } from "@react-native-firebase/firestore";
-
 import { useEffect, useState } from "react";
 
 import { Platform } from "react-native";
 
 import { setBadgeCountAsync } from "expo-notifications";
 
-import { FIRESTORE_DB } from "@/app/init/firebase";
 import { getInvitationsFromDatabaseSnapshot } from "@/services/firebase/listeners";
 import {
   listenToFollowNotifications,
@@ -75,16 +72,13 @@ export function useInAppNotificationBadges(userId: string | null | undefined) {
   useEffect(() => {
     if (!userId || userId === "null" || Platform.OS !== "ios") return;
 
-    const unsubscribe = onSnapshot(
-      doc(FIRESTORE_DB, "user", userId),
-      (snapshot) => {
-        const count = snapshot.data()?.unreadNotificationCount ?? 0;
-        setBadgeCountAsync(Math.max(0, count));
-      }
-    );
-
-    return () => unsubscribe?.();
-  }, [userId]);
+    const total =
+      notifications.Home +
+      notifications.Contacts +
+      notifications.Calendar +
+      notifications.Events;
+    setBadgeCountAsync(total);
+  }, [userId, notifications]);
 
   return notifications;
 }

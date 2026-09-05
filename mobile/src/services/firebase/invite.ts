@@ -23,7 +23,7 @@ import { generateUUID } from "@/utils/uuid";
 import { createDocument } from "../api/create";
 import { getEventInfo, updateEventInDatabase } from "./event";
 import { createUpdateNotification } from "./notifications";
-import { decrementUnreadNotificationCount, getUserInfo } from "./user";
+import { getUserInfo } from "./user";
 
 export async function getInviteInfo(invite: Invite): Promise<Invite | null> {
   const inviteData = await getDocument(API_COLLECTIONS.INVITE, invite.id);
@@ -183,13 +183,6 @@ export async function updateResponseInDatabase(
 
   try {
     await updateDocument(data, API_COLLECTIONS.INVITE, invite.id);
-
-    if (
-      (invite.response === "pending" || invite.response === "maybe") &&
-      (data.response === "accept" || data.response === "decline")
-    ) {
-      await decrementUnreadNotificationCount(invite.recipient);
-    }
 
     if (
       data.response === "accept" ||
