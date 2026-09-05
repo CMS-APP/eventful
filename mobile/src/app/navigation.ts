@@ -176,6 +176,10 @@ export type EventInviteStackParamList = {
   EventInviteItinerary: { invite: Invite; event: Event; host: User };
   EventInviteMusic: { invite: Invite; event: Event; host: User };
   EventInviteDietary: { invite: Invite; event: Event; host: User };
+  Profile: {
+    screen: "ProfileView";
+    params: { user: User };
+  };
 };
 
 export type AllStackParamList =

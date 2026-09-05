@@ -1,10 +1,7 @@
-import { StyleSheet, View } from "react-native";
-
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { EventInviteStackParamList } from "@/app/navigation";
-import { FlatHeader } from "@/components/screen/FlatHeader";
-import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
+import { Screen } from "@/components/screen/Screen";
 import { colors } from "@/design-system/tokens/colors";
 import { ItineraryList } from "@/features/events/components/edit/components/itinerary/ItineraryList";
 
@@ -16,44 +13,30 @@ type Props = NativeStackScreenProps<
 export function EventInviteItineraryScreen({ route }: Props) {
   const { event } = route.params;
 
-  const headerConfig = {
-    title: "Itinerary",
-    backgroundColor: colors.primary,
-    dark: true,
-    backAction: true,
-    icon: "calendar"
-  };
-
   return (
-    <View style={styles.container}>
-      <KeyboardScrollView
-        tabBarPresent={false}
-        handleScroll={() => {}}
-        _handleScroll={() => {}}
-        backgroundColor={colors.primary}
-      >
-        <View style={styles.contents}>
-          <FlatHeader {...headerConfig} />
-
-          <ItineraryList
-            event={event}
-            itinerary={event.itinerary || []}
-            onActivityPress={() => {}}
-            theme="light"
-            disabled={true}
-          />
-        </View>
-      </KeyboardScrollView>
-    </View>
+    <Screen
+      headerConfig={{
+        type: "flat",
+        backgroundColor: colors.primary,
+        flatHeaderProps: {
+          title: "Itinerary",
+          backgroundColor: colors.primary,
+          dark: true,
+          backAction: true,
+          icon: "calendar"
+        }
+      }}
+      contentConfig={{
+        backgroundColor: colors.primary
+      }}
+    >
+      <ItineraryList
+        event={event}
+        itinerary={event.itinerary || []}
+        onActivityPress={() => {}}
+        theme="light"
+        disabled={true}
+      />
+    </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.primary,
-    flex: 1
-  },
-  contents: {
-    padding: 24
-  }
-});

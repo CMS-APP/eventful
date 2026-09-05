@@ -5,6 +5,8 @@ import {
   AppStackParamList,
   EventInviteStackParamList
 } from "../../app/navigation";
+import { profileNavigatorGestureOptions } from "../profile/profileNavigatorScreenOptions";
+import { ProfileNavigator } from "../profile/ProfileNavigator";
 import { EventInviteFoodDrinkScreen } from "./screens/EventInviteFoodDrinkScreen";
 import { EventInviteGuestsScreen } from "./screens/EventInviteGuestsScreen";
 import { EventInviteHomeScreen } from "./screens/EventInviteHomeScreen";
@@ -42,6 +44,11 @@ export function EventInviteNavigator() {
         name="EventInviteDietary"
         component={EventInviteFoodDrinkScreen}
         initialParams={initialParams}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={ProfileNavigator}
+        options={profileNavigatorGestureOptions}
       />
     </Stack.Navigator>
   );

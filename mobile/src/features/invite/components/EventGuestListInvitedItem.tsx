@@ -2,36 +2,33 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { navigationRef } from "@/app/navigation";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+import { EventInviteStackParamList } from "@/app/navigation";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
-import { updateEventInDatabase } from "@/services/firebase/event";
-import { deleteInviteFromDatabase } from "@/services/firebase/invite";
 import { syncUserPicture } from "@/services/local/cache";
-import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
-import { showOptionsAlert } from "@/utils/alertModal";
 import { haptics } from "@/utils/haptics";
-import { log } from "@/utils/logging";
-import { showErrorToast } from "@/utils/toast";
 
 interface EventGuestListInvitedItemProps {
   user: User;
   invite: Invite;
-  event: Event;
 }
 
 export function EventGuestListInvitedItem({
   user,
-  invite,
-  event
+  invite
 }: EventGuestListInvitedItemProps) {
   const name = user.name;
   const response = invite.response === "pending" ? "maybe" : invite.response;
   const [userImage, setUserImage] = useState<string | null>(null);
+  const navigation =
+    useNavigation<NativeStackNavigationProp<EventInviteStackParamList>>();
 
   const fetchUserImage = useCallback(async () => {
     const imageUri = await syncUserPicture(user);
@@ -43,48 +40,11 @@ export function EventGuestListInvitedItem({
   }, [fetchUserImage]);
 
   const viewProfile = useCallback(() => {
-    if (!navigationRef.isReady()) return;
-
-    navigationRef.navigate("Main", {
-      screen: "Contacts",
-      params: {
-        screen: "Profile",
-        params: { screen: "ProfileView", params: { user: user } }
-      }
+    navigation.navigate("Profile", {
+      screen: "ProfileView",
+      params: { user }
     });
-  }, [user]);
-
-  const removeUserFromEvent = useCallback(async () => {
-    try {
-      await deleteInviteFromDatabase(invite.id);
-
-      event.invited = event.invited.filter(
-        (invited: string) => invited !== user.uid
-      );
-      await updateEventInDatabase(event);
-    } catch (error) {
-      log(`Error Removing User: ${error}`, "error");
-      showErrorToast("Error Removing User");
-    }
-  }, [invite, user, event]);
-
-  const onPressAlert = useCallback(() => {
-    showOptionsAlert("Guest Options", "What would you like to do?", [
-      {
-        text: "Cancel",
-        style: "cancel"
-      },
-      {
-        text: "View Profile",
-        onPress: viewProfile
-      },
-      {
-        text: "Remove",
-        style: "destructive",
-        onPress: removeUserFromEvent
-      }
-    ]);
-  }, [viewProfile, removeUserFromEvent]);
+  }, [user, navigation]);
 
   const responseColor = useCallback(() => {
     if (response === "accept") {
@@ -100,7 +60,7 @@ export function EventGuestListInvitedItem({
     <TouchableOpacity
       onPress={() => {
         haptics.soft();
-        onPressAlert();
+        viewProfile();
       }}
       hitSlop={getHitSlop("medium")}
     >

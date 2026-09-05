@@ -4,12 +4,13 @@ import { type RefObject, useEffect, useState } from "react";
 
 import { Alert, StyleSheet, View } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 import { PhotoResult } from "expo-camera";
 import * as FileSystem from "expo-file-system/legacy";
 import * as MediaLibrary from "expo-media-library";
 
+import type { PhotoBoothStackParamList } from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
 import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
@@ -28,7 +29,6 @@ import {
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
-import type { PhotoBoothStackNavigation } from "../../photoBoothStackParams";
 import { PhotoBoothResultsButton } from "./PhotoBoothResultsButton";
 
 export function PhotoBoothResultsButtons({
@@ -36,7 +36,7 @@ export function PhotoBoothResultsButtons({
 }: {
   viewRef: RefObject<View | null>;
 }) {
-  const navigation = useNavigation<PhotoBoothStackNavigation>();
+  const navigation = useNavigation<NavigationProp<PhotoBoothStackParamList>>();
 
   const { photos, setPhotos } = usePhotoBoothCamera();
   const {

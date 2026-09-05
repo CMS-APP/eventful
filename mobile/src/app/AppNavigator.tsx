@@ -80,7 +80,7 @@ export function AppNavigator() {
         <Stack.Screen
           name="EventInvite"
           component={EventInviteNavigator}
-          options={modalOptions}
+          options={{ gestureEnabled: true }}
         />
         <Stack.Screen
           name="Celebration"

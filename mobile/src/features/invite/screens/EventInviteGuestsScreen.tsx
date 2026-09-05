@@ -1,12 +1,9 @@
-import { StyleSheet, View } from "react-native";
-
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { EventInviteStackParamList } from "@/app/navigation";
-import { FlatHeader } from "@/components/screen/FlatHeader";
-import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
+import { Screen } from "@/components/screen/Screen";
 import { colors } from "@/design-system/tokens/colors";
-import { EventGuestListInvited } from "@/features/events/components/guest-list/EventGuestListInvited";
+import { EventGuestListInvited } from "@/features/invite/components/EventGuestListInvited";
 
 import { InviteLinkGuests } from "../components/InviteLinkGuests";
 
@@ -18,40 +15,25 @@ type Props = NativeStackScreenProps<
 export function EventInviteGuestsScreen({ route }: Props) {
   const { event, host } = route.params;
 
-  const headerConfig = {
-    title: "Guests",
-    backgroundColor: colors.primary,
-    dark: true,
-    backAction: true,
-    icon: "users"
-  };
-
   return (
-    <View style={styles.container}>
-      <KeyboardScrollView
-        tabBarPresent={false}
-        handleScroll={() => {}}
-        _handleScroll={() => {}}
-        backgroundColor={colors.primary}
-      >
-        <View style={styles.headerContainer}>
-          <FlatHeader {...headerConfig} />
-          <EventGuestListInvited event={event} host={host} />
-
-          <InviteLinkGuests event={event} />
-        </View>
-      </KeyboardScrollView>
-    </View>
+    <Screen
+      headerConfig={{
+        type: "flat",
+        backgroundColor: colors.primary,
+        flatHeaderProps: {
+          title: "Guests",
+          backgroundColor: colors.primary,
+          dark: true,
+          backAction: true,
+          icon: "users"
+        }
+      }}
+      contentConfig={{
+        backgroundColor: colors.primary
+      }}
+    >
+      <EventGuestListInvited event={event} host={host} />
+      <InviteLinkGuests event={event} />
+    </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.primary,
-    flex: 1
-  },
-  headerContainer: {
-    flex: 1,
-    paddingTop: 24
-  }
-});

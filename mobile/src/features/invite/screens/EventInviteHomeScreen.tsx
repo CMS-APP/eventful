@@ -2,14 +2,14 @@ import { useSelector } from "react-redux";
 
 import { useCallback, useState } from "react";
 
-import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { Entypo } from "@expo/vector-icons";
 
 import { EventInviteStackParamList } from "@/app/navigation";
-import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
+import { Screen } from "@/components/screen/Screen";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { textFormatter } from "@/design-system/tokens/fonts";
@@ -63,18 +63,17 @@ export function EventInviteHomeScreen({
 
   return (
     <View style={styles.screenContainer}>
-      <KeyboardScrollView
-        tabBarPresent={false}
-        handleScroll={() => {}}
-        _handleScroll={() => {}}
-        backgroundColor={colors.white}
+      <Screen
+        headerConfig={{
+          type: "flat",
+          backgroundColor: colors.white,
+          flatHeaderProps: {
+            title: "Invite",
+            backAction: true
+          }
+        }}
       >
-        <View
-          style={[
-            styles.container,
-            Platform.OS === "android" && styles.containerAndroid
-          ]}
-        >
+        <View style={styles.container}>
           <Text type="subHeader" style={styles.eventText} center>
             You Are Invited To
           </Text>
@@ -174,7 +173,7 @@ export function EventInviteHomeScreen({
 
           <InviteButtons event={event} invite={invite} host={host} />
         </View>
-      </KeyboardScrollView>
+      </Screen>
     </View>
   );
 }
@@ -192,11 +191,8 @@ const styles = StyleSheet.create({
     borderColor: colors.secondary,
     borderRadius: 30,
     borderWidth: 3,
-    margin: 12,
+    marginHorizontal: 12,
     padding: 12
-  },
-  containerAndroid: {
-    marginVertical: 48
   },
   dateContainer: {
     alignItems: "center",

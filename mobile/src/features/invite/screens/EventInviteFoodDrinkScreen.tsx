@@ -5,8 +5,7 @@ import { StyleSheet, View } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { EventInviteStackParamList } from "@/app/navigation";
-import { FlatHeader } from "@/components/screen/FlatHeader";
-import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
+import { Screen } from "@/components/screen/Screen";
 import { Input } from "@/design-system/components/inputs/Input";
 import { colors } from "@/design-system/tokens/colors";
 import { updateResponseInDatabase } from "@/services/firebase/invite";
@@ -18,7 +17,7 @@ type Props = NativeStackScreenProps<
   "EventInviteDietary"
 >;
 
-export function EventInviteFoodDrinkScreen({ navigation, route }: Props) {
+export function EventInviteFoodDrinkScreen({ route }: Props) {
   const { event, invite } = route.params;
   const [dietary, setDietary] = useState(invite.dietary ?? "");
 
@@ -40,47 +39,37 @@ export function EventInviteFoodDrinkScreen({ navigation, route }: Props) {
     return null;
   }
 
-  const headerConfig = {
-    title: "Food & Drink",
-    backgroundColor: colors.primary,
-    dark: true,
-    backAction: true,
-    icon: "utensils"
-  };
-
   return (
-    <View style={styles.container}>
-      <KeyboardScrollView
-        tabBarPresent={false}
-        handleScroll={() => {}}
-        _handleScroll={() => {}}
-        backgroundColor={colors.primary}
-      >
-        <View style={styles.headerContainer}>
-          <FlatHeader {...headerConfig} />
-        </View>
-        <View style={styles.inputContainer}>
-          <Input
-            placeholder="Dietary Preferences"
-            onChangeText={setDietary}
-            value={dietary}
-            dark
-          />
-        </View>
-      </KeyboardScrollView>
-    </View>
+    <Screen
+      headerConfig={{
+        type: "flat",
+        backgroundColor: colors.primary,
+        flatHeaderProps: {
+          title: "Food & Drink",
+          backgroundColor: colors.primary,
+          dark: true,
+          backAction: true,
+          icon: "utensils"
+        }
+      }}
+      contentConfig={{
+        backgroundColor: colors.primary
+      }}
+    >
+      <View style={styles.container}>
+        <Input
+          placeholder="Dietary Preferences"
+          onChangeText={setDietary}
+          value={dietary}
+          dark
+        />
+      </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.primary,
-    flex: 1
-  },
-  headerContainer: {
-    paddingTop: 24
-  },
-  inputContainer: {
     paddingHorizontal: 24
   }
 });

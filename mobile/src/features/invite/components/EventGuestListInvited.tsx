@@ -58,7 +58,6 @@ export function EventGuestListInvited({
               response: "accept",
               dietary: ""
             }}
-            event={event}
           />
         </>
       )}
@@ -81,7 +80,6 @@ export function EventGuestListInvited({
             key={item.invite.id}
             user={item.user}
             invite={item.invite}
-            event={event}
           />
         ))}
     </View>
