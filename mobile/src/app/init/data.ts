@@ -12,6 +12,7 @@ import { checkAuth } from "@/app/init/auth";
 import { getDeviceInfo } from "@/app/init/device";
 import { FIREBASE_AUTH } from "@/app/init/firebase";
 import { appDatabaseUpdate } from "@/app/init/migration";
+import { resolveBootDeepLink } from "@/app/init/pendingDeepLink";
 import { storeInit } from "@/app/init/store";
 import { navigationRef } from "@/app/navigation";
 import {
@@ -140,8 +141,10 @@ export function useDataInit() {
           routes: [{ name: result }]
         })
       );
+      resolveBootDeepLink(result);
     } catch (error) {
       log(`Error initialising app: ${error}`, "error");
+      resolveBootDeepLink("Error");
     } finally {
       stopLoading();
     }

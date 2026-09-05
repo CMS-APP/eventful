@@ -5,11 +5,18 @@ import { StackActions } from "@react-navigation/native";
 import * as Notifications from "expo-notifications";
 import { NotificationResponse } from "expo-notifications";
 
+import {
+  isBootPending,
+  isBootReadyOnMain,
+  setPendingDeepLink
+} from "@/app/init/pendingDeepLink";
 import { buildNestedResetState, navigationRef } from "@/app/navigation";
 import { getEventInfo } from "@/services/firebase/event";
 import { getInviteInfo } from "@/services/firebase/invite";
 import { getUserInfo } from "@/services/firebase/user";
 import { log } from "@/utils/logging";
+
+const handledNotificationIds = new Set<string>();
 
 export async function handleEventEditNavigation(params: any) {
   const event = await getEventInfo(params.event);
@@ -71,19 +78,35 @@ export async function handleEventInviteNavigation(params: any) {
   }
 }
 
-export async function navigateToScreenFromNotification(response: any) {
-  const { screen, params } = response.notification.request.content.data;
-  if (!params || !screen || !navigationRef || !navigationRef.isReady()) {
-    log("Notification navigation failed", "warn");
-    return;
-  }
-
+async function navigateToNotificationTarget(params: any, screen: string) {
   if (screen === "EventEdit") {
     await handleEventEditNavigation(params);
   } else if (screen === "ContactView") {
     await handleContactViewNavigation(params);
   } else if (screen === "EventInvite") {
     await handleEventInviteNavigation(params);
+  }
+}
+
+export async function navigateToScreenFromNotification(response: any) {
+  const identifier = response?.notification?.request?.identifier;
+  if (identifier) {
+    if (handledNotificationIds.has(identifier)) return;
+    handledNotificationIds.add(identifier);
+  }
+
+  const { screen, params } = response.notification.request.content.data;
+  if (!params || !screen) {
+    log("Notification navigation failed", "warn");
+    return;
+  }
+
+  if (isBootReadyOnMain()) {
+    await navigateToNotificationTarget(params, screen);
+  } else if (isBootPending()) {
+    setPendingDeepLink(() => navigateToNotificationTarget(params, screen));
+  } else {
+    log("Notification navigation discarded: app did not boot to Main", "warn");
   }
 }
 
@@ -96,6 +119,12 @@ export function usePushNotificationHandler() {
   );
 
   useEffect(() => {
+    const lastResponse = Notifications.getLastNotificationResponse();
+    if (lastResponse) {
+      navigateToScreenFromNotification(lastResponse);
+      Notifications.clearLastNotificationResponse();
+    }
+
     const subscription = Notifications.addNotificationResponseReceivedListener(
       handleNotificationResponse
     );

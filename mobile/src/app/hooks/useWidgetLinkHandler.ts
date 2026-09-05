@@ -6,26 +6,14 @@ import {
   handleEventEditNavigation,
   handleEventInviteNavigation
 } from "@/app/hooks/usePushNotificationHandler";
-import { navigationRef } from "@/app/navigation";
+import {
+  isBootPending,
+  isBootReadyOnMain,
+  setPendingDeepLink
+} from "@/app/init/pendingDeepLink";
 import { log } from "@/utils/logging";
 
-async function waitForNavigationReady(maxAttempts = 20, delayMs = 250) {
-  for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    if (navigationRef.isReady()) return true;
-    await new Promise((resolve) => setTimeout(resolve, delayMs));
-  }
-  return false;
-}
-
-async function handleWidgetUrl(url: string) {
-  const { queryParams } = Linking.parse(url);
-  if (queryParams?.source !== "widget" || !queryParams?.eventId) return;
-
-  if (!(await waitForNavigationReady())) {
-    log("Widget navigation failed: navigator never became ready", "warn");
-    return;
-  }
-
+async function navigateToWidgetTarget(queryParams: Linking.QueryParams) {
   const eventId = String(queryParams.eventId);
 
   if (queryParams.type === "guest" && queryParams.inviteId) {
@@ -36,6 +24,19 @@ async function handleWidgetUrl(url: string) {
     });
   } else {
     await handleEventEditNavigation({ event: { id: eventId } });
+  }
+}
+
+async function handleWidgetUrl(url: string) {
+  const { queryParams } = Linking.parse(url);
+  if (queryParams?.source !== "widget" || !queryParams?.eventId) return;
+
+  if (isBootReadyOnMain()) {
+    await navigateToWidgetTarget(queryParams);
+  } else if (isBootPending()) {
+    setPendingDeepLink(() => navigateToWidgetTarget(queryParams));
+  } else {
+    log("Widget navigation discarded: app did not boot to Main", "warn");
   }
 }
 
