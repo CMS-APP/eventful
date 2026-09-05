@@ -338,6 +338,25 @@
   font-family: var(--font-poppins-regular);
 }
 
+.percent-change-badge {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: var(--font-poppins-medium);
+  white-space: nowrap;
+}
+
+.percent-change-badge-up {
+  color: var(--color-success-light);
+  background: var(--color-success-alpha-20);
+}
+
+.percent-change-badge-down {
+  color: var(--color-danger-light);
+  background: var(--color-danger-alpha-20);
+}
+
 @media (max-width: 768px) {
   .stats-container {
     padding: 10px;

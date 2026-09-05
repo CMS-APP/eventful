@@ -34,8 +34,13 @@ function extractPoints(raw: unknown): ChartPoint[] {
     .sort((a, b) => a.date.localeCompare(b.date));
 }
 
+function percentChange(previous: number, current: number): number | null {
+  if (!previous) return null;
+  return ((current - previous) / previous) * 100;
+}
+
 async function fetchChart(
-  chartName: "mrr" | "revenue",
+  chartName: "mrr" | "revenue" | "actives",
   projectId: string,
   apiKey: string,
   startDate: string,
@@ -118,9 +123,10 @@ export async function GET(request: NextRequest) {
   const endDate = end.toISOString().slice(0, 10);
 
   try {
-    const [mrr, revenue, activeSubscriptions] = await Promise.all([
+    const [mrr, revenue, actives, activeSubscriptions] = await Promise.all([
       fetchChart("mrr", projectId, apiKey, startDate, endDate),
       fetchChart("revenue", projectId, apiKey, startDate, endDate),
+      fetchChart("actives", projectId, apiKey, startDate, endDate),
       fetchActiveSubscriptions(projectId, apiKey)
     ]);
 
@@ -131,7 +137,19 @@ export async function GET(request: NextRequest) {
       revenue: revenueByDate.get(p.date) ?? 0
     }));
 
-    return NextResponse.json({ history, activeSubscriptions });
+    const mrrChangePercent =
+      mrr.length > 1 ? percentChange(mrr[0].value, mrr[mrr.length - 1].value) : null;
+    const activeSubscriptionsChangePercent =
+      actives.length > 1
+        ? percentChange(actives[0].value, actives[actives.length - 1].value)
+        : null;
+
+    return NextResponse.json({
+      history,
+      activeSubscriptions,
+      mrrChangePercent,
+      activeSubscriptionsChangePercent
+    });
   } catch (error) {
     console.error("RevenueCat charts fetch failed:", error);
     return NextResponse.json(

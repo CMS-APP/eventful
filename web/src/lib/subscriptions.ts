@@ -7,6 +7,8 @@ export interface RevenueCatDailyStat {
 export interface RevenueCatStats {
   history: RevenueCatDailyStat[];
   activeSubscriptions: number | null;
+  mrrChangePercent: number | null;
+  activeSubscriptionsChangePercent: number | null;
 }
 
 export async function getRevenueCatStats(
@@ -27,6 +29,12 @@ export async function getRevenueCatStats(
     activeSubscriptions:
       typeof data.activeSubscriptions === "number"
         ? data.activeSubscriptions
+        : null,
+    mrrChangePercent:
+      typeof data.mrrChangePercent === "number" ? data.mrrChangePercent : null,
+    activeSubscriptionsChangePercent:
+      typeof data.activeSubscriptionsChangePercent === "number"
+        ? data.activeSubscriptionsChangePercent
         : null,
   };
 }

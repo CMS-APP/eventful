@@ -69,13 +69,28 @@ function formatCurrency(value: number): string {
   });
 }
 
+function PercentChangeBadge({ value }: { value: number | null }) {
+  if (value === null) return null;
+
+  const isDecrease = value < 0;
+  return (
+    <span
+      className={`percent-change-badge ${isDecrease ? "percent-change-badge-down" : "percent-change-badge-up"}`}
+    >
+      {isDecrease ? "-" : ""}
+      {Math.abs(value).toFixed(1)}%
+    </span>
+  );
+}
+
 function TrendChart<T extends { date: string }>({
   history,
   metric,
   color,
   formatValue,
   emptyMessage,
-  loading
+  loading,
+  changePercent
 }: {
   history: T[];
   metric: keyof T;
@@ -83,6 +98,7 @@ function TrendChart<T extends { date: string }>({
   formatValue: (value: number) => string;
   emptyMessage: string;
   loading: boolean;
+  changePercent?: number | null;
 }) {
   if (loading) {
     return (
@@ -105,6 +121,7 @@ function TrendChart<T extends { date: string }>({
     <div>
       <div className="chart-card-summary">
         <span className="chart-card-summary-value">{formatValue(latest)}</span>
+        {changePercent !== undefined && <PercentChangeBadge value={changePercent} />}
         <span className="chart-card-summary-label">
           on {formatShortDate(history[history.length - 1].date)} · avg{" "}
           {formatValue(average)}
@@ -293,6 +310,9 @@ export default function Stats() {
   const [activeSubscriptions, setActiveSubscriptions] = useState<number | null>(
     null
   );
+  const [mrrChangePercent, setMrrChangePercent] = useState<number | null>(null);
+  const [activeSubscriptionsChangePercent, setActiveSubscriptionsChangePercent] =
+    useState<number | null>(null);
   const [funnelSteps, setFunnelSteps] = useState<FunnelStep[]>([]);
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [loadingSubscriptions, setLoadingSubscriptions] = useState(true);
@@ -341,12 +361,16 @@ export default function Stats() {
     async function getSubscriptionStats() {
       try {
         const idToken = await user!.getIdToken();
-        const { history, activeSubscriptions } = await getRevenueCatStats(
-          idToken,
-          30
-        );
+        const {
+          history,
+          activeSubscriptions,
+          mrrChangePercent,
+          activeSubscriptionsChangePercent
+        } = await getRevenueCatStats(idToken, 30);
         setSubscriptionHistory(history);
         setActiveSubscriptions(activeSubscriptions);
+        setMrrChangePercent(mrrChangePercent);
+        setActiveSubscriptionsChangePercent(activeSubscriptionsChangePercent);
       } catch (error) {
         console.error("Error fetching subscription stats:", error);
       } finally {
@@ -432,6 +456,7 @@ export default function Stats() {
                 <p className="chart-card-active-subs">
                   <FontAwesomeIcon icon={faUsers} />
                   {activeSubscriptions.toLocaleString()} active subscriptions
+                  <PercentChangeBadge value={activeSubscriptionsChangePercent} />
                 </p>
               )}
               <TrendChart
@@ -441,6 +466,7 @@ export default function Stats() {
                 formatValue={formatCurrency}
                 emptyMessage="No subscription data yet from RevenueCat for this range."
                 loading={loadingSubscriptions}
+                changePercent={mrrChangePercent}
               />
             </section>
 
