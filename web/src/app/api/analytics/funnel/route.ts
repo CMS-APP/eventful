@@ -9,7 +9,8 @@ import { getGa4Client } from "@/lib/ga4";
 const FUNNEL_STEPS = [
   { id: "downloads", label: "Downloads", event: "first_open" },
   { id: "signup", label: "Signup", event: "auth_sign_up" },
-  { id: "onboarding", label: "Onboarding completed", event: "onboarding_completed" },
+  { id: "onboarding_started", label: "Onboarding started", event: "onboarding_started" },
+  { id: "onboarding_completed", label: "Onboarding completed", event: "onboarding_completed" },
 ] as const;
 
 export async function GET(request: NextRequest) {
