@@ -2,10 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-
-import { AppStackParamList } from "@/app/navigation";
+import { navigationRef } from "@/app/navigation";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
@@ -32,7 +29,6 @@ export function EventGuestListInvitedItem({
   invite,
   event
 }: EventGuestListInvitedItemProps) {
-  const navigation = useNavigation() as StackNavigationProp<AppStackParamList>;
   const name = user.name;
   const response = invite.response === "pending" ? "maybe" : invite.response;
   const [userImage, setUserImage] = useState<string | null>(null);
@@ -47,22 +43,16 @@ export function EventGuestListInvitedItem({
   }, [fetchUserImage]);
 
   const viewProfile = useCallback(() => {
-    navigation.goBack();
+    if (!navigationRef.isReady()) return;
 
-    setTimeout(() => {
-      navigation.goBack();
-    }, 250);
-
-    setTimeout(() => {
-      navigation.navigate("Main", {
-        screen: "Contacts",
-        params: {
-          screen: "Profile",
-          params: { screen: "ProfileView", params: { user: user } }
-        }
-      });
-    }, 500);
-  }, [navigation, user]);
+    navigationRef.navigate("Main", {
+      screen: "Contacts",
+      params: {
+        screen: "Profile",
+        params: { screen: "ProfileView", params: { user: user } }
+      }
+    });
+  }, [user]);
 
   const removeUserFromEvent = useCallback(async () => {
     try {
