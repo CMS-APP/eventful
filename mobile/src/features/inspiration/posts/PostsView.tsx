@@ -1,6 +1,6 @@
 import { ActivityIndicator } from "react-native-paper";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
@@ -23,13 +23,15 @@ interface PostsViewProps {
 export function PostsView({ isAdmin }: PostsViewProps) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const hasLoadedOnce = useRef(false);
   const navigation = useNavigation<StackNavigationProp<HomeStackParamList>>();
 
   const getPosts = useCallback(async () => {
-    setLoading(true);
+    if (!hasLoadedOnce.current) setLoading(true);
     const posts = await getPostsFromDatabase();
     setPosts(posts || []);
     setLoading(false);
+    hasLoadedOnce.current = true;
   }, []);
 
   useFocusEffect(

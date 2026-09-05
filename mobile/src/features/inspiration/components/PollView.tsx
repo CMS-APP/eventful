@@ -1,7 +1,7 @@
 import { ActivityIndicator } from "react-native-paper";
 import { useSelector } from "react-redux";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
@@ -32,11 +32,12 @@ export function PollView({ isAdmin }: PollViewProps) {
   const [votes, setVotes] = useState<PollVote[]>([]);
   const [userVote, setUserVote] = useState<PollVote | null>(null);
   const [loading, setLoading] = useState(true);
+  const hasLoadedOnce = useRef(false);
   const userId = useSelector((state: UserState) => state.uid);
   const navigation = useNavigation<StackNavigationProp<HomeStackParamList>>();
 
   const fetchPoll = useCallback(async () => {
-    setLoading(true);
+    if (!hasLoadedOnce.current) setLoading(true);
     const poll = await getPollInDatabase();
     setPoll(poll);
 
@@ -47,6 +48,7 @@ export function PollView({ isAdmin }: PollViewProps) {
       setUserVote(userVote as PollVote | null);
     }
     setLoading(false);
+    hasLoadedOnce.current = true;
   }, [userId]);
 
   useFocusEffect(

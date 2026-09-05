@@ -97,7 +97,11 @@ export function ProfileTop({ user }: { user: User }) {
       </View>
 
       <View style={styles.buttonsContainer}>
-        <FollowButton user={user} flex={1} />
+        <FollowButton
+          user={user}
+          flex={1}
+          onFollowingChange={setIsFollowing}
+        />
 
         {isFollowing && (
           <Button
