@@ -60,7 +60,7 @@ export function PhotoBoothColorPicker() {
         <View style={styles.container}>
           <View style={styles.colorPickerWrapper}>
             <ColorPicker
-              color={currentColor}
+              color={color || "#ffffff"}
               onColorChange={onColorChange}
               thumbSize={40}
               sliderSize={40}
@@ -72,7 +72,7 @@ export function PhotoBoothColorPicker() {
               useNativeLayout={false}
               gapSize={15}
               wheelHidden={false}
-              palette={["#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff"]}
+              swatches={false}
             />
           </View>
 
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   },
   container: {
     gap: 16,
-    marginTop: 52,
+    marginTop: 12,
     paddingHorizontal: 24
   },
   selectedColorBox: {
