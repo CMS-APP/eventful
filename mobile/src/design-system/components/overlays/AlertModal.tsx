@@ -1,3 +1,5 @@
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import {
   Modal,
   StyleSheet,
@@ -28,6 +30,7 @@ export function AlertModal({
 }: AlertModalProps) {
   const cancelButton = buttons.find((button) => button.style === "cancel");
   const optionButtons = buttons.filter((button) => button.style !== "cancel");
+  const { bottom } = useSafeAreaInsets();
 
   function handlePress(button: AlertOptions) {
     onDismiss();
@@ -47,7 +50,7 @@ export function AlertModal({
           <View style={StyleSheet.absoluteFillObject} />
         </TouchableWithoutFeedback>
 
-        <View style={styles.sheet}>
+        <View style={[styles.sheet, { paddingBottom: bottom + 16 }]}>
           <Text type="header" center color={colors.white}>
             {title}
           </Text>

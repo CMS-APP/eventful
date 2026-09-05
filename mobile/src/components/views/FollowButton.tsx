@@ -53,14 +53,13 @@ export function FollowButton({
   }, [userId, user.uid, isFollowingMe, onFollowingChange]);
 
   const unFollowUserAlert = useCallback(async () => {
-    haptics.error();
     showOptionsAlert(
       "Unfollow User",
       "Are you sure you want to unfollow this user?",
       [
         { text: "Cancel", style: "cancel" },
         {
-          text: "Unfollows",
+          text: "Unfollow",
           style: "destructive",
           onPress: handleUnfollow
         }
