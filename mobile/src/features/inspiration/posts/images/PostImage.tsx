@@ -1,6 +1,8 @@
+import { ActivityIndicator } from "react-native-paper";
+
 import { useEffect, useState } from "react";
 
-import { ActivityIndicator, Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 
 import { colors } from "@/design-system/tokens/colors";
 

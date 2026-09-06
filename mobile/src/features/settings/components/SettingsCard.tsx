@@ -1,10 +1,6 @@
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Switch,
-  TouchableOpacity,
-  View
-} from "react-native";
+import { ActivityIndicator } from "react-native-paper";
+
+import { StyleSheet, Switch, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 

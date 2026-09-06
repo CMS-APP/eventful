@@ -1,8 +1,9 @@
+import { ActivityIndicator } from "react-native-paper";
 import ColorPicker from "react-native-wheel-color-picker";
 
 import { useCallback, useState } from "react";
 
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 
