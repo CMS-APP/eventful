@@ -44,7 +44,7 @@ export function PhotoBoothLayout() {
           onChange={handleCanChangeCollageChange}
         />
 
-        <Divider />
+        <Divider color={colors.lightGray} />
 
         <Text type="header">Filters</Text>
 

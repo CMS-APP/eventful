@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { card } from "@/design-system/tokens/card";
 import { syncPostImage } from "@/services/local/cache";
 import { Photo } from "@/types/Photo";
 import { log } from "@/utils/logging";
@@ -70,7 +69,6 @@ export function PostImageCarousel({ photos, postId }: PostImageCarouselProps) {
 
 const styles = StyleSheet.create({
   container: {
-    ...card.small,
     gap: 12,
     paddingVertical: 12
   }

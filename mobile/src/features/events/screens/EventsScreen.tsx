@@ -94,6 +94,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 12,
     marginHorizontal: 24,
-    marginTop: 20
+    marginTop: 16
   }
 });

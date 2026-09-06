@@ -2,6 +2,7 @@ import { Animated, StyleSheet } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 
 import { RAISED_CIRCLE_SIZE, RAISED_CIRCLE_TOP_OFFSET } from "./TabBarBorder";
@@ -19,8 +20,8 @@ export function TabBarCamera({
   hasAccess,
   isFocused
 }: TabBarCameraProps) {
-  const fillColor = colors.primary;
-  const glyphColor = isFocused ? colors.secondary : colors.white;
+  const fillColor = colors.white;
+  const glyphColor = isFocused ? colors.secondary : colors.black;
 
   return (
     <Animated.View
@@ -54,6 +55,7 @@ const styles = StyleSheet.create({
     width: CROWN_BADGE_SIZE
   },
   raisedCircle: {
+    ...card.medium,
     alignItems: "center",
     alignSelf: "center",
     borderRadius: RAISED_CIRCLE_SIZE / 2,

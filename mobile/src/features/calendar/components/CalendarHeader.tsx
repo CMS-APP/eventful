@@ -98,7 +98,7 @@ export function CalendarHeader({
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
+    alignItems: "flex-start",
     flexDirection: "row",
     justifyContent: "center",
     marginBottom: 16,

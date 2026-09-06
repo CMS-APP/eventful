@@ -7,8 +7,9 @@ import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
+import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
-import { shadows } from "@/design-system/tokens/shadows";
 import { TextType } from "@/design-system/tokens/text";
 import { haptics } from "@/utils/haptics";
 
@@ -105,7 +106,8 @@ export function Button({
   const containerStyle = [
     styles.container,
     style,
-    fullWidth && styles.fullWidth
+    fullWidth && styles.fullWidth,
+    color === colors.white && { ...card.small }
   ];
   const buttonStyle = buttonStyles[size];
   let iconSize = iconSizes[size];
@@ -147,6 +149,7 @@ export function Button({
             type={textStyle as TextType}
             color={textColor}
             style={styles.text}
+            numberOfLines={1}
           >
             {text}
           </Text>
@@ -159,7 +162,6 @@ export function Button({
 
 const styles = StyleSheet.create({
   button: {
-    ...shadows.lightShadow,
     alignItems: "center",
     alignSelf: "stretch",
     borderRadius: 16,

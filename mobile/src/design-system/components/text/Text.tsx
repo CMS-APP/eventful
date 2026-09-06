@@ -7,12 +7,7 @@ import { colors } from "@/design-system/tokens/colors";
 import { textStyles } from "../../tokens/text";
 
 type TextType =
-  | "title"
-  | "header"
-  | "subHeader"
-  | "body"
-  | "caption"
-  | "footnote";
+  "title" | "header" | "subHeader" | "body" | "caption" | "footnote";
 
 interface TextProps extends RNTextProps {
   children: ReactNode;

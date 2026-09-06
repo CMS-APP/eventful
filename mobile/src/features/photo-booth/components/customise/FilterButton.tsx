@@ -74,13 +74,11 @@ const styles = StyleSheet.create({
   button: {
     ...card.small,
     alignItems: "center",
-    borderColor: colors.white,
     borderRadius: 6,
-    borderWidth: 3,
+    borderWidth: 1,
     gap: 12,
     marginBottom: 8,
-    marginTop: 8,
-    padding: 12,
+    paddingVertical: 14,
     width: 160
   },
   image: {
@@ -93,7 +91,9 @@ const styles = StyleSheet.create({
     alignSelf: "center"
   },
   selectedContainer: {
-    borderColor: colors.secondary
+    borderColor: colors.secondary,
+    borderWidth: 3,
+    paddingVertical: 12
   },
   selectedIndicator: {
     alignItems: "center",

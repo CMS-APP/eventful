@@ -15,8 +15,8 @@ export default ({ config }: ConfigContext) => {
     slug: "Eventful",
     scheme: "eventful",
     owner: "chrissharp",
-    version: "6.10.0",
-    runtimeVersion: "6.10.0",
+    version: "6.10.2",
+    runtimeVersion: "6.10.2",
     orientation: "portrait",
     icon: "./src/assets/logos/eventful-logo.png",
     userInterfaceStyle: "light",
@@ -28,7 +28,7 @@ export default ({ config }: ConfigContext) => {
     android: {
       package: bundleId,
       icon: "./src/assets/logos/eventful-logo-android.png",
-      versionCode: 352,
+      versionCode: 354,
       softwareKeyboardLayoutMode: "pan",
       permissions: [
         "android.permission.READ_EXTERNAL_STORAGE",
@@ -44,7 +44,7 @@ export default ({ config }: ConfigContext) => {
     ios: {
       bundleIdentifier: bundleId,
       icon: "./src/assets/logos/eventful-logo.png",
-      buildNumber: "359",
+      buildNumber: "361",
       supportsTablet: true,
       appleTeamId: "4LMZHG2P3T",
       infoPlist: {

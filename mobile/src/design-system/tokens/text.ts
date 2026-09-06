@@ -1,12 +1,7 @@
 import { Platform } from "react-native";
 
 export type TextType =
-  | "title"
-  | "header"
-  | "subHeader"
-  | "body"
-  | "caption"
-  | "footnote";
+  "title" | "header" | "subHeader" | "body" | "caption" | "footnote";
 
 export type TextStyle = {
   fontFamily: string;
@@ -26,8 +21,9 @@ const defaultText: Record<TextType, TextStyle> = {
   header: {
     fontFamily: "playfairRegular",
     fontSize: 24,
-    lineHeight: Platform.OS === "android" ? 28 : 24,
-    textAlign: "center"
+    lineHeight: 28,
+    textAlign: "center",
+    top: Platform.OS === "android" ? -2 : 0
   },
   subHeader: {
     fontFamily: "poppinsMedium",

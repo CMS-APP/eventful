@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
   progressText: {
     bottom: -10,
     position: "absolute",
+    top: null,
     transform: [{ translateX: 2.5 }]
   },
   titleContainer: {
