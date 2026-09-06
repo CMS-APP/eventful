@@ -25,9 +25,8 @@ export function LinkInviteDisclaimerModal({
       </Text>
 
       <Text type="body" color={colors.black}>
-        This link will allow anyone to RSVP to your event and view the event
-        details. Anyone with the link will be able to see details such as the
-        location, time and date.
+        This link will allow anyone to RSVP to your event. Anyone with the link
+        will be able to see details such as the location, time and date.
       </Text>
 
       <Button
