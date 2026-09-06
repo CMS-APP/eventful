@@ -1,0 +1,26 @@
+{
+  "name": "eventful",
+  "private": true,
+  "scripts": {
+    "web": "npm --prefix web run dev",
+    "mobile": "npm --prefix mobile exec expo start",
+    "ios:dev": "npm --prefix mobile run ios:dev",
+    "ios:build": "npm --prefix mobile run ios:build",
+    "android:dev": "npm --prefix mobile run android:dev",
+    "android:build": "npm --prefix mobile run android:build",
+    "deploy:mobile": "npm --prefix mobile run deploy",
+    "deploy:backend": "npm --prefix backend run deploy",
+    "deploy:backend:node": "npm --prefix backend run deploy:node",
+    "deploy:backend:python": "npm --prefix backend run deploy:python",
+    "deploy:backend:hosting": "npm --prefix backend run deploy:hosting",
+    "lint": "npm run lint:mobile && npm run lint:web && npm run lint:backend",
+    "lint:mobile": "npm --prefix mobile run lint",
+    "lint:web": "npm --prefix web run lint",
+    "lint:backend": "npm --prefix backend/node run lint",
+    "format": "prettier --write \"mobile/src/**/*.{ts,tsx,js,jsx}\" \"web/src/**/*.{ts,tsx,js,jsx}\" \"backend/node/src/**/*.js\""
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+    "prettier": "^3.8.3"
+  }
+}
