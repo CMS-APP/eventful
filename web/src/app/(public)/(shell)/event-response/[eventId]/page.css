@@ -258,6 +258,10 @@
 }
 
 .event-response-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   width: 100%;
   padding: 14px;
   border: none;
@@ -280,6 +284,21 @@
 
 .event-response-submit:not(:disabled):hover {
   background-color: var(--color-primary-light);
+}
+
+.event-response-submit-spinner {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: event-response-spin 0.7s linear infinite;
+}
+
+@keyframes event-response-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .event-response-message {

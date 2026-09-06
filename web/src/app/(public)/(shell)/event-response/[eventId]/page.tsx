@@ -13,7 +13,6 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 import { useEffect, useRef, useState } from "react";
 
-import Loading from "@/components/Loading";
 import { checkEventLink } from "@/services/FirebaseFunctions";
 
 import "./page.css";
@@ -100,6 +99,7 @@ export default function EventResponse() {
     setIsLoading(true);
 
     const recaptchaToken = await recaptchaRef.current.executeAsync();
+    recaptchaRef.current.reset();
     if (!recaptchaToken) {
       setFormMessage({ type: "error", text: "reCAPTCHA failed." });
       setIsLoading(false);
@@ -186,7 +186,6 @@ export default function EventResponse() {
 
   return (
     <>
-      {isLoading && <Loading message="Sending..." />}
       <main className="event-response-page">
         <div className="event-response-shell">
           <div className="event-response-card">
@@ -327,7 +326,17 @@ export default function EventResponse() {
                 disabled={!canSubmit}
                 onClick={sendResponse}
               >
-                Reply
+                {isLoading ? (
+                  <>
+                    <span
+                      className="event-response-submit-spinner"
+                      aria-hidden="true"
+                    />
+                    Sending
+                  </>
+                ) : (
+                  "Reply"
+                )}
               </button>
               <p className="event-response-footnote">
                 You can change your reply until the event starts
