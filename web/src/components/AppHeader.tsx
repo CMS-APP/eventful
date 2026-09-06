@@ -13,13 +13,13 @@ import { usePathname, useRouter } from "next/navigation";
 import { signOutUser } from "@/app/account/database/utils";
 import { useUser } from "@/contexts/UserContext";
 
-import "./Sidebar.css";
+import "./AppHeader.css";
 
-type SidebarProps = {
+type AppHeaderProps = {
   authenticated?: boolean;
 };
 
-export default function Sidebar({ authenticated = false }: SidebarProps) {
+export default function AppHeader({ authenticated = false }: AppHeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { isAdmin } = useUser();
@@ -37,24 +37,22 @@ export default function Sidebar({ authenticated = false }: SidebarProps) {
   }
 
   return (
-    <aside className="sidebar">
-      <Link href={accountHref} className="sidebar-logo" aria-label="Home">
+    <header className="app-header">
+      <Link href={accountHref} className="app-header-logo" aria-label="Home">
         <Image
           src="/icon.png"
           alt=""
           width={28}
           height={28}
-          className="sidebar-logo-img"
+          className="app-header-logo-img"
           priority
         />
       </Link>
 
-      <div className="sidebar-divider" role="presentation" />
-
-      <nav className="sidebar-nav">
+      <nav className="app-header-nav">
         <Link
           href={accountHref}
-          className={`sidebar-link${accountActive ? " is-active" : ""}`}
+          className={`app-header-link${accountActive ? " is-active" : ""}`}
           title="Account"
         >
           <FontAwesomeIcon icon={faUser} />
@@ -64,29 +62,26 @@ export default function Sidebar({ authenticated = false }: SidebarProps) {
         {authenticated && isAdmin && (
           <Link
             href="/stats"
-            className={`sidebar-link${pathname.startsWith("/stats") ? " is-active" : ""}`}
+            className={`app-header-link${pathname.startsWith("/stats") ? " is-active" : ""}`}
             title="Admin"
           >
             <FontAwesomeIcon icon={faChartLine} />
             <span>Admin</span>
           </Link>
         )}
-      </nav>
 
-      {authenticated && (
-        <div className="sidebar-footer">
-          <div className="sidebar-divider" role="presentation" />
+        {authenticated && (
           <button
             type="button"
-            className="sidebar-link sidebar-logout"
+            className="app-header-link app-header-logout"
             onClick={logout}
             title="Log out"
           >
             <FontAwesomeIcon icon={faRightFromBracket} />
             <span>Log out</span>
           </button>
-        </div>
-      )}
-    </aside>
+        )}
+      </nav>
+    </header>
   );
 }

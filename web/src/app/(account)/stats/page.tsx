@@ -13,7 +13,6 @@ import {
   CartesianGrid,
   Line,
   LineChart,
-  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -26,7 +25,11 @@ import { checkAdmin } from "@/app/account/database/utils";
 import Loading from "@/components/Loading";
 import UnauthorizedAccess from "@/components/UnauthorizedAccess";
 import { useUser } from "@/contexts/UserContext";
-import { type FunnelStep, getFunnelStats } from "@/lib/analytics";
+import {
+  type FunnelStep,
+  getFunnelStats,
+  getRealtimeActiveUsers
+} from "@/lib/analytics";
 import {
   type RevenueCatDailyStat,
   getRevenueCatStats
@@ -81,29 +84,13 @@ function formatCurrency(value: number): string {
   });
 }
 
-function PercentChangeBadge({ value }: { value: number | null }) {
-  if (value === null) return null;
-
-  const isDecrease = value < 0;
-  return (
-    <span
-      className={`percent-change-badge ${isDecrease ? "percent-change-badge-down" : "percent-change-badge-up"}`}
-    >
-      {isDecrease ? "-" : ""}
-      {Math.abs(value).toFixed(1)}%
-    </span>
-  );
-}
-
 function TrendChart<T extends { date: string }>({
   history,
   metric,
   color,
   formatValue,
   emptyMessage,
-  loading,
-  changePercent,
-  showAverage = true
+  loading
 }: {
   history: T[];
   metric: keyof T;
@@ -111,8 +98,6 @@ function TrendChart<T extends { date: string }>({
   formatValue: (value: number) => string;
   emptyMessage: string;
   loading: boolean;
-  changePercent?: number | null;
-  showAverage?: boolean;
 }) {
   if (loading) {
     return (
@@ -128,20 +113,11 @@ function TrendChart<T extends { date: string }>({
   }
 
   const latest = Number(history[history.length - 1][metric]) || 0;
-  const values = history.map((p) => Number(p[metric]) || 0);
-  const average = values.reduce((sum, v) => sum + v, 0) / values.length;
 
   return (
     <div>
       <div className="chart-card-summary">
         <span className="chart-card-summary-value">{formatValue(latest)}</span>
-        {changePercent !== undefined && (
-          <PercentChangeBadge value={changePercent} />
-        )}
-        <span className="chart-card-summary-label">
-          on {formatShortDate(history[history.length - 1].date)}
-          {showAverage && <> · avg {formatValue(average)}</>}
-        </span>
       </div>
       <ResponsiveContainer width="100%" height={180}>
         <LineChart
@@ -171,15 +147,6 @@ function TrendChart<T extends { date: string }>({
             labelFormatter={(label) => formatShortDate(String(label))}
             formatter={(value) => [formatValue(Number(value)), ""]}
           />
-          {showAverage && (
-            <ReferenceLine
-              y={average}
-              stroke="rgba(255, 255, 255, 0.4)"
-              strokeDasharray="4 4"
-              strokeWidth={1.5}
-              ifOverflow="extendDomain"
-            />
-          )}
           <Line
             type="monotone"
             dataKey={metric as string}
@@ -305,6 +272,40 @@ function FunnelChart({
           })}
         </div>
       </div>
+      <div className="funnel-vertical">
+        {steps.map((step, index) => {
+          const previous = index > 0 ? steps[index - 1] : null;
+          const conversionFromPrevious =
+            previous && previous.users > 0
+              ? (step.users / previous.users) * 100
+              : null;
+          const barWidth = Math.max(step.users / maxUsers, 0.08) * 100;
+
+          return (
+            <div className="funnel-vertical-row" key={step.id}>
+              <div className="funnel-vertical-text">
+                <span className="funnel-label-name">{step.label}</span>
+                <span className="funnel-label-value">
+                  {step.users.toLocaleString()}
+                </span>
+                {conversionFromPrevious !== null && (
+                  <span className="funnel-label-conversion">
+                    {conversionFromPrevious.toFixed(0)}% of previous step
+                  </span>
+                )}
+              </div>
+              <div
+                className="funnel-vertical-bar"
+                style={{
+                  width: `${barWidth}%`,
+                  backgroundColor: GROWTH_COLOR,
+                  opacity: FUNNEL_STEP_OPACITY[index] ?? 0.32
+                }}
+              />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -331,12 +332,8 @@ export default function Stats() {
   const [activeSubscriptions, setActiveSubscriptions] = useState<number | null>(
     null
   );
-  const [mrrChangePercent, setMrrChangePercent] = useState<number | null>(null);
-  const [
-    activeSubscriptionsChangePercent,
-    setActiveSubscriptionsChangePercent
-  ] = useState<number | null>(null);
   const [funnelSteps, setFunnelSteps] = useState<FunnelStep[]>([]);
+  const [realtimeUsers, setRealtimeUsers] = useState<number | null>(null);
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [loadingSubscriptions, setLoadingSubscriptions] = useState(true);
   const [loadingFunnel, setLoadingFunnel] = useState(true);
@@ -410,16 +407,12 @@ export default function Stats() {
     async function getSubscriptionStats() {
       try {
         const idToken = await user!.getIdToken();
-        const {
-          history,
-          activeSubscriptions,
-          mrrChangePercent,
-          activeSubscriptionsChangePercent
-        } = await getRevenueCatStats(idToken, 30);
+        const { history, activeSubscriptions } = await getRevenueCatStats(
+          idToken,
+          30
+        );
         setSubscriptionHistory(history);
         setActiveSubscriptions(activeSubscriptions);
-        setMrrChangePercent(mrrChangePercent);
-        setActiveSubscriptionsChangePercent(activeSubscriptionsChangePercent);
       } catch (error) {
         console.error("Error fetching subscription stats:", error);
       } finally {
@@ -439,9 +432,23 @@ export default function Stats() {
       }
     }
 
+    async function getRealtimeUsers() {
+      try {
+        const idToken = await user!.getIdToken();
+        const activeUsers = await getRealtimeActiveUsers(idToken);
+        setRealtimeUsers(activeUsers);
+      } catch (error) {
+        console.error("Error fetching realtime users:", error);
+      }
+    }
+
     getUserStats();
     getSubscriptionStats();
     getFunnelData();
+    getRealtimeUsers();
+
+    const realtimeInterval = setInterval(getRealtimeUsers, 60_000);
+    return () => clearInterval(realtimeInterval);
   }, [isAdmin, checkingAdmin, user]);
 
   if (loading || checkingAdmin) {
@@ -458,11 +465,11 @@ export default function Stats() {
   }
 
   return (
-    <main className="flex flex-1 flex-col p-10">
+    <main className="flex flex-1 flex-col p-4 md:p-10">
       <div className="stats-container">
         <div className="stats-header">
-          <h1>Admin Panel</h1>
-          <p className="stats-subtitle">Platform stats and overview</p>
+          <h1>App Statistics</h1>
+          <p className="stats-subtitle">Revenue, Usage, and Funnel Growth</p>
         </div>
 
         <div className="stats-grid">
@@ -489,6 +496,14 @@ export default function Stats() {
             <div className="stat-content">
               <h2 className="stat-label">Total Users</h2>
               <p className="stat-value">{totalUser.toLocaleString()}</p>
+              {realtimeUsers !== null && (
+                <p
+                  className={`stat-realtime${realtimeUsers > 0 ? " stat-realtime-active" : ""}`}
+                >
+                  <span className="stat-realtime-dot" aria-hidden />
+                  {realtimeUsers.toLocaleString()} online in the last 30 mins
+                </p>
+              )}
             </div>
           </Link>
         </div>
@@ -499,15 +514,12 @@ export default function Stats() {
             <section className="chart-card">
               <h2 className="chart-card-title">
                 <FontAwesomeIcon icon={faCoins} />
-                MRR (last 30 days)
+                MRR
               </h2>
               {!loadingSubscriptions && activeSubscriptions !== null && (
                 <p className="chart-card-active-subs">
                   <FontAwesomeIcon icon={faUsers} />
                   {activeSubscriptions.toLocaleString()} active subscriptions
-                  <PercentChangeBadge
-                    value={activeSubscriptionsChangePercent}
-                  />
                 </p>
               )}
               <TrendChart
@@ -517,14 +529,13 @@ export default function Stats() {
                 formatValue={formatCurrency}
                 emptyMessage="No subscription data yet from RevenueCat for this range."
                 loading={loadingSubscriptions}
-                changePercent={mrrChangePercent}
               />
             </section>
 
             <section className="chart-card">
               <h2 className="chart-card-title">
                 <FontAwesomeIcon icon={faCoins} />
-                Revenue per day (last 30 days)
+                Revenue per day
               </h2>
               <TrendChart
                 history={subscriptionHistory}
@@ -559,14 +570,13 @@ export default function Stats() {
                 formatValue={(v) => v.toLocaleString()}
                 emptyMessage="No total user history yet — daily tracking started today. Check back tomorrow to see the trend build up."
                 loading={loadingUsers}
-                showAverage={false}
               />
             </section>
 
             <section className="chart-card">
               <h2 className="chart-card-title">
                 <FontAwesomeIcon icon={faUsers} />
-                New users per day (last 30 days)
+                New users per day
               </h2>
               <TrendChart
                 history={newUserHistory}
@@ -598,13 +608,11 @@ export default function Stats() {
         </div>
 
         <div className="charts-section">
-          <h2 className="charts-section-title">
-            Acquisition funnel (last 30 days)
-          </h2>
+          <h2 className="charts-section-title">Acquisition funnel</h2>
           <section className="chart-card chart-card-full">
             <h2 className="chart-card-title">
               <FontAwesomeIcon icon={faFilter} />
-              Downloads → Signup → Onboarding (last 30 days)
+              Downloads → Signup → Onboarding
             </h2>
             <FunnelChart steps={funnelSteps} loading={loadingFunnel} />
           </section>

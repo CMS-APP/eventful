@@ -1,6 +1,6 @@
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./design-system.css";
 import "./globals.css";
@@ -23,6 +23,11 @@ const poppinsRegular = localFont({
   variable: "--font-poppins-regular",
   weight: "300",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
   title: "Eventful | The Ultimate Event Planner",

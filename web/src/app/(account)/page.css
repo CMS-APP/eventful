@@ -42,3 +42,13 @@
 .login-forgot-link:hover {
   text-decoration: underline;
 }
+
+@media (max-width: 480px) {
+  .login-page {
+    padding: 12px;
+  }
+
+  .login-container {
+    padding: 20px;
+  }
+}

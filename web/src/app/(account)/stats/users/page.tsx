@@ -123,7 +123,7 @@ export default function UserStatsPage() {
 
   return (
     <>
-      <main className="flex flex-1 flex-col p-10">
+      <main className="flex flex-1 flex-col p-4 md:p-10">
         <div className="user-stats-container">
           <div className="user-stats-header">
             <Link href="/stats" className="user-stats-back-link">

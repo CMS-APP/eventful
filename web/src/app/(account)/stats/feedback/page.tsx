@@ -104,7 +104,7 @@ export default function FeedbackPage() {
   return (
     <>
       {loadingFeedback && <Loading message="Loading feedback..." />}
-      <main className="flex flex-1 flex-col p-10">
+      <main className="flex flex-1 flex-col p-4 md:p-10">
         <div className="feedback-page-container">
           <div className="feedback-page-header">
             <Link href="/stats" className="feedback-back-link">

@@ -50,11 +50,11 @@ export default function Home() {
   return (
     <>
       <main
-        className={`flex flex-1 flex-col ${isMobile ? "flex-col" : "md:flex-row"} gap-10 p-10`}
+        className={`flex flex-1 flex-col ${isMobile ? "flex-col" : "md:flex-row"} gap-4 p-4 md:gap-10 md:p-10`}
       >
         <div className="profile-container">
           <div className="profile-header">
-            <h1>Welcome to your account</h1>
+            <h1>Account</h1>
             <p className="profile-subtitle">
               Manage your settings and preferences
             </p>

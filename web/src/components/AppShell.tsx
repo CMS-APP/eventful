@@ -2,8 +2,8 @@
 
 import { useUser } from "@/contexts/UserContext";
 
-import Sidebar from "./Sidebar";
-import "./Sidebar.css";
+import AppHeader from "./AppHeader";
+import "./AppHeader.css";
 
 type AppShellProps = {
   children: React.ReactNode;
@@ -16,7 +16,7 @@ export default function AppShell({ children, className = "" }: AppShellProps) {
 
   return (
     <div className={`app-shell ${className}`.trim()}>
-      <Sidebar authenticated={authenticated} />
+      <AppHeader authenticated={authenticated} />
       <div className="app-shell-content">{children}</div>
     </div>
   );

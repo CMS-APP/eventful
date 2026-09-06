@@ -160,6 +160,10 @@
     padding: 10px;
   }
 
+  .feedback-card {
+    padding: 16px;
+  }
+
   .feedback-card-meta {
     flex-direction: column;
     gap: 8px;

@@ -159,6 +159,10 @@
     padding: 10px;
   }
 
+  .user-stats-card {
+    padding: 16px;
+  }
+
   .user-stats-grid {
     grid-template-columns: 1fr;
   }

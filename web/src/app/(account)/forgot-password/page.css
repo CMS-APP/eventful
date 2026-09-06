@@ -74,3 +74,13 @@
 .forgot-password-back:hover {
   text-decoration: underline;
 }
+
+@media (max-width: 480px) {
+  .forgot-password-page {
+    padding: 12px;
+  }
+
+  .forgot-password-card {
+    padding: 20px;
+  }
+}
