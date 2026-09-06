@@ -131,9 +131,15 @@
   font-size: 14px;
 }
 
+.event-response-download-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: 6px;
+}
+
 .event-response-download-link {
   display: inline-block;
-  margin-top: 6px;
   color: var(--color-secondary);
   font-family: var(--font-poppins-bold);
   font-size: 13px;
@@ -274,6 +280,25 @@
 
 .event-response-submit:not(:disabled):hover {
   background-color: var(--color-primary-light);
+}
+
+.event-response-message {
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-family: var(--font-poppins-medium);
+  font-size: 13px;
+  text-align: center;
+}
+
+.event-response-message--error {
+  background-color: var(--color-danger-alpha-20);
+  color: #8a1f1f;
+}
+
+.event-response-message--success {
+  background-color: var(--color-accent-green-alpha-20);
+  color: var(--color-primary-dark);
 }
 
 .event-response-footnote {

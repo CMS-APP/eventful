@@ -21,6 +21,8 @@ import "./page.css";
 const RECAPTCHA_SITE_KEY = "6LfDpgQrAAAAAO0TSbcQban4TrA16CjelRzF_Urp";
 const APP_STORE_LINK =
   "https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=6449842590";
+const GOOGLE_PLAY_LINK =
+  "https://play.google.com/store/apps/details?id=com.hostinghappily.app";
 
 type EventDateTime = { seconds: number };
 
@@ -43,6 +45,10 @@ export default function EventResponse() {
   const [eventTimeLabel, setEventTimeLabel] = useState("");
   const recaptchaRef = useRef<ReCAPTCHA | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [formMessage, setFormMessage] = useState<{
+    type: "error" | "success";
+    text: string;
+  } | null>(null);
 
   function handleResponse(type: string) {
     setResponse((current) => (current === type ? null : type));
@@ -72,19 +78,20 @@ export default function EventResponse() {
 
   async function sendResponse() {
     if (isLoading) return;
+    setFormMessage(null);
 
     if (!name) {
-      alert("Please enter your name.");
+      setFormMessage({ type: "error", text: "Please enter your name." });
       return;
     }
 
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      alert("Please enter a valid email.");
+      setFormMessage({ type: "error", text: "Please enter a valid email." });
       return;
     }
 
     if (!response) {
-      alert("Please select a response.");
+      setFormMessage({ type: "error", text: "Please select a response." });
       return;
     }
 
@@ -94,7 +101,7 @@ export default function EventResponse() {
 
     const recaptchaToken = await recaptchaRef.current.executeAsync();
     if (!recaptchaToken) {
-      alert("reCAPTCHA failed.");
+      setFormMessage({ type: "error", text: "reCAPTCHA failed." });
       setIsLoading(false);
       return;
     }
@@ -122,19 +129,26 @@ export default function EventResponse() {
 
       const data = await res.text();
       if (!res.ok) {
-        if (res.status !== 429) alert("Error: " + data);
+        const text =
+          res.status === 429
+            ? data
+            : "Something went wrong sending your reply. Please try again.";
+        setFormMessage({ type: "error", text });
         setIsLoading(false);
         return;
       }
 
-      alert(data);
+      setFormMessage({ type: "success", text: data });
       setName("");
       setEmail("");
       setResponse(null);
     } catch (error) {
       console.error("Error sending response:", error);
       if (recaptchaRef.current) recaptchaRef.current.reset();
-      alert("Error: " + error);
+      setFormMessage({
+        type: "error",
+        text: "Something went wrong sending your reply. Please try again."
+      });
     }
 
     setIsLoading(false);
@@ -226,14 +240,24 @@ export default function EventResponse() {
                   <p className="event-response-detail-value">
                     See who&apos;s going in the app
                   </p>
-                  <a
-                    href={APP_STORE_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="event-response-download-link"
-                  >
-                    Download Eventful
-                  </a>
+                  <div className="event-response-download-links">
+                    <a
+                      href={APP_STORE_LINK}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="event-response-download-link"
+                    >
+                      Download for iOS
+                    </a>
+                    <a
+                      href={GOOGLE_PLAY_LINK}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="event-response-download-link"
+                    >
+                      Download for Android
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -287,6 +311,15 @@ export default function EventResponse() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
+
+              {formMessage && (
+                <p
+                  className={`event-response-message event-response-message--${formMessage.type}`}
+                  role="status"
+                >
+                  {formMessage.text}
+                </p>
+              )}
 
               <button
                 type="button"
