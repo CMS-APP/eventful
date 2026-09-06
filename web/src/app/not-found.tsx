@@ -1,28 +1,40 @@
 "use client";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons/faExclamationTriangle";
+import { useRouter } from "next/navigation";
 
 import AppShell from "@/components/AppShell";
 import SimpleButton from "@/components/SimpleButton";
 
+import "./not-found.css";
+
 export default function NotFound() {
+  const router = useRouter();
+
   return (
     <AppShell>
-      <main className="flex flex-1 flex-col items-center gap-5 p-10 text-white md:p-20">
-        <div className="flex flex-row items-center justify-center gap-5">
-          <FontAwesomeIcon
-            icon={faExclamationTriangle}
-            className="text-[75px] text-white"
-          />
-          <h1>Error 404</h1>
+      <main className="not-found">
+        <p className="not-found-eyebrow">Error 404</p>
+        <h1 className="not-found-numeral">404</h1>
+        <h2 className="not-found-title">Page not found</h2>
+        <p className="not-found-text">
+          The page you&apos;re looking for doesn&apos;t exist or may have been
+          moved.
+        </p>
+        <div className="not-found-actions">
+          <SimpleButton
+            className="not-found-primary"
+            onClick={() => router.push("/")}
+          >
+            Return home
+          </SimpleButton>
+          <button
+            type="button"
+            className="not-found-secondary"
+            onClick={() => router.back()}
+          >
+            Go back
+          </button>
         </div>
-        <h3 className="text-center">
-          Whoops! The page you are looking for doesn&apos;t exist.
-        </h3>
-        <SimpleButton onClick={() => (window.location.href = "/")}>
-          Go to Login
-        </SimpleButton>
       </main>
     </AppShell>
   );

@@ -28,7 +28,7 @@
 .user-stats-header h1 {
   margin: 0 0 8px 0;
   color: var(--color-white);
-  font-family: var(--font-poppins-bold);
+  font-family: var(--font-playfair-display);
 }
 
 .user-stats-subtitle {

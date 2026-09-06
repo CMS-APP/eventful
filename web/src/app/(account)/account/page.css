@@ -41,7 +41,7 @@
   font-size: 1.5rem;
   margin-bottom: 24px;
   color: white;
-  font-family: var(--font-poppins-bold);
+  font-family: var(--font-playfair-display);
 }
 
 .profile-info-grid {
@@ -89,7 +89,7 @@
   font-size: 1.3rem;
   margin-bottom: 20px;
   color: white;
-  font-family: var(--font-poppins-bold);
+  font-family: var(--font-playfair-display);
 }
 
 .profile-buttons-grid {

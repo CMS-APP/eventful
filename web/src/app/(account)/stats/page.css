@@ -217,7 +217,7 @@
   margin: 0 0 16px 0;
   font-size: 1.3rem;
   color: var(--color-white);
-  font-family: var(--font-poppins-bold);
+  font-family: var(--font-playfair-display);
 }
 
 .charts-section-subtitle {
