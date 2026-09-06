@@ -1,19 +1,21 @@
-import { arrayUnion } from "@react-native-firebase/firestore";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Alert, StyleSheet, View } from "react-native";
+import { useState } from "react";
+
+import { StyleSheet, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AllStackParamList } from "@/app/navigation";
+import { usePushNotificationsToggle } from "@/app/hooks/usePushNotificationsToggle";
+import { SwitchButton } from "@/design-system/components/buttons/SwitchButton";
+import { TextButton } from "@/design-system/components/buttons/TextButton";
 import { colors } from "@/design-system/tokens/colors";
 import { trackOnboardingCompleted } from "@/services/analytics/events";
 import { updateUserInfo } from "@/services/firebase/user";
-import { registerForPushNotificationsAsync } from "@/services/pushNotifications";
-import { UserState } from "@/store/UserSlice";
+import { UserState, setEmailNotifications } from "@/store/UserSlice";
 
 import { FeatureView } from "../components/FeatureView";
-import { OnboardingButtons } from "../components/OnboardingButtons";
 
 interface OnboardingNotificationsScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;
@@ -22,36 +24,18 @@ interface OnboardingNotificationsScreenProps {
 export function OnboardingNotificationsScreen({
   navigation
 }: OnboardingNotificationsScreenProps) {
+  const dispatch = useDispatch();
   const userId = useSelector((state: UserState) => state.uid);
+  const [emailNotifications, setEmailNotificationsLocal] = useState(false);
 
-  async function allowNotifications() {
-    const token = await registerForPushNotificationsAsync();
+  const { pushNotifications, togglePushNotifications } =
+    usePushNotificationsToggle();
 
-    if (!token) {
-      return;
-    }
-
-    await updateUserInfo(userId, {
-      pushTokens: arrayUnion(token)
-    });
-
-    enabledAlert();
-  }
-
-  function enabledAlert() {
-    Alert.alert(
-      "Notifications Enabled",
-      "You will now receive notifications for your events.",
-      [
-        {
-          text: "OK",
-          onPress: () => {
-            trackOnboardingCompleted();
-            navigation.navigate("Main" as never);
-          }
-        }
-      ]
-    );
+  async function finishNotificationsStep() {
+    await updateUserInfo(userId, { emailNotifications });
+    dispatch(setEmailNotifications(emailNotifications));
+    trackOnboardingCompleted();
+    navigation.navigate("Main" as never);
   }
 
   return (
@@ -63,17 +47,31 @@ export function OnboardingNotificationsScreen({
         description="Stay on top of your events and never miss a thing - enable notifications to keep track of to-dos and RSVPs."
       />
 
-      <OnboardingButtons
-        exit={() => {
-          trackOnboardingCompleted();
-          navigation.navigate("Main" as never);
-        }}
-        next={() => {
-          allowNotifications();
-        }}
-        nextText="Allow"
-        backText="Skip"
-      />
+      <View style={styles.content}>
+        <View style={styles.emailToggle}>
+          <SwitchButton
+            title="Push Notifications"
+            isChecked={pushNotifications}
+            onChange={togglePushNotifications}
+            dark
+          />
+
+          <SwitchButton
+            title="Email Notifications"
+            isChecked={emailNotifications}
+            onChange={() => setEmailNotificationsLocal(!emailNotifications)}
+            dark
+          />
+        </View>
+
+        <TextButton
+          text="Continue"
+          type="body"
+          textAlign="center"
+          onPress={finishNotificationsStep}
+          textColor={colors.white}
+        />
+      </View>
     </View>
   );
 }
@@ -82,5 +80,15 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primary,
     flex: 1
+  },
+  content: {
+    gap: 12,
+    marginBottom: 100,
+    width: "100%"
+  },
+  emailToggle: {
+    gap: 12,
+    marginBottom: 12,
+    paddingHorizontal: 20
   }
 });

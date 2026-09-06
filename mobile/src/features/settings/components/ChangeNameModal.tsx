@@ -50,11 +50,26 @@ export function ChangeNameModal({
 
   const userId = useSelector((state: UserState) => state.uid);
   const name = useSelector((state: UserState) => state.name);
+  const firstName = useSelector((state: UserState) => state.firstName);
+  const lastName = useSelector((state: UserState) => state.lastName);
   const username = useSelector((state: UserState) => state.username);
   const usernameUpdateDate = useSelector(
     (state: UserState) => state.usernameUpdateDate
   );
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!presentModal) return;
+
+    if (type === "name") {
+      setNewName(firstName);
+      setNewSecondName(lastName);
+    } else if (type === "username") {
+      setNewName(username);
+    }
+    setUsernameExists(null);
+    setHelperText("");
+  }, [presentModal, type, firstName, lastName, username]);
 
   const usernameExistsFunc = useCallback(async (username: string) => {
     return await checkUsernameExists(username.toLowerCase());
@@ -62,27 +77,33 @@ export function ChangeNameModal({
 
   const checkNames = useCallback(async () => {
     if (type === "name") {
-      const firstName = checkValueUtil(newName, "first name");
-      const lastName = checkValueUtil(newSecondName, "last name");
+      const firstNameCheck = checkValueUtil(newName, "first name");
+      const lastNameCheck = checkValueUtil(newSecondName, "last name");
 
-      if (firstName?.valid === null && lastName?.valid === null) {
+      if (firstNameCheck?.valid === null && lastNameCheck?.valid === null) {
         setUsernameExists(null);
         setHelperText("");
-      } else if (!firstName?.valid || !lastName?.valid) {
+      } else if (!firstNameCheck?.valid || !lastNameCheck?.valid) {
         setUsernameExists(true);
-        setHelperText(firstName?.message || lastName?.message || "");
+        setHelperText(firstNameCheck?.message || lastNameCheck?.message || "");
       } else {
         setUsernameExists(false);
         setHelperText("");
       }
     } else if (type === "username") {
-      const username = checkValueUtil(newName, "username");
-      if (username?.valid === null) {
+      if (newName.toLowerCase() === username.toLowerCase()) {
+        setUsernameExists(null);
+        setHelperText("");
+        return;
+      }
+
+      const usernameCheck = checkValueUtil(newName, "username");
+      if (usernameCheck?.valid === null) {
         setUsernameExists(true);
         setHelperText("Username is required");
-      } else if (!username?.valid) {
+      } else if (!usernameCheck?.valid) {
         setUsernameExists(true);
-        setHelperText(username?.message || "");
+        setHelperText(usernameCheck?.message || "");
       } else {
         try {
           if (await usernameExistsFunc(newName)) {
@@ -101,7 +122,7 @@ export function ChangeNameModal({
         }
       }
     }
-  }, [newName, newSecondName, type, usernameExistsFunc]);
+  }, [newName, newSecondName, type, username, usernameExistsFunc]);
 
   useEffect(() => {
     checkNames();
@@ -271,6 +292,14 @@ export function ChangeNameModal({
         textColor={colors.white}
         onPress={changeName}
         leadingIcon="check"
+      />
+
+      <Button
+        text="Cancel"
+        color={colors.lightGray}
+        textColor={colors.black}
+        onPress={() => setPresentModal(false)}
+        leadingIcon="times"
       />
     </ModalView>
   );

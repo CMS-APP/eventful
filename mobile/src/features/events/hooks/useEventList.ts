@@ -9,6 +9,7 @@ import { AllStackParamList } from "@/app/navigation";
 import { getAllEvents } from "@/services/firebase/event";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
+import { isValidUserId } from "@/utils/userId";
 
 export function useEventList(
   navigation: StackNavigationProp<AllStackParamList>
@@ -19,6 +20,8 @@ export function useEventList(
   const userId = useSelector((state: UserState) => state.uid);
 
   const fetchData = useCallback(async () => {
+    if (!isValidUserId(userId)) return;
+
     const {
       upcomingEvents: allUpcomingEvents,
       pastEvents: allPastEvents,

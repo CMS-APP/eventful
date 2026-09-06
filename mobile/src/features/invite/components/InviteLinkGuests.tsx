@@ -9,6 +9,7 @@ import { getRSVPWebUsers } from "@/services/firebase/invite";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { UserInvite } from "@/types/UserInvite";
+import { isValidUserId } from "@/utils/userId";
 
 interface InviteLinkGuestsProps {
   event: Event;
@@ -19,6 +20,8 @@ export function InviteLinkGuests({ event }: InviteLinkGuestsProps) {
   const [linkList, setLinkList] = useState<UserInvite[]>([]);
 
   const fetchData = useCallback(async () => {
+    if (!isValidUserId(userId)) return;
+
     const linkList = await getRSVPWebUsers(event as Event, userId);
     setLinkList(linkList);
   }, [event, userId]);

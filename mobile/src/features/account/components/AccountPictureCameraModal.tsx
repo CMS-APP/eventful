@@ -24,6 +24,7 @@ import { UserState, setProfilePictureHash } from "@/store/UserSlice";
 import { User } from "@/types/User";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
+import { isValidUserId } from "@/utils/userId";
 
 interface AccountPictureCameraModalProps {
   presentModal: boolean;
@@ -44,10 +45,7 @@ export function AccountPictureCameraModal({
   const navigation = useNavigation();
 
   async function savePhoto() {
-    if (!photo?.uri) return;
-    if (!userId || userId === "null") {
-      log("You're not signed in. Please sign in again.", "error");
-      showErrorToast("You're not signed in. Please sign in again.");
+    if (!photo?.uri || !isValidUserId(userId)) {
       return;
     }
 

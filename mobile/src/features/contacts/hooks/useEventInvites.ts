@@ -9,6 +9,7 @@ import { AllStackParamList } from "@/app/navigation";
 import { getSortedInvites } from "@/services/firebase/event";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
+import { isValidUserId } from "@/utils/userId";
 
 export function useEventInvites(
   navigation: StackNavigationProp<AllStackParamList>
@@ -18,6 +19,8 @@ export function useEventInvites(
   const userId = useSelector((state: UserState) => state.uid);
 
   const fetchData = useCallback(async () => {
+    if (!isValidUserId(userId)) return;
+
     const { upcomingEvents, pastEvents } = await getSortedInvites(userId);
     setUpcomingEvents(upcomingEvents);
     setPastEvents(pastEvents);

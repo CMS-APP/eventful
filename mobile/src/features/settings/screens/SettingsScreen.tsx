@@ -5,30 +5,28 @@ import { colors } from "@/design-system/tokens/colors";
 
 import { AccountSettings } from "../components/AccountSettings";
 import { DataSettings } from "../components/DataSettings";
-import { FeedbackButtons } from "../components/FeedbackButtons";
 
 export function SettingsScreen() {
   return (
     <Screen
       headerConfig={{
-        type: "flat",
-        flatHeaderProps: {
+        type: "curvy",
+        curvyHeaderProps: {
           title: "Settings",
-          dark: true,
-          backAction: true,
-          backgroundColor: colors.primary
-        },
-        backgroundColor: colors.primary
+          icon: "cog",
+          color: colors.white,
+          accountButton: false,
+          backgroundColor: colors.primary,
+          backAction: true
+        }
       }}
       contentConfig={{
-        tabBarPresent: true,
-        backgroundColor: colors.primary
+        tabBarPresent: true
       }}
     >
       <View style={styles.container}>
         <AccountSettings />
         <DataSettings />
-        <FeedbackButtons />
       </View>
     </Screen>
   );
@@ -36,8 +34,9 @@ export function SettingsScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.primary,
     flex: 1,
-    paddingHorizontal: 24
+    gap: 12,
+    marginTop: 52,
+    paddingHorizontal: 16
   }
 });

@@ -12,7 +12,6 @@ import { Platform } from "react-native";
 
 import { setBadgeCountAsync } from "expo-notifications";
 
-import { setAnalyticsUserId } from "@/services/analytics/analytics";
 import {
   trackAuthSignIn,
   trackAuthSignOut,
@@ -24,6 +23,7 @@ import { clearNotifications } from "@/services/pushNotifications";
 import { clearStorage } from "@/store/UserSlice";
 import { log } from "@/utils/logging";
 
+import { setAnalyticsUserId } from "../analytics/analytics";
 import { incrementUserCount } from "./backend";
 import { removeExpoToken } from "./user";
 

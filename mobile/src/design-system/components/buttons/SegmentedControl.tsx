@@ -127,8 +127,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   buttonRow: {
-    flexDirection: "row",
-    marginTop: 12
+    flexDirection: "row"
   },
   buttonText: {
     textAlign: "center"

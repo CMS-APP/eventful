@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
   viewSwitcherContainer: {
     alignItems: "center",
     flexDirection: "row",
+    marginBottom: 12,
     marginHorizontal: 24,
     marginTop: 20
   }

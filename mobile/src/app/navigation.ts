@@ -47,6 +47,7 @@ export type AppStackParamList = {
     type?: string;
   };
   WebView: { title: string; uri: string };
+  Feedback: undefined;
   EventInvite: { invite: Invite; event: Event; host: User };
   PhotoBooth: undefined;
   Celebration: {

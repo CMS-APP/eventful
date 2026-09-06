@@ -24,6 +24,7 @@ import { showOptionsAlert } from "@/utils/alertModal";
 import { formatDate, formatTime, parseDatabaseDate } from "@/utils/date";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
+import { isValidUserId } from "@/utils/userId";
 
 import { InviteEventCardResponse } from "./InviteEventCardResponse";
 import { InviteProfilePictures } from "./InviteProfilePictures";
@@ -62,6 +63,8 @@ export function InviteEventCard({
   }, [event]);
 
   const fetchInvite = useCallback(async () => {
+    if (!isValidUserId(userId)) return;
+
     const invite = await getInviteFromDatabase(event, userId);
     setInvite(invite);
   }, [event, userId]);

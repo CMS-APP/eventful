@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 0
   },
   searchContainerWithoutButton: {
-    marginHorizontal: 24
+    marginHorizontal: 16
   },
   separator: {
     backgroundColor: colors.lightGray,

@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   },
   usersContainer: {
     marginTop: 12,
-    paddingHorizontal: 24
+    paddingHorizontal: 16
   },
   usersList: {
     gap: 12

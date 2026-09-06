@@ -13,6 +13,7 @@ import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { User } from "@/types/User";
 import { UserInvite } from "@/types/UserInvite";
+import { isValidUserId } from "@/utils/userId";
 
 import { EventGuestListInvitedItem } from "./EventGuestListInvitedItem";
 
@@ -29,6 +30,8 @@ export function EventGuestListInvited({
   const userId = useSelector((state: UserState) => state.uid);
 
   const fetchData = useCallback(async () => {
+    if (!isValidUserId(userId)) return;
+
     const invitedGuests = await getInvitedGuests(event, userId);
     setInvitedGuests(invitedGuests as UserInvite[]);
   }, [event, userId]);

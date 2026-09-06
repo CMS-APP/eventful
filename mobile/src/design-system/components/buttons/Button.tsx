@@ -71,6 +71,7 @@ interface ButtonProps {
   disabled?: boolean;
   loading?: boolean;
   align?: buttonAlign;
+  fullWidth?: boolean;
 }
 
 export function Button({
@@ -83,7 +84,8 @@ export function Button({
   leadingIcon,
   disabled = false,
   loading = false,
-  align = "center"
+  align = "center",
+  fullWidth = false
 }: ButtonProps) {
   const handlePress = () => {
     onPress();
@@ -99,7 +101,11 @@ export function Button({
     style.opacity = 0.5;
   }
 
-  const containerStyle = [styles.container, style];
+  const containerStyle = [
+    styles.container,
+    style,
+    fullWidth && styles.fullWidth
+  ];
   const buttonStyle = buttonStyles[size];
   let iconSize = iconSizes[size];
 
@@ -160,7 +166,9 @@ const styles = StyleSheet.create({
     padding: 16
   },
   container: {
-    alignItems: "center",
+    alignItems: "center"
+  },
+  fullWidth: {
     width: "100%"
   },
   text: {

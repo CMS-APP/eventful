@@ -8,6 +8,7 @@ import { getEventsFromDatabase } from "@/services/firebase/event";
 import { getInvitedEvents } from "@/services/firebase/invite";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
+import { isValidUserId } from "@/utils/userId";
 
 export function useCalenderEvents() {
   const [allEvents, setAllEvents] = useState<Event[]>([]);
@@ -15,6 +16,8 @@ export function useCalenderEvents() {
   const userId = useSelector((state: UserState) => state.uid);
 
   const fetchData = useCallback(async () => {
+    if (!isValidUserId(userId)) return;
+
     const { upcomingEvents, pastEvents } = await getEventsFromDatabase(userId);
     const allEvents = [...upcomingEvents, ...pastEvents];
     const invitedEvents = await getInvitedEvents(userId);

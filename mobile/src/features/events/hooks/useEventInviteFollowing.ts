@@ -3,9 +3,7 @@ import { useSelector } from "react-redux";
 import { useCallback, useEffect, useState } from "react";
 
 import { useFocusEffect } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AllStackParamList } from "@/app/navigation";
 import { getInvitedGuests } from "@/services/firebase/invite";
 import {
   getUserFollowing,
@@ -15,68 +13,74 @@ import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { User } from "@/types/User";
 import { UserInvite } from "@/types/UserInvite";
+import { isValidUserId } from "@/utils/userId";
 
-export function useEventInviteFollowing(
-  navigation: StackNavigationProp<AllStackParamList>,
-  event: Event
-) {
-  const [invitedUsers, setInvitedUsers] = useState<User[]>([]);
-  const [filteredInvitedUsers, setFilteredInvitedUsers] = useState<User[]>([]);
-  const [nonInvitedUsers, setNonInvitedUsers] = useState<User[]>([]);
-  const [filteredNonInvitedUsers, setFilteredNonInvitedUsers] = useState<
-    User[]
-  >([]);
+export interface InviteGuest {
+  user: User;
+  invited: boolean;
+  inviteId: string | null;
+}
+
+export function useEventInviteFollowing(event: Event) {
+  const [guests, setGuests] = useState<InviteGuest[]>([]);
+  const [filteredGuests, setFilteredGuests] = useState<InviteGuest[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const userId = useSelector((state: UserState) => state.uid);
 
-  const sortUsers = useCallback((users: User[]) => {
-    return (
-      users?.sort((a, b) => {
-        return a.name.localeCompare(b.name);
-      }) ?? []
-    );
-  }, []);
-
   const fetchData = useCallback(async () => {
-    const invitedGuests = await getInvitedGuests(event, userId);
-    const invitedUsers = invitedGuests.map((invite: UserInvite) => invite.user);
-    setInvitedUsers(invitedUsers);
-    setFilteredInvitedUsers(sortUsers(invitedUsers ?? []));
-
-    const userFollowing = await getUserFollowing(userId);
-    const users = await getUsersFromFollowing(userFollowing, "Following");
-
-    const nonInvitedUsers = users.filter(
-      (user: User) =>
-        !invitedGuests.some(
-          (invite: UserInvite) => invite.user.uid === user.uid
-        )
-    );
-    setNonInvitedUsers(nonInvitedUsers);
-    setFilteredNonInvitedUsers(sortUsers(nonInvitedUsers ?? []));
-  }, [userId, event, sortUsers]);
-
-  const handleSearch = useCallback(() => {
-    if (!search) {
-      setFilteredInvitedUsers(invitedUsers ?? []);
-      setFilteredNonInvitedUsers(sortUsers(nonInvitedUsers ?? []));
+    if (!isValidUserId(userId)) {
+      setLoading(false);
       return;
     }
-    const lowercasedSearch = search.toLowerCase();
-    const filteredInvitedUsers = invitedUsers?.filter(
-      (user: User) =>
-        user.username.includes(lowercasedSearch) ||
-        (user.searchName?.includes(lowercasedSearch) ?? false)
+
+    const [invitedGuests, userFollowing] = await Promise.all([
+      getInvitedGuests(event, userId),
+      getUserFollowing(userId)
+    ]);
+    const invitedUserIds = new Set(
+      invitedGuests.map(({ user }: UserInvite) => user.uid)
     );
-    const filteredNonInvitedUsers = nonInvitedUsers?.filter(
-      (user: User) =>
-        user.username.includes(lowercasedSearch) ||
-        (user.searchName?.includes(lowercasedSearch) ?? false)
+
+    const followingUsers = await getUsersFromFollowing(
+      userFollowing,
+      "Following"
     );
-    setFilteredInvitedUsers(sortUsers(filteredInvitedUsers ?? []));
-    setFilteredNonInvitedUsers(sortUsers(filteredNonInvitedUsers ?? []));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, sortUsers]);
+    const nonInvitedUsers = followingUsers.filter(
+      (user: User) => !invitedUserIds.has(user.uid)
+    );
+
+    const allGuests: InviteGuest[] = [
+      ...invitedGuests.map(({ user, invite }: UserInvite) => ({
+        user,
+        invited: true,
+        inviteId: invite.id
+      })),
+      ...nonInvitedUsers.map((user: User) => ({
+        user,
+        invited: false,
+        inviteId: null
+      }))
+    ].sort((a, b) => a.user.name.localeCompare(b.user.name));
+
+    setGuests(allGuests);
+    setLoading(false);
+  }, [userId, event]);
+
+  useEffect(() => {
+    const lowercasedSearch = search.trim().toLowerCase();
+    if (!lowercasedSearch) {
+      setFilteredGuests(guests);
+      return;
+    }
+    setFilteredGuests(
+      guests.filter(
+        ({ user }) =>
+          user.username.includes(lowercasedSearch) ||
+          (user.searchName?.includes(lowercasedSearch) ?? false)
+      )
+    );
+  }, [search, guests]);
 
   const refreshInvites = useCallback(() => {
     fetchData();
@@ -88,13 +92,9 @@ export function useEventInviteFollowing(
     }, [fetchData])
   );
 
-  useEffect(() => {
-    handleSearch();
-  }, [handleSearch]);
-
   return {
-    filteredInvitedUsers,
-    filteredNonInvitedUsers,
+    guests: filteredGuests,
+    loading,
     search,
     setSearch,
     refreshInvites

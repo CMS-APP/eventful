@@ -16,10 +16,10 @@ import {
 } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
+import { Divider } from "@/design-system/components/layout/Divider";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { ContactsSearch } from "@/features/contacts/components/ContactsSearch";
-import { User } from "@/types/User";
 
 import { useEventInviteFollowing } from "../../hooks/useEventInviteFollowing";
 import { EventInviteGuestItem } from "./EventInviteGuestItem";
@@ -31,15 +31,9 @@ interface EventInviteGuestProps {
 
 export function EventInviteGuest({ navigation, route }: EventInviteGuestProps) {
   const event = route.params.event;
-  const invitedList = event.invited ?? [];
 
-  const {
-    filteredInvitedUsers,
-    filteredNonInvitedUsers,
-    search,
-    setSearch,
-    refreshInvites
-  } = useEventInviteFollowing(navigation, event);
+  const { guests, loading, search, setSearch, refreshInvites } =
+    useEventInviteFollowing(event);
 
   const handleIconRightAction = useCallback(() => {
     (navigation as StackNavigationProp<MainStackParamList>).navigate(
@@ -60,7 +54,6 @@ export function EventInviteGuest({ navigation, route }: EventInviteGuestProps) {
           backgroundColor: colors.darkGray,
           dark: true,
           backAction: true,
-          icon: "users",
           iconRight: "search",
           iconRightAction: handleIconRightAction
         },
@@ -71,83 +64,56 @@ export function EventInviteGuest({ navigation, route }: EventInviteGuestProps) {
       }}
     >
       <View style={styles.container}>
-        <ContactsSearch search={search} setSearch={setSearch} />
+        <ContactsSearch
+          search={search}
+          setSearch={setSearch}
+          showSeparator={false}
+        />
+
+        <Divider />
 
         <View style={styles.contentContainer}>
-          {filteredInvitedUsers === null && (
+          {loading && (
             <ActivityIndicator
-              size={"large"}
+              size="large"
               color={colors.secondary}
               style={styles.loader}
             />
           )}
 
-          {filteredInvitedUsers !== null &&
-            filteredInvitedUsers.length === 0 &&
-            filteredNonInvitedUsers !== null &&
-            filteredNonInvitedUsers.length === 0 &&
-            search.trim() !== "" && (
-              <View style={styles.noResultsContainer}>
-                <FontAwesome5 name="search" size={24} color={colors.white} />
-                <Text
-                  type="body"
-                  color={colors.white}
-                  style={styles.noResultsText}
-                >
-                  No users found
-                </Text>
-              </View>
-            )}
+          {!loading && guests.length === 0 && search.trim() !== "" && (
+            <View style={styles.noResultsContainer}>
+              <FontAwesome5 name="search" size={24} color={colors.white} />
+              <Text
+                type="body"
+                color={colors.white}
+                style={styles.noResultsText}
+              >
+                No users found
+              </Text>
+            </View>
+          )}
 
-          <View style={styles.usersContainer}>
-            {filteredInvitedUsers !== null &&
-              filteredInvitedUsers.length > 0 && (
-                <Text type="subHeader" color="white" style={styles.subText}>
-                  Invited Users
-                </Text>
-              )}
+          {!loading && guests.length === 0 && search.trim() === "" && (
+            <EmptyStateContainer
+              title="No Guests Found"
+              description="Follow some people so you can invite them to your events..."
+              icon="user-plus"
+            />
+          )}
 
-            {filteredInvitedUsers !== null &&
-              filteredInvitedUsers.map((followingUser: User) => (
+          {!loading && guests.length > 0 && (
+            <View style={styles.usersContainer}>
+              {guests.map((guest) => (
                 <EventInviteGuestItem
-                  key={followingUser.uid}
-                  user={followingUser}
+                  key={guest.user.uid}
+                  guest={guest}
                   event={event}
-                  invitedList={invitedList}
                   refreshInvites={refreshInvites}
                 />
               ))}
-
-            {filteredNonInvitedUsers !== null &&
-              filteredNonInvitedUsers.length > 0 && (
-                <Text type="subHeader" color="white" style={styles.subText}>
-                  Other Users
-                </Text>
-              )}
-
-            {filteredInvitedUsers !== null &&
-              filteredInvitedUsers.length === 0 &&
-              filteredNonInvitedUsers !== null &&
-              filteredNonInvitedUsers.length === 0 &&
-              search.trim() === "" && (
-                <EmptyStateContainer
-                  title="No Guests Found"
-                  description="Follow some people so you can invite them to your events..."
-                  icon="user-plus"
-                />
-              )}
-
-            {filteredNonInvitedUsers !== null &&
-              filteredNonInvitedUsers.map((invitedUser: User) => (
-                <EventInviteGuestItem
-                  key={invitedUser.uid}
-                  user={invitedUser}
-                  event={event}
-                  invitedList={invitedList}
-                  refreshInvites={refreshInvites}
-                />
-              ))}
-          </View>
+            </View>
+          )}
         </View>
       </View>
     </Screen>
@@ -157,11 +123,12 @@ export function EventInviteGuest({ navigation, route }: EventInviteGuestProps) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.darkGray,
-    flex: 1
+    flex: 1,
+    gap: 12
   },
   contentContainer: {
     alignItems: "center",
-    marginHorizontal: 24
+    marginHorizontal: 16
   },
   loader: {
     marginTop: 24
@@ -179,9 +146,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexShrink: 1,
     textAlign: "left"
-  },
-  subText: {
-    marginTop: 12
   },
   usersContainer: {
     alignItems: "center",

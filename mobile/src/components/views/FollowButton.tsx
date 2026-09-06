@@ -23,6 +23,7 @@ import { showOptionsAlert } from "@/utils/alertModal";
 import { haptics } from "@/utils/haptics";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
+import { isValidUserId } from "@/utils/userId";
 
 interface FollowButtonProps {
   user: User;
@@ -68,6 +69,8 @@ export function FollowButton({
   }, [handleUnfollow]);
 
   const fetchData = useCallback(async () => {
+    if (!isValidUserId(userId)) return;
+
     const [isFollowing, followingMe] = await Promise.all([
       isFollowingUser(userId, user.uid),
       isFollowingUser(user.uid, userId)

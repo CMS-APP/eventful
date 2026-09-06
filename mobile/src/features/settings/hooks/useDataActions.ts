@@ -4,26 +4,37 @@ import { useCallback, useState } from "react";
 
 import { Alert } from "react-native";
 
-import { Button } from "@/design-system/components/buttons/Button";
-import { colors } from "@/design-system/tokens/colors";
+import { useFocusEffect } from "@react-navigation/native";
+
 import { updateUserInfo } from "@/services/firebase/user";
-import { clearCache as clearImageCache } from "@/services/local/cache";
+import {
+  clearCache as clearImageCache,
+  getCacheSize
+} from "@/services/local/cache";
 import { UserState, clearSpotifyData } from "@/store/UserSlice";
 import { showOptionsAlert } from "@/utils/alertModal";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
-export function DataActionButtons() {
+export function useDataActions() {
   const userId = useSelector((state: UserState) => state.uid);
   const dispatch = useDispatch();
 
   const [clearingCache, setClearingCache] = useState(false);
   const [resettingSpotify, setResettingSpotify] = useState(false);
+  const [cacheSize, setCacheSize] = useState(0);
+
+  useFocusEffect(
+    useCallback(() => {
+      setCacheSize(getCacheSize());
+    }, [])
+  );
 
   const handleClearCache = useCallback(async () => {
     try {
       setClearingCache(true);
       await clearImageCache();
+      setCacheSize(getCacheSize());
       Alert.alert("Success", "The cache has been cleared.");
     } catch {
       log("Error Clearing Cache", "error");
@@ -82,25 +93,11 @@ export function DataActionButtons() {
     );
   }, [resetSpotifyData]);
 
-  return (
-    <>
-      <Button
-        text="Reset Spotify Data"
-        color={colors.primaryTint3}
-        textColor={colors.white}
-        onPress={resetSpotifyDataAlert}
-        leadingIcon="spotify"
-        loading={resettingSpotify}
-      />
-
-      <Button
-        text="Clear Cache"
-        color={colors.primaryTint3}
-        textColor={colors.white}
-        onPress={clearCacheAlert}
-        leadingIcon="database"
-        loading={clearingCache}
-      />
-    </>
-  );
+  return {
+    cacheSize,
+    clearCacheAlert,
+    clearingCache,
+    resetSpotifyDataAlert,
+    resettingSpotify
+  };
 }

@@ -57,12 +57,12 @@ export function HomeFollowsItem({ notification }: HomeFollowsItemProps) {
   return (
     <TouchableOpacity onPress={handlePress} hitSlop={getHitSlop("medium")}>
       <View style={widgetStyle}>
-        <ProfilePicture user={userDetails} size={50} />
+        <ProfilePicture user={userDetails} size={36} />
         <View style={styles.contentContainer}>
           <Text type="subHeader" style={styles.title}>
             {notification.title}
           </Text>
-          <Text type="body" style={styles.body}>
+          <Text type="caption" color={colors.gray}>
             {notification.body}
           </Text>
         </View>
@@ -74,9 +74,6 @@ export function HomeFollowsItem({ notification }: HomeFollowsItemProps) {
 }
 
 const styles = StyleSheet.create({
-  body: {
-    color: colors.gray
-  },
   container: {
     backgroundColor: colors.lightGray,
     flexDirection: "row",

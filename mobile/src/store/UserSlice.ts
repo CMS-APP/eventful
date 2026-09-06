@@ -33,6 +33,8 @@ export interface UserState {
   premium: boolean;
   photoBooth: boolean;
   photoBoothLocked: boolean;
+  pushNotifications: boolean;
+  emailNotifications: boolean;
   googleOnboardingName: GoogleOnboardingName | null;
   appleOnboardingName: AppleOnboardingName | null;
 }
@@ -66,7 +68,9 @@ const userSlice = createSlice({
     spotify: null,
     premium: __DEV__,
     photoBooth: false,
-    photoBoothLocked: false
+    photoBoothLocked: false,
+    pushNotifications: false,
+    emailNotifications: false
   },
   reducers: {
     setUserData: (state, action) => {
@@ -80,6 +84,8 @@ const userSlice = createSlice({
       state.usernameUpdateDate = action.payload.usernameUpdateDate;
       state.usernameCreateDate = action.payload.usernameCreateDate;
       state.spotify = action.payload.spotify;
+      state.pushNotifications = action.payload.pushNotifications ?? false;
+      state.emailNotifications = action.payload.emailNotifications ?? false;
     },
     setName: (state, action) => {
       state.name = action.payload;
@@ -118,6 +124,8 @@ const userSlice = createSlice({
       state.premium = __DEV__;
       state.photoBooth = false;
       state.photoBoothLocked = false;
+      state.pushNotifications = false;
+      state.emailNotifications = false;
     },
     setPremium: (state, action) => {
       state.premium = action.payload;
@@ -127,6 +135,12 @@ const userSlice = createSlice({
     },
     setPhotoBoothLocked: (state, action) => {
       state.photoBoothLocked = action.payload;
+    },
+    setPushNotifications: (state, action) => {
+      state.pushNotifications = action.payload;
+    },
+    setEmailNotifications: (state, action) => {
+      state.emailNotifications = action.payload;
     }
   }
 });
@@ -144,7 +158,9 @@ export const {
   clearSpotifyData,
   setPremium,
   setPhotoBooth,
-  setPhotoBoothLocked
+  setPhotoBoothLocked,
+  setPushNotifications,
+  setEmailNotifications
 } = userSlice.actions;
 
 export const userStore = configureStore({

@@ -108,6 +108,7 @@ export function PhotoBoothHome() {
               <PhotoBoothPaywallFeatures />
 
               <Button
+                fullWidth
                 text="Subscribe"
                 leadingIcon="credit-card"
                 onPress={() => {

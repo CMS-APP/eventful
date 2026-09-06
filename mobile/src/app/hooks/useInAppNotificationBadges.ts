@@ -11,6 +11,7 @@ import {
 } from "@/services/firebase/notifications";
 import { InAppNotification } from "@/types/InAppNotification";
 import { Invites } from "@/types/Invites";
+import { isValidUserId } from "@/utils/userId";
 
 export function useInAppNotificationBadges(userId: string | null | undefined) {
   const [notifications, setNotifications] = useState({
@@ -21,7 +22,7 @@ export function useInAppNotificationBadges(userId: string | null | undefined) {
   });
 
   useEffect(() => {
-    if (!userId || userId === "null") return;
+    if (!isValidUserId(userId)) return;
 
     const unsubscribe = getInvitationsFromDatabaseSnapshot(
       userId,
@@ -35,7 +36,7 @@ export function useInAppNotificationBadges(userId: string | null | undefined) {
   }, [userId]);
 
   useEffect(() => {
-    if (!userId || userId === "null") return;
+    if (!isValidUserId(userId)) return;
 
     let unreadFollows = 0;
     let unreadUpdates = 0;
@@ -70,7 +71,7 @@ export function useInAppNotificationBadges(userId: string | null | undefined) {
   }, [userId]);
 
   useEffect(() => {
-    if (!userId || userId === "null" || Platform.OS !== "ios") return;
+    if (!isValidUserId(userId) || Platform.OS !== "ios") return;
 
     const total =
       notifications.Home +

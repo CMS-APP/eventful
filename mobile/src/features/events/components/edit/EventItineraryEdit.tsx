@@ -120,6 +120,7 @@ export function EventItineraryEdit({
 
           <View style={styles.buttonContainer}>
             <Button
+              fullWidth
               text="Add Activity"
               onPress={handleAddActivity}
               color={colors.primaryTint}

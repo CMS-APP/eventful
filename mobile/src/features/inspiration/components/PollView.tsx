@@ -44,8 +44,10 @@ export function PollView({ isAdmin }: PollViewProps) {
     if (poll) {
       const votes = await getVotesInDatabase(poll);
       setVotes(votes);
-      const userVote = await getVoteForUserInDatabase(poll, userId);
-      setUserVote(userVote as PollVote | null);
+      if (userId && userId !== "null") {
+        const userVote = await getVoteForUserInDatabase(poll, userId);
+        setUserVote(userVote as PollVote | null);
+      }
     }
     setLoading(false);
     hasLoadedOnce.current = true;

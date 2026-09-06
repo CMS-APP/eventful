@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/design-system/components/text/Text";
+import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { InviteEventCard } from "@/features/invite/components/InviteEventCard";
 import { Event } from "@/types/Event";
 
@@ -23,13 +23,13 @@ export function InvitesView({
         ))}
       </View>
     ) : (
-      <Text type="subHeader" style={styles.noEventsText}>
-        {noEventsText}
-        {"\n"}
-        <Text type="body" style={styles.noEventsSubtext}>
-          Ask your friends to invite you!
-        </Text>
-      </Text>
+      <View style={styles.emptyStateContainer}>
+        <EmptyStateContainer
+          title="No Invites"
+          description="Ask your friends to invite you!"
+          icon="inbox"
+        />
+      </View>
     );
 
   return (
@@ -43,17 +43,13 @@ export function InvitesView({
 }
 
 const styles = StyleSheet.create({
+  emptyStateContainer: {
+    marginHorizontal: 12,
+    marginVertical: 12
+  },
   eventsContainer: {
     gap: 12,
     marginHorizontal: 12,
     marginVertical: 12
-  },
-  noEventsSubtext: {
-    marginTop: 12,
-    textAlign: "center"
-  },
-  noEventsText: {
-    marginTop: 12,
-    textAlign: "center"
   }
 });

@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { StyleSheet, View } from "react-native";
+
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AllStackParamList } from "@/app/navigation";
@@ -37,12 +39,15 @@ export function ContactsInvitationScreen({
         paddingTop: 48
       }}
       nonScrollChildren={
-        <SegmentedControl
-          selections={["Upcoming", "Past"]}
-          selectedButton={selectedButton}
-          setSelectedButton={setSelectedButton}
-          nonPressColor={colors.gray}
-        />
+        <View style={styles.segmentedControlContainer}>
+          <SegmentedControl
+            selections={["Upcoming", "Past"]}
+            selectedButton={selectedButton}
+            setSelectedButton={setSelectedButton}
+            nonPressColor={colors.gray}
+            pressColor={colors.primary}
+          />
+        </View>
       }
     >
       <InvitesView
@@ -53,3 +58,9 @@ export function ContactsInvitationScreen({
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  segmentedControlContainer: {
+    marginTop: 12
+  }
+});

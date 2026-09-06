@@ -52,6 +52,14 @@ export function SettingsPasswordModal({
           }}
           leadingIcon="trash-alt"
         />
+
+        <Button
+          text="Cancel"
+          color={colors.lightGray}
+          textColor={colors.black}
+          onPress={() => setPresentPasswordModal(false)}
+          leadingIcon="times"
+        />
       </View>
     </ModalView>
   );

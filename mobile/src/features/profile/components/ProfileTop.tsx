@@ -22,6 +22,7 @@ import {
 import { UserState } from "@/store/UserSlice";
 import { Follower } from "@/types/Follower";
 import { User } from "@/types/User";
+import { isValidUserId } from "@/utils/userId";
 
 import { ProfilePicture } from "./ProfilePicture";
 
@@ -36,6 +37,8 @@ export function ProfileTop({ user }: { user: User }) {
     useNavigation<StackNavigationProp<ProfileStackParamList>>();
 
   const checkIsFollowing = useCallback(async () => {
+    if (!isValidUserId(userId)) return;
+
     const isFollowing = await isFollowingUser(userId, user.uid);
     setIsFollowing(isFollowing);
   }, [userId, user.uid]);

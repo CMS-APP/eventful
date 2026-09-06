@@ -23,7 +23,7 @@ export function FeatureView({
     <View style={styles.container}>
       <Image
         source={image}
-        style={[styles.image, { width: width / 1.5 }]}
+        style={[styles.image, { width: width / 1.8 }]}
         resizeMode="contain"
       />
       <View style={styles.textContainer}>

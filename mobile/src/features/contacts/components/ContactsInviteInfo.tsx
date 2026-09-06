@@ -17,6 +17,7 @@ import { UserState } from "@/store/UserSlice";
 import { EventInvite } from "@/types/EventInvite";
 import { Invites } from "@/types/Invites";
 import { parseDatabaseDate } from "@/utils/date";
+import { isValidUserId } from "@/utils/userId";
 
 import { ContactInviteItem } from "./ContactInviteItem";
 
@@ -32,6 +33,8 @@ export function ContactsInviteInfo() {
   const userId = useSelector((state: UserState) => state.uid);
 
   const fetchData = useCallback(async () => {
+    if (!isValidUserId(userId)) return;
+
     const invitations = await getInvitationsForUser(userId);
 
     const respond = invitations.respond;
@@ -110,7 +113,7 @@ export function ContactsInviteInfo() {
 const styles = StyleSheet.create({
   container: {
     gap: 16,
-    marginTop: 12,
-    paddingHorizontal: 24
+    marginTop: 20,
+    paddingHorizontal: 16
   }
 });

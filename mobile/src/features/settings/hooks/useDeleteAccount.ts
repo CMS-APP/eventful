@@ -18,8 +18,6 @@ import { CommonActions, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AllStackParamList, navigationRef } from "@/app/navigation";
-import { Button } from "@/design-system/components/buttons/Button";
-import { colors } from "@/design-system/tokens/colors";
 import {
   getAppleCredentialForReauthentication,
   revokeSignInWithAppleToken
@@ -32,8 +30,6 @@ import { showOptionsAlert } from "@/utils/alertModal";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
-import { SettingsPasswordModal } from "./SettingsPasswordModal";
-
 type ReauthMethod = "google" | "apple" | "password";
 
 const REAUTH_METHOD_LABEL: Record<"google" | "apple", string> = {
@@ -41,7 +37,7 @@ const REAUTH_METHOD_LABEL: Record<"google" | "apple", string> = {
   apple: "Apple"
 };
 
-export function DeleteAccountButton() {
+export function useDeleteAccount() {
   const userId = useSelector((state: UserState) => state.uid);
   const navigation = useNavigation<StackNavigationProp<AllStackParamList>>();
   const dispatch = useDispatch();
@@ -226,24 +222,13 @@ export function DeleteAccountButton() {
     }
   }, [finalizeAccountDeletion, inputText]);
 
-  return (
-    <>
-      <SettingsPasswordModal
-        presentPasswordModal={presentPasswordModal}
-        setPresentPasswordModal={setPresentPasswordModal}
-        inputText={inputText}
-        setInputText={setInputText}
-        submitFunction={deleteAccount}
-      />
-
-      <Button
-        text="Delete Account"
-        color={colors.primaryTint3}
-        textColor={colors.white}
-        onPress={handleDeleteAccount}
-        leadingIcon="trash-alt"
-        loading={deleting}
-      />
-    </>
-  );
+  return {
+    handleDeleteAccount,
+    deleting,
+    presentPasswordModal,
+    setPresentPasswordModal,
+    inputText,
+    setInputText,
+    deleteAccount
+  };
 }

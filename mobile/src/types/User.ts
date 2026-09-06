@@ -12,6 +12,8 @@ export interface User {
   usernameCreateDate?: Timestamp | number;
   usernameUpdateDate?: Timestamp | number;
   pushTokens: string[];
+  pushNotifications?: boolean;
+  emailNotifications?: boolean;
   platform?: string | number;
   version?: string | number;
   appVersion?: string | number;

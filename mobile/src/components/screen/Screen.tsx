@@ -126,7 +126,7 @@ export function Screen({
           handleScroll={handleScroll ?? (() => {})}
           _handleScroll={_handleScroll}
           backgroundColor={contentConfig?.backgroundColor}
-          paddingBottom={contentConfig?.paddingBottom ?? 12}
+          paddingBottom={contentConfig?.paddingBottom ?? 24}
           bottomMargin={contentConfig?.bottomMargin ?? true}
         >
           {headerConfig?.type === "flat" && (

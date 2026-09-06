@@ -41,7 +41,7 @@ export function HomeUpdateItem({ update }: HomeUpdateItemProps) {
   }
 
   const widgetStyle = [
-    padding.largeWidget,
+    padding.mediumWidget,
     styles.container,
     {
       borderWidth: update.read ? 0 : 1
@@ -51,10 +51,12 @@ export function HomeUpdateItem({ update }: HomeUpdateItemProps) {
   return (
     <TouchableOpacity onPress={handlePress} hitSlop={getHitSlop("medium")}>
       <View style={widgetStyle}>
-        <ProfilePicture user={userDetails as User} size={50} />
+        <ProfilePicture user={userDetails as User} size={36} />
         <View style={styles.contentContainer}>
           <Text type="subHeader">{update.title}</Text>
-          <Text type="body">{update.body}</Text>
+          <Text type="caption" color={colors.gray}>
+            {update.body}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>

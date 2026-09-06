@@ -20,6 +20,7 @@ import { colors } from "@/design-system/tokens/colors";
 import { getEvent } from "@/services/photo-booth/events";
 import { UserState } from "@/store/UserSlice";
 import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
+import { isValidUserId } from "@/utils/userId";
 
 import { GalleryPhotoItem } from "../components/gallery/GalleryPhotoItem";
 import { UploadProgress } from "../components/gallery/UploadProgress";
@@ -35,6 +36,8 @@ export function PhotoBoothEventGallery() {
 
   const refreshEvent = useCallback(
     async (event: GalleryEvent) => {
+      if (!isValidUserId(userId)) return;
+
       const newEvent = await getEvent(userId, event.eventTitle);
       if (!newEvent) {
         return;

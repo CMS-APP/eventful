@@ -16,6 +16,7 @@ import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
+import { isValidUserId } from "@/utils/userId";
 
 interface ProfileInvitesProps {
   user: User;
@@ -27,6 +28,11 @@ export function ProfileInvites({ user }: ProfileInvitesProps) {
   const [loading, setLoading] = useState(true);
 
   const fetchInvites = useCallback(async () => {
+    if (!isValidUserId(userId)) {
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     const invites = await getInvitesFromUser(userId, user.uid);
     const events = await getFutureEventsFromDatabaseByIds(

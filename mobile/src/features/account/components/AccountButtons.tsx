@@ -23,7 +23,7 @@ export function AccountButtons() {
   async function signOut() {
     try {
       setSigningOut(true);
-      handleSignOut(dispatch);
+      await handleSignOut(dispatch);
       signOutNavigation();
     } catch (error) {
       log(`Error Signing Out: ${error}`, "error");

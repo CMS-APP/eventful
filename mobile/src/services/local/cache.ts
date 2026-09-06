@@ -219,3 +219,11 @@ export async function clearCache() {
   imageCacheDirectory.delete();
   await createCacheImageFolder();
 }
+
+export function getCacheSize(): number {
+  try {
+    return getImageCacheDirectory().size ?? 0;
+  } catch {
+    return 0;
+  }
+}

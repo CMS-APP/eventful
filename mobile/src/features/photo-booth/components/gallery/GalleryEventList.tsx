@@ -11,6 +11,7 @@ import { getEvents } from "@/services/photo-booth/events";
 import { UserState } from "@/store/UserSlice";
 import { GalleryEvent } from "@/types/photoBoothGallery";
 import { log } from "@/utils/logging";
+import { isValidUserId } from "@/utils/userId";
 
 import { GalleryEventListItem } from "./GalleryEventListItem";
 
@@ -19,8 +20,10 @@ export function GalleryEventList() {
   const userId = useSelector((state: UserState) => state.uid);
 
   const getAllEvents = useCallback(async () => {
+    if (!isValidUserId(userId)) return;
+
     try {
-      const events = await getEvents(userId!);
+      const events = await getEvents(userId);
       setEvents(events);
     } catch {
       log("Error Getting Events: ", "error");

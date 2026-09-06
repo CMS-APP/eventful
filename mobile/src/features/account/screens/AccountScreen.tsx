@@ -35,6 +35,8 @@ export function AccountScreen() {
   const [userFollowing, setUserFollowing] = useState(0);
 
   const setData = useCallback(async (userData: User) => {
+    if (!userData.uid || userData.uid === "null") return;
+
     const followers = await getUserFollowers(userData.uid);
     const following = await getUserFollowing(userData.uid);
     setUserFollowers(followers.length);

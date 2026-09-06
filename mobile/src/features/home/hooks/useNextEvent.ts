@@ -9,6 +9,7 @@ import { getEventResponses } from "@/services/firebase/invite";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { UserInvite } from "@/types/UserInvite";
+import { isValidUserId } from "@/utils/userId";
 
 export function useNextEvent(event: Event | null) {
   const [nextEvent, setNextEvent] = useState<Event | null>(null);
@@ -30,6 +31,10 @@ export function useNextEvent(event: Event | null) {
   }, []);
 
   const fetchData = useCallback(async () => {
+    if (!isValidUserId(userId)) {
+      setLoading(false);
+      return;
+    }
     if (!hasLoadedOnce.current) setLoading(true);
     const nextEvent = event || (await getNextEvent(userId));
     setNextEvent(nextEvent);

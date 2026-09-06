@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -13,58 +13,58 @@ import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
+import { InviteGuest } from "@/features/events/hooks/useEventInviteFollowing";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import { updateEventInDatabase } from "@/services/firebase/event";
 import {
-  checkInvitedToEvent,
   deleteInviteFromDatabase,
   sendInvite
 } from "@/services/firebase/invite";
 import { deleteUpdateNotification } from "@/services/firebase/notifications";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
-import { User } from "@/types/User";
 import { showOptionsAlert } from "@/utils/alertModal";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 interface EventInviteGuestItemProps {
-  user: User;
+  guest: InviteGuest;
   event: Event;
-  invitedList: string[];
   refreshInvites: () => void;
 }
 
 export function EventInviteGuestItem({
-  user,
+  guest,
   event,
-  invitedList,
   refreshInvites
 }: EventInviteGuestItemProps) {
+  const { user } = guest;
   const guestId = user.uid;
   const userId = useSelector((state: UserState) => state.uid);
   const name = useSelector((state: UserState) => state.name);
   const username = useSelector((state: UserState) => state.username);
-  const [inviteId, setInviteId] = useState<string | null>(null);
   const navigation =
     useNavigation() as StackNavigationProp<AccountStackParamList>;
-  const [alreadyInvited, setAlreadyInvited] = useState(
-    invitedList.includes(guestId)
-  );
+  const [invited, setInvited] = useState(guest.invited);
+  const [inviteId, setInviteId] = useState(guest.inviteId);
+  const [processing, setProcessing] = useState(false);
 
   const removeUserFromEvent = useCallback(async () => {
+    setProcessing(true);
     try {
       event.invited = event.invited.filter(
         (invited: string) => invited !== guestId
       );
       await updateEventInDatabase(event);
-      setAlreadyInvited(false);
+      setInvited(false);
       await deleteInviteFromDatabase(inviteId ?? "");
       await deleteUpdateNotification(userId, guestId, event.id);
       refreshInvites();
     } catch (error) {
       log(`Error Removing User: ${error}`, "error");
       showErrorToast("Error Removing User");
+    } finally {
+      setProcessing(false);
     }
   }, [event, guestId, inviteId, userId, refreshInvites]);
 
@@ -87,10 +87,14 @@ export function EventInviteGuestItem({
   }, [removeUserFromEvent]);
 
   const inviteUser = useCallback(async () => {
-    if (alreadyInvited) {
+    if (invited) {
       removeUserAlert();
-    } else {
-      setAlreadyInvited(true);
+      return;
+    }
+
+    setProcessing(true);
+    setInvited(true);
+    try {
       const { inviteId } = await sendInvite(
         userId,
         name,
@@ -100,9 +104,11 @@ export function EventInviteGuestItem({
       );
       setInviteId(inviteId);
       refreshInvites();
+    } finally {
+      setProcessing(false);
     }
   }, [
-    alreadyInvited,
+    invited,
     userId,
     name,
     username,
@@ -119,25 +125,15 @@ export function EventInviteGuestItem({
     });
   }, [user, navigation]);
 
-  useEffect(() => {
-    const getInviteId = async () => {
-      const invite = await checkInvitedToEvent(event, guestId);
-      if (invite) {
-        setAlreadyInvited(true);
-        setInviteId(invite.id);
-      } else {
-        setAlreadyInvited(false);
-      }
-    };
-
-    getInviteId();
-  }, [event, guestId]);
-
   return (
-    <TouchableOpacity onPress={handlePress} hitSlop={getHitSlop("medium")}>
+    <TouchableOpacity
+      style={styles.touchable}
+      onPress={handlePress}
+      hitSlop={getHitSlop("medium")}
+    >
       <View style={[padding.mediumWidget, styles.container]}>
         <View style={styles.userRow}>
-          <ProfilePicture size={40} user={user} />
+          <ProfilePicture size={36} user={user} />
           <View style={styles.userInfo}>
             <Text type="body" style={styles.userName}>
               {user.name}
@@ -148,12 +144,14 @@ export function EventInviteGuestItem({
           </View>
 
           <Button
-            text={alreadyInvited ? "Remove" : "Invite"}
+            text={invited ? "Remove" : "Invite"}
+            leadingIcon={invited ? "user-times" : "user-plus"}
             onPress={inviteUser}
-            color={colors.primary}
+            color={invited ? colors.primaryTint : colors.secondary}
             textColor={colors.white}
             size="small"
-            flex={null}
+            disabled={processing}
+            loading={processing}
           />
         </View>
       </View>
@@ -166,6 +164,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightGray,
     width: "100%"
   },
+  touchable: {
+    width: "100%"
+  },
   userInfo: {
     flex: 1
   },
@@ -174,6 +175,7 @@ const styles = StyleSheet.create({
   },
   userRow: {
     alignItems: "center",
+    alignSelf: "stretch",
     flexDirection: "row",
     gap: 12
   },

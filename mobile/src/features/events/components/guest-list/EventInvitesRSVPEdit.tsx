@@ -77,7 +77,10 @@ export function EventInvitesRSVPEdit({
     const eventData = await getEventInfo({ id: event.id } as Event);
     const appUsers = await getRSVPAppUsers(eventData as Event);
     setAppList(appUsers);
-    const linkUsers = await getRSVPWebUsers(eventData as Event, userId);
+    const linkUsers =
+      userId && userId !== "null"
+        ? await getRSVPWebUsers(eventData as Event, userId)
+        : [];
     setLinkList(linkUsers);
     const manualUsers = await getRSVPManualUsers(eventData as Event);
     setManualList(manualUsers);
@@ -196,6 +199,7 @@ export function EventInvitesRSVPEdit({
 const styles = StyleSheet.create({
   buttonsContainer: {
     gap: 16,
+    marginBottom: 12,
     paddingHorizontal: 24
   },
   container: {

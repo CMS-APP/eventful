@@ -47,7 +47,7 @@ export function ContactsScreen({ navigation }: ContactsScreenProps) {
 
 const styles = StyleSheet.create({
   searchContainer: {
-    paddingHorizontal: 24,
+    paddingHorizontal: 16,
     paddingTop: 52
   }
 });

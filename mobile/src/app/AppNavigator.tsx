@@ -21,6 +21,7 @@ import { EventInviteNavigator } from "../features/invite/EventInviteNavigator";
 import { MainNavigator } from "../features/main/MainNavigator";
 import { OnboardingNavigator } from "../features/onboarding/OnboardingNavigator";
 import { PaywallScreen } from "../features/paywall/PaywallScreen";
+import { FeedbackScreen } from "../features/settings/screens/FeedbackScreen";
 import { CelebrationScreen } from "./screens/CelebrationScreen";
 import { LoadingScreen } from "./screens/LoadingScreen";
 import { UpdateScreen } from "./screens/UpdateScreen";
@@ -75,6 +76,11 @@ export function AppNavigator() {
         <Stack.Screen
           name="WebView"
           component={WebScreen}
+          options={modalOptions}
+        />
+        <Stack.Screen
+          name="Feedback"
+          component={FeedbackScreen}
           options={modalOptions}
         />
         <Stack.Screen

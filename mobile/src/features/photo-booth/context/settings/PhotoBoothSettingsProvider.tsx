@@ -115,6 +115,12 @@ export function PhotoBoothSettingsProvider({
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const loadConfig = useCallback(async () => {
+    if (!userId) {
+      setConfig(getDefaultConfig());
+      setIsLoading(false);
+      return;
+    }
+
     try {
       setIsLoading(true);
       const fetchedConfig = await getPhotoBoothConfig(userId);
@@ -135,12 +141,12 @@ export function PhotoBoothSettingsProvider({
   }, [loadConfig]);
 
   const saveConfig = useCallback(async () => {
-    if (isLoading) return;
+    if (isLoading || !userId) return;
     await savePhotoBoothConfig(userId, config as PhotoBoothConfig);
   }, [userId, isLoading, config]);
 
   useEffect(() => {
-    if (isLoading) return;
+    if (isLoading || !userId) return;
 
     if (saveTimeoutRef.current) {
       clearTimeout(saveTimeoutRef.current);

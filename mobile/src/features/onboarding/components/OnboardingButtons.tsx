@@ -20,6 +20,7 @@ export function OnboardingButtons({
   return (
     <View style={styles.container}>
       <Button
+        fullWidth
         text={nextText}
         color={colors.secondary}
         textColor={colors.white}

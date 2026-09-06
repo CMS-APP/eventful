@@ -15,6 +15,7 @@ import { InviteEventCard } from "@/features/invite/components/InviteEventCard";
 import { getFutureEventsFromDatabase } from "@/services/firebase/event";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
+import { isValidUserId } from "@/utils/userId";
 
 interface ProfileInviteScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;
@@ -30,6 +31,8 @@ export function ProfileInviteScreen({
   const { user } = route.params;
 
   const fetchEvents = useCallback(async () => {
+    if (!isValidUserId(userId)) return;
+
     const events = await getFutureEventsFromDatabase(userId);
     setEvents(events);
   }, [userId]);
