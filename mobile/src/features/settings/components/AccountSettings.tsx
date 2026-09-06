@@ -7,6 +7,7 @@ import { StyleSheet, View } from "react-native";
 import { usePaymentProvider } from "@/app/context/payment/PaymentContext";
 import { usePushNotificationsToggle } from "@/app/hooks/usePushNotificationsToggle";
 import { openSubscriptionManagement } from "@/app/update";
+import { trackSettingsNotificationsToggled } from "@/services/analytics/events";
 import { updateUserInfo } from "@/services/firebase/user";
 import { UserState, setEmailNotifications } from "@/store/UserSlice";
 import { log } from "@/utils/logging";
@@ -41,6 +42,7 @@ export function AccountSettings() {
       const newValue = !emailNotifications;
       await updateUserInfo(userId, { emailNotifications: newValue });
       dispatch(setEmailNotifications(newValue));
+      trackSettingsNotificationsToggled("email", newValue);
     } catch (error) {
       log(`Error Updating Email Notifications: ${error}`, "error");
       showErrorToast("Error Updating Email Notifications");

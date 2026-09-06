@@ -6,6 +6,7 @@ import { Divider } from "@/design-system/components/layout/Divider";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
+import { trackPhotoBoothCustomised } from "@/services/analytics/events";
 
 import { CustomiseCollage } from "../components/customise/CustomiseCollage";
 import { FilterButton } from "../components/customise/FilterButton";
@@ -16,6 +17,12 @@ export function PhotoBoothLayout() {
 
   function handleCanChangeCollageChange() {
     setCanChangeCollage(!canChangeCollage);
+    trackPhotoBoothCustomised("collage");
+  }
+
+  function handleFilterChange(nextFilter: string) {
+    setFilter(nextFilter);
+    trackPhotoBoothCustomised("filter");
   }
 
   return (
@@ -52,49 +59,49 @@ export function PhotoBoothLayout() {
           <View style={styles.filtersRow}>
             <FilterButton
               filter="Normal"
-              onPress={() => setFilter("Normal")}
+              onPress={() => handleFilterChange("Normal")}
               isSelected={filter === "Normal"}
             />
 
             <FilterButton
               filter="Black & White"
-              onPress={() => setFilter("Black & White")}
+              onPress={() => handleFilterChange("Black & White")}
               isSelected={filter === "Black & White"}
             />
 
             <FilterButton
               filter="Sepia"
-              onPress={() => setFilter("Sepia")}
+              onPress={() => handleFilterChange("Sepia")}
               isSelected={filter === "Sepia"}
             />
 
             <FilterButton
               filter="Vintage"
-              onPress={() => setFilter("Vintage")}
+              onPress={() => handleFilterChange("Vintage")}
               isSelected={filter === "Vintage"}
             />
 
             <FilterButton
               filter="Warm"
-              onPress={() => setFilter("Warm")}
+              onPress={() => handleFilterChange("Warm")}
               isSelected={filter === "Warm"}
             />
 
             <FilterButton
               filter="Cool"
-              onPress={() => setFilter("Cool")}
+              onPress={() => handleFilterChange("Cool")}
               isSelected={filter === "Cool"}
             />
 
             <FilterButton
               filter="Kodachrome"
-              onPress={() => setFilter("Kodachrome")}
+              onPress={() => handleFilterChange("Kodachrome")}
               isSelected={filter === "Kodachrome"}
             />
 
             <FilterButton
               filter="Polaroid"
-              onPress={() => setFilter("Polaroid")}
+              onPress={() => handleFilterChange("Polaroid")}
               isSelected={filter === "Polaroid"}
             />
           </View>

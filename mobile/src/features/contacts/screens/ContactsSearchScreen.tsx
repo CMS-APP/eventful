@@ -13,6 +13,7 @@ import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { ProfileButton } from "@/features/profile/components/ProfileButton";
+import { trackContactsSearchPerformed } from "@/services/analytics/events";
 import { userSearch } from "@/services/firebase/backend";
 import { User } from "@/types/User";
 import { log } from "@/utils/logging";
@@ -43,6 +44,7 @@ export function ContactsSearchScreen({ route }: ContactsSearchScreenProps) {
     try {
       const users = await userSearch(search, user as FirebaseAuthTypes.User);
       setUsers(users);
+      trackContactsSearchPerformed();
     } catch (error) {
       log(`Error Loading Users: ${error}`, "error");
       showErrorToast("Error Loading Users");

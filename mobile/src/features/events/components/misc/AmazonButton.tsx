@@ -9,6 +9,7 @@ import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
+import { trackEventAmazonLinkOpened } from "@/services/analytics/events";
 import { haptics } from "@/utils/haptics";
 
 interface AmazonButtonProps {
@@ -25,6 +26,7 @@ export function AmazonButton({ type }: AmazonButtonProps) {
 
   const handlePress = () => {
     haptics.soft();
+    trackEventAmazonLinkOpened();
     navigation.navigate("WebView", {
       title: "Amazon",
       uri: links[type]

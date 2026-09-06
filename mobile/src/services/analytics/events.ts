@@ -38,8 +38,30 @@ export function trackEventUpdated() {
   track("event_updated");
 }
 
-export function trackEventDeleted() {
-  track("event_deleted");
+export function trackEventListItemAdded(
+  list: "checklist" | "toDoList" | "shoppingList"
+) {
+  track("event_list_item_added", { list });
+}
+
+export function trackEventBudgetItemAdded(category: string) {
+  track("event_budget_item_added", { category });
+}
+
+export function trackEventLocationSearched() {
+  track("event_location_searched");
+}
+
+export function trackEventLocationSelected() {
+  track("event_location_selected");
+}
+
+export function trackEventTimelineItemToggled(completed: boolean) {
+  track("event_timeline_item_toggled", { completed });
+}
+
+export function trackEventAmazonLinkOpened() {
+  track("event_amazon_link_opened");
 }
 
 // Invites & guests
@@ -52,14 +74,18 @@ export function trackInviteResponseChanged(response: string) {
   track("invite_response_changed", { response });
 }
 
+export function trackInviteLinkCopied() {
+  track("invite_link_copied");
+}
+
 // Contacts
 
 export function trackUserFollowed() {
   track("user_followed");
 }
 
-export function trackUserUnfollowed() {
-  track("user_unfollowed");
+export function trackContactsSearchPerformed() {
+  track("contacts_search_performed");
 }
 
 // Photo booth
@@ -76,24 +102,43 @@ export function trackPhotoBoothPhotosUploaded(count: number) {
   track("photo_booth_photos_uploaded", { count });
 }
 
-// Inspiration
-
-export function trackPostCreated() {
-  track("post_created", undefined, "create");
+export function trackPhotoBoothSessionStarted() {
+  track("photo_booth_session_started");
 }
 
-export function trackPollCreated() {
-  track("poll_created", undefined, "create");
+export function trackPhotoBoothLocked() {
+  track("photo_booth_locked");
+}
+
+export function trackPhotoBoothCustomised(type: "collage" | "filter") {
+  track("photo_booth_customised", { type });
+}
+
+// Inspiration
+
+export function trackPostLiked() {
+  track("post_liked");
 }
 
 export function trackPollVoted() {
   track("poll_voted");
 }
 
-// Feedback
+// Settings & account
 
-export function trackFeedbackSubmitted(type: string) {
-  track("feedback_submitted", { type });
+export function trackSettingsNameChanged() {
+  track("settings_name_changed");
+}
+
+export function trackSettingsNotificationsToggled(
+  type: "push" | "email",
+  enabled: boolean
+) {
+  track("settings_notifications_toggled", { type, enabled });
+}
+
+export function trackAccountPictureUpdated() {
+  track("account_picture_updated");
 }
 
 // Spotify
@@ -102,16 +147,8 @@ export function trackSpotifyConnected() {
   track("spotify_connected");
 }
 
-export function trackSpotifyDisconnected() {
-  track("spotify_disconnected");
-}
-
 export function trackSpotifyPlaylistAdded() {
   track("spotify_playlist_added");
-}
-
-export function trackSpotifyPlaylistRemoved() {
-  track("spotify_playlist_removed");
 }
 
 // Payments

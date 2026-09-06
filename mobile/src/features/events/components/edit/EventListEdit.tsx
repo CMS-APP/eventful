@@ -7,6 +7,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Input } from "@/design-system/components/inputs/Input";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { trackEventListItemAdded } from "@/services/analytics/events";
 import { Event } from "@/types/Event";
 import { haptics } from "@/utils/haptics";
 
@@ -117,6 +118,7 @@ export function EventListEdit({
       ...event,
       [listType]: createDataToBeSaved(newItemList, newCompleteList)
     });
+    trackEventListItemAdded(listType);
   }, [
     itemList,
     completeList,

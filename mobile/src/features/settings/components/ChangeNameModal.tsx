@@ -14,6 +14,7 @@ import { ModalView } from "@/design-system/components/overlays/ModalView";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { padding } from "@/design-system/tokens/padding";
+import { trackSettingsNameChanged } from "@/services/analytics/events";
 import {
   changeHostname,
   checkUsernameExists,
@@ -213,6 +214,9 @@ export function ChangeNameModal({
       }
 
       await updateUserInfo(userId, data);
+      if (type === "name") {
+        trackSettingsNameChanged();
+      }
       setPresentModal(false);
       setNewName("");
       setNewSecondName("");

@@ -17,6 +17,7 @@ import { colors } from "@/design-system/tokens/colors";
 import { textFormatter } from "@/design-system/tokens/fonts";
 import { ResponseButtonIcon } from "@/features/events/components/invite/ResponseButtonIcon";
 import { formatEventAddressDisplay } from "@/services/address/eventAddress";
+import { trackInviteResponseChanged } from "@/services/analytics/events";
 import { updateResponseInDatabase } from "@/services/firebase/invite";
 import { openInMaps } from "@/services/maps/openInMaps";
 import { updateResponseNotification } from "@/services/pushNotifications";
@@ -55,6 +56,7 @@ export function EventInviteHomeScreen({
       try {
         setResponse(newResponse);
         await updateResponseInDatabase(invite, { response: newResponse });
+        trackInviteResponseChanged(newResponse);
         await updateResponseNotification(
           host,
           name,

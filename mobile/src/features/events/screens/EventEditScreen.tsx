@@ -18,7 +18,6 @@ import { IconButton } from "@/design-system/components/buttons/IconButton";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { HomeNextEvent } from "@/features/home/components/HomeNextEvent";
-import { trackEventDeleted } from "@/services/analytics/events";
 import {
   deleteEventFromDatabase,
   getEventsFromDatabase
@@ -65,7 +64,6 @@ export function EventEditScreen({ navigation, route }: EventEditScreenProps) {
     try {
       await deleteEventFromDatabase(event.id);
       await deleteEventInvitesFromDatabase(event.id);
-      trackEventDeleted();
       const { upcomingEvents } = await getEventsFromDatabase(userId);
       await createNotificationsForEvents(upcomingEvents);
     } catch (error) {

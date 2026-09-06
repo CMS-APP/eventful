@@ -25,6 +25,10 @@ import {
   mapRawPlaceAddressToFields
 } from "@/services/address/placeAddressMapping";
 import {
+  trackEventLocationSearched,
+  trackEventLocationSelected
+} from "@/services/analytics/events";
+import {
   PlaceSuggestion,
   getPlaceDetails,
   searchPlaces
@@ -122,6 +126,7 @@ export function LocationSearch({ event, setEvent }: LocationSearchProps) {
         );
         if (!cancelled) {
           setSuggestions(results);
+          trackEventLocationSearched();
         }
       } catch (error) {
         if (!cancelled) {
@@ -283,6 +288,7 @@ export function LocationSearch({ event, setEvent }: LocationSearchProps) {
       commitEventUpdate({
         address: buildSearchAddress(nextCountryCode, nextCountryName, values)
       });
+      trackEventLocationSelected();
 
       setQuery("");
       setSuggestions([]);

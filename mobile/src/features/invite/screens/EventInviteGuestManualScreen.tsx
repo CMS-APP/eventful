@@ -16,6 +16,7 @@ import { Input } from "@/design-system/components/inputs/Input";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { EventInviteUserItem } from "@/features/events/components/guest-list/EventInviteUserItem";
+import { trackInviteSent } from "@/services/analytics/events";
 import { updateEventInDatabase } from "@/services/firebase/event";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
@@ -102,6 +103,7 @@ export function EventInviteGuestManualScreen({
     }
     addGuest(newGuest);
     setNewGuest("");
+    trackInviteSent("manual");
   }, [addGuest, newGuest, checkInput]);
 
   const refreshUsers = useCallback(() => {}, []);

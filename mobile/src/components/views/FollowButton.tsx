@@ -8,10 +8,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
-import {
-  trackUserFollowed,
-  trackUserUnfollowed
-} from "@/services/analytics/events";
+import { trackUserFollowed } from "@/services/analytics/events";
 import {
   followUser,
   isFollowingUser,
@@ -43,7 +40,6 @@ export function FollowButton({
   const handleUnfollow = useCallback(async () => {
     try {
       await unFollowUser(userId, user.uid);
-      trackUserUnfollowed();
       haptics.error();
       setContactText(isFollowingMe ? "Follow Back" : "Follow");
       onFollowingChange?.(false);

@@ -11,7 +11,6 @@ import { Button } from "@/design-system/components/buttons/Button";
 import { SegmentedControl } from "@/design-system/components/buttons/SegmentedControl";
 import { Input } from "@/design-system/components/inputs/Input";
 import { colors } from "@/design-system/tokens/colors";
-import { trackFeedbackSubmitted } from "@/services/analytics/events";
 import { sendFeedbackToDatabase } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { User } from "@/types/User";
@@ -40,7 +39,6 @@ export function FeedbackScreen() {
       type,
       description
     );
-    trackFeedbackSubmitted(type);
     Alert.alert("Feedback Sent", "Thank you for your feedback!");
     navigation.goBack();
   }, [description, userId, email, name, username, type, navigation]);

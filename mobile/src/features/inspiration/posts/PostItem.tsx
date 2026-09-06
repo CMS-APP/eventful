@@ -20,6 +20,7 @@ import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
+import { trackPostLiked } from "@/services/analytics/events";
 import {
   getPostLikesCount,
   hasUserLikedPost,
@@ -96,6 +97,7 @@ export function PostItem({ post }: { post: Post }) {
       try {
         haptics.success();
         await togglePostLike(post.id, currentUserId);
+        trackPostLiked();
         setIsLiked(true);
         setLikesCount((prev) => prev + 1);
       } catch (error) {
@@ -120,6 +122,7 @@ export function PostItem({ post }: { post: Post }) {
 
     if (newLikedState) {
       haptics.success();
+      trackPostLiked();
     } else {
       haptics.error();
     }

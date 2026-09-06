@@ -17,6 +17,10 @@ import { colors } from "@/design-system/tokens/colors";
 import { EventInviteUserItem } from "@/features/events/components/guest-list/EventInviteUserItem";
 import { LinkInviteDisclaimerModal } from "@/features/invite/components/LinkInviteDisclaimerModal";
 import {
+  trackInviteLinkCopied,
+  trackInviteSent
+} from "@/services/analytics/events";
+import {
   changeEventEnabledStatus,
   updateEventInDatabase
 } from "@/services/firebase/event";
@@ -64,11 +68,13 @@ export function EventInviteGuestLinkScreen({
       id: event?.id || "",
       eventLinkEnabled: true
     });
+    trackInviteSent("link");
   }
 
   function copyUrlToClipboard() {
     const url = "https://app.eventfulapp.com/event-response/" + `${event?.id}`;
     Clipboard.setString(url);
+    trackInviteLinkCopied();
 
     Alert.alert(
       "Link Copied",

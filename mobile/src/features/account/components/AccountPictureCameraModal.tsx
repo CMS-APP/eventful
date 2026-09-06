@@ -14,6 +14,7 @@ import { Button } from "@/design-system/components/buttons/Button";
 import { ModalView } from "@/design-system/components/overlays/ModalView";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { trackAccountPictureUpdated } from "@/services/analytics/events";
 import { uploadImageAsync } from "@/services/firebase/storage";
 import { updateUserInfo } from "@/services/firebase/user";
 import {
@@ -71,6 +72,7 @@ export function AccountPictureCameraModal({
 
       await saveLocalImageToCache(processedImage.uri, "profilePicture", true);
       dispatch(setProfilePictureHash(imageHash));
+      trackAccountPictureUpdated();
 
       navigation.goBack();
     } catch (error) {

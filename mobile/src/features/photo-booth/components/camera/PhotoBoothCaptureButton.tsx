@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import { CameraActionButton } from "@/components/camera/CameraActionButton";
 import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
 import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
+import { trackPhotoBoothSessionStarted } from "@/services/analytics/events";
 
 interface PhotoBoothCaptureButtonProps {
   disabled?: boolean;
@@ -17,6 +18,9 @@ export function PhotoBoothCaptureButton({
   const { isCameraReady, setPhotos } = usePhotoBoothCamera();
 
   const handlePress = useCallback(() => {
+    if (!isBoothRunning) {
+      trackPhotoBoothSessionStarted();
+    }
     setIsBoothRunning(!isBoothRunning);
     if (!redo) {
       setPhotos([]);

@@ -5,6 +5,7 @@ import {
   faCoins,
   faCommentDots,
   faFilter,
+  faListOl,
   faUsers
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,7 +27,10 @@ import Loading from "@/components/Loading";
 import UnauthorizedAccess from "@/components/UnauthorizedAccess";
 import { useUser } from "@/contexts/UserContext";
 import {
+  type FeatureUsageDomain,
+  type FeatureUsageStat,
   type FunnelStep,
+  getFeatureUsageStats,
   getFunnelStats,
   getRealtimeActiveUsers
 } from "@/lib/analytics";
@@ -310,6 +314,61 @@ function FunnelChart({
   );
 }
 
+function FeatureUsageChart({
+  features,
+  loading
+}: {
+  features: FeatureUsageStat[];
+  loading: boolean;
+}) {
+  if (loading) {
+    return (
+      <div className="chart-card-loading" role="status" aria-live="polite">
+        <span className="chart-card-spinner" aria-hidden />
+        <span>Loading...</span>
+      </div>
+    );
+  }
+
+  if (features.length === 0) {
+    return (
+      <p className="chart-card-empty">
+        No feature usage data yet from Firebase Analytics for this range.
+      </p>
+    );
+  }
+
+  const maxCount = Math.max(...features.map((feature) => feature.count), 1);
+
+  return (
+    <div className="feature-usage-list">
+      {features.map((feature) => (
+        <div
+          className="feature-usage-row"
+          key={feature.event}
+          title={`${feature.count.toLocaleString()} uses · ${feature.users.toLocaleString()} users`}
+        >
+          <span className="feature-usage-label">{feature.label}</span>
+          <div className="feature-usage-row-bottom">
+            <div className="feature-usage-bar-track">
+              <div
+                className="feature-usage-bar-fill"
+                style={{
+                  width: `${Math.max((feature.count / maxCount) * 100, 4)}%`,
+                  backgroundColor: GROWTH_COLOR
+                }}
+              />
+            </div>
+            <span className="feature-usage-count">
+              {feature.count.toLocaleString()}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 const ACTIVE_USER_METRICS = [
   { key: "dau", label: "Daily active users" },
   { key: "mau", label: "Monthly active users" }
@@ -333,10 +392,12 @@ export default function Stats() {
     null
   );
   const [funnelSteps, setFunnelSteps] = useState<FunnelStep[]>([]);
+  const [featureUsage, setFeatureUsage] = useState<FeatureUsageDomain[]>([]);
   const [realtimeUsers, setRealtimeUsers] = useState<number | null>(null);
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [loadingSubscriptions, setLoadingSubscriptions] = useState(true);
   const [loadingFunnel, setLoadingFunnel] = useState(true);
+  const [loadingFeatureUsage, setLoadingFeatureUsage] = useState(true);
 
   const totalUserWeeklyHistory = useMemo(() => {
     return totalUserHistory.filter((point) => {
@@ -361,6 +422,12 @@ export default function Stats() {
     if (dates.length === 0) return null;
     return dates.sort().at(-1) ?? null;
   }, [totalUserHistory, activeUserHistory]);
+
+  const sortedFeatureUsage = useMemo(() => {
+    return [...featureUsage].sort(
+      (a, b) => b.features.length - a.features.length
+    );
+  }, [featureUsage]);
 
   useEffect(() => {
     async function verifyAdmin() {
@@ -442,10 +509,23 @@ export default function Stats() {
       }
     }
 
+    async function getFeatureUsageData() {
+      try {
+        const idToken = await user!.getIdToken();
+        const features = await getFeatureUsageStats(idToken, 30);
+        setFeatureUsage(features);
+      } catch (error) {
+        console.error("Error fetching feature usage stats:", error);
+      } finally {
+        setLoadingFeatureUsage(false);
+      }
+    }
+
     getUserStats();
     getSubscriptionStats();
     getFunnelData();
     getRealtimeUsers();
+    getFeatureUsageData();
 
     const realtimeInterval = setInterval(getRealtimeUsers, 60_000);
     return () => clearInterval(realtimeInterval);
@@ -616,6 +696,37 @@ export default function Stats() {
             </h2>
             <FunnelChart steps={funnelSteps} loading={loadingFunnel} />
           </section>
+        </div>
+
+        <div className="charts-section">
+          <h2 className="charts-section-title">Feature usage</h2>
+          <p className="charts-section-subtitle">
+            Most-used actions by feature area · last 30 days
+          </p>
+          <div className="charts-grid">
+            {loadingFeatureUsage ? (
+              <section className="chart-card chart-card-full">
+                <h2 className="chart-card-title">
+                  <FontAwesomeIcon icon={faListOl} />
+                  Top features
+                </h2>
+                <FeatureUsageChart features={[]} loading />
+              </section>
+            ) : (
+              sortedFeatureUsage.map((domain) => (
+                <section className="chart-card" key={domain.id}>
+                  <h2 className="chart-card-title">
+                    <FontAwesomeIcon icon={faListOl} />
+                    {domain.label}
+                  </h2>
+                  <FeatureUsageChart
+                    features={domain.features}
+                    loading={false}
+                  />
+                </section>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </main>

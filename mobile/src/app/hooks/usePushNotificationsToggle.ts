@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { useCallback } from "react";
 
+import { trackSettingsNotificationsToggled } from "@/services/analytics/events";
 import { removeExpoToken, updateUserInfo } from "@/services/firebase/user";
 import { registerForPushNotificationsAsync } from "@/services/pushNotifications";
 import { UserState, setPushNotifications } from "@/store/UserSlice";
@@ -24,6 +25,7 @@ export function usePushNotificationsToggle() {
           updateUserInfo(userId, { pushNotifications: false })
         ]);
         dispatch(setPushNotifications(false));
+        trackSettingsNotificationsToggled("push", false);
         return;
       }
 
@@ -37,6 +39,7 @@ export function usePushNotificationsToggle() {
         pushNotifications: true
       });
       dispatch(setPushNotifications(true));
+      trackSettingsNotificationsToggled("push", true);
     } catch (error) {
       log(`Error Toggling Push Notifications: ${error}`, "error");
       showErrorToast("Error Updating Notifications");

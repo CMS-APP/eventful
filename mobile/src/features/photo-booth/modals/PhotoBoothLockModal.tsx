@@ -7,6 +7,7 @@ import { Input } from "@/design-system/components/inputs/Input";
 import { ModalView } from "@/design-system/components/overlays/ModalView";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { trackPhotoBoothLocked } from "@/services/analytics/events";
 
 interface PhotoBoothLockModalProps {
   setLocked: (locked: boolean) => void;
@@ -39,6 +40,7 @@ export function PhotoBoothLockModal({
     setInput("");
     setLocked(true);
     setPresentModal(false);
+    trackPhotoBoothLocked();
   }
 
   useEffect(() => {

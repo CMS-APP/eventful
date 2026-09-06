@@ -5,6 +5,7 @@ import { View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 
 import { EventsStackParamList } from "@/app/navigation";
+import { trackEventUpdated } from "@/services/analytics/events";
 import { updateEventInDatabase } from "@/services/firebase/event";
 
 import { EventBudget } from "../budget/EventBudget";
@@ -24,6 +25,7 @@ export function EventOutfitEdit({ route }: EventOutfitEditProps) {
       setEvent((prevEvent) => {
         const updatedEvent = { ...prevEvent, outfitItems };
         updateEventInDatabase(updatedEvent);
+        trackEventUpdated();
         return updatedEvent;
       });
       prevOutfitItemsRef.current = outfitItems;

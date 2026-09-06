@@ -354,6 +354,56 @@
   border-radius: 999px;
 }
 
+.feature-usage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.feature-usage-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.feature-usage-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-poppins-regular);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feature-usage-row-bottom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.feature-usage-bar-track {
+  flex: 1;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.feature-usage-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.feature-usage-count {
+  flex-shrink: 0;
+  min-width: 40px;
+  color: var(--color-white);
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: var(--font-poppins-medium);
+  text-align: right;
+}
+
 .chart-card-empty {
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.9rem;
@@ -457,5 +507,9 @@
 
   .funnel-vertical {
     display: flex;
+  }
+
+  .feature-usage-count {
+    font-size: 0.75rem;
   }
 }

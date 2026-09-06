@@ -4,6 +4,7 @@ import { StyleSheet, View } from "react-native";
 
 import { colors } from "@/design-system/tokens/colors";
 import { TIMELINE_TEXT_LIST } from "@/features/events/constants";
+import { trackEventTimelineItemToggled } from "@/services/analytics/events";
 import { Event } from "@/types/Event";
 
 import { TimelineBottom } from "./components/timeline/TimelineBottom";
@@ -53,6 +54,7 @@ export function EventTimelineEdit({ event, setEvent }: EventTimelineEditProps) {
       const updatedList = [...timelineList];
       updatedList[index] = !updatedList[index];
       setTimelineList(updatedList);
+      trackEventTimelineItemToggled(updatedList[index]);
     },
     [timelineList]
   );

@@ -17,6 +17,7 @@ import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
+import { trackEventBudgetItemAdded } from "@/services/analytics/events";
 import { UserState } from "@/store/UserSlice";
 import { BudgetItem } from "@/types/BudgetItem";
 
@@ -66,9 +67,10 @@ export function EventBudgetList({
       }
     ]);
 
+    trackEventBudgetItemAdded(title);
     setItemName("");
     setItemCost("");
-  }, [itemName, itemCost, items, setItems]);
+  }, [itemName, itemCost, items, setItems, title]);
 
   const handleAddPress = useCallback(() => {
     addItem();

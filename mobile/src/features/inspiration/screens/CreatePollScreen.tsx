@@ -16,7 +16,6 @@ import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
-import { trackPollCreated } from "@/services/analytics/events";
 import { createPollInDatabase } from "@/services/firebase/inspiration";
 import { showOptionsAlert } from "@/utils/alertModal";
 
@@ -50,7 +49,6 @@ export function CreatePollScreen({ navigation }: CreatePollScreenProps) {
         text: "Create Poll",
         onPress: () => {
           createPollInDatabase(pollTitle, pollSubtitle, pollOptions);
-          trackPollCreated();
           navigation.goBack();
         }
       }
