@@ -46,7 +46,9 @@ const styles = StyleSheet.create({
   crownBadge: {
     alignItems: "center",
     backgroundColor: colors.white,
+    borderColor: colors.lightGray,
     borderRadius: CROWN_BADGE_SIZE / 2,
+    borderWidth: 0.5,
     height: CROWN_BADGE_SIZE,
     justifyContent: "center",
     position: "absolute",
