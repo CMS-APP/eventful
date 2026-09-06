@@ -286,6 +286,12 @@
   background-color: var(--color-primary-light);
 }
 
+.event-response-submit.event-response-submit--loading {
+  background-color: var(--primary);
+  color: #ffffff;
+  cursor: default;
+}
+
 .event-response-submit-spinner {
   width: 15px;
   height: 15px;

@@ -322,7 +322,7 @@ export default function EventResponse() {
 
               <button
                 type="button"
-                className="event-response-submit"
+                className={`event-response-submit${isLoading ? " event-response-submit--loading" : ""}`}
                 disabled={!canSubmit}
                 onClick={sendResponse}
               >
