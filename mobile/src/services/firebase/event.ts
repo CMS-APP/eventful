@@ -10,7 +10,6 @@ import { isActiveEvent, parseDatabaseDate } from "@/utils/date";
 import { log } from "@/utils/logging";
 
 import { deleteDocument } from "../api/delete";
-import { incrementEventCount } from "./backend";
 
 export async function getEventInfo(event: Event): Promise<Event | null> {
   log("Getting event info from database", "debug");
@@ -22,7 +21,6 @@ export async function createEventInDatabase(data: Event, user: any) {
   log("Creating event in database", "debug");
   await setDocument(data, API_COLLECTIONS.EVENT, data.id);
   await createNotificationForEvent(data);
-  incrementEventCount(user);
 }
 
 export async function updateEventInDatabase(event: Partial<Event>) {

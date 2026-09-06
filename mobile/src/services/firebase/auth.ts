@@ -24,7 +24,6 @@ import { clearStorage } from "@/store/UserSlice";
 import { log } from "@/utils/logging";
 
 import { setAnalyticsUserId } from "../analytics/analytics";
-import { incrementUserCount } from "./backend";
 import { removeExpoToken } from "./user";
 
 export async function handleSignIn(
@@ -81,7 +80,6 @@ export async function handleSignUp(
       email,
       password
     );
-    incrementUserCount(userCredential.user);
     trackAuthSignUp();
     return userCredential.user;
   } catch (error) {
