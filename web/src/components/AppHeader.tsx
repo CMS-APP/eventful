@@ -38,50 +38,52 @@ export default function AppHeader({ authenticated = false }: AppHeaderProps) {
 
   return (
     <header className="app-header">
-      <Link href={accountHref} className="app-header-logo" aria-label="Home">
-        <Image
-          src="/icon.png"
-          alt=""
-          width={28}
-          height={28}
-          className="app-header-logo-img"
-          priority
-        />
-      </Link>
-
-      <nav className="app-header-nav">
-        <Link
-          href={accountHref}
-          className={`app-header-link${accountActive ? " is-active" : ""}`}
-          title="Account"
-        >
-          <FontAwesomeIcon icon={faUser} />
-          <span>Account</span>
+      <div className="app-header-left">
+        <Link href={accountHref} className="app-header-logo" aria-label="Home">
+          <Image
+            src="/icon.png"
+            alt=""
+            width={28}
+            height={28}
+            className="app-header-logo-img"
+            priority
+          />
         </Link>
 
-        {authenticated && isAdmin && (
+        <nav className="app-header-nav">
           <Link
-            href="/stats"
-            className={`app-header-link${pathname.startsWith("/stats") ? " is-active" : ""}`}
-            title="Admin"
+            href={accountHref}
+            className={`app-header-link${accountActive ? " is-active" : ""}`}
+            title="Account"
           >
-            <FontAwesomeIcon icon={faChartLine} />
-            <span>Admin</span>
+            <FontAwesomeIcon icon={faUser} />
+            <span>Account</span>
           </Link>
-        )}
 
-        {authenticated && (
-          <button
-            type="button"
-            className="app-header-link app-header-logout"
-            onClick={logout}
-            title="Log out"
-          >
-            <FontAwesomeIcon icon={faRightFromBracket} />
-            <span>Log out</span>
-          </button>
-        )}
-      </nav>
+          {authenticated && isAdmin && (
+            <Link
+              href="/stats"
+              className={`app-header-link${pathname.startsWith("/stats") ? " is-active" : ""}`}
+              title="Admin"
+            >
+              <FontAwesomeIcon icon={faChartLine} />
+              <span>Admin</span>
+            </Link>
+          )}
+        </nav>
+      </div>
+
+      {authenticated && (
+        <button
+          type="button"
+          className="app-header-link app-header-logout"
+          onClick={logout}
+          title="Log out"
+        >
+          <FontAwesomeIcon icon={faRightFromBracket} />
+          <span>Log out</span>
+        </button>
+      )}
     </header>
   );
 }
