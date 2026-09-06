@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
     marginTop: 12
   },
   usersContainer: {
+    marginBottom: 24,
     marginTop: 12,
     paddingHorizontal: 16
   },
