@@ -3,6 +3,7 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
@@ -25,7 +26,7 @@ export function SpotifyPlaylistItem({
 
   return (
     <TouchableOpacity onPress={onPress} hitSlop={getHitSlop("medium")}>
-      <View style={[padding.largeWidget, styles.container]}>
+      <View style={[padding.mediumWidget, styles.container]}>
         {playlist?.icon ? (
           <Image
             source={{ uri: playlist?.icon }}
@@ -58,7 +59,7 @@ export function SpotifyPlaylistItem({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.lightGray,
+    ...card.medium,
     flexDirection: "row",
     gap: 12
   },

@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import { StyleSheet, Switch, TouchableOpacity, View } from "react-native";
 
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { haptics } from "@/utils/haptics";
@@ -26,13 +27,19 @@ export function SwitchButton({
   }, [onChange]);
 
   const textColor = dark ? colors.white : colors.black;
-  const backgroundColor = dark ? colors.primaryTint3 : colors.lightGray;
+  const backgroundColor = dark ? colors.primaryTint3 : colors.white;
   const trackColor = dark ? colors.primaryTint3 : colors.primary;
 
   return (
     <TouchableOpacity onPress={handlePress} hitSlop={getHitSlop("medium")}>
       <View style={styles.switchButton}>
-        <View style={[styles.switchContainer, { backgroundColor }]}>
+        <View
+          style={[
+            styles.switchContainer,
+            !dark && card.small,
+            { backgroundColor }
+          ]}
+        >
           <Text type="body" style={{ color: textColor }}>
             {title}
           </Text>
@@ -58,7 +65,6 @@ const styles = StyleSheet.create({
     gap: 12
   },
   switchContainer: {
-    backgroundColor: colors.primaryTint3,
     borderRadius: 12,
     flex: 1,
     paddingHorizontal: 12,

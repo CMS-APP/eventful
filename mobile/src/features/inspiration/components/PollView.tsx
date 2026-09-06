@@ -11,6 +11,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { HomeStackParamList } from "@/app/navigation";
 import { IconButton } from "@/design-system/components/buttons/IconButton";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import {
   getPollInDatabase,
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     gap: 12
   },
   contentContainer: {
-    backgroundColor: colors.white,
+    ...card.medium,
     borderRadius: 16,
     padding: 16
   },

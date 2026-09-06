@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { PhotoBoothStackNavigation } from "@/app/navigation";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 
@@ -41,6 +42,7 @@ export function ColorButton({ color, type }: ColorButtonProps) {
 
 const styles = StyleSheet.create({
   colorBox: {
+    ...card.small,
     borderColor: colors.lightGray,
     borderRadius: 12,
     borderWidth: 2,

@@ -1,6 +1,5 @@
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
@@ -15,10 +14,6 @@ export function CustomiseCollage() {
 
   return (
     <View style={styles.container}>
-      <Text type="subHeader" color={colors.white}>
-        Photo Templates
-      </Text>
-
       <View style={styles.collageContainer}>
         <CustomiseCollageItem
           isSelected={collageStyle === "square"}

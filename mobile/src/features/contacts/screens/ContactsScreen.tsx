@@ -9,6 +9,7 @@ import { haptics } from "@/utils/haptics";
 
 import { ContactsInviteInfo } from "../components/ContactsInviteInfo";
 import { ContactsSearch } from "../components/ContactsSearch";
+import { SuggestedFollows } from "../components/SuggestedFollows";
 
 interface ContactsScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;
@@ -38,8 +39,9 @@ export function ContactsScreen({ navigation }: ContactsScreenProps) {
       }}
     >
       <View style={styles.searchContainer}>
-        <ContactsSearch buttonAction={openSearch} />
+        <ContactsSearch buttonAction={openSearch} showSeparator={true} />
       </View>
+      <SuggestedFollows />
       <ContactsInviteInfo />
     </Screen>
   );
@@ -47,7 +49,7 @@ export function ContactsScreen({ navigation }: ContactsScreenProps) {
 
 const styles = StyleSheet.create({
   searchContainer: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 0,
     paddingTop: 52
   }
 });

@@ -140,7 +140,7 @@ export function EventDateTimeRangeEditor({
         <View style={styles.row}>
           <Button
             size="small"
-            color={dark ? colors.primaryTint3 : colors.lightGray}
+            color={dark ? colors.primaryTint3 : colors.white}
             textColor={dark ? colors.white : colors.black}
             text={formatDate(startDate)}
             onPress={handleDatePress}
@@ -150,7 +150,7 @@ export function EventDateTimeRangeEditor({
 
           <Button
             size="small"
-            color={dark ? colors.primaryTint3 : colors.lightGray}
+            color={dark ? colors.primaryTint3 : colors.white}
             textColor={dark ? colors.white : colors.black}
             text={formatTime(startDate)}
             onPress={handleTimePress}
@@ -170,7 +170,7 @@ export function EventDateTimeRangeEditor({
           <View style={styles.row}>
             <Button
               size="small"
-              color={dark ? colors.primaryTint3 : colors.lightGray}
+              color={dark ? colors.primaryTint3 : colors.white}
               textColor={dark ? colors.white : colors.black}
               text={formatDate(endDate)}
               onPress={handleEndDatePress}
@@ -180,7 +180,7 @@ export function EventDateTimeRangeEditor({
 
             <Button
               size="small"
-              color={dark ? colors.primaryTint3 : colors.lightGray}
+              color={dark ? colors.primaryTint3 : colors.white}
               textColor={dark ? colors.white : colors.black}
               text={formatTime(endDate)}
               onPress={handleEndTimePress}

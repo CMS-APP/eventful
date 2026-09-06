@@ -7,7 +7,7 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/text/Text";
-import { colors } from "@/design-system/tokens/colors";
+import { card } from "@/design-system/tokens/card";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
 import { trackSpotifyDisconnected } from "@/services/analytics/events";
@@ -81,7 +81,7 @@ export function SpotifySignInButton({
       onPress={signedIn ? signOutOfSpotifyAlert : signIntoSpotify}
       hitSlop={getHitSlop("medium")}
     >
-      <View style={[padding.largeWidget, styles.container]}>
+      <View style={[padding.mediumWidget, styles.container]}>
         <View style={styles.imageContainer}>
           <Image
             source={require("@/assets/logos/spotify-logo-green.png")}
@@ -111,8 +111,8 @@ const styles = StyleSheet.create({
     width: 30
   },
   container: {
+    ...card.medium,
     alignItems: "center",
-    backgroundColor: colors.lightGray,
     flexDirection: "row",
     gap: 12,
     marginBottom: 12

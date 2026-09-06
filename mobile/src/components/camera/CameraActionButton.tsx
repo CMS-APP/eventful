@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     minHeight: 50,
     padding: 12,
-    ...shadows.buttonShadow
+    ...shadows.mediumShadow
   },
   disabled: {
     opacity: 0.5

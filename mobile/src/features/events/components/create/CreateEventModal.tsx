@@ -96,7 +96,7 @@ export function CreateEventModal({
         placeholder="Event Name"
         value={eventName}
         onChangeText={setEventName}
-        backgroundColor={colors.lightGray}
+        backgroundColor={colors.white}
         textColor={colors.black}
       />
 

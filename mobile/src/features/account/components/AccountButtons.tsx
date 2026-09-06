@@ -58,7 +58,7 @@ export function AccountButtons() {
           routes: [{ name: "Auth" }]
         })
       );
-    }, 3000);
+    }, 1000);
   }
 
   return (

@@ -12,6 +12,7 @@ import {
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 
@@ -24,6 +25,7 @@ interface InputProps {
   onChangeText: (text: string) => void;
   backgroundColor?: string;
   textColor?: string;
+  titleColor?: string | null;
   dark?: boolean;
   multilineProps?: {
     numberOfLines?: number;
@@ -46,6 +48,7 @@ export function Input({
   onChangeText,
   backgroundColor = colors.primaryTint3,
   textColor = colors.white,
+  titleColor = null,
   dark = false,
   multilineProps,
   keyboardType = "default",
@@ -63,17 +66,16 @@ export function Input({
   const isEmailInput = keyboardType === "email-address";
   const resolvedAutoCapitalize =
     autoCapitalize ?? (password || isEmailInput ? "none" : "sentences");
-  const resolvedAutoCorrect =
-    autoCorrect ?? !(password || isEmailInput);
+  const resolvedAutoCorrect = autoCorrect ?? !(password || isEmailInput);
   const resolvedAutoComplete =
-    autoComplete ??
-    (password ? "password" : isEmailInput ? "email" : "off");
+    autoComplete ?? (password ? "password" : isEmailInput ? "email" : "off");
   const resolvedTextContentType =
     textContentType ??
     (password ? "password" : isEmailInput ? "emailAddress" : undefined);
 
   const inputContainerStyle = {
     ...styles.inputContainer,
+    ...(!dark && card.small),
     backgroundColor: backgroundColor
   };
 
@@ -85,6 +87,12 @@ export function Input({
     textAlignVertical: multilineProps ? ("top" as const) : undefined
   };
 
+  const titleTextColor = titleColor
+    ? titleColor
+    : dark
+      ? colors.white
+      : colors.black;
+
   return (
     <View
       style={[
@@ -93,7 +101,7 @@ export function Input({
         !editable && styles.noEditable
       ]}
     >
-      <Text type="body" color={dark ? colors.white : colors.black}>
+      <Text type="body" color={titleTextColor}>
         {placeholder}
       </Text>
 

@@ -12,6 +12,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { AppStackParamList } from "@/app/navigation";
 import { UserPicture } from "@/components/views/UserPicture";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { getUserInfo } from "@/services/firebase/user";
@@ -129,8 +130,7 @@ export function ContactInviteItem({ eventInvite }: ContactInviteItemProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.lightGray,
-    borderRadius: 24,
+    ...card.medium,
     gap: 6,
     padding: 12
   },

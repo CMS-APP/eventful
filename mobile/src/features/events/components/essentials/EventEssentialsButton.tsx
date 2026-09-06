@@ -9,6 +9,7 @@ import {
 } from "react-native";
 
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
@@ -48,8 +49,8 @@ export function EventEssentialsButton({
 
 const styles = StyleSheet.create({
   button: {
+    ...card.small,
     ...padding.mediumWidget,
-    backgroundColor: colors.lightGray,
     gap: 12,
     padding: 12
   },

@@ -56,8 +56,7 @@ export function ForgotPasswordScreen({
     <View style={styles.container}>
       <FlatHeader
         title="Forgot Password"
-        dark
-        backgroundColor={colors.primary}
+        backgroundColor={colors.white}
         backAction
       />
 
@@ -65,10 +64,10 @@ export function ForgotPasswordScreen({
         tabBarPresent={false}
         handleScroll={() => {}}
         _handleScroll={() => {}}
-        backgroundColor={colors.primary}
+        backgroundColor={colors.white}
       >
         <View style={styles.formContainer}>
-          <Text type="body" color={colors.white}>
+          <Text type="body" color={colors.black}>
             Enter your email address and we will send you a link to reset your
             password.
           </Text>
@@ -83,7 +82,6 @@ export function ForgotPasswordScreen({
               autoCorrect={false}
               backgroundColor={colors.white}
               textColor={colors.black}
-              dark
             />
 
             {error && (
@@ -95,7 +93,7 @@ export function ForgotPasswordScreen({
 
           <Button
             text="Send Reset Link"
-            color={colors.primaryTint}
+            color={colors.primary}
             textColor={colors.white}
             onPress={handleSubmit}
             leadingIcon="paper-plane"
@@ -109,15 +107,14 @@ export function ForgotPasswordScreen({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.white,
     flex: 1,
     paddingTop: 24
   },
   formContainer: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.white,
     gap: 12,
-    paddingHorizontal: 24,
-    paddingTop: 24
+    paddingHorizontal: 24
   },
   inputContainer: {
     gap: 4

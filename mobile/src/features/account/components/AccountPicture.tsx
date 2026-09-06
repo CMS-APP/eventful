@@ -15,6 +15,7 @@ import { useCameraPermissions } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 
 import { AllStackParamList } from "@/app/navigation";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import {
@@ -212,9 +213,9 @@ export function AccountPicture() {
 
 const styles = StyleSheet.create({
   image: {
+    ...card.small,
     alignItems: "center",
     alignSelf: "center",
-    backgroundColor: colors.white,
     borderRadius: 120,
     height: 100,
     justifyContent: "center",

@@ -14,6 +14,7 @@ import {
 import { Screen } from "@/components/screen/Screen";
 import { Button } from "@/design-system/components/buttons/Button";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
@@ -105,8 +106,7 @@ export function PhotoBoothColorPicker() {
 
 const styles = StyleSheet.create({
   colorPickerWrapper: {
-    backgroundColor: colors.lightGray,
-    borderRadius: 12,
+    ...card.small,
     height: 350,
     justifyContent: "center",
     marginHorizontal: 12,

@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { haptics } from "@/utils/haptics";
@@ -64,6 +65,7 @@ export function PhotoBoothOpenCard({
 
 const styles = StyleSheet.create({
   container: {
+    ...card.small,
     alignItems: "center",
     borderRadius: 24,
     flexDirection: "row",

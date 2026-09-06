@@ -97,6 +97,6 @@ const styles = StyleSheet.create({
   feedContainer: {
     gap: 12,
     marginHorizontal: 24,
-    marginVertical: 12
+    marginTop: 12
   }
 });

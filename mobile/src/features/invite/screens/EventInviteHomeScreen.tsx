@@ -2,8 +2,9 @@ import { useSelector } from "react-redux";
 
 import { useCallback, useState } from "react";
 
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
 
+import { useFocusEffect } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { Entypo } from "@expo/vector-icons";
@@ -11,6 +12,7 @@ import { Entypo } from "@expo/vector-icons";
 import { EventInviteStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { textFormatter } from "@/design-system/tokens/fonts";
 import { ResponseButtonIcon } from "@/features/events/components/invite/ResponseButtonIcon";
@@ -37,6 +39,13 @@ export function EventInviteHomeScreen({
 }: EventInviteHomeScreenProps) {
   const { invite, event, host } = route.params;
   const name = useSelector((state: UserState) => state.name);
+
+  useFocusEffect(
+    useCallback(() => {
+      StatusBar.setBarStyle("dark-content");
+      return () => StatusBar.setBarStyle("light-content");
+    }, [])
+  );
   const username = useSelector((state: UserState) => state.username);
   const [response, setResponse] = useState(invite.response);
   const address = formatEventAddressDisplay(event.address);
@@ -198,9 +207,8 @@ const styles = StyleSheet.create({
     padding: 12
   },
   dateContainer: {
+    ...card.medium,
     alignItems: "center",
-    backgroundColor: colors.lightGray,
-    borderRadius: 24,
     flexDirection: "row",
     gap: 60,
     justifyContent: "center",

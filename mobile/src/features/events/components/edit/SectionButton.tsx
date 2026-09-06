@@ -5,6 +5,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { haptics } from "@/utils/haptics";
 
@@ -49,6 +50,7 @@ export function SectionButton({
 
 const styles = StyleSheet.create({
   button: {
+    ...card.small,
     alignItems: "center",
     borderRadius: 16,
     justifyContent: "center",

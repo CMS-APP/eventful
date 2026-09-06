@@ -29,9 +29,9 @@ export function EventMusicEdit({ event, setEvent }: EventMusicEditProps) {
         placeholder="Music"
         value={event.music}
         onChangeText={setEventMusic}
-        dark
-        backgroundColor={colors.lightGray}
+        backgroundColor={colors.white}
         textColor={colors.black}
+        titleColor={colors.white}
         multilineProps={{ numberOfLines: 10, height: 100 }}
       />
 

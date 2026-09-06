@@ -8,6 +8,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { AccountStackParamList } from "@/app/navigation";
 import { FollowButton } from "@/components/views/FollowButton";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
@@ -75,7 +76,7 @@ export function HomeFollowsItem({ notification }: HomeFollowsItemProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.lightGray,
+    ...card.small,
     flexDirection: "row",
     gap: 12
   },

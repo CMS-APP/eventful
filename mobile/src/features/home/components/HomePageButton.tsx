@@ -11,6 +11,7 @@ import {
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { haptics } from "@/utils/haptics";
 
@@ -57,6 +58,7 @@ export function HomePageButton({
 
 const styles = StyleSheet.create({
   container: {
+    ...card.small,
     alignItems: "center",
     borderRadius: 24,
     gap: 12,

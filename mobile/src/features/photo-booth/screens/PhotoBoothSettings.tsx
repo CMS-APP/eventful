@@ -124,7 +124,7 @@ export function PhotoBoothSettings() {
           value={timerDurationLocal.toString()}
           onChangeText={(text) => setTimerDurationLocal(text)}
           keyboardType="number-pad"
-          backgroundColor={colors.lightGray}
+          backgroundColor={colors.white}
           textColor={colors.black}
         />
       </View>

@@ -7,6 +7,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
@@ -197,8 +198,7 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   container: {
-    backgroundColor: colors.lightGray,
-    borderRadius: 24,
+    ...card.medium,
     flex: 1,
     padding: 20
   },

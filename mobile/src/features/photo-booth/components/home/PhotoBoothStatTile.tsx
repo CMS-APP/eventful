@@ -1,6 +1,7 @@
 import { StyleSheet, View } from "react-native";
 
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 
 interface PhotoBoothStatTileProps {
@@ -23,8 +24,8 @@ export function PhotoBoothStatTile({ value, label }: PhotoBoothStatTileProps) {
 
 const styles = StyleSheet.create({
   container: {
+    ...card.small,
     alignItems: "center",
-    backgroundColor: colors.lightGray,
     borderRadius: 20,
     flex: 1,
     gap: 4,

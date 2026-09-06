@@ -4,15 +4,23 @@ import { colors } from "@/design-system/tokens/colors";
 
 interface DividerProps {
   dark?: boolean;
+  color?: string;
 }
 
-export function Divider({ dark = false }: DividerProps) {
-  return <View style={[styles.divider, dark && styles.dividerDark]} />;
+export function Divider({ dark = false, color = colors.gray }: DividerProps) {
+  return (
+    <View
+      style={[
+        styles.divider,
+        dark && styles.dividerDark,
+        { backgroundColor: color }
+      ]}
+    />
+  );
 }
 
 const styles = StyleSheet.create({
   divider: {
-    backgroundColor: colors.gray,
     height: 1
   },
   dividerDark: {

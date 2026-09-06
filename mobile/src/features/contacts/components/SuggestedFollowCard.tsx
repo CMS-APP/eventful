@@ -14,33 +14,25 @@ import { Text } from "@/design-system/components/text/Text";
 import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
-import { padding } from "@/design-system/tokens/padding";
+import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import { getUserInfo } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { User } from "@/types/User";
 
-import { ProfilePicture } from "./ProfilePicture";
-
-interface ProfileButtonProps {
+interface SuggestedFollowCardProps {
   uid: string;
 }
 
-export function ProfileButton({ uid }: ProfileButtonProps) {
+export function SuggestedFollowCard({ uid }: SuggestedFollowCardProps) {
   const [user, setUser] = useState<User | null>(null);
   const userId = useSelector((state: UserState) => state.uid);
   const navigation = useNavigation() as StackNavigationProp<HomeStackParamList>;
 
-  async function fetchUser() {
-    const user = await getUserInfo(uid);
-    setUser(user);
-  }
-
   useEffect(() => {
-    fetchUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getUserInfo(uid).then(setUser);
   }, [uid]);
 
-  const handleActionPress = useCallback(() => {
+  const handlePress = useCallback(() => {
     if (user) {
       navigation.navigate("Profile", {
         screen: "ProfileView",
@@ -50,25 +42,34 @@ export function ProfileButton({ uid }: ProfileButtonProps) {
   }, [user, navigation]);
 
   if (!user) {
-    return <ActivityIndicator size="small" color={colors.secondary} />;
+    return (
+      <View style={[styles.container, styles.loadingContainer]}>
+        <ActivityIndicator size="small" color={colors.secondary} />
+      </View>
+    );
   }
 
   return (
     <TouchableOpacity
-      onPress={handleActionPress}
+      onPress={handlePress}
       hitSlop={getHitSlop("medium")}
+      style={styles.container}
     >
-      <View style={[padding.mediumWidget, styles.container]}>
-        <ProfilePicture user={user} size={40} />
-        <View style={styles.contentContainer}>
-          <Text type="body">{user.name}</Text>
-          <Text type="body" style={styles.username}>
-            {user.username}
-          </Text>
-        </View>
-
-        {user.uid !== userId && <FollowButton user={user} />}
+      <ProfilePicture user={user} size={36} />
+      <View style={styles.nameContainer}>
+        <Text type="body" numberOfLines={1} style={styles.name}>
+          {user.name}
+        </Text>
+        <Text type="caption" numberOfLines={1} style={styles.username}>
+          {user.username}
+        </Text>
       </View>
+
+      {user.uid !== userId && (
+        <View style={styles.followButtonWrapper}>
+          <FollowButton user={user} />
+        </View>
+      )}
     </TouchableOpacity>
   );
 }
@@ -76,14 +77,30 @@ export function ProfileButton({ uid }: ProfileButtonProps) {
 const styles = StyleSheet.create({
   container: {
     ...card.small,
-    flexDirection: "row",
-    gap: 12
+    alignItems: "center",
+    gap: 8,
+    padding: 12,
+    width: 132
   },
-  contentContainer: {
-    alignItems: "flex-start",
-    flex: 1
+  followButtonWrapper: {
+    width: "100%"
+  },
+  loadingContainer: {
+    height: 190,
+    justifyContent: "center"
+  },
+  name: {
+    textAlign: "center",
+    width: "100%"
+  },
+  nameContainer: {
+    alignItems: "center",
+    gap: 0,
+    width: "100%"
   },
   username: {
-    color: colors.gray
+    color: colors.gray,
+    textAlign: "center",
+    width: "100%"
   }
 });

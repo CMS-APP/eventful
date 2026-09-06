@@ -13,6 +13,7 @@ import { PanSnapScrollHint } from "@/app/context/panSnap/PanSnapScrollHint";
 import { useAppDimensions } from "@/app/hooks/useAppDimensions";
 import { Screen } from "@/components/screen/Screen";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
@@ -152,9 +153,8 @@ const styles = StyleSheet.create({
     shadowRadius: 6
   },
   redoContainer: {
+    ...card.medium,
     alignItems: "center",
-    backgroundColor: colors.lightGray,
-    borderRadius: 16,
     flexDirection: "column",
     gap: 8,
     marginHorizontal: 24,

@@ -79,8 +79,8 @@ export function AlertModal({
           {cancelButton ? (
             <Button
               text={cancelButton.text}
-              color={colors.primaryTint3}
-              textColor={colors.white}
+              color={colors.white}
+              textColor={colors.black}
               onPress={() => handlePress(cancelButton)}
             />
           ) : null}
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     marginTop: 4
   },
   sheet: {
-    ...shadows.buttonShadow,
+    ...shadows.mediumShadow,
     backgroundColor: colors.primary,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,

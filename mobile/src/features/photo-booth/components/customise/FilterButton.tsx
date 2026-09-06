@@ -3,6 +3,7 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { FilterWrapper } from "@/features/photo-booth/components/customise/FilterWrapper";
@@ -71,8 +72,8 @@ export function FilterButton({
 
 const styles = StyleSheet.create({
   button: {
+    ...card.small,
     alignItems: "center",
-    backgroundColor: colors.white,
     borderColor: colors.white,
     borderRadius: 6,
     borderWidth: 3,

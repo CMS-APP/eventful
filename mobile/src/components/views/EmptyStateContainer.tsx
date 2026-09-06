@@ -4,6 +4,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { shadows } from "@/design-system/tokens/shadows";
 
 interface EmptyStateContainerProps {
   title: string;
@@ -19,10 +20,11 @@ export function EmptyStateContainer({
   dark = false
 }: EmptyStateContainerProps) {
   const textColor = dark ? colors.white : colors.black;
-  const backgroundColor = dark ? colors.primaryTint3 : colors.lightGray;
+  const backgroundColor = dark ? colors.primaryTint3 : colors.white;
+  const borderColor = dark ? colors.primaryDark : colors.lightGray;
 
   return (
-    <View style={[styles.container, { backgroundColor }]}>
+    <View style={[styles.container, { backgroundColor, borderColor }]}>
       <FontAwesome5 name={icon} size={24} color={textColor} />
       <Text type="subHeader" color={textColor} center>
         {title}
@@ -36,9 +38,10 @@ export function EmptyStateContainer({
 
 const styles = StyleSheet.create({
   container: {
+    ...shadows.lightShadow,
     alignItems: "center",
-    backgroundColor: colors.lightGray,
     borderRadius: 16,
+    borderWidth: 1,
     gap: 4,
     justifyContent: "center",
     padding: 16

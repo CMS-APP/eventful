@@ -4,6 +4,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
@@ -106,6 +107,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start"
   },
   buttonInner: {
+    ...card.small,
     ...padding.smallWidget,
     alignItems: "center",
     backgroundColor: colors.secondary,

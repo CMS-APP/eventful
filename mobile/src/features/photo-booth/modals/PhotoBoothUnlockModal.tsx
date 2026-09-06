@@ -9,7 +9,6 @@ import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 
 interface PhotoBoothUnlockModalProps {
-  locked: boolean;
   setLocked: (locked: boolean) => void;
   presentModal: boolean;
   setPresentModal: (presentModal: boolean) => void;
@@ -18,7 +17,6 @@ interface PhotoBoothUnlockModalProps {
 }
 
 export function PhotoBoothUnlockModal({
-  locked,
   setLocked,
   presentModal,
   setPresentModal,
@@ -89,7 +87,7 @@ export function PhotoBoothUnlockModal({
       <Button
         text="Cancel"
         onPress={() => setPresentModal(false)}
-        color={colors.lightGray}
+        color={colors.white}
         textColor={colors.black}
       />
     </ModalView>

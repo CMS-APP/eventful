@@ -8,6 +8,7 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { useAccountProfilePicture } from "@/features/account/useAccountProfilePicture";
@@ -102,8 +103,8 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   button: {
+    ...card.small,
     alignItems: "center",
-    backgroundColor: colors.white,
     borderRadius: 25,
     height: 50,
     justifyContent: "center",

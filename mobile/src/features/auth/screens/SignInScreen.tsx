@@ -208,7 +208,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
-              backgroundColor={colors.lightGray}
+              backgroundColor={colors.white}
               textColor={colors.black}
             />
 
@@ -225,7 +225,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
               value={password}
               onChangeText={setPassword}
               keyboardType="default"
-              backgroundColor={colors.lightGray}
+              backgroundColor={colors.white}
               textColor={colors.black}
               password
             />
@@ -241,7 +241,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
             type="body"
             onPress={handleForgotPassword}
             textAlign="left"
-            textColor="black"
+            textColor={colors.black}
             text="Forgot Password?"
           />
 
@@ -254,13 +254,13 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
           />
 
           <View style={styles.orContainer}>
-            <Text type="body" color={colors.primary}>
+            <Text type="body" color={colors.black}>
               Don&apos;t have an account?
             </Text>
 
             <TextButton
               text="Sign up"
-              textColor={colors.primary}
+              textColor={colors.black}
               textAlign="center"
               type="subHeader"
               onPress={handleSignUp}
@@ -282,7 +282,6 @@ const styles = StyleSheet.create({
   },
   orContainer: {
     alignItems: "center",
-    gap: 4,
     marginTop: 12
   }
 });

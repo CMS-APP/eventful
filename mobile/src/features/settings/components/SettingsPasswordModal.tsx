@@ -37,7 +37,7 @@ export function SettingsPasswordModal({
           placeholder="Password"
           value={inputText}
           onChangeText={setInputText}
-          backgroundColor={colors.lightGray}
+          backgroundColor={colors.white}
           textColor={colors.black}
           password
         />

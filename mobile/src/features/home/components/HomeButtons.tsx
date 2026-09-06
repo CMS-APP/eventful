@@ -91,7 +91,7 @@ export function HomeButtons({ scrollY }: HomeButtonsProps) {
                 icon="camera"
                 text={"Photo Booth"}
                 color={
-                  premium || photoBooth ? colors.secondary : colors.lightGray
+                  premium || photoBooth ? colors.secondary : colors.white
                 }
                 textColor={premium || photoBooth ? colors.white : colors.black}
                 buttonAction={onPhotoBoothPress}

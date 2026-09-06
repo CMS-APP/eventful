@@ -35,7 +35,7 @@ export function SubscriptionButton({
           styles.button,
           {
             borderColor,
-            backgroundColor: colors.lightGray
+            backgroundColor: colors.white
           }
         ]}
       >

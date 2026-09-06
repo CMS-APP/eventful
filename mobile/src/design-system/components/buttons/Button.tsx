@@ -8,6 +8,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/text/Text";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { shadows } from "@/design-system/tokens/shadows";
 import { TextType } from "@/design-system/tokens/text";
 import { haptics } from "@/utils/haptics";
 
@@ -158,6 +159,7 @@ export function Button({
 
 const styles = StyleSheet.create({
   button: {
+    ...shadows.lightShadow,
     alignItems: "center",
     alignSelf: "stretch",
     borderRadius: 16,

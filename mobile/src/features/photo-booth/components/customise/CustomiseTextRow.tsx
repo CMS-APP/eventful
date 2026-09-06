@@ -2,6 +2,7 @@ import { StyleSheet, TextStyle, TouchableOpacity, View } from "react-native";
 
 import { Input } from "@/design-system/components/inputs/Input";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 
@@ -33,7 +34,7 @@ export function CustomiseTextRow({
           placeholder={placeholder}
           value={title}
           onChangeText={setTitle}
-          backgroundColor={colors.lightGray}
+          backgroundColor={colors.white}
           textColor={colors.black}
         />
       </View>
@@ -83,9 +84,8 @@ const styles = StyleSheet.create({
     gap: 12
   },
   controlButton: {
+    ...card.small,
     alignItems: "center",
-    backgroundColor: colors.lightGray,
-    borderRadius: 12,
     flex: 1,
     justifyContent: "center",
     width: CONTROL_WIDTH

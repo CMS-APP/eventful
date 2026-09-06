@@ -10,6 +10,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { AppStackParamList } from "@/app/navigation";
 import { Button } from "@/design-system/components/buttons/Button";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { trackPhotoBoothPhotosUploaded } from "@/services/analytics/events";
 import {
@@ -231,8 +232,7 @@ const styles = StyleSheet.create({
     gap: 8
   },
   container: {
-    backgroundColor: colors.lightGray,
-    borderRadius: 12,
+    ...card.small,
     gap: 6,
     padding: 16
   }

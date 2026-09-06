@@ -252,7 +252,7 @@ export function ChangeNameModal({
         autoCapitalize={type === "username" ? "none" : "sentences"}
         autoCorrect={type !== "username"}
         textContentType={type === "username" ? "username" : "givenName"}
-        backgroundColor={colors.lightGray}
+        backgroundColor={colors.white}
         textColor={colors.black}
       />
 
@@ -261,7 +261,7 @@ export function ChangeNameModal({
           placeholder={type === "name" ? "Last Name" : "Username"}
           onChangeText={(text) => setNewSecondName(text)}
           value={newSecondName}
-          backgroundColor={colors.lightGray}
+          backgroundColor={colors.white}
           textColor={colors.black}
         />
       )}
@@ -296,7 +296,7 @@ export function ChangeNameModal({
 
       <Button
         text="Cancel"
-        color={colors.lightGray}
+        color={colors.white}
         textColor={colors.black}
         onPress={() => setPresentModal(false)}
         leadingIcon="times"

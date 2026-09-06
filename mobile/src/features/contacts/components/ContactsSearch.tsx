@@ -5,6 +5,7 @@ import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { InputAccessory } from "@/design-system/components/inputs/InputAccessory";
+import { Divider } from "@/design-system/components/layout/Divider";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
@@ -120,20 +121,28 @@ export function ContactsSearch({
 
   const normalSearch = useCallback(() => {
     return (
-      <View>
+      <View style={styles.searchContainerWrapper}>
         {renderSearch(false)}
-        {showSeparator && <View style={styles.separator} />}
+        {showSeparator && <Divider color={colors.lightGray} />}
       </View>
     );
   }, [renderSearch, showSeparator]);
 
   const buttonSearch = useCallback(() => {
     return (
-      <TouchableOpacity onPress={buttonAction} hitSlop={getHitSlop("small")}>
-        {renderSearch(true)}
-      </TouchableOpacity>
+      <View style={styles.searchContainerWrapper}>
+        <View style={styles.searchContainerWithoutButton}>
+          <TouchableOpacity
+            onPress={buttonAction}
+            hitSlop={getHitSlop("small")}
+          >
+            {renderSearch(true)}
+          </TouchableOpacity>
+        </View>
+        {showSeparator && <Divider color={colors.lightGray} />}
+      </View>
     );
-  }, [buttonAction, renderSearch]);
+  }, [buttonAction, renderSearch, showSeparator]);
 
   return <View>{buttonAction ? buttonSearch() : normalSearch()}</View>;
 }
@@ -163,10 +172,8 @@ const styles = StyleSheet.create({
   searchContainerWithoutButton: {
     marginHorizontal: 16
   },
-  separator: {
-    backgroundColor: colors.lightGray,
-    height: 1,
-    marginTop: 12
+  searchContainerWrapper: {
+    gap: 12
   },
   textInput: {
     color: colors.black,

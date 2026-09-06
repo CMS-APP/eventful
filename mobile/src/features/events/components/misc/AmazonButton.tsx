@@ -5,6 +5,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AppStackParamList } from "@/app/navigation";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
@@ -52,9 +53,9 @@ export function AmazonButton({ type }: AmazonButtonProps) {
 
 const styles = StyleSheet.create({
   buttonContainer: {
+    ...card.medium,
     ...padding.largeWidget,
     alignItems: "center",
-    backgroundColor: colors.lightGray,
     flexDirection: "row",
     gap: 12
   },

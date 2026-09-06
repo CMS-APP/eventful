@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     width: "100%"
   },
   imageShadow: {
-    ...shadows.buttonShadow,
+    ...shadows.mediumShadow,
     backgroundColor: colors.white,
     borderRadius: 10
   },

@@ -12,6 +12,7 @@ import { Button } from "@/design-system/components/buttons/Button";
 import { Input } from "@/design-system/components/inputs/Input";
 import { Divider } from "@/design-system/components/layout/Divider";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     paddingTop: 24
   },
   optionContainer: {
-    backgroundColor: colors.lightGray,
+    ...card.small,
     flexDirection: "row"
   },
   optionContent: {

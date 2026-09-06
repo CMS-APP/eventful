@@ -11,6 +11,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { AppStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { textFormatter } from "@/design-system/tokens/fonts";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
@@ -142,9 +143,8 @@ const styles = StyleSheet.create({
     gap: 8
   },
   eventContainer: {
+    ...card.medium,
     alignItems: "center",
-    backgroundColor: colors.lightGray,
-    borderRadius: 20,
     flexDirection: "row",
     gap: 16,
     padding: 12,

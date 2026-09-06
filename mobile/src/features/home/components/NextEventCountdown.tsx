@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { Event } from "@/types/Event";
 import { calculateTimeDifference, parseDatabaseDate } from "@/utils/date";
@@ -98,6 +99,7 @@ export function NextEventCountdown({ event }: NextEventCountdownProps) {
 
 const styles = StyleSheet.create({
   countdownContainer: {
+    ...card.small,
     alignItems: "center",
     backgroundColor: colors.white,
     borderRadius: 24,

@@ -5,6 +5,7 @@ import { StyleSheet, Switch, TouchableOpacity, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 
@@ -86,13 +87,9 @@ export function SettingsCard({ rows }: SettingsCardProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.white,
+    ...card.medium,
     borderRadius: 20,
     paddingHorizontal: 16,
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
     width: "100%"
   },
   iconContainer: {

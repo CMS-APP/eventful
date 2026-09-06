@@ -4,6 +4,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 
@@ -34,7 +35,7 @@ export function CustomiseCollageItem({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.lightGray,
+    ...card.small,
     borderColor: colors.lightGray,
     borderRadius: 6,
     borderWidth: 2,

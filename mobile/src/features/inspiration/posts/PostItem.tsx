@@ -16,6 +16,7 @@ import { FontAwesome } from "@expo/vector-icons";
 
 import { HomeStackParamList } from "@/app/navigation";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
@@ -216,9 +217,8 @@ const styles = StyleSheet.create({
     gap: 12
   },
   likeButton: {
+    ...card.medium,
     alignItems: "center",
-    backgroundColor: colors.lightGray,
-    borderRadius: 24,
     flexDirection: "row",
     gap: 6,
     paddingHorizontal: 12,

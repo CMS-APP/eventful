@@ -53,16 +53,13 @@ export function PhotoBoothHome() {
   return (
     <>
       <PhotoBoothLockModal
-        locked={locked}
         setLocked={setLocked}
         presentModal={presentLockModal}
         setPresentModal={setPresentLockModal}
-        lockPin={lockPin}
         setLockPin={setLockPin}
       />
 
       <PhotoBoothUnlockModal
-        locked={locked}
         setLocked={setLocked}
         presentModal={presentUnlockModal}
         setPresentModal={setPresentUnlockModal}
@@ -169,7 +166,7 @@ export function PhotoBoothHome() {
                   <Button
                     leadingIcon="cog"
                     text="Customise"
-                    color={colors.lightGray}
+                    color={colors.white}
                     textColor={colors.primary}
                     onPress={() => {
                       navigation.navigate("PhotoBoothCustomise");
@@ -182,7 +179,7 @@ export function PhotoBoothHome() {
                   <Button
                     leadingIcon="cloud"
                     text="Gallery"
-                    color={colors.lightGray}
+                    color={colors.white}
                     textColor={colors.primary}
                     onPress={async () => {
                       const hasPermissions = await ensurePermissions();
@@ -201,7 +198,7 @@ export function PhotoBoothHome() {
                   <Button
                     leadingIcon={locked ? "unlock" : "lock"}
                     text={`${locked ? "Un" : ""}Lock`}
-                    color={colors.lightGray}
+                    color={colors.white}
                     textColor={colors.primary}
                     disabled={!hasAccess}
                     onPress={() => {
@@ -219,7 +216,7 @@ export function PhotoBoothHome() {
                     <Button
                       leadingIcon="apple"
                       text="Access"
-                      color={colors.lightGray}
+                      color={colors.white}
                       textColor={colors.primary}
                       onPress={() => {
                         navigation.navigate("PhotoBoothGuidedAccessInfo");

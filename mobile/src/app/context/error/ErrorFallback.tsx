@@ -6,6 +6,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Button } from "@/design-system/components/buttons/Button";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 
 interface ErrorFallbackProps {
@@ -72,8 +73,7 @@ const styles = StyleSheet.create({
     width: "100%"
   },
   errorDetails: {
-    backgroundColor: colors.lightGray,
-    borderRadius: 8,
+    ...card.small,
     marginBottom: 32,
     marginTop: 24,
     maxHeight: 300,

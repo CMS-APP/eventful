@@ -8,6 +8,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { PhotoBoothStackNavigation } from "@/app/navigation";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { GalleryEvent } from "@/types/photoBoothGallery";
@@ -61,8 +62,7 @@ export function GalleryEventListItem({ event }: GalleryEventListItemProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.lightGray,
-    borderRadius: 12,
+    ...card.small,
     gap: 6,
     padding: 12
   },

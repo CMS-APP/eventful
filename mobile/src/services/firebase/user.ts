@@ -408,6 +408,52 @@ export async function getUserFollowing(userId: string) {
   return following.filter((follower) => follower.status === "active");
 }
 
+export async function getSuggestedFollows(
+  userId: string,
+  maxResults = 8
+): Promise<User[]> {
+  const following = await getUserFollowing(userId);
+  const followingIds = new Set(
+    following
+      .map((follow) => follow.followingId)
+      .filter((id): id is string => !!id)
+  );
+
+  const secondDegreeLists = await Promise.all(
+    [...followingIds].map((id) => getUserFollowing(id))
+  );
+
+  const suggestionCounts = new Map<string, number>();
+
+  for (const list of secondDegreeLists) {
+    for (const follow of list) {
+      const candidateId = follow.followingId;
+      if (
+        !candidateId ||
+        candidateId === userId ||
+        followingIds.has(candidateId)
+      ) {
+        continue;
+      }
+      suggestionCounts.set(
+        candidateId,
+        (suggestionCounts.get(candidateId) || 0) + 1
+      );
+    }
+  }
+
+  const topCandidateIds = [...suggestionCounts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, maxResults)
+    .map(([candidateId]) => candidateId);
+
+  const users = await Promise.all(
+    topCandidateIds.map((id) => getUserInfo(id))
+  );
+
+  return users.filter((user): user is User => user !== null);
+}
+
 export async function readFollowNotification(notificationId: string) {
   try {
     await updateDocument(

@@ -61,7 +61,7 @@ export function Screen({
   headerConfig,
   contentConfig = {
     tabBarPresent: true,
-    paddingBottom: 12,
+    paddingBottom: 24,
     bottomMargin: true
   },
   nonScrollChildren,

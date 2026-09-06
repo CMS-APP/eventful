@@ -68,7 +68,7 @@ export function FeedbackScreen() {
             value={description}
             onChangeText={setDescription}
             multilineProps={{ numberOfLines: 10, height: 200 }}
-            backgroundColor={colors.lightGray}
+            backgroundColor={colors.white}
             textColor={colors.black}
           />
 

@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
@@ -63,8 +64,8 @@ export function TimelineButton({
 
 const styles = StyleSheet.create({
   button: {
+    ...card.medium,
     ...padding.largeWidget,
-    backgroundColor: colors.lightGray,
     gap: 12,
     width: "75%"
   },

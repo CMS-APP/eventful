@@ -9,20 +9,16 @@ import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 
 interface PhotoBoothLockModalProps {
-  locked: boolean;
   setLocked: (locked: boolean) => void;
   presentModal: boolean;
   setPresentModal: (presentModal: boolean) => void;
-  lockPin: string;
   setLockPin: (lockPin: string) => void;
 }
 
 export function PhotoBoothLockModal({
-  locked,
   setLocked,
   presentModal,
   setPresentModal,
-  lockPin,
   setLockPin
 }: PhotoBoothLockModalProps) {
   const [input, setInput] = useState("");
@@ -59,7 +55,7 @@ export function PhotoBoothLockModal({
       borderColor={colors.lightGray + "40"}
     >
       <Text type="header" color={colors.black}>
-        {locked ? "Unlock" : "Lock"} Photo Booth
+        Lock Photo Booth
       </Text>
 
       <Input
@@ -68,7 +64,7 @@ export function PhotoBoothLockModal({
         onChangeText={setInput}
         keyboardType="number-pad"
         password
-        backgroundColor={colors.lightGray}
+        backgroundColor={colors.white}
         textColor={colors.black}
       />
 
@@ -83,7 +79,7 @@ export function PhotoBoothLockModal({
       <Button
         text="Cancel"
         onPress={() => setPresentModal(false)}
-        color={colors.lightGray}
+        color={colors.white}
         textColor={colors.black}
       />
     </ModalView>
