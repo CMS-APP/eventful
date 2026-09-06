@@ -38,6 +38,7 @@ export function Onboarding1Screen({ navigation }: Onboarding1ScreenProps) {
   }
 
   async function handleNext() {
+    trackOnboardingStarted();
     (navigation as StackNavigationProp<OnboardingStackParamList>).navigate(
       "Onboarding2"
     );
@@ -61,7 +62,6 @@ export function Onboarding1Screen({ navigation }: Onboarding1ScreenProps) {
 
   useEffect(() => {
     StatusBar.setBarStyle("light-content");
-    trackOnboardingStarted();
   }, []);
 
   return (
