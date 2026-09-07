@@ -34,7 +34,7 @@
     "rewrites": [
       {
         "source": "/respondToEvent",
-        "function": { "functionId": "respondToEvent", "region": "us-central1" }
+        "function": { "functionId": "respondToEvent", "region": "europe-west2" }
       },
       {
         "source": "/appCheckToken",
@@ -44,40 +44,36 @@
         "source": "/sendVerificationEmail",
         "function": {
           "functionId": "sendVerificationEmail",
-          "region": "us-central1"
+          "region": "europe-west2"
         }
       },
       {
         "source": "/forgotPassword",
-        "function": { "functionId": "forgotPassword", "region": "us-central1" }
-      },
-      {
-        "source": "/signUp",
-        "function": { "functionId": "signUp", "region": "us-central1" }
+        "function": { "functionId": "forgotPassword", "region": "europe-west2" }
       },
       {
         "source": "/incrementUserCount",
         "function": {
           "functionId": "incrementUserCount",
-          "region": "us-central1"
+          "region": "europe-west2"
         }
       },
       {
         "source": "/incrementEventCount",
         "function": {
           "functionId": "incrementEventCount",
-          "region": "us-central1"
+          "region": "europe-west2"
         }
       },
       {
         "source": "/searchUsers",
-        "function": { "functionId": "searchUsers", "region": "us-central1" }
+        "function": { "functionId": "searchUsers", "region": "europe-west2" }
       },
       {
         "source": "/locationSearch",
         "function": {
           "functionId": "locationSearch",
-          "region": "us-central1"
+          "region": "europe-west2"
         }
       }
     ]

@@ -1,5 +1,5 @@
-export const forgotPasswordTemplate = (forgotPasswordLink) => {
-  return `
+def forgot_password_template(forgot_password_link: str) -> str:
+    return f"""
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,25 +7,25 @@ export const forgotPasswordTemplate = (forgotPasswordLink) => {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Forgot Password - Eventful</title>
     <style>
-    body, html {
+    body, html {{
         font-family: "Poppins", sans-serif;
         font-size: 16px;
         color: #333;
         margin: 0;
         padding: 0;
-        height: 100%; /* Ensures full height */
+        height: 100%;
         display: flex;
         flex-direction: column;
-      }
-    img {
+      }}
+    img {{
         -ms-interpolation-mode: bicubic;
         max-width: 100%;
-      }
-    .header {
+      }}
+    .header {{
         padding-bottom: 10px;
         background-color: #0a3b2e;
-      }
-    .button {
+      }}
+    .button {{
         background-color: #fdba17;
         color: #0a3b2e;
         padding: 14px 24px;
@@ -34,24 +34,23 @@ export const forgotPasswordTemplate = (forgotPasswordLink) => {
         display: inline-block;
         font-weight: 600;
         text-align: center;
-      }
-    .content {
+      }}
+    .content {{
         background-color: #ffffff;
         padding: 40px;
         text-align: left;
-        flex-grow: 1; /* Ensures content area grows and takes full space */
-      }
-    .footer {
+        flex-grow: 1;
+      }}
+    .footer {{
         padding: 20px;
         background-color: #6e9975;
         color: #ffffff;
         font-size: 12px;
         text-align: center;
-      }
+      }}
     </style>
   </head>
   <body style="background: #e3e3e3">
-    <!-- Header with Logo -->
     <table width="100%" cellpadding="0" cellspacing="0">
       <tr>
         <td align="center" class="header" style="padding: 15px 0">
@@ -60,7 +59,6 @@ export const forgotPasswordTemplate = (forgotPasswordLink) => {
       </tr>
     </table>
 
-    <!-- Body -->
     <table width="100%" cellpadding="0" cellspacing="0">
       <tr>
         <td align="center" style="padding: 40px 20px">
@@ -93,7 +91,7 @@ export const forgotPasswordTemplate = (forgotPasswordLink) => {
                 </p>
 
                 <p style="text-align: center; margin: 30px 0">
-                  <a href="${forgotPasswordLink}" class="button">
+                  <a href="{forgot_password_link}" class="button">
                     Reset Password
                   </a>
                 </p>
@@ -109,7 +107,6 @@ export const forgotPasswordTemplate = (forgotPasswordLink) => {
       </tr>
     </table>
 
-    <!-- Footer -->
     <div class="footer">
       &copy; 2025 Eventful. All vibes reserved.<br />
       <a
@@ -122,5 +119,4 @@ export const forgotPasswordTemplate = (forgotPasswordLink) => {
     </div>
   </body>
 </html>
-`;
-};
+"""

@@ -1,7 +1,11 @@
-export const feedbackEmailTemplate = (feedbackData) => {
-  const { message, email, type, username, timestamp } = feedbackData;
+def feedback_email_template(feedback_data: dict) -> str:
+    message = feedback_data.get("message")
+    email = feedback_data.get("email")
+    type_ = feedback_data.get("type")
+    username = feedback_data.get("username")
+    timestamp = feedback_data.get("timestamp")
 
-  return `
+    return f"""
     <!DOCTYPE html>
     <html>
     <head>
@@ -9,7 +13,7 @@ export const feedbackEmailTemplate = (feedbackData) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>New Feedback Received</title>
         <style>
-            body {
+            body {{
                 font-family: "Poppins", sans-serif;
                 line-height: 1.6;
                 color: #333;
@@ -17,13 +21,13 @@ export const feedbackEmailTemplate = (feedbackData) => {
                 margin: 0 auto;
                 padding: 20px;
                 background-color: #f5f5f5;
-            }
-            .container {
+            }}
+            .container {{
                 background-color: #f5f5f5;
                 border-radius: 8px;
                 padding: 30px;
-            }
-            .header {
+            }}
+            .header {{
                 text-align: center;
                 margin-bottom: 30px;
                 padding-bottom: 20px;
@@ -32,60 +36,60 @@ export const feedbackEmailTemplate = (feedbackData) => {
                 margin: -30px -30px 30px -30px;
                 padding: 20px 30px;
                 border-radius: 8px 8px 0 0;
-            }
-            .header h1 {
+            }}
+            .header h1 {{
                 color: #ffffff;
                 margin: 0;
                 font-size: 24px;
                 font-weight: 600;
-            }
-            .feedback-section {
+            }}
+            .feedback-section {{
                 margin-bottom: 25px;
-            }
-            .feedback-section h3 {
+            }}
+            .feedback-section h3 {{
                 color: #0a3b2e;
                 margin-bottom: 10px;
                 font-size: 16px;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
                 font-weight: 600;
-            }
-            .feedback-content {
+            }}
+            .feedback-content {{
                 background-color: #f8f9fa;
                 padding: 15px;
                 border-radius: 6px;
                 border-left: 4px solid #fdba17;
                 font-size: 14px;
                 line-height: 1.5;
-            }
-            .message-content {
+            }}
+            .message-content {{
                 white-space: pre-wrap;
                 word-wrap: break-word;
-            }
-            .metadata {
+            }}
+            .metadata {{
                 margin-top: 20px;
-            }
-            .metadata-item {
+            }}
+            .metadata-item {{
                 background-color: #f8f9fa;
                 padding: 12px;
                 border-radius: 6px;
                 border: 1px solid #6e9975;
                 margin-bottom: 15px;
-            }
-            .metadata-label {
+            }}
+            .metadata-label {{
                 font-weight: 400;
                 color: #0a3b2e;
                 font-size: 12px;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
                 margin-bottom: 5px;
-            }
-            .metadata-value {
+            }}
+            .metadata-value {{
                 color: #333;
                 font-size: 14px;
                 font-weight: 600;
-            }
-            .timestamp {
+            }}
+            .timestamp {{
                 text-align: center;
                 margin-top: 30px;
                 padding-top: 20px;
@@ -97,8 +101,8 @@ export const feedbackEmailTemplate = (feedbackData) => {
                 margin: 30px -30px -30px -30px;
                 padding: 20px 30px;
                 border-radius: 0 0 8px 8px;
-            }
-            .type-badge {
+            }}
+            .type-badge {{
                 display: inline-block;
                 padding: 4px 8px;
                 border-radius: 12px;
@@ -106,11 +110,11 @@ export const feedbackEmailTemplate = (feedbackData) => {
                 font-weight: 600;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
-            }
-            .type-bug { background-color: #fdba17; color: #0a3b2e; }
-            .type-feature { background-color: #6e9975; color: #ffffff; }
-            .type-general { background-color: #0a3b2e; color: #ffffff; }
-            .type-other { background-color: #fdba17; color: #0a3b2e; }
+            }}
+            .type-bug {{ background-color: #fdba17; color: #0a3b2e; }}
+            .type-feature {{ background-color: #6e9975; color: #ffffff; }}
+            .type-general {{ background-color: #0a3b2e; color: #ffffff; }}
+            .type-other {{ background-color: #fdba17; color: #0a3b2e; }}
         </style>
     </head>
     <body>
@@ -118,35 +122,34 @@ export const feedbackEmailTemplate = (feedbackData) => {
             <div class="header">
                 <h1>📝 New Feedback Received</h1>
             </div>
-        
+
             <div class="metadata">
                 <div class="metadata-item">
                     <div class="metadata-label">Message</div>
-                    <div class="metadata-value">${message || "No message provided"}</div>
+                    <div class="metadata-value">{message or "No message provided"}</div>
                 </div>
                 <div class="metadata-item">
                     <div class="metadata-label">From</div>
-                    <div class="metadata-value">${username || "Anonymous"}</div>
+                    <div class="metadata-value">{username or "Anonymous"}</div>
                 </div>
                 <div class="metadata-item">
                     <div class="metadata-label">Email</div>
-                    <div class="metadata-value">${email || "Not provided"}</div>
+                    <div class="metadata-value">{email or "Not provided"}</div>
                 </div>
                 <div class="metadata-item">
                     <div class="metadata-label">Type</div>
-                    <div class="metadata-value type-${type || "other"}">${type || "Other"}</div>
+                    <div class="metadata-value type-{type_ or "other"}">{type_ or "Other"}</div>
                 </div>
                 <div class="metadata-item">
                     <div class="metadata-label">Submitted</div>
-                    <div class="metadata-value">${timestamp || "Unknown"}</div>
+                    <div class="metadata-value">{timestamp or "Unknown"}</div>
                 </div>
             </div>
-            
+
             <div class="timestamp">
                 This feedback was automatically sent from your Eventful app.
             </div>
         </div>
     </body>
     </html>
-  `;
-};
+  """

@@ -1,5 +1,5 @@
-export const verifyEmailTemplate = (verificationLink) => {
-  return `
+def verify_email_template(verification_link: str) -> str:
+    return f"""
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,25 +7,25 @@ export const verifyEmailTemplate = (verificationLink) => {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Let's Make this Official - Eventful</title>
     <style>
-    body, html {
+    body, html {{
       font-family: "Poppins", sans-serif;
       font-size: 16px;
       color: #333;
       margin: 0;
       padding: 0;
-      height: 100%; /* Ensures full height */
+      height: 100%;
       display: flex;
       flex-direction: column;
-    }
-    img {
+    }}
+    img {{
       -ms-interpolation-mode: bicubic;
       max-width: 100%;
-    }
-    .header {
+    }}
+    .header {{
       padding-bottom: 10px;
       background-color: #0a3b2e;
-    }
-    .button {
+    }}
+    .button {{
       background-color: #fdba17;
       color: #0a3b2e;
       padding: 14px 24px;
@@ -34,24 +34,23 @@ export const verifyEmailTemplate = (verificationLink) => {
       display: inline-block;
       font-weight: 600;
       text-align: center;
-    }
-    .content {
+    }}
+    .content {{
       background-color: #ffffff;
       padding: 40px;
       text-align: left;
-      flex-grow: 1; /* Ensures content area grows and takes full space */
-    }
-    .footer {
+      flex-grow: 1;
+    }}
+    .footer {{
       padding: 20px;
       background-color: #6e9975;
       color: #ffffff;
       font-size: 12px;
       text-align: center;
-    }
+    }}
     </style>
   </head>
   <body style="background: #e3e3e3">
-    <!-- Header with Logo -->
     <table width="100%" cellpadding="0" cellspacing="0">
       <tr>
         <td align="center" class="header" style="padding: 15px 0">
@@ -60,7 +59,6 @@ export const verifyEmailTemplate = (verificationLink) => {
       </tr>
     </table>
 
-    <!-- Body -->
     <table width="100%" cellpadding="0" cellspacing="0">
       <tr>
         <td align="center" style="padding: 40px 20px">
@@ -78,7 +76,7 @@ export const verifyEmailTemplate = (verificationLink) => {
             <tr>
               <td style="text-align: left">
                 <h2 style="color: #0a3b2e; font-weight: 600">
-                  Let's Make This Official 🎉 
+                  Let's Make This Official 🎉
                 </h2>
                 <p>Hey there 👋</p>
                 <p>
@@ -87,7 +85,7 @@ export const verifyEmailTemplate = (verificationLink) => {
                 </p>
 
                 <p style="text-align: center; margin: 30px 0">
-                  <a href="${verificationLink}" class="button">Verify My Email</a>
+                  <a href="{verification_link}" class="button">Verify My Email</a>
                 </p>
 
                 <p>Once you're verified, you're all set to start creating events 🎊</p>
@@ -103,7 +101,6 @@ export const verifyEmailTemplate = (verificationLink) => {
       </tr>
     </table>
 
-    <!-- Footer -->
     <div class="footer">
       &copy; 2025 Eventful. All vibes reserved.<br />
       <a
@@ -116,5 +113,4 @@ export const verifyEmailTemplate = (verificationLink) => {
     </div>
   </body>
 </html>
-`;
-};
+"""
