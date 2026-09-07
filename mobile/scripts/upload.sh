@@ -164,7 +164,8 @@ ios_pipeline() {
   echo "Building" > "$phase_file"
   build_ios || return $?
   echo "Uploading" > "$phase_file"
-  upload_ios
+  upload_ios || return $?
+  rm -f "build/$NEW_VERSION/$IOS_FILENAME"
 }
 
 android_pipeline() {
@@ -172,7 +173,8 @@ android_pipeline() {
   echo "Building" > "$phase_file"
   build_android || return $?
   echo "Uploading" > "$phase_file"
-  upload_android
+  upload_android || return $?
+  rm -f "build/$NEW_VERSION/$ANDROID_FILENAME"
 }
 
 TRACKS=()
