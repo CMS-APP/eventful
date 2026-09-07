@@ -2,6 +2,7 @@ import requests
 from firebase_admin import app_check, auth
 from firebase_functions import https_fn
 
+from services.app_check import verify_app_check
 from services.email import (
     send_forgot_password_email_mailjet,
     send_verification_email_mailjet,
@@ -27,14 +28,9 @@ def handle_send_verification_email_request(
     req: https_fn.Request, mj_api_key, mj_secret
 ) -> https_fn.Response:
     try:
-        app_check_token = req.headers.get("X-Firebase-AppCheck")
-        if not app_check_token:
-            return https_fn.Response("Missing app token", status=400)
-        try:
-            app_check.verify_token(app_check_token)
-        except Exception as exc:
-            print(f"App Check verification failed: {exc}")
-            return https_fn.Response("Unauthorized", status=401)
+        app_check_error = verify_app_check(req)
+        if app_check_error:
+            return app_check_error
 
         email = (req.get_json(silent=True) or {}).get("email")
 
@@ -98,7 +94,7 @@ def handle_forgot_password_request(
                 return https_fn.Response("reCAPTCHA validation failed", status=403)
 
         try:
-            user = auth.get_user_by_email(email)
+            auth.get_user_by_email(email)
         except auth.UserNotFoundError:
             return generic_success
 

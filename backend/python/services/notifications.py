@@ -56,26 +56,18 @@ def _count_unread_notifications(db, user_id: str) -> int:
 
 def _count_pending_invites(db, user_id: str) -> int:
     docs = db.collection("invite").where("recipient", "==", user_id).stream()
-    return sum(
-        1 for doc in docs if doc.to_dict().get("response") in ("pending", "maybe")
-    )
+    return sum(1 for doc in docs if doc.to_dict().get("response") in ("pending", "maybe"))
 
 
 def recompute_unread_badge(user_id: str) -> int:
     db = firestore.client()
-    badge = _count_unread_notifications(db, user_id) + _count_pending_invites(
-        db, user_id
-    )
-    db.collection("user").document(user_id).set(
-        {"unreadNotificationCount": badge}, merge=True
-    )
+    badge = _count_unread_notifications(db, user_id) + _count_pending_invites(db, user_id)
+    db.collection("user").document(user_id).set({"unreadNotificationCount": badge}, merge=True)
     return badge
 
 
 def handle_notification_written(
-    event: firestore_fn.Event[
-        firestore_fn.Change[firestore_fn.DocumentSnapshot | None]
-    ],
+    event: firestore_fn.Event[firestore_fn.Change[firestore_fn.DocumentSnapshot | None]],
 ) -> None:
     after = event.data.after.to_dict() if event.data.after else None
     before = event.data.before.to_dict() if event.data.before else None
@@ -91,9 +83,7 @@ def handle_notification_written(
 
 
 def handle_invite_written(
-    event: firestore_fn.Event[
-        firestore_fn.Change[firestore_fn.DocumentSnapshot | None]
-    ],
+    event: firestore_fn.Event[firestore_fn.Change[firestore_fn.DocumentSnapshot | None]],
 ) -> None:
     after = event.data.after.to_dict() if event.data.after else None
     before = event.data.before.to_dict() if event.data.before else None

@@ -27,9 +27,7 @@ exports.appCheckToken = onRequest((request, response) => {
         return response.status(401).send("Unauthorized");
       }
 
-      const appCheckToken = await admin
-        .appCheck()
-        .createToken("1:165003650822:web:88a7fa08ae63985891a087");
+      const appCheckToken = await admin.appCheck().createToken("1:165003650822:web:88a7fa08ae63985891a087");
 
       response.json({ token: appCheckToken.token });
     } catch (err) {

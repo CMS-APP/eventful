@@ -1,23 +1,11 @@
 import json
 
 import requests
-from firebase_admin import app_check
 from firebase_functions import https_fn
 
+from services.app_check import verify_app_check
+
 PLACES_API_BASE = "https://places.googleapis.com/v1"
-
-
-def _verify_app_check(req: https_fn.Request) -> https_fn.Response | None:
-    token = req.headers.get("X-Firebase-AppCheck")
-    if not token:
-        return https_fn.Response("Missing app token", status=400)
-
-    try:
-        app_check.verify_token(token)
-        return None
-    except Exception as exc:
-        print(f"App Check verification failed: {exc}")
-        return https_fn.Response("Unauthorized", status=401)
 
 
 def _string_param(req: https_fn.Request, key: str) -> str:
@@ -60,15 +48,13 @@ def _json_response(payload: dict, status: int = 200) -> https_fn.Response:
     )
 
 
-def handle_autocomplete_request(
-    req: https_fn.Request, api_key: str
-) -> https_fn.Response:
+def handle_autocomplete_request(req: https_fn.Request, api_key: str) -> https_fn.Response:
     if req.method == "OPTIONS":
         return https_fn.Response("", status=204)
     if req.method not in ("GET", "POST"):
         return https_fn.Response("Method Not Allowed", status=405)
 
-    app_check_error = _verify_app_check(req)
+    app_check_error = verify_app_check(req)
     if app_check_error:
         return app_check_error
 
@@ -98,9 +84,7 @@ def handle_autocomplete_request(
         data = places_res.json()
         suggestions = [
             suggestion
-            for suggestion in (
-                _pick_suggestion(s) for s in data.get("suggestions", [])
-            )
+            for suggestion in (_pick_suggestion(s) for s in data.get("suggestions", []))
             if suggestion
         ]
         return _json_response({"suggestions": suggestions})
@@ -109,15 +93,13 @@ def handle_autocomplete_request(
         return https_fn.Response("Search failed", status=500)
 
 
-def handle_place_details_request(
-    req: https_fn.Request, api_key: str
-) -> https_fn.Response:
+def handle_place_details_request(req: https_fn.Request, api_key: str) -> https_fn.Response:
     if req.method == "OPTIONS":
         return https_fn.Response("", status=204)
     if req.method not in ("GET", "POST"):
         return https_fn.Response("Method Not Allowed", status=405)
 
-    app_check_error = _verify_app_check(req)
+    app_check_error = verify_app_check(req)
     if app_check_error:
         return app_check_error
 
@@ -148,9 +130,7 @@ def handle_place_details_request(
         return _json_response(
             {
                 "formattedAddress": data.get("formattedAddress"),
-                "addressComponents": _pick_address_components(
-                    data.get("addressComponents")
-                ),
+                "addressComponents": _pick_address_components(data.get("addressComponents")),
             }
         )
     except Exception as exc:
@@ -158,9 +138,7 @@ def handle_place_details_request(
         return https_fn.Response("Place details failed", status=500)
 
 
-def handle_location_search_request(
-    req: https_fn.Request, api_key: str
-) -> https_fn.Response:
+def handle_location_search_request(req: https_fn.Request, api_key: str) -> https_fn.Response:
     if req.method == "OPTIONS":
         return https_fn.Response("", status=204)
 

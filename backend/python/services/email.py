@@ -43,7 +43,9 @@ def send_verification_email_mailjet(mj_api_key, mj_secret, to: str, verification
             raise RuntimeError("Mailjet connection reset after retry") from retry_exc
 
 
-def send_forgot_password_email_mailjet(mj_api_key, mj_secret, to: str, forgot_password_link: str) -> None:
+def send_forgot_password_email_mailjet(
+    mj_api_key, mj_secret, to: str, forgot_password_link: str
+) -> None:
     client = _client(mj_api_key, mj_secret)
     client.send.create(
         data={

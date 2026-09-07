@@ -48,7 +48,6 @@ ALGOLIA_API_KEY = SecretParam("ALGOLIA_API_KEY")
 @https_fn.on_request(
     cors=EVENTFUL_CORS,
     secrets=[GOOGLE_PLACES_API_KEY],
-    min_instances=1,
 )
 def locationSearch(req: https_fn.Request) -> https_fn.Response:
     return handle_location_search_request(req, GOOGLE_PLACES_API_KEY.value)
@@ -80,9 +79,7 @@ def incrementEventCount(req: https_fn.Request) -> https_fn.Response:
     document="followers/{userId}/followers/{followerId}",
 )
 def syncFollowing(
-    event: firestore_fn.Event[
-        firestore_fn.Change[firestore_fn.DocumentSnapshot | None]
-    ],
+    event: firestore_fn.Event[firestore_fn.Change[firestore_fn.DocumentSnapshot | None]],
 ) -> None:
     handle_sync_following(event)
 
@@ -91,9 +88,7 @@ def syncFollowing(
     document="following/{userA}/following/{userB}",
 )
 def syncFollowers(
-    event: firestore_fn.Event[
-        firestore_fn.Change[firestore_fn.DocumentSnapshot | None]
-    ],
+    event: firestore_fn.Event[firestore_fn.Change[firestore_fn.DocumentSnapshot | None]],
 ) -> None:
     handle_sync_followers(event)
 
@@ -102,9 +97,7 @@ def syncFollowers(
     document="notifications/{notificationId}",
 )
 def notificationWritten(
-    event: firestore_fn.Event[
-        firestore_fn.Change[firestore_fn.DocumentSnapshot | None]
-    ],
+    event: firestore_fn.Event[firestore_fn.Change[firestore_fn.DocumentSnapshot | None]],
 ) -> None:
     handle_notification_written(event)
 
@@ -113,9 +106,7 @@ def notificationWritten(
     document="invite/{inviteId}",
 )
 def inviteWritten(
-    event: firestore_fn.Event[
-        firestore_fn.Change[firestore_fn.DocumentSnapshot | None]
-    ],
+    event: firestore_fn.Event[firestore_fn.Change[firestore_fn.DocumentSnapshot | None]],
 ) -> None:
     handle_invite_written(event)
 
@@ -144,7 +135,6 @@ def respondToEvent(req: https_fn.Request) -> https_fn.Response:
 @https_fn.on_request(
     cors=ALLOW_ALL_CORS,
     secrets=[MJ_API_KEY, MJ_SECRET],
-    min_instances=1,
 )
 def sendVerificationEmail(req: https_fn.Request) -> https_fn.Response:
     return handle_send_verification_email_request(req, MJ_API_KEY, MJ_SECRET)
@@ -161,7 +151,6 @@ def forgotPassword(req: https_fn.Request) -> https_fn.Response:
 @https_fn.on_request(
     cors=EVENTFUL_CORS_STRICT,
     secrets=[ALGOLIA_APP_ID, ALGOLIA_API_KEY],
-    min_instances=1,
 )
 def searchUsers(req: https_fn.Request) -> https_fn.Response:
     return handle_search_users_request(req, ALGOLIA_APP_ID, ALGOLIA_API_KEY)
@@ -172,8 +161,6 @@ def searchUsers(req: https_fn.Request) -> https_fn.Response:
     secrets=[MJ_API_KEY, MJ_SECRET],
 )
 def sendFeedbackEmail(
-    event: firestore_fn.Event[
-        firestore_fn.Change[firestore_fn.DocumentSnapshot | None]
-    ],
+    event: firestore_fn.Event[firestore_fn.Change[firestore_fn.DocumentSnapshot | None]],
 ) -> None:
     handle_send_feedback_email(event, MJ_API_KEY, MJ_SECRET)

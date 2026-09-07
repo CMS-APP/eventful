@@ -38,7 +38,7 @@
       },
       {
         "source": "/appCheckToken",
-        "function": { "functionId": "appCheckToken", "region": "us-central1" }
+        "function": { "functionId": "appCheckToken", "region": "europe-west2" }
       },
       {
         "source": "/sendVerificationEmail",

@@ -10,9 +10,7 @@ RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"
 COOLDOWN_SECONDS = 5 * 60
 
 
-def handle_respond_to_event_request(
-    req: https_fn.Request, recaptcha_secret
-) -> https_fn.Response:
+def handle_respond_to_event_request(req: https_fn.Request, recaptcha_secret) -> https_fn.Response:
     if req.method != "POST":
         return https_fn.Response("Method Not Allowed", status=405)
 

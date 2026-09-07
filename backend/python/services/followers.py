@@ -7,9 +7,7 @@ from services.user import get_user_info
 
 
 def handle_sync_following(
-    event: firestore_fn.Event[
-        firestore_fn.Change[firestore_fn.DocumentSnapshot | None]
-    ],
+    event: firestore_fn.Event[firestore_fn.Change[firestore_fn.DocumentSnapshot | None]],
 ) -> None:
     if event.data.after is not None:
         return
@@ -18,15 +16,13 @@ def handle_sync_following(
     follower_id = event.params["followerId"]
 
     db = firestore.client()
-    db.collection("following").document(follower_id).collection(
-        "following"
-    ).document(user_id).delete()
+    db.collection("following").document(follower_id).collection("following").document(
+        user_id
+    ).delete()
 
 
 def handle_sync_followers(
-    event: firestore_fn.Event[
-        firestore_fn.Change[firestore_fn.DocumentSnapshot | None]
-    ],
+    event: firestore_fn.Event[firestore_fn.Change[firestore_fn.DocumentSnapshot | None]],
 ) -> None:
     user_a = event.params["userA"]
     user_b = event.params["userB"]
@@ -34,10 +30,7 @@ def handle_sync_followers(
 
     db = firestore.client()
     follower_doc_ref = (
-        db.collection("followers")
-        .document(user_b)
-        .collection("followers")
-        .document(user_a)
+        db.collection("followers").document(user_b).collection("followers").document(user_a)
     )
 
     if not new_data:

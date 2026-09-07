@@ -1,8 +1,9 @@
 import json
 
 from algoliasearch.search.client import SearchClientSync
-from firebase_admin import app_check
 from firebase_functions import https_fn
+
+from services.app_check import verify_app_check
 
 _client: SearchClientSync | None = None
 
@@ -44,19 +45,6 @@ def _string_param(req: https_fn.Request, key: str, body: dict) -> str:
     return str(value or "").strip()
 
 
-def _verify_app_check(req: https_fn.Request) -> https_fn.Response | None:
-    token = req.headers.get("X-Firebase-AppCheck")
-    if not token:
-        return https_fn.Response("Missing app token", status=400)
-
-    try:
-        app_check.verify_token(token)
-        return None
-    except Exception as exc:
-        print(f"App Check verification failed: {exc}")
-        return https_fn.Response("Unauthorized", status=401)
-
-
 def handle_search_users_request(
     req: https_fn.Request, algolia_app_id, algolia_api_key
 ) -> https_fn.Response:
@@ -65,7 +53,7 @@ def handle_search_users_request(
     if req.method not in ("GET", "POST"):
         return https_fn.Response("Method Not Allowed", status=405)
 
-    app_check_error = _verify_app_check(req)
+    app_check_error = verify_app_check(req)
     if app_check_error:
         return app_check_error
 

@@ -36,6 +36,19 @@
   "[css]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/python/venv/bin/python",
+  "basedpyright.analysis.venvPath": "${workspaceFolder}/backend/python",
+  "basedpyright.analysis.venv": "venv",
   "prettier.requireConfig": true,
   "prettier.useEditorConfig": false,
   "files.exclude": {
