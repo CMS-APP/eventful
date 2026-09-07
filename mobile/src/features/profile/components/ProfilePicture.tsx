@@ -14,13 +14,15 @@ interface ProfilePictureProps {
   size: number;
   borderColor?: string;
   borderWidth?: number;
+  placeholderColor?: string;
 }
 
 export function ProfilePicture({
   user,
   size,
   borderColor = colors.black,
-  borderWidth = 0
+  borderWidth = 0,
+  placeholderColor
 }: ProfilePictureProps) {
   const [image, setImage] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
@@ -71,7 +73,9 @@ export function ProfilePicture({
           style={[
             styles.placeholderContainer,
             {
-              backgroundColor: size >= 50 ? colors.primaryTint : colors.primary,
+              backgroundColor:
+                placeholderColor ??
+                (size >= 50 ? colors.primaryTint : colors.primary),
               borderRadius: size / 2,
               height: size,
               width: size

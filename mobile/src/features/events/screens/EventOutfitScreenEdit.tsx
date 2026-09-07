@@ -65,6 +65,6 @@ export function EventOutfitScreenEdit({ route }: EventOutfitScreenEditProps) {
 const styles = StyleSheet.create({
   content: {
     gap: 16,
-    paddingHorizontal: 24
+    paddingHorizontal: 16
   }
 });

@@ -55,14 +55,14 @@ export function IconButton({
 
   const sizes = {
     small: 20,
-    medium: 30,
-    large: 40
+    medium: 24,
+    large: 32
   };
 
   const widths = {
     small: 40,
-    medium: 60,
-    large: 80
+    medium: 48,
+    large: 60
   };
 
   const buttonStyle = {

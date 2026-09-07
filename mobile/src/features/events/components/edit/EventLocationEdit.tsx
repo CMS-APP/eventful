@@ -19,6 +19,6 @@ export function EventLocationEdit({ event, setEvent }: EventLocationEditProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 24
+    paddingHorizontal: 16
   }
 });

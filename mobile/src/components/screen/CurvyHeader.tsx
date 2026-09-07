@@ -50,12 +50,18 @@ export function CurvyHeader({ ...props }: CurvyHeaderProps) {
       </View>
 
       {props?.iconRight && (
-        <TouchableOpacity
-          onPress={handleIconRightAction}
-          hitSlop={getHitSlop("small")}
-        >
-          <FontAwesome5 name={props.iconRight} size={24} color={props?.color} />
-        </TouchableOpacity>
+        <View style={styles.iconRight}>
+          <TouchableOpacity
+            onPress={handleIconRightAction}
+            hitSlop={getHitSlop("small")}
+          >
+            <FontAwesome5
+              name={props.iconRight}
+              size={24}
+              color={props?.color}
+            />
+          </TouchableOpacity>
+        </View>
       )}
 
       <ArcCutout
@@ -81,6 +87,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 20,
     width: "100%"
+  },
+  iconRight: {
+    marginRight: 8
   },
   titleContainer: {
     alignItems: "flex-start",

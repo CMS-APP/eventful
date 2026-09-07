@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 
 import { Alert, StyleSheet, View } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { StackActions } from "@react-navigation/native";
 
-import { AppStackParamList, navigationRef } from "@/app/navigation";
+import { buildNestedResetState, navigationRef } from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
 import {
   calculateEventActiveDays,
@@ -50,7 +49,6 @@ export function CalendarView({
     Array(42).fill(false)
   );
   const userId = useSelector((state: UserState) => state.uid);
-  const navigation = useNavigation() as StackNavigationProp<AppStackParamList>;
 
   useEffect(() => {
     const weeks = getCalendarWeeks(currentMonth, currentYear);
@@ -110,6 +108,29 @@ export function CalendarView({
   async function navigateToEvent(event: Event) {
     haptics.soft();
     if (event.userId === userId) {
+      const currentRoot = navigationRef.getRootState();
+      const alreadyOnMain =
+        currentRoot?.routes[currentRoot.index]?.name === "Main";
+
+      if (!alreadyOnMain) {
+        navigationRef.reset({ index: 0, routes: [{ name: "Main" }] });
+      }
+
+      const mainRoute = navigationRef
+        .getRootState()
+        ?.routes.find((route) => route.name === "Main");
+      const eventsRoute = (mainRoute?.state as any)?.routes?.find(
+        (route: any) => route.name === "Events"
+      );
+      const eventsKey = eventsRoute?.state?.key;
+
+      if (eventsKey && eventsRoute.state.routes.length > 1) {
+        navigationRef.dispatch({
+          ...StackActions.popToTop(),
+          target: eventsKey
+        });
+      }
+
       navigationRef.navigate("Main", {
         screen: "Events",
         params: {
@@ -124,11 +145,12 @@ export function CalendarView({
     if (isActiveEvent(event)) {
       const invite = await getInviteFromDatabase(event, userId);
       if (invite && userDetails) {
-        navigation.navigate("EventInvite", {
-          invite,
-          event,
-          host: userDetails
-        });
+        navigationRef.reset(
+          buildNestedResetState(
+            [{ name: "EventInvite", params: { invite, event, host: userDetails } }],
+            { background: "Main" }
+          )
+        );
       } else {
         Alert.alert("Invite Not Found", "This invite was not found", [
           { text: "OK" }

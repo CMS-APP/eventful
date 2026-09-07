@@ -81,6 +81,6 @@ export function EventFoodScreenEdit({
 const styles = StyleSheet.create({
   contentContainer: {
     gap: 16,
-    marginHorizontal: 24
+    marginHorizontal: 16
   }
 });

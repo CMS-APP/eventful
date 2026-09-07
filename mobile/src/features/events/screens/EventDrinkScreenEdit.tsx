@@ -78,6 +78,6 @@ export function EventDrinkScreenEdit({ route }: EventDrinkScreenEditProps) {
 const styles = StyleSheet.create({
   contentContainer: {
     gap: 16,
-    paddingHorizontal: 24
+    paddingHorizontal: 16
   }
 });

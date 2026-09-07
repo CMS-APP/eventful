@@ -7,12 +7,15 @@ import { Alert, Clipboard, StyleSheet, View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { FontAwesome5 } from "@expo/vector-icons";
+
 import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { Button } from "@/design-system/components/buttons/Button";
 import { SegmentedControl } from "@/design-system/components/buttons/SegmentedControl";
 import { SwitchButton } from "@/design-system/components/buttons/SwitchButton";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { EventInviteUserItem } from "@/features/events/components/guest-list/EventInviteUserItem";
 import { LinkInviteDisclaimerModal } from "@/features/invite/components/LinkInviteDisclaimerModal";
@@ -39,6 +42,9 @@ export function EventInviteGuestLinkScreen({
   route
 }: EventInviteGuestLinkScreenProps) {
   const event = route.params?.event;
+  const url = event
+    ? "https://app.eventfulapp.com/event-response/" + event.id
+    : "";
   const [enableLinkInvite, setEnableLinkInvite] = useState<boolean | undefined>(
     undefined
   );
@@ -72,7 +78,6 @@ export function EventInviteGuestLinkScreen({
   }
 
   function copyUrlToClipboard() {
-    const url = "https://app.eventfulapp.com/event-response/" + `${event?.id}`;
     Clipboard.setString(url);
     trackInviteLinkCopied();
 
@@ -178,36 +183,52 @@ export function EventInviteGuestLinkScreen({
         }}
       >
         <View style={styles.contentContainer}>
-          <View style={styles.linkContainer}>
-            <View style={styles.switchContainer}>
-              <SwitchButton
-                title={"Enable Link Invite"}
-                isChecked={enableLinkInvite ?? false}
-                onChange={handleSwitchChange}
+          <View style={styles.switchContainer}>
+            <SwitchButton
+              title={"Enable Link Invite"}
+              isChecked={enableLinkInvite ?? false}
+              onChange={handleSwitchChange}
+            />
+
+            {enableLinkInvite && (
+              <View style={styles.urlContainer}>
+                <FontAwesome5 name="link" size={14} color={colors.black} />
+                <Text
+                  type="caption"
+                  color={colors.black}
+                  style={styles.urlText}
+                  numberOfLines={1}
+                  ellipsizeMode="middle"
+                >
+                  {url}
+                </Text>
+              </View>
+            )}
+
+            <View
+              style={
+                enableLinkInvite
+                  ? styles.buttonContainerEnabled
+                  : styles.buttonContainerDisabled
+              }
+            >
+              <Button
+                size="small"
+                color={colors.secondary}
+                text={"Copy Invite Link"}
+                onPress={copyUrlToClipboard}
+                textColor={colors.white}
+                disabled={!enableLinkInvite}
+                leadingIcon={"copy"}
               />
 
-              <View
-                style={
-                  enableLinkInvite
-                    ? styles.buttonContainerEnabled
-                    : styles.buttonContainerDisabled
-                }
-              >
-                <Button
-                  color={colors.secondary}
-                  text={"Copy Invite Link"}
-                  onPress={copyUrlToClipboard}
-                  textColor={colors.white}
-                  disabled={!enableLinkInvite}
-                  leadingIcon={"copy"}
-                />
-              </View>
+              {enableLinkInvite && (
+                <Text type="caption" color={colors.gray} center>
+                  Anyone with this link can respond to the event
+                </Text>
+              )}
             </View>
           </View>
-
-          <Text type="header" color="white" center>
-            Responses
-          </Text>
 
           <SegmentedControl
             selections={["accept", "maybe", "decline"]}
@@ -245,25 +266,37 @@ export function EventInviteGuestLinkScreen({
 
 const styles = StyleSheet.create({
   buttonContainerDisabled: {
-    marginTop: 6,
+    gap: 4,
     opacity: 0.5
   },
   buttonContainerEnabled: {
-    marginTop: 6,
+    gap: 4,
     opacity: 1
   },
   contentContainer: {
     gap: 12
   },
-  linkContainer: {
-    gap: 16,
-    paddingHorizontal: 24
-  },
   switchContainer: {
-    gap: 12
+    gap: 12,
+    paddingHorizontal: 16
+  },
+  urlContainer: {
+    ...card.small,
+    alignItems: "center",
+    backgroundColor: colors.white,
+    flexDirection: "row",
+    gap: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 12
+  },
+  urlText: {
+    flex: 1,
+    fontStyle: "italic",
+    textAlign: "left",
+    textTransform: "none"
   },
   userListContainer: {
     gap: 12,
-    paddingHorizontal: 24
+    paddingHorizontal: 16
   }
 });

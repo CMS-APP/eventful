@@ -1,140 +1,36 @@
-import { useCallback, useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
 
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-
-import { FontAwesome5 } from "@expo/vector-icons";
-
-import { Input } from "@/design-system/components/inputs/Input";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
-import { getHitSlop } from "@/design-system/tokens/hitSlop";
-import { trackEventListItemAdded } from "@/services/analytics/events";
-import { Event } from "@/types/Event";
-import { haptics } from "@/utils/haptics";
 
 import { EventListItem } from "./EventListItem";
 
 interface EventListEditProps {
-  event: Event;
-  setEvent: (event: Event) => void;
-  listType: "checklist" | "toDoList" | "shoppingList";
-  placeholder?: string;
+  itemList: string[];
+  completeList: boolean[];
+  removeItem: (index: number) => void;
+  completeItem: (index: number) => void;
+  onPrevTextChange: (text: string, index: number) => void;
+  itemTextFinish: (index: number) => void;
 }
 
 export function EventListEdit({
-  event,
-  setEvent,
-  listType,
-  placeholder = "New Item"
+  itemList,
+  completeList,
+  removeItem,
+  completeItem,
+  onPrevTextChange,
+  itemTextFinish
 }: EventListEditProps) {
-  const [itemList, setItemList] = useState<string[]>([]);
-  const [completeList, setCompleteList] = useState<boolean[]>([]);
-  const [newText, setNewText] = useState("");
-
-  useEffect(() => {
-    if (listType in event) {
-      const data = (event as any)[listType];
-      setItemList(data.map((item: { item: string }) => item.item));
-      setCompleteList(data.map((item: { complete: boolean }) => item.complete));
-    } else {
-      setItemList([]);
-      setCompleteList([]);
-    }
-  }, [event, listType]);
-
-  const createDataToBeSaved = useCallback(
-    (items: string[], completes: boolean[]) => {
-      return items.map((item, index) => ({
-        item,
-        complete: completes[index]
-      }));
-    },
-    []
-  );
-
-  const saveData = useCallback(
-    (items: string[], completes: boolean[]) => {
-      setEvent({
-        ...event,
-        [listType]: createDataToBeSaved(items, completes)
-      });
-    },
-    [setEvent, event, listType, createDataToBeSaved]
-  );
-
-  const onPrevTextChange = useCallback(
-    (text: string, index: number) => {
-      const updatedList = [...itemList];
-      updatedList[index] = text;
-      setItemList(updatedList);
-    },
-    [itemList]
-  );
-
-  const completeItem = useCallback(
-    (index: number) => {
-      const updatedList = [...completeList];
-      updatedList[index] = !updatedList[index];
-      setCompleteList(updatedList);
-      saveData(itemList, updatedList);
-      haptics.soft();
-    },
-    [completeList, itemList, saveData]
-  );
-
-  const removeItem = useCallback(
-    (index: number) => {
-      const updatedList = [...itemList];
-      updatedList.splice(index, 1);
-      setItemList(updatedList);
-
-      const updatedCompleteList = [...completeList];
-      updatedCompleteList.splice(index, 1);
-      setCompleteList(updatedCompleteList);
-
-      saveData(updatedList, updatedCompleteList);
-      haptics.error();
-    },
-    [itemList, completeList, saveData]
-  );
-
-  const itemTextFinish = useCallback(
-    (index: number) => {
-      if (itemList[index]?.trim() === "") {
-        removeItem(index);
-      }
-    },
-    [itemList, removeItem]
-  );
-
-  const handleAddPress = useCallback(() => {
-    if (newText.trim() === "") return;
-
-    const newItemList = [...itemList, newText];
-    const newCompleteList = [...completeList, false];
-    setItemList(newItemList);
-    setCompleteList(newCompleteList);
-    setNewText("");
-    setEvent({
-      ...event,
-      [listType]: createDataToBeSaved(newItemList, newCompleteList)
-    });
-    trackEventListItemAdded(listType);
-  }, [
-    itemList,
-    completeList,
-    newText,
-    event,
-    listType,
-    createDataToBeSaved,
-    setEvent
-  ]);
+  if (itemList.length === 0) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
-      {itemList !== null &&
-        itemList.map((item, index) => (
+      {itemList.map((item, index) => (
+        <View key={index} style={[styles.row, index > 0 && styles.rowDivider]}>
           <EventListItem
-            key={`${listType}-${index}-${item}`}
             item={item}
             index={index}
             removeItem={removeItem}
@@ -143,44 +39,22 @@ export function EventListEdit({
             itemTextFinish={itemTextFinish}
             completeList={completeList}
           />
-        ))}
-      <View style={styles.inputContainer}>
-        <Input
-          placeholder={placeholder}
-          value={newText}
-          onChangeText={setNewText}
-          backgroundColor={colors.lightGray}
-          textColor={colors.black}
-          dark
-          flex
-        />
-
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={handleAddPress}
-          hitSlop={getHitSlop("medium")}
-        >
-          <FontAwesome5 name="plus" size={24} color={colors.white} />
-        </TouchableOpacity>
-      </View>
+        </View>
+      ))}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  addButton: {
-    marginBottom: 12
-  },
   container: {
-    flex: 1,
-    gap: 16,
-    marginHorizontal: 24,
-    marginTop: 12
+    ...card.medium,
+    paddingHorizontal: 16
   },
-  inputContainer: {
-    alignItems: "flex-end",
-    flexDirection: "row",
-    gap: 12,
-    marginTop: 6
+  row: {
+    paddingVertical: 14
+  },
+  rowDivider: {
+    borderTopColor: colors.lightGray,
+    borderTopWidth: 1
   }
 });

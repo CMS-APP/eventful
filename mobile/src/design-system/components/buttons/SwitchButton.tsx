@@ -50,7 +50,7 @@ export function SwitchButton({
             onValueChange={handlePress}
             trackColor={{ true: trackColor, false: colors.lightGray }}
             thumbColor={colors.white}
-            ios_backgroundColor={colors.lightGray}
+            ios_backgroundColor={colors.gray}
           />
         </View>
       </View>

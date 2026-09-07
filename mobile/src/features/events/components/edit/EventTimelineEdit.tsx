@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primaryTint2,
     flex: 1,
-    paddingHorizontal: 24
+    paddingHorizontal: 16
   },
   itemContainer: {
     alignItems: "center",

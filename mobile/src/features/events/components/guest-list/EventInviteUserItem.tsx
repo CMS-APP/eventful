@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -9,13 +9,14 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { AccountStackParamList } from "@/app/navigation";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
-import { padding } from "@/design-system/tokens/padding";
 import type {
   DeleteGuestManual,
   SetResponseManual
 } from "@/features/events/components/guest-list/EventInvitesRSVPUserList";
+import { ProfilePicture } from "@/features/profile/components/ProfilePicture";
 import { trackInviteResponseChanged } from "@/services/analytics/events";
 import { updateEventInDatabase } from "@/services/firebase/event";
 import {
@@ -24,7 +25,6 @@ import {
   deleteInviteFromDatabase,
   updateEventLinkResponse
 } from "@/services/firebase/invite";
-import { syncUserPicture } from "@/services/local/cache";
 import { AlertOptions } from "@/types/AlertOptions";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
@@ -32,6 +32,18 @@ import { User } from "@/types/User";
 import { showOptionsAlert } from "@/utils/alertModal";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
+
+const inviteTypeLabels: Record<string, string> = {
+  app: "In-App Friend",
+  link: "Via Link",
+  manual: "Added Manually"
+};
+
+const inviteTypeColors: Record<string, string> = {
+  app: colors.primary,
+  link: colors.primaryTint,
+  manual: colors.primaryTint2
+};
 
 interface EventInviteUserItemProps {
   user: User;
@@ -50,7 +62,6 @@ export function EventInviteUserItem({
   deleteGuestManual,
   setResponseManual
 }: EventInviteUserItemProps) {
-  const [userImage, setUserImage] = useState<string | null>(null);
   const [inviteId, setInviteId] = useState<string | null>(null);
   const navigation =
     useNavigation() as StackNavigationProp<AccountStackParamList>;
@@ -63,17 +74,11 @@ export function EventInviteUserItem({
     }
   }, [user, event]);
 
-  const fetchUserImage = useCallback(async () => {
-    const imageUri = await syncUserPicture(user);
-    setUserImage(imageUri ?? null);
-  }, [user]);
-
   useEffect(() => {
     if (!user || !appUser) return;
 
     getInviteId();
-    fetchUserImage();
-  }, [user, appUser, event, getInviteId, fetchUserImage]);
+  }, [user, appUser, event, getInviteId]);
 
   const handlePress = useCallback(() => {
     if (appUser) {
@@ -180,19 +185,17 @@ export function EventInviteUserItem({
         hitSlop={getHitSlop("medium")}
       >
         <View style={styles.userRow}>
-          {userImage ? (
-            <Image source={{ uri: userImage }} style={styles.userImage} />
-          ) : (
-            <View style={styles.placeholderImage}>
-              <FontAwesome5 name="user" size={20} color={colors.black} />
-            </View>
-          )}
-          <View style={[padding.smallWidget, styles.userInfo]}>
+          <ProfilePicture
+            user={user}
+            size={40}
+            placeholderColor={inviteTypeColors[invite.type ?? ""]}
+          />
+          <View style={styles.userInfo}>
             <Text type="subHeader" style={styles.userName}>
               {user.name}
             </Text>
-            <Text type="body" style={styles.inviteType}>
-              {invite.type}
+            <Text type="body" color={colors.gray} style={styles.userName}>
+              {inviteTypeLabels[invite.type ?? ""] ?? invite.type}
             </Text>
           </View>
         </View>
@@ -202,7 +205,7 @@ export function EventInviteUserItem({
         hitSlop={getHitSlop("medium")}
       >
         <View style={styles.ellipsisButton}>
-          <FontAwesome5 name="ellipsis-h" size={24} color={colors.black} />
+          <FontAwesome5 name="ellipsis-h" size={18} color={colors.black} />
         </View>
       </TouchableOpacity>
     </View>
@@ -211,43 +214,25 @@ export function EventInviteUserItem({
 
 const styles = StyleSheet.create({
   container: {
+    ...card.small,
     alignItems: "center",
-    flex: 1,
     flexDirection: "row",
-    gap: 12
+    gap: 12,
+    padding: 8
   },
   ellipsisButton: {
     alignItems: "center",
     backgroundColor: colors.lightGray,
     borderRadius: 12,
-    height: 40,
+    height: 36,
     justifyContent: "center",
-    width: 40
-  },
-  inviteType: {
-    color: colors.black
-  },
-  placeholderImage: {
-    alignItems: "center",
-    backgroundColor: colors.lightGray,
-    borderRadius: 24,
-    height: 40,
-    justifyContent: "center",
-    width: 40
+    width: 36
   },
   touchableContainer: {
     flex: 1
   },
-  userImage: {
-    borderRadius: 24,
-    height: 40,
-    width: 40
-  },
   userInfo: {
-    alignItems: "flex-start",
-    backgroundColor: colors.lightGray,
-    flex: 1,
-    paddingHorizontal: 12
+    flex: 1
   },
   userName: {
     textAlign: "left"

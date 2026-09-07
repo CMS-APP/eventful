@@ -2,19 +2,18 @@ import { useSelector } from "react-redux";
 
 import { useCallback, useEffect, useState } from "react";
 
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { FontAwesome5 } from "@expo/vector-icons";
-
 import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
+import { IconButton } from "@/design-system/components/buttons/IconButton";
 import { SegmentedControl } from "@/design-system/components/buttons/SegmentedControl";
 import { Input } from "@/design-system/components/inputs/Input";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { EventInviteUserItem } from "@/features/events/components/guest-list/EventInviteUserItem";
 import { trackInviteSent } from "@/services/analytics/events";
 import { updateEventInDatabase } from "@/services/firebase/event";
@@ -184,7 +183,7 @@ export function EventInviteGuestManualScreen({
           backgroundColor: colors.darkGray,
           dark: true,
           backAction: true,
-          icon: "users"
+          icon: "user-edit"
         },
         backgroundColor: colors.darkGray
       }}
@@ -192,6 +191,34 @@ export function EventInviteGuestManualScreen({
         backgroundColor: colors.darkGray
       }}
     >
+      <View style={styles.section}>
+        <View style={styles.inputContainer}>
+          <View style={styles.inputContainerInner}>
+            <Input
+              placeholder={"New Guest Name"}
+              onChangeText={setNewGuest}
+              value={newGuest}
+              backgroundColor={colors.lightGray}
+              textColor={colors.black}
+              dark
+            />
+          </View>
+
+          <IconButton
+            size="medium"
+            marginTop={0}
+            marginBottom={-24}
+            iconName="plus"
+            color={colors.secondary}
+            onPress={handleAddGuest}
+          />
+        </View>
+
+        <Text type="caption" color={colors.gray}>
+          Manual guests do not get a notification. You set their response.
+        </Text>
+      </View>
+
       <SegmentedControl
         selections={["accept", "maybe", "decline"]}
         selectionValues={[
@@ -218,47 +245,28 @@ export function EventInviteGuestManualScreen({
             />
           );
         })}
-
-        <View style={styles.inputContainer}>
-          <View style={styles.inputContainerInner}>
-            <Input
-              placeholder={"New Guest Name"}
-              onChangeText={setNewGuest}
-              value={newGuest}
-              backgroundColor={colors.lightGray}
-              textColor={colors.black}
-              dark
-            />
-          </View>
-
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={handleAddGuest}
-            hitSlop={getHitSlop("medium")}
-          >
-            <FontAwesome5 name="plus" size={24} color={colors.white} />
-          </TouchableOpacity>
-        </View>
       </View>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  addButton: {
-    marginBottom: 12
-  },
   inputContainer: {
-    alignItems: "flex-end",
+    alignItems: "center",
     flexDirection: "row",
     gap: 12
   },
   inputContainerInner: {
     flex: 1
   },
+  section: {
+    gap: 8,
+    paddingBottom: 16,
+    paddingHorizontal: 16
+  },
   userListContainer: {
     gap: 12,
-    marginHorizontal: 12,
-    marginTop: 12
+    paddingHorizontal: 16,
+    paddingTop: 12
   }
 });

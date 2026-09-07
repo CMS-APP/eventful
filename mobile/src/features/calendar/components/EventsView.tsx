@@ -27,13 +27,24 @@ export function EventsView({
 
   useEffect(() => {
     function getCurrentEvents() {
+      const monthStart = new Date(currentYear, currentMonth, 1);
+      const monthEnd = new Date(
+        currentYear,
+        currentMonth + 1,
+        0,
+        23,
+        59,
+        59,
+        999
+      );
+
       const filteredEvents = [...allEvents, ...allInvitedEvents].filter(
         (event: Event) => {
-          const date = parseDatabaseDate(event.date);
-          return (
-            date.getMonth() === currentMonth &&
-            date.getFullYear() === currentYear
-          );
+          const startDate = parseDatabaseDate(event.date);
+          const endDate = event.endDate
+            ? parseDatabaseDate(event.endDate)
+            : startDate;
+          return startDate <= monthEnd && endDate >= monthStart;
         }
       );
 

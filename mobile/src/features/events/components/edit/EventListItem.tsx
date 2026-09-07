@@ -6,7 +6,6 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
-import { padding } from "@/design-system/tokens/padding";
 import { haptics } from "@/utils/haptics";
 
 interface EventListItemProps {
@@ -53,25 +52,10 @@ export function EventListItem({
     itemTextFinish(index);
   }, [itemTextFinish, index]);
 
+  const complete = completeList[index];
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.removeButton}
-        onPress={handleRemoveItem}
-        hitSlop={getHitSlop("medium")}
-      >
-        <View style={styles.removeButtonContent}>
-          <FontAwesome5 name="trash" size={20} color={colors.black} />
-        </View>
-      </TouchableOpacity>
-
-      <TextInput
-        value={item}
-        onChangeText={handleTextChange}
-        onEndEditing={handleTextFinish}
-        style={styles.textInput}
-      />
-
       <TouchableOpacity
         style={styles.completeButton}
         onPress={handleCompleteItem}
@@ -81,18 +65,33 @@ export function EventListItem({
           style={[
             styles.completeButtonContent,
             {
-              backgroundColor: completeList[index]
-                ? colors.primaryTint
-                : colors.lightGray
+              backgroundColor: complete ? colors.primary : colors.transparent,
+              borderColor: complete ? colors.primary : colors.gray
             }
           ]}
         >
-          <FontAwesome5
-            name="check"
-            size={20}
-            color={completeList[index] ? colors.white : colors.black}
-          />
+          {complete && (
+            <FontAwesome5 name="check" size={14} color={colors.white} />
+          )}
         </View>
+      </TouchableOpacity>
+
+      <TextInput
+        value={item}
+        onChangeText={handleTextChange}
+        onEndEditing={handleTextFinish}
+        style={[
+          styles.textInput,
+          complete && styles.textInputComplete
+        ]}
+      />
+
+      <TouchableOpacity
+        style={styles.removeButton}
+        onPress={handleRemoveItem}
+        hitSlop={getHitSlop("medium")}
+      >
+        <FontAwesome5 name="trash" size={18} color={colors.gray} />
       </TouchableOpacity>
     </View>
   );
@@ -100,37 +99,33 @@ export function EventListItem({
 
 const styles = StyleSheet.create({
   completeButton: {
-    justifyContent: "center",
-    marginLeft: 6
+    justifyContent: "center"
   },
   completeButtonContent: {
     alignItems: "center",
-    borderColor: colors.lightGray + "33",
-    borderRadius: 12,
+    borderRadius: 14,
     borderWidth: 2,
+    height: 28,
     justifyContent: "center",
-    padding: 8
+    width: 28
   },
   container: {
-    alignItems: "stretch",
-    flexDirection: "row"
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 12
   },
   removeButton: {
-    justifyContent: "center",
-    marginRight: 6
-  },
-  removeButtonContent: {
-    ...padding.smallWidget,
-    backgroundColor: colors.lightGray,
     justifyContent: "center"
   },
   textInput: {
-    ...padding.smallWidget,
-    backgroundColor: colors.lightGray,
+    color: colors.black,
     flex: 1,
-    fontSize: 12,
-    justifyContent: "center",
-    letterSpacing: 2,
+    fontFamily: "poppinsMediumItalic",
+    fontSize: 15,
     textTransform: "none"
+  },
+  textInputComplete: {
+    color: colors.gray,
+    textDecorationLine: "line-through"
   }
 });

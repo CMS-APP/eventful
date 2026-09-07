@@ -8,8 +8,8 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { EventsStackParamList } from "@/app/navigation";
-import { Button } from "@/design-system/components/buttons/Button";
 import { SegmentedControl } from "@/design-system/components/buttons/SegmentedControl";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getEventInfo } from "@/services/firebase/event";
 import {
@@ -22,7 +22,9 @@ import { Event } from "@/types/Event";
 import { UserInvite } from "@/types/UserInvite";
 import { parseDatabaseDate } from "@/utils/date";
 
+import { EventInviteMoreRow } from "./EventInviteMoreRow";
 import { EventInvitesRSVPUserList } from "./EventInvitesRSVPUserList";
+import { EventInvitesStatsCard } from "./EventInvitesStatsCard";
 
 interface EventInvitesRSVPEditProps {
   event: Event;
@@ -145,34 +147,42 @@ export function EventInvitesRSVPEdit({
     );
   }, [event, navigation]);
 
+  const totalGuests = appList.length + linkList.length + manualList.length;
+
   return (
     <View style={styles.container}>
-      <View style={styles.buttonsContainer}>
-        <Button
-          text={"In-App Friends: " + appList.length}
+      <View style={styles.section}>
+        <EventInvitesStatsCard
+          total={totalGuests}
+          acceptNum={acceptNum}
+          maybeNum={maybeNum}
+          declineNum={declineNum}
+        />
+      </View>
+
+      <Text type="caption" color={colors.gray} style={styles.sectionLabel}>
+        Invite More
+      </Text>
+      <View style={styles.section}>
+        <EventInviteMoreRow
+          icon="users"
+          label="In-App Friends"
+          count={appList.length}
           onPress={openInviteFriends}
-          flex={1}
-          color={colors.lightGray}
-          textColor={colors.black}
-          leadingIcon="users"
         />
 
-        <Button
-          text={"Invite Via Link: " + linkList.length}
+        <EventInviteMoreRow
+          icon="link"
+          label="Invite Via Link"
+          count={linkList.length}
           onPress={openInviteLink}
-          flex={1}
-          color={colors.lightGray}
-          textColor={colors.black}
-          leadingIcon="link"
         />
 
-        <Button
-          text={"Manual Guests: " + manualList.length}
+        <EventInviteMoreRow
+          icon="user-plus"
+          label="Manual Guests"
+          count={manualList.length}
           onPress={openManualGuest}
-          flex={1}
-          color={colors.lightGray}
-          textColor={colors.black}
-          leadingIcon="user"
         />
       </View>
 
@@ -197,13 +207,18 @@ export function EventInvitesRSVPEdit({
 }
 
 const styles = StyleSheet.create({
-  buttonsContainer: {
-    gap: 16,
-    marginBottom: 12,
-    paddingHorizontal: 24
-  },
   container: {
     backgroundColor: colors.darkGray,
     flex: 1
+  },
+  section: {
+    gap: 8,
+    paddingBottom: 16,
+    paddingHorizontal: 16
+  },
+  sectionLabel: {
+    marginBottom: 8,
+    paddingHorizontal: 16,
+    textAlign: "left"
   }
 });

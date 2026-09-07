@@ -54,6 +54,6 @@ export function EventNotesScreenEdit({ route }: EventNotesScreenEditProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 24
+    paddingHorizontal: 16
   }
 });

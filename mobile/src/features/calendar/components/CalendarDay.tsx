@@ -138,7 +138,7 @@ export function CalendarDay({
       onPress={() => {
         onPress(date, type);
       }}
-      hitSlop={getHitSlop("medium")}
+      hitSlop={getHitSlop("xSmall")}
     >
       <View style={dayContainerStyle}>
         {combined && <View style={combinedContainerStyle} />}
