@@ -12,14 +12,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import Loading from "@/components/Loading";
-import {
-  galleryExists,
-  getGalleryImages,
-  getGalleryStats
-} from "@/services/FirebaseFunctions";
+import { getGalleryImages } from "@/services/FirebaseFunctions";
 
 import GalleryImageView from "./GalleryImageView";
-import SelectedImageView from "./SelectedImageView";
 import "./page.css";
 
 export interface GalleryImage {
@@ -37,7 +32,6 @@ interface GalleryStats {
 
 export default function Gallery() {
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
-  const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
   const [galleryStats, setGalleryStats] = useState<GalleryStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -69,21 +63,18 @@ export default function Gallery() {
       setIsLoading(true);
       setError(null);
 
-      const exists = await galleryExists(userId, eventId);
-
-      if (!exists) {
-        console.log("Gallery does not exist for this user and event");
-        setGalleryImages([]);
-        setGalleryStats({ imageCount: 0, totalSize: 0, hasImages: false });
-        setIsLoading(false);
-        return;
-      }
-
       const images = await getGalleryImages(userId, eventId);
       setGalleryImages(images);
 
-      const stats = (await getGalleryStats(userId, eventId)) as GalleryStats;
-      setGalleryStats(stats);
+      const totalSize = images.reduce(
+        (sum: number, image: GalleryImage) => sum + (image.size || 0),
+        0
+      );
+      setGalleryStats({
+        imageCount: images.length,
+        totalSize,
+        hasImages: images.length > 0
+      });
 
       console.log("Gallery loaded successfully:", images);
     } catch (error) {
@@ -101,15 +92,22 @@ export default function Gallery() {
 
     const zip = new JSZip();
     const totalImages = images.length;
+    const BATCH_SIZE = 6;
+    let completed = 0;
 
-    for (let i = 0; i < images.length; i++) {
-      const image = images[i];
-      const apiUrl = `/api/download-image?url=${encodeURIComponent(image.url)}&fileName=${encodeURIComponent(image.name)}`;
-      const response = await fetch(apiUrl);
-      const blob = await response.blob();
-      zip.file(image.name, blob);
+    for (let i = 0; i < images.length; i += BATCH_SIZE) {
+      const batch = images.slice(i, i + BATCH_SIZE);
+      await Promise.all(
+        batch.map(async (image) => {
+          const apiUrl = `/api/download-image?url=${encodeURIComponent(image.url)}&fileName=${encodeURIComponent(image.name)}`;
+          const response = await fetch(apiUrl);
+          const blob = await response.blob();
+          zip.file(image.name, blob);
 
-      setDownloadProgress(((i + 1) / totalImages) * 100);
+          completed += 1;
+          setDownloadProgress((completed / totalImages) * 100);
+        })
+      );
     }
 
     const content = await zip.generateAsync({ type: "blob" });
@@ -122,10 +120,6 @@ export default function Gallery() {
     URL.revokeObjectURL(url);
     setIsDownloadingAll(false);
     setDownloadProgress(0);
-  }
-
-  function getIndex(name: string) {
-    return galleryImages.findIndex((image) => image.name === name);
   }
 
   if (isLoading) {
@@ -208,36 +202,17 @@ export default function Gallery() {
               </p>
             </div>
           ) : (
-            <div className="gallery-page-grid-layout">
-              {selectedImage && (
-                <div className="gallery-page-preview">
-                  <SelectedImageView
-                    url={selectedImage.url}
-                    name={selectedImage.name}
-                    index={getIndex(selectedImage.name)}
-                    galleryImages={galleryImages}
-                    downloadingImage={downloadingImage}
-                    setDownloadingImage={setDownloadingImage}
-                    setSelectedImage={setSelectedImage}
-                  />
-                </div>
-              )}
-
-              <div
-                className={`gallery-page-grid${selectedImage ? " gallery-page-grid--with-preview" : ""}`}
-              >
-                {galleryImages.map((image, index) => (
-                  <GalleryImageView
-                    key={image.fullPath}
-                    url={image.url}
-                    name={image.name}
-                    index={index}
-                    downloadingImage={downloadingImage}
-                    setDownloadingImage={setDownloadingImage}
-                    setSelectedImage={setSelectedImage}
-                  />
-                ))}
-              </div>
+            <div className="gallery-page-grid">
+              {galleryImages.map((image, index) => (
+                <GalleryImageView
+                  key={image.fullPath}
+                  url={image.url}
+                  name={image.name}
+                  index={index}
+                  downloadingImage={downloadingImage}
+                  setDownloadingImage={setDownloadingImage}
+                />
+              ))}
             </div>
           )}
         </div>

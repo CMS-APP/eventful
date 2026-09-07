@@ -9,15 +9,13 @@ export default function GalleryImageView({
   name,
   index,
   downloadingImage,
-  setDownloadingImage,
-  setSelectedImage
+  setDownloadingImage
 }: {
   url: string;
   name: string;
   index: number;
   downloadingImage: string | null;
   setDownloadingImage: (image: string | null) => void;
-  setSelectedImage: (image: GalleryImage | null) => void;
 }) {
   async function downloadImage(image: GalleryImage) {
     try {
@@ -40,20 +38,16 @@ export default function GalleryImageView({
   }
 
   return (
-    <div
-      key={index}
-      className="relative group cursor-pointer"
-      onClick={() => setSelectedImage({ url, name, fullPath: "", size: 0 })}
-    >
+    <div key={index} className="relative group">
       <Image
         src={url}
         alt={`Gallery image ${index + 1}`}
         width={1200}
         height={800}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
         className="w-full h-auto rounded-lg shadow-lg transition-transform duration-200 pointer-events-none select-none"
         loading="lazy"
         draggable={false}
-        unoptimized
       />
       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 rounded-lg"></div>
 

@@ -180,34 +180,3 @@ export async function deleteAllGalleryImages(userId, eventId) {
   }
 }
 
-export async function galleryExists(userId, eventId) {
-  try {
-    const images = await getGalleryImages(userId, eventId);
-    return images.length > 0;
-  } catch (error) {
-    console.error("Error checking if gallery exists:", error);
-    return false;
-  }
-}
-
-export async function getGalleryStats(userId, eventId) {
-  try {
-    const images = await getGalleryImages(userId, eventId);
-    const totalSize = images.reduce((sum, image) => sum + (image.size || 0), 0);
-
-    console.log("Gallery Stats:", {
-      imageCount: images.length,
-      totalSize: totalSize,
-      hasImages: images.length > 0
-    });
-
-    return {
-      imageCount: images.length,
-      totalSize: totalSize,
-      hasImages: images.length > 0
-    };
-  } catch (error) {
-    console.error("Error getting gallery stats:", error);
-    throw error;
-  }
-}
