@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "web": "npm --prefix web run dev",
-    "mobile": "npm --prefix mobile exec expo start",
+    "mobile": "cd mobile && npx expo",
     "ios:dev": "npm --prefix mobile run ios:dev",
     "ios:build": "npm --prefix mobile run ios:build",
     "android:dev": "npm --prefix mobile run android:dev",
