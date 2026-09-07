@@ -1,9 +1,18 @@
-import { Image, Linking, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Linking,
+  StyleSheet,
+  TouchableOpacity,
+  View
+} from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { FontAwesome6 } from "@expo/vector-icons";
+
 import { AppStackParamList } from "@/app/navigation";
+import { Tooltip } from "@/design-system/components/overlays/Tooltip";
 import { Text } from "@/design-system/components/text/Text";
 import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
@@ -38,20 +47,36 @@ export function AmazonButton({ type }: AmazonButtonProps) {
   };
 
   return (
-    <TouchableOpacity onPress={handlePress} hitSlop={getHitSlop("large")}>
+    <TouchableOpacity
+      onPress={handlePress}
+      hitSlop={getHitSlop("large")}
+      activeOpacity={0.7}
+    >
       <View style={styles.buttonContainer}>
         <Image
           source={require("@/assets/logos/amazon-logo.png")}
           style={styles.logo}
+          resizeMode="contain"
         />
         <View style={styles.textContainer}>
-          <Text type="subHeader" color={colors.black} style={styles.title}>
-            Purchase {type}
-          </Text>
+          <View style={styles.titleRow}>
+            <Text
+              type="subHeader"
+              color={colors.black}
+              style={styles.title}
+              numberOfLines={1}
+            >
+              Shop {type}
+            </Text>
+          </View>
           <Text type="caption" color={colors.gray} style={styles.subtitle}>
-            We recieve a small commission from Amazon for each purchase
+            Search Amazon for party {type.toLowerCase()}
           </Text>
         </View>
+        <Tooltip text="We receive a small commission from Amazon for each purchase made through this link.">
+          <FontAwesome6 name="circle-info" size={14} color={colors.gray} />
+        </Tooltip>
+        <FontAwesome6 name="chevron-right" size={16} color={colors.gray} />
       </View>
     </TouchableOpacity>
   );
@@ -60,24 +85,28 @@ export function AmazonButton({ type }: AmazonButtonProps) {
 const styles = StyleSheet.create({
   buttonContainer: {
     ...card.medium,
-    ...padding.largeWidget,
+    ...padding.mediumWidget,
     alignItems: "center",
     flexDirection: "row",
     gap: 12
   },
   logo: {
-    height: 20,
-    marginTop: 6,
-    width: 60
+    height: 24,
+    width: 24
   },
   subtitle: {
-    color: colors.gray,
-    textAlign: "left"
+    letterSpacing: 0
   },
   textContainer: {
     flex: 1
   },
   title: {
+    flexShrink: 1,
     textAlign: "left"
+  },
+  titleRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 8
   }
 });

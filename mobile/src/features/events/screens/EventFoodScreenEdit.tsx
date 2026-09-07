@@ -8,8 +8,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { Input } from "@/design-system/components/inputs/Input";
-import { Divider } from "@/design-system/components/layout/Divider";
-import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { AmazonButton } from "@/features/events/components/misc/AmazonButton";
 import { UserState } from "@/store/UserSlice";
@@ -58,19 +56,13 @@ export function EventFoodScreenEdit({
           value={event.food}
           onChangeText={(text) => setEventFood(text)}
           dark
-          backgroundColor={colors.lightGray}
+          backgroundColor={colors.white}
           textColor={colors.black}
           multilineProps={{
             numberOfLines: 10,
             height: 100
           }}
         />
-
-        <Divider color={colors.white} />
-
-        <Text type="subHeader" color={colors.white} center>
-          Want some inspiration?
-        </Text>
 
         <AmazonButton type={"Food"} />
       </View>

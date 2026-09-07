@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     textAlign: "right"
   },
   container: {
-    backgroundColor: colors.lightGray,
+    backgroundColor: colors.white,
     gap: 12,
     justifyContent: "center",
     marginTop: 20

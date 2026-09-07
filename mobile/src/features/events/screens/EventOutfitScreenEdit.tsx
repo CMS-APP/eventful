@@ -50,7 +50,7 @@ export function EventOutfitScreenEdit({ route }: EventOutfitScreenEditProps) {
           value={event.outfit}
           onChangeText={(text) => setEventOutfit(text)}
           dark
-          backgroundColor={colors.lightGray}
+          backgroundColor={colors.white}
           textColor={colors.black}
           multilineProps={{
             numberOfLines: 10,

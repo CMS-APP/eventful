@@ -145,7 +145,7 @@ export function EventBudget({ event }: EventBudgetProps) {
 
 const styles = StyleSheet.create({
   budgetContainer: {
-    backgroundColor: colors.lightGray
+    backgroundColor: colors.white
   },
   budgetContent: {
     alignItems: "center",
