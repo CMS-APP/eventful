@@ -1,4 +1,5 @@
 import { ActivityIndicator } from "react-native-paper";
+import { useSelector } from "react-redux";
 
 import { useCallback } from "react";
 
@@ -14,10 +15,17 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { EventsStackParamList, MainStackParamList } from "@/app/navigation";
+import {
+  AppStackParamList,
+  EventsStackParamList,
+  MainStackParamList
+} from "@/app/navigation";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { getInviteFromDatabase } from "@/services/firebase/invite";
+import { getUserInfo } from "@/services/firebase/user";
+import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
 import { haptics } from "@/utils/haptics";
 
@@ -39,49 +47,66 @@ export function HomeNextEvent({
 }: HomeNextEventProps) {
   const navigation = useNavigation() as StackNavigationProp<MainStackParamList>;
   const eventNav = useNavigation() as StackNavigationProp<EventsStackParamList>;
+  const appNavigation = useNavigation() as StackNavigationProp<AppStackParamList>;
+  const userId = useSelector((state: UserState) => state.uid);
   const { nextEvent, percentageComplete, accepted, loading } =
     useNextEvent(event);
+  const isOwner = nextEvent?.userId === userId;
+
+  const goToInvite = useCallback(async () => {
+    if (!nextEvent) return;
+    const [host, invite] = await Promise.all([
+      getUserInfo(nextEvent.userId),
+      getInviteFromDatabase(nextEvent, userId)
+    ]);
+    if (host && invite) {
+      appNavigation.navigate("EventInvite", { invite, event: nextEvent, host });
+    }
+  }, [appNavigation, nextEvent, userId]);
 
   const goToEvent = useCallback(() => {
-    if (!navigation || edit) return;
+    if (!navigation || edit || !nextEvent) return;
+    if (!isOwner) {
+      goToInvite();
+      return;
+    }
     navigation.reset({
       index: 0,
       routes: [{ name: "Events" }]
     });
     setTimeout(() => {
-      if (nextEvent) {
-        navigation.navigate("Events", {
-          screen: "EventEdit",
-          params: { event: nextEvent as Event | null }
-        });
-      }
+      navigation.navigate("Events", {
+        screen: "EventEdit",
+        params: { event: nextEvent as Event | null }
+      });
     }, 100);
-  }, [navigation, edit, nextEvent]);
+  }, [navigation, edit, nextEvent, isOwner, goToInvite]);
 
   const goToUserInvites = useCallback(() => {
     haptics.soft();
+    if (!nextEvent) return;
     if (!edit) {
+      if (!isOwner) {
+        goToInvite();
+        return;
+      }
       navigation.reset({
         index: 0,
         routes: [{ name: "Events" }]
       });
-      if (nextEvent) {
-        setTimeout(() => {
-          navigation.navigate("Events", {
-            screen: "EventEdit",
-            params: { event: nextEvent as Event }
-          });
-        }, 100);
-      }
-    } else {
-      if (nextEvent) {
-        eventNav.navigate("EventEditSection", {
-          event: nextEvent,
-          section: "Invites"
+      setTimeout(() => {
+        navigation.navigate("Events", {
+          screen: "EventEdit",
+          params: { event: nextEvent as Event }
         });
-      }
+      }, 100);
+    } else {
+      eventNav.navigate("EventEditSection", {
+        event: nextEvent,
+        section: "Invites"
+      });
     }
-  }, [navigation, edit, nextEvent, eventNav]);
+  }, [navigation, edit, nextEvent, eventNav, isOwner, goToInvite]);
 
   if (loading)
     return (

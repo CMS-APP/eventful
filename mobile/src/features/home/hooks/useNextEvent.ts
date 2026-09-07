@@ -4,7 +4,7 @@ import { useCallback, useRef, useState } from "react";
 
 import { useFocusEffect } from "@react-navigation/native";
 
-import { getNextEvent } from "@/services/firebase/event";
+import { getAllEvents } from "@/services/firebase/event";
 import { getEventResponses } from "@/services/firebase/invite";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
@@ -36,7 +36,11 @@ export function useNextEvent(event: Event | null) {
       return;
     }
     if (!hasLoadedOnce.current) setLoading(true);
-    const nextEvent = event || (await getNextEvent(userId));
+    let nextEvent = event;
+    if (!nextEvent) {
+      const { upcomingEvents } = await getAllEvents(userId);
+      nextEvent = upcomingEvents[0] || null;
+    }
     setNextEvent(nextEvent);
     setPercentageComplete(calculatePercentageComplete(nextEvent));
     const responses = await getEventResponses(nextEvent);
