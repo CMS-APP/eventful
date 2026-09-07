@@ -24,6 +24,11 @@ import { emailValid, passwordValid } from "@/utils/validation";
 
 import { Header } from "../components/Header";
 import { HeaderArcs } from "../components/HeaderArcs";
+import {
+  EmailValidationHint,
+  PasswordMatchCheck,
+  PasswordStrengthChecks
+} from "../components/PasswordRequirements";
 import { formStyles } from "../styles/formStyles";
 
 type SignUpScreenProps = NativeStackScreenProps<AuthStackParamList, "SignUp">;
@@ -127,11 +132,13 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
               textColor={colors.black}
             />
 
-            {errors.email && (
-              <Text type="body" color="red">
-                {errors.email}
-              </Text>
-            )}
+            <EmailValidationHint
+              message={
+                email.length > 0 && !emailValid(email)
+                  ? "Please enter a valid email address."
+                  : errors.email
+              }
+            />
           </View>
 
           <View style={styles.inputContainer}>
@@ -144,11 +151,7 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
               textColor={colors.black}
             />
 
-            {errors.password && (
-              <Text type="body" color="red">
-                {errors.password}
-              </Text>
-            )}
+            <PasswordStrengthChecks password={password} />
           </View>
 
           <View style={styles.inputContainer}>
@@ -161,11 +164,10 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
               textColor={colors.black}
             />
 
-            {errors.confirmPassword && (
-              <Text type="body" color="red">
-                {errors.confirmPassword}
-              </Text>
-            )}
+            <PasswordMatchCheck
+              password={password}
+              confirmPassword={confirmPassword}
+            />
           </View>
 
           <Button
