@@ -1,4 +1,4 @@
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, Linking, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -11,6 +11,7 @@ import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
 import { trackEventAmazonLinkOpened } from "@/services/analytics/events";
 import { haptics } from "@/utils/haptics";
+import { log } from "@/utils/logging";
 
 interface AmazonButtonProps {
   type: "Food" | "Drink" | "Decor";
@@ -24,13 +25,16 @@ export function AmazonButton({ type }: AmazonButtonProps) {
     Decor: "https://link.amazon/B0dyaL5oD"
   };
 
-  const handlePress = () => {
+  const handlePress = async () => {
     haptics.soft();
     trackEventAmazonLinkOpened();
-    navigation.navigate("WebView", {
-      title: "Amazon",
-      uri: links[type]
-    });
+    const link = links[type];
+    try {
+      await Linking.openURL(link);
+    } catch (error) {
+      log(`Error opening Amazon link: ${error}`, "error");
+      navigation.navigate("WebView", { title: "Amazon", uri: link });
+    }
   };
 
   return (
