@@ -1,7 +1,13 @@
+import { useRef } from "react";
+
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
+import {
+  Confetti,
+  ConfettiHandle
+} from "@/design-system/components/feedback/Confetti";
 import { Text } from "@/design-system/components/text/Text";
 import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
@@ -14,85 +20,120 @@ interface TimelineButtonProps {
   updateList: (index: number) => void;
   textList: string[];
   timelineList: boolean[];
+  onNavigate?: () => void;
 }
 
 export function TimelineButton({
   index,
   updateList,
   textList,
-  timelineList
+  timelineList,
+  onNavigate
 }: TimelineButtonProps) {
   const isCompleted = timelineList[index];
+  const isParty = textList[index] === "Party";
+  const confettiRef = useRef<ConfettiHandle>(null);
 
   return (
-    <TouchableOpacity
-      onPress={() => {
-        if (isCompleted) {
-          haptics.error();
-        } else {
-          haptics.success();
-        }
-        updateList(index);
-      }}
-      style={styles.container}
-      hitSlop={getHitSlop("medium")}
-    >
-      <View style={styles.button}>
-        <Text type="subHeader" color={colors.black} center>
-          {textList[index]}
-        </Text>
-        <View style={styles.checkContainer}>
-          <View
-            style={
-              isCompleted ? styles.completedCheck : styles.notCompletedCheck
-            }
-          >
-            <FontAwesome5
-              name="check"
-              size={40}
-              color={colors.black}
-              style={
-                isCompleted ? styles.completedIcon : styles.notCompletedIcon
+    <View style={styles.container}>
+      {isParty && (
+        <Confetti ref={confettiRef} count={80} originX={0.5} originY={0.5} />
+      )}
+      <View style={styles.row}>
+        <View style={styles.flexSide} />
+        <TouchableOpacity
+          onPress={() => {
+            if (isCompleted) {
+              haptics.error();
+            } else {
+              haptics.success();
+              if (isParty) {
+                confettiRef.current?.play();
               }
-            />
+            }
+            updateList(index);
+          }}
+          hitSlop={getHitSlop("medium")}
+          style={styles.flexCenter}
+        >
+          <View style={styles.card}>
+            <Text type="subHeader" color={colors.black} center>
+              {textList[index]}
+            </Text>
+            <View style={styles.checkContainer}>
+              <FontAwesome5
+                name="check"
+                size={40}
+                color={colors.black}
+                style={
+                  isCompleted ? styles.completedIcon : styles.notCompletedIcon
+                }
+              />
+            </View>
           </View>
+        </TouchableOpacity>
+
+        <View style={styles.flexSide}>
+          {onNavigate && (
+            <TouchableOpacity
+              onPress={() => {
+                haptics.soft();
+                onNavigate();
+              }}
+              style={styles.navButton}
+              hitSlop={getHitSlop("medium")}
+            >
+              <FontAwesome5
+                name="chevron-right"
+                size={18}
+                color={colors.black}
+              />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  button: {
+  card: {
     ...card.medium,
     ...padding.largeWidget,
-    gap: 12,
-    width: "75%"
+    gap: 12
   },
   checkContainer: {
     alignItems: "center",
     justifyContent: "center"
   },
-  completedCheck: {
-    backgroundColor: colors.white,
-    borderRadius: 12,
-    padding: 8
-  },
   completedIcon: {
     opacity: 1
   },
   container: {
-    alignItems: "center",
-    width: "100%"
+    alignItems: "center"
   },
-  notCompletedCheck: {
-    backgroundColor: colors.transparent,
-    borderColor: colors.white,
-    borderRadius: 12,
-    borderWidth: 2,
-    padding: 6
+  flexCenter: {
+    flex: 4
+  },
+  flexSide: {
+    flex: 1,
+    height: 40
+  },
+  navButton: {
+    alignItems: "center",
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    flex: 1,
+    height: 40,
+    justifyContent: "center",
+    width: 40
   },
   notCompletedIcon: {
     opacity: 0.1
+  },
+  row: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 12
   }
 });

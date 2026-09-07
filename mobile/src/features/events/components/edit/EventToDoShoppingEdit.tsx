@@ -18,13 +18,17 @@ type ListType = "toDoList" | "shoppingList";
 interface EventToDoShoppingEditProps {
   event: Event;
   setEvent: (event: Event) => void;
+  initialTab?: string;
 }
 
 export function EventToDoShoppingEdit({
   event,
-  setEvent
+  setEvent,
+  initialTab
 }: EventToDoShoppingEditProps) {
-  const [selectedButton, setSelectedButton] = useState("To Do List");
+  const [selectedButton, setSelectedButton] = useState(
+    initialTab ?? "To Do List"
+  );
   const listType: ListType =
     selectedButton === "To Do List" ? "toDoList" : "shoppingList";
   const placeholder =

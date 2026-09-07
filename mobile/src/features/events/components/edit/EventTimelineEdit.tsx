@@ -2,8 +2,15 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+import { EventsStackParamList } from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
-import { TIMELINE_TEXT_LIST } from "@/features/events/constants";
+import {
+  TIMELINE_ACTIONS,
+  TIMELINE_TEXT_LIST
+} from "@/features/events/constants";
 import { trackEventTimelineItemToggled } from "@/services/analytics/events";
 import { Event } from "@/types/Event";
 
@@ -18,6 +25,8 @@ interface EventTimelineEditProps {
 }
 
 export function EventTimelineEdit({ event, setEvent }: EventTimelineEditProps) {
+  const navigation =
+    useNavigation() as StackNavigationProp<EventsStackParamList>;
   const [timelineList, setTimelineList] = useState<boolean[]>([]);
   const [percentageComplete, setPercentageComplete] = useState(0);
 
@@ -59,6 +68,23 @@ export function EventTimelineEdit({ event, setEvent }: EventTimelineEditProps) {
     [timelineList]
   );
 
+  const navigateToAction = useCallback(
+    (index: number) => {
+      const action = TIMELINE_ACTIONS[index];
+      if (!action) return;
+
+      navigation.reset({
+        index: 2,
+        routes: [
+          { name: "EventsList" },
+          { name: "EventEdit", params: { event } },
+          { name: action.screen as any, params: { event, ...action.params } }
+        ]
+      });
+    },
+    [navigation, event]
+  );
+
   return (
     <View style={styles.container}>
       {timelineList.map((_, index) => (
@@ -72,6 +98,11 @@ export function EventTimelineEdit({ event, setEvent }: EventTimelineEditProps) {
             updateList={updateList}
             textList={TIMELINE_TEXT_LIST}
             timelineList={timelineList}
+            onNavigate={
+              TIMELINE_ACTIONS[index]
+                ? () => navigateToAction(index)
+                : undefined
+            }
           />
 
           {index !== timelineList.length - 1 && <TimelineDivider />}

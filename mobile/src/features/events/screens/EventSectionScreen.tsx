@@ -154,7 +154,11 @@ export function EventSectionScreen({
       )}
 
       {section === "To Do" && (
-        <EventToDoShoppingEdit event={event} setEvent={setEvent} />
+        <EventToDoShoppingEdit
+          event={event}
+          setEvent={setEvent}
+          initialTab={route.params.initialTab}
+        />
       )}
 
       {section === "Timeline" && (

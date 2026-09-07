@@ -50,7 +50,11 @@ export default ({ config }: ConfigContext) => {
       infoPlist: {
         NSPhotoLibraryUsageDescription:
           "This app needs access to your photo library to upload photos to your account and events.",
-        LSApplicationQueriesSchemes: ["spotify", "comgooglemaps"],
+        LSApplicationQueriesSchemes: [
+          "spotify",
+          "comgooglemaps",
+          "com.amazon.mobile.shopping.web"
+        ],
         NSCameraUsageDescription:
           "Eventful uses your camera to let you take photos for your event pages or user profile.",
         ITSAppUsesNonExemptEncryption: false

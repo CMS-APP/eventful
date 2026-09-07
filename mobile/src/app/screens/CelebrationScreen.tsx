@@ -15,6 +15,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useAppDimensions } from "@/app/hooks/useAppDimensions";
 import { AppStackParamList } from "@/app/navigation";
 import { Button } from "@/design-system/components/buttons/Button";
+import { Confetti } from "@/design-system/components/feedback/Confetti";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { haptics } from "@/utils/haptics";
@@ -80,6 +81,8 @@ export function CelebrationScreen({
 
   return (
     <View style={styles.container}>
+      <Confetti autoPlay count={100} originX={0.5} originY={0.8} />
+
       <Animated.View
         style={[
           styles.contentContainer,

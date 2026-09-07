@@ -94,7 +94,7 @@ export type EventsStackParamList = {
   EventsList: { newEvent?: boolean };
   Events: { screen: string; params: { event: Event } } | undefined;
   EventEdit: { event: Event };
-  EventEditSection: { event: Event; section: string };
+  EventEditSection: { event: Event; section: string; initialTab?: string };
   EventEditFood: { event: Event };
   EventEditDrink: { event: Event };
   EventEditDecor: { event: Event };
