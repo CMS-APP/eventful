@@ -124,6 +124,7 @@ export function AccountPictureCameraModal({
               onPress={() => setPresentModal(false)}
               color={colors.lightGray}
               textColor={colors.black}
+              leadingIcon={"times"}
             />
           </>
         )}

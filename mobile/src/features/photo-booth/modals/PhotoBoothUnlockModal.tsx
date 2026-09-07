@@ -89,6 +89,7 @@ export function PhotoBoothUnlockModal({
         onPress={() => setPresentModal(false)}
         color={colors.white}
         textColor={colors.black}
+        leadingIcon={"times"}
       />
     </ModalView>
   );

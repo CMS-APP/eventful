@@ -30,17 +30,19 @@ export function LinkInviteDisclaimerModal({
       </Text>
 
       <Button
-        text="Accept"
+        text="Enable"
         onPress={onAccept}
         color={colors.primary}
         textColor={colors.white}
+        leadingIcon={"check"}
       />
 
       <Button
-        text="Decline"
+        text="Cancel"
         onPress={() => setPresentModal(false)}
-        color={colors.lightGray}
+        color={colors.white}
         textColor={colors.black}
+        leadingIcon={"times"}
       />
     </ModalView>
   );

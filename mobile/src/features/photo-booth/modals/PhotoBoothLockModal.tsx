@@ -83,6 +83,7 @@ export function PhotoBoothLockModal({
         onPress={() => setPresentModal(false)}
         color={colors.white}
         textColor={colors.black}
+        leadingIcon={"times"}
       />
     </ModalView>
   );
