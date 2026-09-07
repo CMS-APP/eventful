@@ -115,6 +115,7 @@ export function ContactsSearch({
       onFocus,
       onBlur,
       textColor,
+      iconColor,
       dark,
       inset
     ]
