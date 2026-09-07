@@ -63,7 +63,7 @@ export function EventDrinkScreenEdit({ route }: EventDrinkScreenEditProps) {
           }}
         />
 
-        <Divider dark />
+        <Divider color={colors.white} />
 
         <Text type="subHeader" color={colors.white} center>
           Want some inspiration?

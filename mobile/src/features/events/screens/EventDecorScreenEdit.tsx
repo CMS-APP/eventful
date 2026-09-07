@@ -66,7 +66,7 @@ export function EventDecorScreenEdit({
           }}
         />
 
-        <Divider dark />
+        <Divider color={colors.white} />
 
         <Text type="subHeader" color={colors.white} center>
           Want some inspiration?
