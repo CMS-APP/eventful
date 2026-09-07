@@ -181,6 +181,8 @@ function ConfettiParticle({
     };
   });
 
+  const borderRadius = particle.isCircle ? particle.width / 2 : 2;
+
   return (
     <Animated.View
       style={[
@@ -190,7 +192,7 @@ function ConfettiParticle({
           top: `${originY * 100}%`,
           width: particle.width,
           height: particle.height,
-          borderRadius: particle.isCircle ? particle.width / 2 : 2,
+          borderRadius,
           backgroundColor: particle.color
         },
         animatedStyle
