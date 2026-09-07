@@ -19,9 +19,9 @@ interface AmazonButtonProps {
 export function AmazonButton({ type }: AmazonButtonProps) {
   const navigation = useNavigation() as StackNavigationProp<AppStackParamList>;
   const links = {
-    Food: "https://amzn.to/3EwY4fk",
-    Drink: "https://amzn.to/4ht4RoN",
-    Decor: "https://amzn.to/3CJNhOo"
+    Food: "https://link.amazon/B0ddzQA5w",
+    Drink: "https://link.amazon/B0iDgnO20",
+    Decor: "https://link.amazon/B0dyaL5oD"
   };
 
   const handlePress = () => {
