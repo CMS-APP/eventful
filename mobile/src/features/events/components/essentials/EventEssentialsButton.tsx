@@ -51,16 +51,15 @@ const styles = StyleSheet.create({
   button: {
     ...card.small,
     ...padding.mediumWidget,
-    gap: 12,
-    padding: 12
+    gap: 8
   },
   flexContainer: {
     flex: 1
   },
   image: {
-    height: 100,
+    height: 56,
     tintColor: colors.black,
-    width: 100
+    width: 56
   },
   title: {
     color: colors.black

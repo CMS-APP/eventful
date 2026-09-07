@@ -112,7 +112,7 @@ export function EventEssentialsEdit({
           onChangeText={setBudgetMaximum}
           keyboardType="numeric"
           dark
-          backgroundColor={colors.lightGray}
+          backgroundColor={colors.white}
           textColor={colors.black}
         />
 
