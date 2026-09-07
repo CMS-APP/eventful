@@ -37,7 +37,8 @@ export function ContactsSearch({
   onBlur,
   dark = false
 }: ContactsSearchProps) {
-  const textColor = dark ? colors.white : colors.black;
+  const iconColor = dark ? colors.white : colors.black;
+  const textColor = dark ? colors.white : colors.gray;
 
   const renderSearch = useCallback(
     (disabled: boolean) => {
@@ -55,7 +56,7 @@ export function ContactsSearch({
             }
           ]}
         >
-          <FontAwesome5 name="search" size={16} color={textColor} />
+          <FontAwesome5 name="search" size={16} color={iconColor} />
           {disabled ? (
             <Text type="body" style={styles.buttonLabel} color={textColor}>
               {placeholder}
@@ -71,7 +72,7 @@ export function ContactsSearch({
                 onFocus={onFocus}
                 onBlur={onBlur}
                 placeholder={placeholder}
-                placeholderTextColor={dark ? colors.gray : colors.gray}
+                placeholderTextColor={colors.gray}
                 autoCapitalize="none"
                 autoCorrect={false}
                 autoComplete="off"
@@ -149,7 +150,6 @@ export function ContactsSearch({
 
 const styles = StyleSheet.create({
   buttonLabel: {
-    color: colors.black,
     flex: 1,
     fontSize: 12,
     letterSpacing: 2,
