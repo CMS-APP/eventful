@@ -4,10 +4,6 @@ import { Alert, LayoutChangeEvent, StyleSheet, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import {
-  ILoadingModalContext,
-  useLoadingModal
-} from "@/app/context/loading/LoadingModalContext";
 import { AuthStackParamList } from "@/app/navigation";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Button } from "@/design-system/components/buttons/Button";
@@ -39,8 +35,7 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
   const [headerHeight, setHeaderHeight] = useState(0);
-
-  const { setLoading } = useLoadingModal() as ILoadingModalContext;
+  const [isSigningUp, setIsSigningUp] = useState(false);
 
   const validateForm = useCallback((): boolean => {
     const newErrors: FormErrors = {};
@@ -76,7 +71,7 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
       return;
     }
 
-    setLoading(true);
+    setIsSigningUp(true);
     try {
       const user = await handleSignUp(email, password);
       if (typeof user === "string") {
@@ -105,9 +100,9 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
         }
       }
     } finally {
-      setLoading(false);
+      setIsSigningUp(false);
     }
-  }, [email, password, validateForm, setLoading, navigation]);
+  }, [email, password, validateForm, navigation]);
 
   return (
     <View style={styles.container}>
@@ -175,7 +170,9 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
             color={colors.primary}
             textColor={colors.white}
             onPress={signUp}
-            leadingIcon="user-plus"
+            leadingIcon={isSigningUp ? undefined : "user-plus"}
+            loading={isSigningUp}
+            disabled={isSigningUp}
           />
 
           <View style={styles.orContainer}>

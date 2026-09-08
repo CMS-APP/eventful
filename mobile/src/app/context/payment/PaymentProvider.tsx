@@ -106,28 +106,23 @@ export function PaymentProvider({ children }: { children: React.ReactNode }) {
   }, [userId, init]);
 
   const restorePermissions = useCallback(async () => {
-    setLoading(true);
-    try {
-      const customer = await Purchases.restorePurchases();
-      await updateUserInfo(customer);
-      trackSubscriptionRestored(customer.activeSubscriptions.length > 0);
+    const customer = await Purchases.restorePurchases();
+    await updateUserInfo(customer);
+    trackSubscriptionRestored(customer.activeSubscriptions.length > 0);
 
-      if (customer.activeSubscriptions.length > 0) {
-        Alert.alert(
-          "Subscription Restored",
-          "Your subscription has been restored"
-        );
-      } else {
-        Alert.alert(
-          "No active subscriptions",
-          "You do not have any active subscriptions"
-        );
-      }
-      return customer;
-    } finally {
-      setLoading(false);
+    if (customer.activeSubscriptions.length > 0) {
+      Alert.alert(
+        "Subscription Restored",
+        "Your subscription has been restored"
+      );
+    } else {
+      Alert.alert(
+        "No active subscriptions",
+        "You do not have any active subscriptions"
+      );
     }
-  }, [updateUserInfo, setLoading]);
+    return customer;
+  }, [updateUserInfo]);
 
   const purchasePackage = useCallback(
     async (pack: PurchasesStoreProduct, type: string): Promise<string> => {

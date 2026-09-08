@@ -20,6 +20,7 @@ import { SettingsSectionHeader } from "./SettingsSectionHeader";
 export function AccountSettings() {
   const [presentModal, setPresentModal] = useState(false);
   const [type, setType] = useState("");
+  const [isRestoring, setIsRestoring] = useState(false);
 
   const dispatch = useDispatch();
   const userId = useSelector((state: UserState) => state.uid);
@@ -64,9 +65,19 @@ export function AccountSettings() {
     toggleModal();
   }, [toggleModal]);
 
-  const handleRestorePurchasesPress = useCallback(() => {
-    if (restorePermissions) {
-      restorePermissions();
+  const handleRestorePurchasesPress = useCallback(async () => {
+    if (!restorePermissions) {
+      return;
+    }
+
+    setIsRestoring(true);
+    try {
+      await restorePermissions();
+    } catch (error) {
+      log(`Error Restoring Purchases: ${error}`, "error");
+      showErrorToast("Error Restoring Purchases");
+    } finally {
+      setIsRestoring(false);
     }
   }, [restorePermissions]);
 
@@ -90,7 +101,8 @@ export function AccountSettings() {
       icon: "shopping-cart",
       label: "Restore Purchases",
       onPress: handleRestorePurchasesPress,
-      showChevron: false
+      showChevron: false,
+      loading: isRestoring
     }
   ];
 
