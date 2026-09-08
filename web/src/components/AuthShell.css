@@ -1,0 +1,212 @@
+.auth-page {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 56px);
+  padding: 24px;
+  overflow-x: hidden;
+}
+
+.auth-shell {
+  display: flex;
+  width: 100%;
+  max-width: 960px;
+  min-height: 560px;
+  overflow: hidden;
+  background-color: #fff;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+}
+
+.auth-info-panel {
+  position: relative;
+  display: flex;
+  flex: 1 1 45%;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  min-width: 0;
+  overflow: hidden;
+  padding: 48px 40px;
+  background-color: var(--color-primary-dark);
+  box-sizing: border-box;
+}
+
+.auth-info-watermark {
+  position: absolute;
+  top: -60px;
+  right: -80px;
+  width: 320px;
+  height: 320px;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.auth-info-eyebrow {
+  margin: 0;
+  font-family: var(--font-poppins-medium);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+}
+
+.auth-info-title {
+  position: relative;
+  margin: 0;
+  font-size: 2.25rem;
+  font-family: var(--font-playfair-display);
+  color: #fff;
+}
+
+.auth-info-copy {
+  position: relative;
+  max-width: 360px;
+  margin: 4px 0 0;
+  font-family: var(--font-poppins-regular);
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.auth-info-download-label {
+  position: relative;
+  margin: 28px 0 0;
+  font-family: var(--font-poppins-medium);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.auth-info-download-links {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.auth-info-download-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-family: var(--font-poppins-medium);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.auth-info-download-link:hover {
+  background-color: rgba(255, 255, 255, 0.14);
+}
+
+.auth-form-panel {
+  display: flex;
+  flex: 1 1 55%;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  min-width: 0;
+  padding: 48px 56px;
+  box-sizing: border-box;
+}
+
+.auth-form-title {
+  margin: 0;
+  font-size: 2rem;
+  font-family: var(--font-playfair-display);
+  color: var(--color-primary-dark);
+}
+
+.auth-form-subtitle {
+  margin: -8px 0 8px;
+  font-family: var(--font-poppins-medium);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-gray-500);
+}
+
+.auth-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-form-message {
+  padding: 12px;
+  border-radius: 8px;
+  font-family: var(--font-poppins-medium);
+  font-size: 14px;
+}
+
+.auth-form-message--error {
+  background-color: var(--color-danger-alpha-20);
+  color: #8a1f1f;
+}
+
+.auth-form-message--success {
+  background-color: var(--color-accent-green-alpha-20);
+  color: var(--color-primary-dark);
+}
+
+.auth-form-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  font-family: var(--font-poppins-medium);
+  font-size: 14px;
+  color: var(--color-gray-600);
+  text-align: right;
+}
+
+.auth-form-footer-link {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+@media (max-width: 880px) {
+  .auth-shell {
+    flex-direction: column;
+    max-width: 480px;
+    min-height: 0;
+  }
+
+  .auth-info-panel {
+    gap: 8px;
+    padding: 32px 32px 28px;
+  }
+
+  .auth-info-copy {
+    display: none;
+  }
+
+  .auth-info-download-label {
+    margin-top: 16px;
+  }
+
+  .auth-form-panel {
+    padding: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-page {
+    padding: 12px;
+  }
+
+  .auth-info-panel,
+  .auth-form-panel {
+    padding: 24px;
+  }
+}

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
 import "@/components/DeleteAccountModal.css";
-import SimpleButton from "@/components/SimpleButton";
-import SimpleTextInput from "@/components/SimpleTextInput";
+import Button from "@/components/Button";
+import TextInput from "@/components/TextInput";
 
 export default function DeleteAccountModal({
   isOpen,
@@ -12,10 +12,13 @@ export default function DeleteAccountModal({
   onDelete,
 }) {
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
+      setError("");
+      setIsSubmitting(false);
       setIsAnimating(true);
     } else {
       const timeout = setTimeout(() => setIsAnimating(false), 300);
@@ -23,20 +26,35 @@ export default function DeleteAccountModal({
     }
   }, [isOpen]);
 
-  const handleSubmit = (e) => {
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (error) {
+      setError("");
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!password) {
       setError("Please enter your password to confirm account deletion.");
       return;
     }
-    onDelete();
+
+    setIsSubmitting(true);
+    try {
+      await onDelete();
+    } catch {
+      setError("Incorrect password. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     (isOpen || isAnimating) && (
       <div
         className={`modal-overlay ${isOpen ? "fade-in" : "fade-out"}`}
-        onClick={onClose}
+        onClick={isSubmitting ? undefined : onClose}
       >
         <div
           className={`modal-container ${isOpen ? "slide-in" : "slide-out"}`}
@@ -53,28 +71,31 @@ export default function DeleteAccountModal({
 
           <form onSubmit={handleSubmit} className="modal-form">
             <div className="modal-input-group">
-              <SimpleTextInput
+              <TextInput
                 id="password"
+                label="Password"
                 placeholder="Enter your password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handlePasswordChange}
                 password
                 autoFocus
+                disabled={isSubmitting}
               />
             </div>
 
             <div className="modal-buttons">
-              <SimpleButton type="submit" className="simple-button--danger">
+              <Button type="submit" variant="danger" loading={isSubmitting}>
                 Delete Account
-              </SimpleButton>
+              </Button>
 
-              <SimpleButton
+              <Button
                 type="button"
-                className="simple-button--muted"
+                variant="muted"
                 onClick={onClose}
+                disabled={isSubmitting}
               >
                 Cancel
-              </SimpleButton>
+              </Button>
             </div>
           </form>
         </div>

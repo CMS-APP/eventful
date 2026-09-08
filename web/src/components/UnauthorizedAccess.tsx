@@ -1,6 +1,6 @@
 "use client";
 
-import SimpleButton from "@/components/SimpleButton";
+import Button from "@/components/Button";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -29,9 +29,9 @@ export default function UnauthorizedAccess({
       <h3 className="text-center max-w-2xl">{message}</h3>
 
       {showBackButton && (
-        <SimpleButton onClick={() => (window.location.href = "/account")}>
+        <Button onClick={() => (window.location.href = "/account")}>
           Go Back To Account
-        </SimpleButton>
+        </Button>
       )}
     </main>
   );

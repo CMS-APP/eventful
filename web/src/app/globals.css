@@ -2,26 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary: #0a3b2e;
-  --primaryTint: rgba(10, 59, 46, 0.65);
-  --secondary: #feba12;
-  --secondaryTint: #feba1280;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --primary: #0a3b2e;
-    --primaryTint: rgba(10, 59, 46, 0.65);
-    --secondary: #feba12;
-    --secondaryTint: #feba1280;
-  }
-}
-
 html,
 body {
   background-color: var(--primary);

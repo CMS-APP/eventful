@@ -5,6 +5,7 @@ import {
   faCheck,
   faClock,
   faLocationDot,
+  faPaperPlane,
   faUserGroup,
   faXmark
 } from "@fortawesome/free-solid-svg-icons";
@@ -13,6 +14,8 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 import { useEffect, useRef, useState } from "react";
 
+import Button from "@/components/Button";
+import TextInput from "@/components/TextInput";
 import { checkEventLink } from "@/services/FirebaseFunctions";
 
 import "./page.css";
@@ -182,7 +185,7 @@ export default function EventResponse() {
   }, []);
 
   const hostFirstName = hostName.split(" ")[0] || "The host";
-  const canSubmit = !!response && !!name && !isLoading;
+  const canSubmit = !!response && !!name;
 
   return (
     <>
@@ -283,33 +286,32 @@ export default function EventResponse() {
                 ))}
               </div>
 
-              <label className="event-response-field-label" htmlFor="rsvp-name">
-                Name
-              </label>
-              <input
-                id="rsvp-name"
-                type="text"
-                className="event-response-input"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
+              <div className="event-response-fields">
+                <TextInput
+                  id="rsvp-name"
+                  label="Name"
+                  placeholder="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
 
-              <label
-                className="event-response-field-label"
-                htmlFor="rsvp-email"
-              >
-                Email <span className="event-response-optional">optional</span>
-              </label>
-              <input
-                id="rsvp-email"
-                type="email"
-                className="event-response-input"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+                <TextInput
+                  id="rsvp-email"
+                  label={
+                    <>
+                      Email{" "}
+                      <span className="event-response-optional">
+                        optional
+                      </span>
+                    </>
+                  }
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
 
               {formMessage && (
                 <p
@@ -320,24 +322,15 @@ export default function EventResponse() {
                 </p>
               )}
 
-              <button
-                type="button"
-                className={`event-response-submit${isLoading ? " event-response-submit--loading" : ""}`}
+              <Button
+                variant="primary"
                 disabled={!canSubmit}
+                loading={isLoading}
+                icon={faPaperPlane}
                 onClick={sendResponse}
               >
-                {isLoading ? (
-                  <>
-                    <span
-                      className="event-response-submit-spinner"
-                      aria-hidden="true"
-                    />
-                    Sending
-                  </>
-                ) : (
-                  "Reply"
-                )}
-              </button>
+                {isLoading ? "Sending" : "Reply"}
+              </Button>
               <p className="event-response-footnote">
                 You can change your reply until the event starts
               </p>

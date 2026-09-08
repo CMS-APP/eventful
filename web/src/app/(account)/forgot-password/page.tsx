@@ -1,15 +1,14 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
 import ReCAPTCHA from "react-google-recaptcha";
 
 import React, { useState } from "react";
 
-import Loading from "@/components/Loading";
-import SimpleButton from "@/components/SimpleButton";
-import SimpleTextInput from "@/components/SimpleTextInput";
-
-import "./page.css";
+import AuthShell from "@/components/AuthShell";
+import Button from "@/components/Button";
+import TextInput from "@/components/TextInput";
 
 declare global {
   interface Window {
@@ -27,7 +26,6 @@ export default function ForgotPassword() {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
   const [recaptchaToken, setRecaptchaToken] = useState("");
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,61 +104,68 @@ export default function ForgotPassword() {
   };
 
   return (
-    <>
-      {isLoading && <Loading message="Sending..." />}
-      <main className="forgot-password-page">
-        <div className="forgot-password-card">
-          <h1 className="forgot-password-title">Reset Your Password</h1>
+    <AuthShell
+      eyebrow="Account Recovery"
+      title={
+        <>
+          Back to the party
+          <br />
+          in a minute.
+        </>
+      }
+      description="Your events, guests and galleries are all still here."
+    >
+      <h2 className="auth-form-title">Forgot password</h2>
+      <p className="auth-form-subtitle">
+        Enter your email address and we will send you a link to reset your
+        password.
+      </p>
 
-          <p className="forgot-password-description">
-            Enter your email address and we will send you a link to reset your
-            password.
-          </p>
+      <form onSubmit={handleSubmit} className="auth-form-fields">
+        <TextInput
+          label="Email"
+          id="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setEmail(e.target.value)
+          }
+        />
 
-          <form onSubmit={handleSubmit} className="forgot-password-form">
-            <SimpleTextInput
-              id="email"
-              placeholder="Email Address"
-              value={email}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEmail(e.target.value)
-              }
-            />
+        <ReCAPTCHA
+          sitekey={RECAPTCHA_SITE_KEY}
+          onChange={handleRecaptchaChange}
+          size="normal"
+        />
 
-            <div className="forgot-password-recaptcha">
-              <ReCAPTCHA
-                sitekey={RECAPTCHA_SITE_KEY}
-                onChange={handleRecaptchaChange}
-                size="normal"
-              />
-            </div>
+        {message.text && (
+          <div
+            className={`auth-form-message ${
+              message.type === "error"
+                ? "auth-form-message--error"
+                : "auth-form-message--success"
+            }`}
+          >
+            {message.text}
+          </div>
+        )}
 
-            {message.text && (
-              <div
-                className={`forgot-password-message ${
-                  message.type === "error"
-                    ? "forgot-password-message--error"
-                    : "forgot-password-message--success"
-                }`}
-              >
-                {message.text}
-              </div>
-            )}
+        <Button
+          type="submit"
+          loading={isLoading}
+          variant="primary"
+          icon={faPaperPlane}
+        >
+          Send Reset Link
+        </Button>
+      </form>
 
-            <SimpleButton type="submit" disabled={isLoading}>
-              Send Reset Link
-            </SimpleButton>
-
-            <button
-              type="button"
-              onClick={() => router.push("/")}
-              className="forgot-password-back"
-            >
-              Back to Login
-            </button>
-          </form>
-        </div>
-      </main>
-    </>
+      <p className="auth-form-footer">
+        Remembered it?{" "}
+        <Link href="/" className="auth-form-footer-link">
+          Back To Login
+        </Link>
+      </p>
+    </AuthShell>
   );
 }

@@ -46,7 +46,7 @@
 }
 
 .event-response-panel--rsvp {
-  background-color: #f7f3ec;
+  background-color: var(--color-white, #fff);
   color: var(--color-primary-dark);
 }
 
@@ -222,14 +222,11 @@
   transform: translateY(-2px);
 }
 
-.event-response-field-label {
-  display: block;
-  margin: 0 0 6px;
-  color: var(--color-primary-dark);
-  font-family: var(--font-poppins-bold);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.event-response-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 18px;
 }
 
 .event-response-optional {
@@ -237,74 +234,6 @@
   font-family: var(--font-poppins-medium);
   text-transform: none;
   letter-spacing: 0;
-}
-
-.event-response-input {
-  width: 100%;
-  padding: 12px 16px;
-  margin-bottom: 18px;
-  border: 1px solid rgba(10, 59, 46, 0.15);
-  border-radius: 12px;
-  background-color: #ffffff;
-  font-family: var(--font-poppins-medium);
-  font-size: 15px;
-  color: var(--color-primary-dark);
-}
-
-.event-response-input:focus {
-  outline: none;
-  border-color: var(--color-secondary);
-  box-shadow: 0 0 0 1px var(--color-secondary);
-}
-
-.event-response-submit {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 999px;
-  background-color: var(--color-gray-300);
-  color: var(--color-gray-500);
-  font-family: var(--font-poppins-bold);
-  font-size: 14px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: not-allowed;
-  transition: background-color 0.15s ease;
-}
-
-.event-response-submit:not(:disabled) {
-  background-color: var(--primary);
-  color: #ffffff;
-  cursor: pointer;
-}
-
-.event-response-submit:not(:disabled):hover {
-  background-color: var(--color-primary-light);
-}
-
-.event-response-submit.event-response-submit--loading {
-  background-color: var(--primary);
-  color: #ffffff;
-  cursor: default;
-}
-
-.event-response-submit-spinner {
-  width: 15px;
-  height: 15px;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: event-response-spin 0.7s linear infinite;
-}
-
-@keyframes event-response-spin {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .event-response-message {

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import AppShell from "@/components/AppShell";
-import SimpleButton from "@/components/SimpleButton";
+import Button from "@/components/Button";
 
 import "./not-found.css";
 
@@ -21,12 +21,12 @@ export default function NotFound() {
           moved.
         </p>
         <div className="not-found-actions">
-          <SimpleButton
+          <Button
             className="not-found-primary"
             onClick={() => router.push("/")}
           >
             Return home
-          </SimpleButton>
+          </Button>
           <button
             type="button"
             className="not-found-secondary"

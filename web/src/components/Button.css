@@ -1,0 +1,76 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: var(--radius-full, 999px);
+  color: var(--color-white, #fff);
+  font-family: var(--font-poppins-bold);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.button:disabled {
+  background-color: var(--color-gray-300);
+  color: var(--color-gray-500);
+  cursor: not-allowed;
+}
+
+.button--secondary {
+  background-color: var(--color-secondary);
+}
+
+.button--secondary:hover:not(:disabled) {
+  background-color: var(--color-secondary-dark);
+}
+
+.button--primary {
+  background-color: var(--color-primary);
+}
+
+.button--primary:hover:not(:disabled) {
+  background-color: var(--color-primary-light);
+}
+
+.button--danger {
+  background-color: var(--color-danger);
+}
+
+.button--danger:hover:not(:disabled) {
+  background-color: var(--color-danger-dark);
+}
+
+.button--muted {
+  background-color: var(--color-gray-600);
+}
+
+.button--muted:hover:not(:disabled) {
+  background-color: var(--color-gray-700);
+}
+
+.button-spinner {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: button-spin 0.7s linear infinite;
+}
+
+@keyframes button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

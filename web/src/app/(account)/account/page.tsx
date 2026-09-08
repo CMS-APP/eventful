@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { deleteUserAccount } from "@/app/account/database/utils";
 import DeleteAccountModal from "@/components/DeleteAccountModal.js";
-import SimpleButton from "@/components/SimpleButton";
+import Button from "@/components/Button";
 import { useUser } from "@/contexts/UserContext";
 import { isMobileDevice } from "@/functions/IsMobileDevice.js";
 
@@ -27,20 +27,18 @@ export default function Home() {
     return () => window.removeEventListener("resize", checkDevice);
   }, []);
 
-  function deleteAccountAlert() {
-    if (confirm("Are you sure you want to delete your account?")) {
-      setIsModalOpen(true);
-    }
+  function closeDeleteModal() {
+    setIsModalOpen(false);
+    setPassword("");
   }
 
   async function passwordInputAccountDeletion() {
-    setIsModalOpen(false);
-
     if (!user || !user.email) {
       throw new Error("No user found");
     }
 
     await deleteUserAccount(user, password);
+    closeDeleteModal();
   }
 
   const email = userData?.email ?? "";
@@ -88,12 +86,9 @@ export default function Home() {
             <div className="profile-section danger-zone">
               <h2 className="profile-section-title">Danger Zone</h2>
               <div className="profile-buttons-grid">
-                <SimpleButton
-                  className="simple-button--danger"
-                  onClick={deleteAccountAlert}
-                >
+                <Button variant="danger" onClick={() => setIsModalOpen(true)}>
                   Delete Account
-                </SimpleButton>
+                </Button>
               </div>
             </div>
           </div>
@@ -103,7 +98,7 @@ export default function Home() {
           isOpen={isModalOpen}
           password={password}
           setPassword={setPassword}
-          onClose={() => setIsModalOpen(false)}
+          onClose={closeDeleteModal}
           onDelete={passwordInputAccountDeletion}
         />
       </main>

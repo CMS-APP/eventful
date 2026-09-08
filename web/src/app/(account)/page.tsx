@@ -1,5 +1,6 @@
 "use client";
 
+import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -7,9 +8,10 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 import { FIREBASE_AUTH } from "@/app/Firebase.js";
+import AuthShell from "@/components/AuthShell";
+import Button from "@/components/Button";
 import Loading from "@/components/Loading";
-import SimpleButton from "@/components/SimpleButton";
-import SimpleTextInput from "@/components/SimpleTextInput";
+import TextInput from "@/components/TextInput";
 import { useUser } from "@/contexts/UserContext";
 
 import "./page.css";
@@ -54,35 +56,52 @@ export default function WebApp() {
   }
 
   return (
-    <main className="login-page">
-      <div className="login-container">
-        <div className="login-grid">
-          <h1 className="login-title">Welcome Back</h1>
+    <AuthShell
+      eyebrow="The Ultimate Event Planner"
+      title={
+        <>
+          Plan with Ease,
+          <br />
+          Connect with Joy.
+        </>
+      }
+      description="Eventful lives in the app - get the full experience, from invites to the photo booth, on your phone."
+      showDownloadLinks
+    >
+      <h2 className="auth-form-title">Welcome Back</h2>
+      <p className="auth-form-subtitle">Sign in to access your account</p>
 
-          <SimpleTextInput
-            placeholder="Email"
-            onChange={handleEmailChange}
-            value={email}
-            id="email"
-          />
+      <div className="auth-form-fields">
+        <TextInput
+          label="Email"
+          placeholder="Email"
+          onChange={handleEmailChange}
+          value={email}
+          id="email"
+        />
 
-          <SimpleTextInput
-            placeholder="Password"
-            onChange={handlePasswordChange}
-            value={password}
-            password
-            id="password"
-          />
-
-          <SimpleButton onClick={checkLogin} disabled={submitting}>
-            Login
-          </SimpleButton>
-
-          <Link href="/forgot-password" className="login-forgot-link">
-            Forgot password?
-          </Link>
-        </div>
+        <TextInput
+          label="Password"
+          placeholder="Password"
+          onChange={handlePasswordChange}
+          value={password}
+          password
+          id="password"
+        />
       </div>
-    </main>
+
+      <Link href="/forgot-password" className="login-forgot-link">
+        Forgot Password?
+      </Link>
+
+      <Button
+        onClick={checkLogin}
+        loading={submitting}
+        variant="primary"
+        icon={faRightToBracket}
+      >
+        Sign In
+      </Button>
+    </AuthShell>
   );
 }

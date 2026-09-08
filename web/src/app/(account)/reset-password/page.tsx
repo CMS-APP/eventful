@@ -1,16 +1,17 @@
 "use client";
 
+import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { confirmPasswordReset, verifyPasswordResetCode } from "firebase/auth";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 import { Suspense, useEffect, useState } from "react";
 
 import { FIREBASE_AUTH } from "@/app/Firebase";
+import AuthShell from "@/components/AuthShell";
+import Button from "@/components/Button";
 import Loading from "@/components/Loading";
-import SimpleButton from "@/components/SimpleButton";
-import SimpleTextInput from "@/components/SimpleTextInput";
-
-import "./page.css";
+import TextInput from "@/components/TextInput";
 
 type CodeStatus = "checking" | "valid" | "invalid";
 
@@ -92,82 +93,109 @@ function ResetPasswordContent() {
   };
 
   if (codeStatus === "checking") {
-    return (
-      <main className="reset-password-page">
-        <p className="text-white">Checking your reset link…</p>
-      </main>
-    );
+    return <Loading message="Checking your reset link…" />;
   }
 
   if (codeStatus === "invalid") {
     return (
-      <main className="reset-password-page">
-        <div className="reset-password-card">
-          <h1 className="reset-password-title">Link Expired</h1>
-          <p className="reset-password-description">{codeError}</p>
-        </div>
-      </main>
+      <AuthShell
+        eyebrow="Account Security"
+        title={
+          <>
+            Link Expired,
+            <br />
+            Let&apos;s Try Again.
+          </>
+        }
+        description="Password reset links only work once and expire after a while, for your security."
+      >
+        <h2 className="auth-form-title">Link expired</h2>
+        <p className="auth-form-subtitle">{codeError}</p>
+
+        <p className="auth-form-footer">
+          <Link href="/forgot-password" className="auth-form-footer-link">
+            Request a new link
+          </Link>
+        </p>
+      </AuthShell>
     );
   }
 
   return (
-    <>
-      {isSubmitting && <Loading message="Updating password..." />}
-      <main className="reset-password-page">
-        <div className="reset-password-card">
-          {resetComplete ? (
-            <>
-              <h1 className="reset-password-title">Password Updated</h1>
-              <p className="reset-password-description">
-                Your password has been changed. You can now sign in to Eventful
-                with your new password.
-              </p>
-            </>
-          ) : (
-            <>
-              <h1 className="reset-password-title">Reset Your Password</h1>
-              <p className="reset-password-description">
-                Choose a new password for your account.
-              </p>
+    <AuthShell
+      eyebrow="Account Security"
+      title={
+        <>
+          Fresh Start,
+          <br />
+          Same Great Party.
+        </>
+      }
+      description="Choose a new password to get back into your account on all your devices."
+    >
+      {resetComplete ? (
+        <>
+          <h2 className="auth-form-title">Password updated</h2>
+          <p className="auth-form-subtitle">
+            You can now sign in with your new password.
+          </p>
 
-              <form onSubmit={handleSubmit} className="reset-password-form">
-                <SimpleTextInput
-                  id="password"
-                  placeholder="New password"
-                  password
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoFocus
-                />
-                <SimpleTextInput
-                  id="confirmPassword"
-                  placeholder="Confirm new password"
-                  password
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
+          <p className="auth-form-footer">
+            <Link href="/" className="auth-form-footer-link">
+              Back To Login
+            </Link>
+          </p>
+        </>
+      ) : (
+        <>
+          <h2 className="auth-form-title">Reset password</h2>
+          <p className="auth-form-subtitle">
+            Choose a new password for your account
+          </p>
 
-                {message.text && (
-                  <div
-                    className={`reset-password-message ${
-                      message.type === "error"
-                        ? "reset-password-message--error"
-                        : "reset-password-message--success"
-                    }`}
-                  >
-                    {message.text}
-                  </div>
-                )}
+          <form onSubmit={handleSubmit} className="auth-form-fields">
+            <TextInput
+              id="password"
+              label="New Password"
+              placeholder="New password"
+              password
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoFocus
+            />
+            <TextInput
+              id="confirmPassword"
+              label="Confirm Password"
+              placeholder="Confirm new password"
+              password
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
 
-                <SimpleButton type="submit" disabled={isSubmitting}>
-                  Set New Password
-                </SimpleButton>
-              </form>
-            </>
-          )}
-        </div>
-      </main>
-    </>
+            {message.text && (
+              <div
+                className={`auth-form-message ${
+                  message.type === "error"
+                    ? "auth-form-message--error"
+                    : "auth-form-message--success"
+                }`}
+              >
+                {message.text}
+              </div>
+            )}
+
+            <Button
+              type="submit"
+              loading={isSubmitting}
+              variant="primary"
+              icon={faLock}
+            >
+              Set New Password
+            </Button>
+          </form>
+        </>
+      )}
+    </AuthShell>
   );
 }
 
