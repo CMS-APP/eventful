@@ -110,7 +110,7 @@ export default function EventResponse() {
 
     try {
       const res = await fetch(
-        "https://respondtoevent-iuxeocrkta-uc.a.run.app",
+        "https://api.eventfulapp.com/respondToEvent",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

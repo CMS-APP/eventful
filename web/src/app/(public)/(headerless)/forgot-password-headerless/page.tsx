@@ -17,7 +17,7 @@ declare global {
 }
 
 const RECAPTCHA_SITE_KEY = "6LfDpgQrAAAAAO0TSbcQban4TrA16CjelRzF_Urp";
-const FORGOT_PASSWORD_URL = "https://forgotpassword-iuxeocrkta-uc.a.run.app";
+const FORGOT_PASSWORD_URL = "https://api.eventfulapp.com/forgotPassword";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
