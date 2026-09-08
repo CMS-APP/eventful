@@ -28,7 +28,7 @@ EVENTFUL_CORS = options.CorsOptions(
 )
 
 EVENTFUL_CORS_STRICT = options.CorsOptions(
-    cors_origins=[r".*eventfulapp\.com$"],
+    cors_origins=[r".*eventfulapp\.com$", "http://localhost:3000"],
     cors_methods=["get", "post", "options"],
 )
 
