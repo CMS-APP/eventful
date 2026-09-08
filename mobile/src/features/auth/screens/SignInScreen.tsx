@@ -7,7 +7,6 @@ import { Alert, LayoutChangeEvent, StyleSheet, View } from "react-native";
 import { CommonActions } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { useLoadingModal } from "@/app/context/loading/LoadingModalContext";
 import { dataInit } from "@/app/init/data";
 import { AuthStackParamList, navigationRef } from "@/app/navigation";
 import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
@@ -43,9 +42,9 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [headerHeight, setHeaderHeight] = useState(0);
+  const [isSigningIn, setIsSigningIn] = useState(false);
 
   const dispatch = useDispatch();
-  const { setLoading } = useLoadingModal();
 
   const validateForm = useCallback((): boolean => {
     const newErrors: FormErrors = {};
@@ -137,7 +136,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
         return;
       }
 
-      setLoading(true);
+      setIsSigningIn(true);
       try {
         const user: any | null = await handleSignIn(
           currentEmail,
@@ -183,10 +182,10 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
           }
         }
       } finally {
-        setLoading(false);
+        setIsSigningIn(false);
       }
     },
-    [validateForm, setLoading, dispatch, emailVerificationAlert]
+    [validateForm, dispatch, emailVerificationAlert]
   );
 
   return (
@@ -250,7 +249,9 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
             onPress={signIn}
             color={colors.primary}
             textColor={colors.white}
-            leadingIcon="sign-in-alt"
+            leadingIcon={isSigningIn ? undefined : "sign-in-alt"}
+            loading={isSigningIn}
+            disabled={isSigningIn}
           />
 
           <View style={styles.orContainer}>
