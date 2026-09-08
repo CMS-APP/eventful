@@ -1,3 +1,5 @@
+import { HOUR_MS, readLocalCache, writeLocalCache } from "@/lib/localCache";
+
 export interface FunnelStep {
   id: string;
   label: string;
@@ -8,6 +10,10 @@ export async function getFunnelStats(
   idToken: string,
   days = 30
 ): Promise<FunnelStep[]> {
+  const cacheKey = `analytics:funnel:${days}`;
+  const cached = readLocalCache<FunnelStep[]>(cacheKey, HOUR_MS);
+  if (cached) return cached;
+
   const res = await fetch(`/api/analytics/funnel?days=${days}`, {
     headers: { Authorization: `Bearer ${idToken}` }
   });
@@ -17,7 +23,9 @@ export async function getFunnelStats(
   }
 
   const data = await res.json();
-  return Array.isArray(data.steps) ? data.steps : [];
+  const result = Array.isArray(data.steps) ? data.steps : [];
+  writeLocalCache(cacheKey, result);
+  return result;
 }
 
 export async function getRealtimeActiveUsers(idToken: string): Promise<number> {
@@ -50,6 +58,10 @@ export async function getFeatureUsageStats(
   idToken: string,
   days = 30
 ): Promise<FeatureUsageDomain[]> {
+  const cacheKey = `analytics:featureUsage:${days}`;
+  const cached = readLocalCache<FeatureUsageDomain[]>(cacheKey, HOUR_MS);
+  if (cached) return cached;
+
   const res = await fetch(`/api/analytics/feature-usage?days=${days}`, {
     headers: { Authorization: `Bearer ${idToken}` }
   });
@@ -59,5 +71,7 @@ export async function getFeatureUsageStats(
   }
 
   const data = await res.json();
-  return Array.isArray(data.domains) ? data.domains : [];
+  const result = Array.isArray(data.domains) ? data.domains : [];
+  writeLocalCache(cacheKey, result);
+  return result;
 }

@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 
 import { FIRESTORE_DB } from "@/app/Firebase";
+import { DAY_MS, HOUR_MS, readLocalCache, writeLocalCache } from "@/lib/localCache";
 
 export interface FeedbackItem {
   id: string;
@@ -68,6 +69,10 @@ export interface UserDeviceStatsRow {
 const DEVICE_STATS_ACTIVE_WINDOW_DAYS = 30;
 
 export async function getUsersForDeviceStats(): Promise<UserDeviceStatsRow[]> {
+  const cacheKey = "stats:usersForDeviceStats";
+  const cached = readLocalCache<UserDeviceStatsRow[]>(cacheKey, HOUR_MS);
+  if (cached) return cached;
+
   try {
     const usersRef = collection(FIRESTORE_DB, "user");
     const cutoff = Timestamp.fromMillis(
@@ -75,7 +80,7 @@ export async function getUsersForDeviceStats(): Promise<UserDeviceStatsRow[]> {
     );
     const q = query(usersRef, where("lastLaunchedAt", ">=", cutoff));
     const snapshot = await getDocs(q);
-    return snapshot.docs.map((d) => {
+    const result = snapshot.docs.map((d) => {
       const data = d.data();
       const uid = d.id;
       const lastLaunched = data.lastLaunchedAt as Timestamp | undefined;
@@ -103,6 +108,8 @@ export async function getUsersForDeviceStats(): Promise<UserDeviceStatsRow[]> {
         lastLaunchedAt: lastLaunched?.toDate?.()?.toISOString?.() ?? null
       };
     });
+    writeLocalCache(cacheKey, result);
+    return result;
   } catch (error) {
     console.error("Error fetching users for device stats:", error);
     return [];
@@ -165,14 +172,18 @@ export interface TotalUserStatsPoint {
   totalUsers: number;
 }
 
-export async function getTotalUserStatsHistory(
-  maxDays = 365
-): Promise<TotalUserStatsPoint[]> {
+export async function getTotalUserStatsHistory(): Promise<
+  TotalUserStatsPoint[]
+> {
+  const cacheKey = "stats:totalUserStatsHistory";
+  const cached = readLocalCache<TotalUserStatsPoint[]>(cacheKey, DAY_MS);
+  if (cached) return cached;
+
   try {
     const ref = collection(FIRESTORE_DB, "totalUserStats");
-    const q = query(ref, orderBy("date", "desc"), limit(maxDays));
+    const q = query(ref, orderBy("date", "desc"));
     const snapshot = await getDocs(q);
-    return snapshot.docs
+    const result = snapshot.docs
       .map((d) => {
         const data = d.data();
         return {
@@ -182,6 +193,8 @@ export async function getTotalUserStatsHistory(
         };
       })
       .sort((a, b) => a.date.localeCompare(b.date));
+    writeLocalCache(cacheKey, result);
+    return result;
   } catch (error) {
     console.error("Error fetching total user stats history:", error);
     return [];
@@ -191,11 +204,15 @@ export async function getTotalUserStatsHistory(
 export async function getActiveUserStatsHistory(
   maxDays = 90
 ): Promise<ActiveUserStatsPoint[]> {
+  const cacheKey = `stats:activeUserStatsHistory:${maxDays}`;
+  const cached = readLocalCache<ActiveUserStatsPoint[]>(cacheKey, DAY_MS);
+  if (cached) return cached;
+
   try {
     const ref = collection(FIRESTORE_DB, "activeUserStats");
     const q = query(ref, orderBy("date", "desc"), limit(maxDays));
     const snapshot = await getDocs(q);
-    return snapshot.docs
+    const result = snapshot.docs
       .map((d) => {
         const data = d.data();
         return {
@@ -206,6 +223,8 @@ export async function getActiveUserStatsHistory(
         };
       })
       .sort((a, b) => a.date.localeCompare(b.date));
+    writeLocalCache(cacheKey, result);
+    return result;
   } catch (error) {
     console.error("Error fetching active user stats history:", error);
     return [];

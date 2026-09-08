@@ -1,3 +1,5 @@
+import { HOUR_MS, readLocalCache, writeLocalCache } from "@/lib/localCache";
+
 export interface RevenueCatDailyStat {
   date: string;
   mrr: number;
@@ -15,6 +17,10 @@ export async function getRevenueCatStats(
   idToken: string,
   days = 30,
 ): Promise<RevenueCatStats> {
+  const cacheKey = `subscriptions:revenueCatStats:${days}`;
+  const cached = readLocalCache<RevenueCatStats>(cacheKey, HOUR_MS);
+  if (cached) return cached;
+
   const res = await fetch(`/api/subscriptions?days=${days}`, {
     headers: { Authorization: `Bearer ${idToken}` },
   });
@@ -24,7 +30,7 @@ export async function getRevenueCatStats(
   }
 
   const data = await res.json();
-  return {
+  const result = {
     history: Array.isArray(data.history) ? data.history : [],
     activeSubscriptions:
       typeof data.activeSubscriptions === "number"
@@ -37,4 +43,6 @@ export async function getRevenueCatStats(
         ? data.activeSubscriptionsChangePercent
         : null,
   };
+  writeLocalCache(cacheKey, result);
+  return result;
 }
