@@ -21,7 +21,7 @@ def _verify_recaptcha(recaptcha_secret, recaptcha_token: str) -> bool:
         data=f"secret={recaptcha_secret.value}&response={recaptcha_token}",
         timeout=10,
     ).json()
-    return bool(recaptcha_response.get("success")) and recaptcha_response.get("score", 0) >= 0.5
+    return bool(recaptcha_response.get("success"))
 
 
 def handle_send_verification_email_request(

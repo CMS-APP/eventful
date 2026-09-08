@@ -151,6 +151,7 @@ def forgotPassword(req: https_fn.Request) -> https_fn.Response:
 @https_fn.on_request(
     cors=EVENTFUL_CORS_STRICT,
     secrets=[ALGOLIA_APP_ID, ALGOLIA_API_KEY],
+    min_instances=1,
 )
 def searchUsers(req: https_fn.Request) -> https_fn.Response:
     return handle_search_users_request(req, ALGOLIA_APP_ID, ALGOLIA_API_KEY)

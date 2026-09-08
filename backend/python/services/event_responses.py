@@ -38,7 +38,8 @@ def handle_respond_to_event_request(req: https_fn.Request, recaptcha_secret) -> 
             timeout=10,
         ).json()
 
-        if not recaptcha_response.get("success") or recaptcha_response.get("score", 0) < 0.5:
+        if not recaptcha_response.get("success"):
+            print(f"reCAPTCHA verification failed: {recaptcha_response}")
             return https_fn.Response("reCAPTCHA validation failed", status=403)
 
         db = firestore.client()
