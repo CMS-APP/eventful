@@ -12,6 +12,10 @@ import {
 
 import { CameraView, PhotoResult } from "expo-camera";
 
+import {
+  PhotoBoothStackNavigation,
+  PhotoBoothStackParamList
+} from "@/app/navigation";
 import { CameraOverlayHeader } from "@/components/camera/CameraOverlayHeader";
 import {
   CameraScreenLayout,
@@ -26,10 +30,6 @@ import {
   PhotoBoothTimer,
   PhotoBoothTimerHandle
 } from "../components/camera/PhotoBoothTimer";
-import type {
-  PhotoBoothStackNavigation,
-  PhotoBoothStackParamList
-} from "../photoBoothStackParams";
 
 type RedoPhotoRoute = RouteProp<
   PhotoBoothStackParamList,
@@ -43,7 +43,14 @@ export function PhotoBoothRedoPhoto() {
   const { params } = useRoute<RedoPhotoRoute>();
   const { index } = params;
 
-  const { facing, flash, setIsCameraReady, setPhotos } = usePhotoBoothCamera();
+  const {
+    facing,
+    flash,
+    setIsCameraReady,
+    setPhotos,
+    selectedLens,
+    onAvailableLensesChanged
+  } = usePhotoBoothCamera();
   const { isBoothRunning, setIsBoothRunning } = usePhotoBoothSession();
   const { timerDuration } = usePhotoBoothSettings();
 
@@ -126,6 +133,8 @@ export function PhotoBoothRedoPhoto() {
             facing={facing}
             flash={flashMode}
             mirror={facing === "front"}
+            selectedLens={selectedLens}
+            onAvailableLensesChanged={onAvailableLensesChanged}
             onCameraReady={() => {
               setIsCameraReady(true);
             }}

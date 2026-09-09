@@ -31,8 +31,15 @@ import type { PhotoBoothStackNavigation } from "../photoBoothStackParams";
 export function PhotoBoothCamera() {
   const navigation = useNavigation<PhotoBoothStackNavigation>();
   const isFocused = useIsFocused();
-  const { facing, flash, photos, setIsCameraReady, setPhotos } =
-    usePhotoBoothCamera();
+  const {
+    facing,
+    flash,
+    photos,
+    setIsCameraReady,
+    setPhotos,
+    selectedLens,
+    onAvailableLensesChanged
+  } = usePhotoBoothCamera();
   const { isBoothRunning, setIsBoothRunning } = usePhotoBoothSession();
   const { collageStyle, timerDuration, photoPromptsEnabled } =
     usePhotoBoothSettings();
@@ -140,6 +147,8 @@ export function PhotoBoothCamera() {
             facing={facing}
             flash={flashMode}
             mirror={facing === "front"}
+            selectedLens={selectedLens}
+            onAvailableLensesChanged={onAvailableLensesChanged}
             onCameraReady={() => {
               setIsCameraReady(true);
             }}

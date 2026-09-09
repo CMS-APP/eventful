@@ -1,7 +1,7 @@
-import { createContext, useContext } from "react";
 import type { Dispatch, SetStateAction } from "react";
+import { createContext, useContext } from "react";
 
-import { PhotoResult } from "expo-camera";
+import { AvailableLenses, PhotoResult } from "expo-camera";
 
 export type PhotoBoothCameraContextValue = {
   facing: "front" | "back";
@@ -12,6 +12,11 @@ export type PhotoBoothCameraContextValue = {
   toggleFlash: () => void;
   photos: PhotoResult[];
   setPhotos: Dispatch<SetStateAction<PhotoResult[]>>;
+  selectedLens: string | undefined;
+  isUltraWideAvailable: boolean;
+  isUltraWideActive: boolean;
+  toggleUltraWide: () => void;
+  onAvailableLensesChanged: (event: AvailableLenses) => void;
 };
 
 export const PhotoBoothCameraContext =
