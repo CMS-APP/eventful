@@ -4,6 +4,7 @@ import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
+import { trackPaywallPlanSelected } from "@/services/analytics/events";
 import { Subscription } from "@/types/Subscription";
 
 interface SubscriptionButtonProps {
@@ -26,6 +27,7 @@ export function SubscriptionButton({
     <TouchableOpacity
       onPress={() => {
         setSelectedSubscription(subscription);
+        trackPaywallPlanSelected(subscription.id);
       }}
       style={styles.container}
       hitSlop={getHitSlop("large")}

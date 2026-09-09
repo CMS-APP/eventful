@@ -22,6 +22,7 @@ import { Screen } from "@/components/screen/Screen";
 import { SegmentedControl } from "@/design-system/components/buttons/SegmentedControl";
 import { TextButton } from "@/design-system/components/buttons/TextButton";
 import { colors } from "@/design-system/tokens/colors";
+import { trackPaywallViewed } from "@/services/analytics/events";
 import { Subscription } from "@/types/Subscription";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
@@ -43,6 +44,10 @@ export function PaywallScreen({ navigation, route }: PaywallScreenProps) {
     usePaymentProvider() as PaymentContextType;
 
   const hasActiveSubscription = (user?.activeSubscriptions?.length ?? 0) > 0;
+
+  useEffect(() => {
+    trackPaywallViewed(type);
+  }, [type]);
 
   const [selectedSubscriptionType, setSelectedSubscriptionType] =
     useState("Photo Booth");

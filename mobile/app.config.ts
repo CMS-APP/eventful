@@ -15,8 +15,8 @@ export default ({ config }: ConfigContext) => {
     slug: "Eventful",
     scheme: "eventful",
     owner: "chrissharp",
-    version: "6.12.1",
-    runtimeVersion: "6.12.1",
+    version: "6.12.2",
+    runtimeVersion: "6.12.2",
     orientation: "portrait",
     icon: "./src/assets/logos/eventful-logo.png",
     userInterfaceStyle: "light",
@@ -28,7 +28,7 @@ export default ({ config }: ConfigContext) => {
     android: {
       package: bundleId,
       icon: "./src/assets/logos/eventful-logo-android.png",
-      versionCode: 362,
+      versionCode: 363,
       softwareKeyboardLayoutMode: "pan",
       permissions: [
         "android.permission.READ_EXTERNAL_STORAGE",
@@ -127,6 +127,9 @@ export default ({ config }: ConfigContext) => {
       [
         "expo-build-properties",
         {
+          android: {
+            useLegacyPackaging: true
+          },
           ios: {
             deploymentTarget: "16.4",
             useFrameworks: "static",
