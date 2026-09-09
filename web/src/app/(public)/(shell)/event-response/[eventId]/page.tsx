@@ -16,7 +16,7 @@ import { useEffect, useRef, useState } from "react";
 
 import Button from "@/components/Button";
 import TextInput from "@/components/TextInput";
-import { checkEventLink } from "@/services/FirebaseFunctions";
+import { checkEventLink } from "@/services/firebase/firebaseFunctions";
 
 import "./page.css";
 

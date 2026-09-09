@@ -21,9 +21,12 @@ export async function getRevenueCatStats(
   const cached = readLocalCache<RevenueCatStats>(cacheKey, HOUR_MS);
   if (cached) return cached;
 
-  const res = await fetch(`/api/subscriptions?days=${days}`, {
-    headers: { Authorization: `Bearer ${idToken}` },
-  });
+  const res = await fetch(
+    `https://api.eventfulapp.com/subscriptions?days=${days}`,
+    {
+      headers: { Authorization: `Bearer ${idToken}` },
+    }
+  );
 
   if (!res.ok) {
     throw new Error(`Failed to load subscription stats (${res.status})`);

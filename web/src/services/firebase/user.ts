@@ -1,4 +1,4 @@
-import { FIREBASE_AUTH, FIRESTORE_DB } from "@/app/Firebase";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "@/services/firebase/firebase";
 import {
   deleteUser,
   signInWithEmailAndPassword,

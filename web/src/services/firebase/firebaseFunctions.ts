@@ -1,3 +1,5 @@
+import { FirebaseError } from "firebase/app";
+import { User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import {
@@ -9,9 +11,9 @@ import {
   uploadBytes
 } from "firebase/storage";
 
-import { FIREBASE_APP, FIREBASE_STORAGE, FIRESTORE_DB } from "@/app/Firebase";
+import { FIREBASE_APP, FIREBASE_STORAGE, FIRESTORE_DB } from "@/services/firebase/firebase";
 
-export async function getUserInfo(user) {
+export async function getUserInfo(user: User) {
   try {
     console.log(
       "FirebaseFunctions: Getting user info for user: " + user.uid,
@@ -33,7 +35,7 @@ export async function getUserInfo(user) {
       return null;
     }
   } catch (error) {
-    if (error.code === "permission-denied") {
+    if (error instanceof FirebaseError && error.code === "permission-denied") {
       console.log(
         "FirebaseFunctions: Current User does not have user account",
         "warn"
@@ -49,7 +51,7 @@ export async function getUserInfo(user) {
   }
 }
 
-export async function checkEventLink(eventLinkId) {
+export async function checkEventLink(eventLinkId: string) {
   try {
     const docRef = doc(FIRESTORE_DB, "eventLinks", eventLinkId);
     const docSnap = await getDoc(docRef);
@@ -71,7 +73,10 @@ export async function checkEventLink(eventLinkId) {
   }
 }
 
-export async function sendForgotPasswordEmail(email, recaptchaToken) {
+export async function sendForgotPasswordEmail(
+  email: string,
+  recaptchaToken: string
+) {
   try {
     const functions = getFunctions(FIREBASE_APP, "us-central1");
     const forgotPasswordFunction = httpsCallable(functions, "forgotPassword");
@@ -89,10 +94,10 @@ export async function sendForgotPasswordEmail(email, recaptchaToken) {
 }
 
 export async function uploadGalleryImage(
-  imageFile,
-  userId,
-  eventId,
-  fileName = null
+  imageFile: File,
+  userId: string,
+  eventId: string,
+  fileName: string | null = null
 ) {
   try {
     const timestamp = Date.now();
@@ -117,7 +122,7 @@ export async function uploadGalleryImage(
   }
 }
 
-export async function getGalleryImages(userId, eventId) {
+export async function getGalleryImages(userId: string, eventId: string) {
   try {
     const galleryRef = ref(FIREBASE_STORAGE, `gallery/${userId}/${eventId}`);
 
@@ -149,7 +154,11 @@ export async function getGalleryImages(userId, eventId) {
   }
 }
 
-export async function deleteGalleryImage(userId, eventId, fileName) {
+export async function deleteGalleryImage(
+  userId: string,
+  eventId: string,
+  fileName: string
+) {
   try {
     const imageRef = ref(
       FIREBASE_STORAGE,
@@ -164,7 +173,7 @@ export async function deleteGalleryImage(userId, eventId, fileName) {
   }
 }
 
-export async function deleteAllGalleryImages(userId, eventId) {
+export async function deleteAllGalleryImages(userId: string, eventId: string) {
   try {
     const images = await getGalleryImages(userId, eventId);
 

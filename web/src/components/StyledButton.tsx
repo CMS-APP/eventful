@@ -1,8 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { CSSProperties, ReactNode, useState } from "react";
 
 import "./StyledButton.css";
+
+type StyledButtonProps = {
+  color: string;
+  hoverColor: string;
+  text: ReactNode;
+  onClickAction: () => void;
+  textAlign?: CSSProperties["textAlign"];
+};
 
 export default function StyledButton({
   color,
@@ -10,7 +18,7 @@ export default function StyledButton({
   text,
   onClickAction,
   textAlign = "left",
-}) {
+}: StyledButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (

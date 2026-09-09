@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { deleteUserAccount } from "@/app/account/database/utils";
-import DeleteAccountModal from "@/components/DeleteAccountModal.js";
+import { deleteUserAccount } from "@/services/firebase/user";
+import DeleteAccountModal from "@/features/account/components/DeleteAccountModal";
 import Button from "@/components/Button";
 import { useUser } from "@/contexts/UserContext";
-import { isMobileDevice } from "@/functions/IsMobileDevice.js";
 
 import "./page.css";
 
@@ -14,18 +13,6 @@ export default function Home() {
   const { user, userData } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [password, setPassword] = useState("");
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const checkDevice = () => setIsMobile(isMobileDevice());
-
-    checkDevice();
-    window.addEventListener("resize", checkDevice);
-
-    return () => window.removeEventListener("resize", checkDevice);
-  }, []);
 
   function closeDeleteModal() {
     setIsModalOpen(false);
@@ -48,7 +35,7 @@ export default function Home() {
   return (
     <>
       <main
-        className={`flex flex-1 flex-col ${isMobile ? "flex-col" : "md:flex-row"} gap-4 p-4 md:gap-10 md:p-10`}
+        className="flex flex-1 flex-col gap-4 p-4 md:flex-row md:gap-10 md:p-10"
       >
         <div className="profile-container">
           <div className="profile-header">

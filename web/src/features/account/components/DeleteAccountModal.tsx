@@ -1,8 +1,16 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
-import "@/components/DeleteAccountModal.css";
+import "./DeleteAccountModal.css";
 import Button from "@/components/Button";
 import TextInput from "@/components/TextInput";
+
+type DeleteAccountModalProps = {
+  isOpen: boolean;
+  password: string;
+  setPassword: (password: string) => void;
+  onClose: () => void;
+  onDelete: () => Promise<void>;
+};
 
 export default function DeleteAccountModal({
   isOpen,
@@ -10,7 +18,7 @@ export default function DeleteAccountModal({
   setPassword,
   onClose,
   onDelete,
-}) {
+}: DeleteAccountModalProps) {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -26,14 +34,14 @@ export default function DeleteAccountModal({
     }
   }, [isOpen]);
 
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
     if (error) {
       setError("");
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!password) {
       setError("Please enter your password to confirm account deletion.");

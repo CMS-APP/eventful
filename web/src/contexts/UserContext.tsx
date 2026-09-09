@@ -4,8 +4,8 @@ import { User, onAuthStateChanged } from "firebase/auth";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-import { FIREBASE_AUTH } from "@/app/Firebase.js";
-import { checkAdmin, getUserData } from "@/app/account/database/utils";
+import { FIREBASE_AUTH } from "@/services/firebase/firebase";
+import { checkAdmin, getUserData } from "@/services/firebase/user";
 
 interface UserData {
   email?: string;

@@ -14,18 +14,11 @@ import { useEffect, useState } from "react";
 
 import Button from "@/components/Button";
 import Loading from "@/components/Loading";
-import { getGalleryImages } from "@/services/FirebaseFunctions";
+import GalleryImageView from "@/features/gallery/components/GalleryImageView";
+import { GalleryImage } from "@/features/gallery/types";
+import { getGalleryImages } from "@/services/firebase/firebaseFunctions";
 
-import GalleryImageView from "./GalleryImageView";
 import "./page.css";
-
-export interface GalleryImage {
-  name: string;
-  url: string;
-  fullPath: string;
-  size: number;
-  timeCreated: string | null;
-}
 
 interface GalleryInfo {
   eventTitle: string;

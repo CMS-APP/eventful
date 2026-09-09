@@ -22,9 +22,9 @@ import {
 
 import { useEffect, useMemo, useState } from "react";
 
-import { checkAdmin } from "@/app/account/database/utils";
+import { checkAdmin } from "@/services/firebase/user";
 import Loading from "@/components/Loading";
-import UnauthorizedAccess from "@/components/UnauthorizedAccess";
+import UnauthorizedAccess from "@/features/stats/components/UnauthorizedAccess";
 import { useUser } from "@/contexts/UserContext";
 import {
   type FeatureUsageDomain,
@@ -45,7 +45,7 @@ import {
   getActiveUserStatsHistory,
   getTotalUser,
   getTotalUserStatsHistory
-} from "./database/utils";
+} from "@/features/stats/services/database";
 import "./page.css";
 
 const GROWTH_COLOR = "#199e70";

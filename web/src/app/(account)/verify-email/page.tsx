@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 
 import { Suspense, useEffect, useState } from "react";
 
-import { FIREBASE_AUTH } from "@/app/Firebase";
+import { FIREBASE_AUTH } from "@/services/firebase/firebase";
 
 type Status = "verifying" | "success" | "error";
 

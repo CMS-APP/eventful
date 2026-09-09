@@ -14,7 +14,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { useEffect, useRef, useState } from "react";
 
-import { signOutUser } from "@/app/account/database/utils";
+import { signOutUser } from "@/services/firebase/user";
 import { useUser } from "@/contexts/UserContext";
 
 import "./AppHeader.css";

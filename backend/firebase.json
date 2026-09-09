@@ -77,6 +77,34 @@
       {
         "source": "/galleryInfo",
         "function": { "functionId": "galleryInfo", "region": "europe-west2" }
+      },
+      {
+        "source": "/analytics/feature-usage",
+        "function": {
+          "functionId": "analyticsFeatureUsage",
+          "region": "europe-west2"
+        }
+      },
+      {
+        "source": "/analytics/funnel",
+        "function": {
+          "functionId": "analyticsFunnel",
+          "region": "europe-west2"
+        }
+      },
+      {
+        "source": "/analytics/realtime-users",
+        "function": {
+          "functionId": "analyticsRealtimeUsers",
+          "region": "europe-west2"
+        }
+      },
+      {
+        "source": "/subscriptions",
+        "function": {
+          "functionId": "subscriptionStats",
+          "region": "europe-west2"
+        }
       }
     ]
   },

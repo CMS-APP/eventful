@@ -12,12 +12,12 @@ import Link from "next/link";
 
 import { useState, useEffect, useMemo } from "react";
 
-import { checkAdmin } from "@/app/account/database/utils";
+import { checkAdmin } from "@/services/firebase/user";
 import Loading from "@/components/Loading";
-import UnauthorizedAccess from "@/components/UnauthorizedAccess";
+import UnauthorizedAccess from "@/features/stats/components/UnauthorizedAccess";
 import { useUser } from "@/contexts/UserContext";
 
-import { type UserDeviceStatsRow, getUsersForDeviceStats } from "../database/utils";
+import { type UserDeviceStatsRow, getUsersForDeviceStats } from "@/features/stats/services/database";
 import "./users.css";
 
 function aggregateBy(

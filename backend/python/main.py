@@ -7,6 +7,11 @@ from firebase_functions.params import SecretParam
 
 from services.active_users import snapshot_active_users
 from services.algolia_user_search import handle_search_users_request
+from services.analytics_stats import (
+    handle_feature_usage_request,
+    handle_funnel_request,
+    handle_realtime_users_request,
+)
 from services.auth_http import (
     handle_forgot_password_request,
     handle_send_verification_email_request,
@@ -17,6 +22,7 @@ from services.followers import handle_sync_followers, handle_sync_following
 from services.google_places import handle_location_search_request
 from services.notifications import handle_invite_written, handle_notification_written
 from services.photo_booth_gallery import handle_gallery_info_request
+from services.revenuecat_stats import handle_subscriptions_request
 from services.stats import handle_increment_stat_request
 from services.total_users import snapshot_total_users
 
@@ -44,6 +50,10 @@ MJ_API_KEY = SecretParam("MJ_API_KEY")
 MJ_SECRET = SecretParam("MJ_SECRET")
 ALGOLIA_APP_ID = SecretParam("ALGOLIA_APP_ID")
 ALGOLIA_API_KEY = SecretParam("ALGOLIA_API_KEY")
+REVENUECAT_SECRET_API_KEY = SecretParam("REVENUECAT_SECRET_API_KEY")
+
+GA4_PROPERTY_ID = "467597345"
+REVENUECAT_PROJECT_ID = "proj6625573b"
 
 
 @https_fn.on_request(
@@ -57,6 +67,31 @@ def locationSearch(req: https_fn.Request) -> https_fn.Response:
 @https_fn.on_request(cors=EVENTFUL_CORS)
 def galleryInfo(req: https_fn.Request) -> https_fn.Response:
     return handle_gallery_info_request(req)
+
+
+@https_fn.on_request(cors=EVENTFUL_CORS_STRICT)
+def analyticsFeatureUsage(req: https_fn.Request) -> https_fn.Response:
+    return handle_feature_usage_request(req, GA4_PROPERTY_ID)
+
+
+@https_fn.on_request(cors=EVENTFUL_CORS_STRICT)
+def analyticsFunnel(req: https_fn.Request) -> https_fn.Response:
+    return handle_funnel_request(req, GA4_PROPERTY_ID)
+
+
+@https_fn.on_request(cors=EVENTFUL_CORS_STRICT)
+def analyticsRealtimeUsers(req: https_fn.Request) -> https_fn.Response:
+    return handle_realtime_users_request(req, GA4_PROPERTY_ID)
+
+
+@https_fn.on_request(
+    cors=EVENTFUL_CORS_STRICT,
+    secrets=[REVENUECAT_SECRET_API_KEY],
+)
+def subscriptionStats(req: https_fn.Request) -> https_fn.Response:
+    return handle_subscriptions_request(
+        req, REVENUECAT_SECRET_API_KEY.value, REVENUECAT_PROJECT_ID
+    )
 
 
 @https_fn.on_request(cors=ALLOW_ALL_CORS)

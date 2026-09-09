@@ -1,8 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 
 import "./StyledButton.css";
+
+type StyledButtonFlexProps = {
+  color: string;
+  hoverColor: string;
+  text: ReactNode;
+  onClickAction: () => void;
+  selected: boolean;
+};
 
 export default function StyledButtonFlex({
   color,
@@ -10,7 +18,7 @@ export default function StyledButtonFlex({
   text,
   onClickAction,
   selected,
-}) {
+}: StyledButtonFlexProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (

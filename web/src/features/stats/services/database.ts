@@ -11,7 +11,7 @@ import {
   where
 } from "firebase/firestore";
 
-import { FIRESTORE_DB } from "@/app/Firebase";
+import { FIRESTORE_DB } from "@/services/firebase/firebase";
 import { DAY_MS, HOUR_MS, readLocalCache, writeLocalCache } from "@/lib/localCache";
 
 export interface FeedbackItem {

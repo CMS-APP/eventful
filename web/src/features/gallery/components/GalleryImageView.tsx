@@ -2,7 +2,7 @@ import { faDownload, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 
-import { GalleryImage } from "./page";
+import { GalleryImage } from "@/features/gallery/types";
 
 function formatTime(timeCreated: string | null) {
   if (!timeCreated) return "";

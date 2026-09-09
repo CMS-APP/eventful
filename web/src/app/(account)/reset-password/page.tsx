@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 
 import { Suspense, useEffect, useState } from "react";
 
-import { FIREBASE_AUTH } from "@/app/Firebase";
+import { FIREBASE_AUTH } from "@/services/firebase/firebase";
 import AuthShell from "@/components/AuthShell";
 import Button from "@/components/Button";
 import Loading from "@/components/Loading";

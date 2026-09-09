@@ -24,34 +24,34 @@ export default function Footer() {
             <p>© {new Date().getFullYear()} Eventful</p>
             <button
               className="hidden md:block"
-              onClick={() => (window.location = "/about/privacy")}
+              onClick={() => (window.location.href = "/about/privacy")}
             >
               <p>Privacy Policy</p>
             </button>
           </div>
 
           <div className="flex flex-1 justify-end items-center md:mr-[0px]">
-            <button onClick={() => (window.location = appleLink)}>
+            <button onClick={() => (window.location.href = appleLink)}>
               <FontAwesomeIcon
                 icon={faApple}
                 className="text-white h-[30px] mr-[20px]"
               />
             </button>
-            <button onClick={() => (window.location = googleLink)}>
+            <button onClick={() => (window.location.href = googleLink)}>
               <FontAwesomeIcon
                 icon={faGoogle}
                 className="text-white h-[25px] mr-[20px]"
               />
             </button>
 
-            <button onClick={() => (window.location = instagramLink)}>
+            <button onClick={() => (window.location.href = instagramLink)}>
               <FontAwesomeIcon
                 icon={faInstagram}
                 className="text-white h-[30px] mr-[20px]"
               />
             </button>
 
-            <button onClick={() => (window.location = tiktokLink)}>
+            <button onClick={() => (window.location.href = tiktokLink)}>
               <FontAwesomeIcon
                 icon={faTiktok}
                 className="text-white h-[25px]"

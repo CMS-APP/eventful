@@ -15,9 +15,12 @@ export async function getFunnelStats(
   const cached = readLocalCache<FunnelStep[]>(cacheKey, HOUR_MS);
   if (cached) return cached;
 
-  const res = await fetch(`/api/analytics/funnel?days=${days}&funnel=${funnel}`, {
-    headers: { Authorization: `Bearer ${idToken}` }
-  });
+  const res = await fetch(
+    `https://api.eventfulapp.com/analytics/funnel?days=${days}&funnel=${funnel}`,
+    {
+      headers: { Authorization: `Bearer ${idToken}` }
+    }
+  );
 
   if (!res.ok) {
     throw new Error(`Failed to load funnel stats (${res.status})`);
@@ -30,7 +33,7 @@ export async function getFunnelStats(
 }
 
 export async function getRealtimeActiveUsers(idToken: string): Promise<number> {
-  const res = await fetch("/api/analytics/realtime-users", {
+  const res = await fetch("https://api.eventfulapp.com/analytics/realtime-users", {
     headers: { Authorization: `Bearer ${idToken}` }
   });
 
@@ -63,9 +66,12 @@ export async function getFeatureUsageStats(
   const cached = readLocalCache<FeatureUsageDomain[]>(cacheKey, HOUR_MS);
   if (cached) return cached;
 
-  const res = await fetch(`/api/analytics/feature-usage?days=${days}`, {
-    headers: { Authorization: `Bearer ${idToken}` }
-  });
+  const res = await fetch(
+    `https://api.eventfulapp.com/analytics/feature-usage?days=${days}`,
+    {
+      headers: { Authorization: `Bearer ${idToken}` }
+    }
+  );
 
   if (!res.ok) {
     throw new Error(`Failed to load feature usage stats (${res.status})`);
