@@ -115,16 +115,16 @@ def inviteWritten(
     schedule="0 0 * * *",
     timezone=scheduler_fn.Timezone("UTC"),
 )
-def snapshotActiveUsers(event: scheduler_fn.ScheduledEvent) -> None:
-    snapshot_active_users(event.schedule_time)
+def snapshotActiveUsers(_event: scheduler_fn.ScheduledEvent) -> None:
+    snapshot_active_users()
 
 
 @scheduler_fn.on_schedule(
     schedule="0 0 * * *",
     timezone=scheduler_fn.Timezone("UTC"),
 )
-def snapshotTotalUsers(event: scheduler_fn.ScheduledEvent) -> None:
-    snapshot_total_users(event.schedule_time)
+def snapshotTotalUsers(_event: scheduler_fn.ScheduledEvent) -> None:
+    snapshot_total_users()
 
 
 @https_fn.on_request(cors=EVENTFUL_CORS_STRICT, secrets=[RECAPTCHA_SECRET])
