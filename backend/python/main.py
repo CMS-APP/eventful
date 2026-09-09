@@ -16,6 +16,7 @@ from services.feedback import handle_send_feedback_email
 from services.followers import handle_sync_followers, handle_sync_following
 from services.google_places import handle_location_search_request
 from services.notifications import handle_invite_written, handle_notification_written
+from services.photo_booth_gallery import handle_gallery_info_request
 from services.stats import handle_increment_stat_request
 from services.total_users import snapshot_total_users
 
@@ -51,6 +52,11 @@ ALGOLIA_API_KEY = SecretParam("ALGOLIA_API_KEY")
 )
 def locationSearch(req: https_fn.Request) -> https_fn.Response:
     return handle_location_search_request(req, GOOGLE_PLACES_API_KEY.value)
+
+
+@https_fn.on_request(cors=EVENTFUL_CORS)
+def galleryInfo(req: https_fn.Request) -> https_fn.Response:
+    return handle_gallery_info_request(req)
 
 
 @https_fn.on_request(cors=ALLOW_ALL_CORS)
