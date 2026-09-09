@@ -45,7 +45,7 @@ export function HomeUpdateItem({ update }: HomeUpdateItemProps) {
     padding.mediumWidget,
     styles.container,
     {
-      borderWidth: update.read ? 0 : 1
+      borderColor: update.read ? colors.lightGray : colors.secondary
     }
   ];
 
@@ -67,7 +67,6 @@ export function HomeUpdateItem({ update }: HomeUpdateItemProps) {
 const styles = StyleSheet.create({
   container: {
     ...card.small,
-    borderColor: colors.secondary,
     flexDirection: "row",
     gap: 12
   },

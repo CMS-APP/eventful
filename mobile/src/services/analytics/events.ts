@@ -157,10 +157,6 @@ export function trackPaywallViewed(source: string) {
   track("paywall_viewed", { source });
 }
 
-export function trackPaywallPlanSelected(plan: string) {
-  track("paywall_plan_selected", { plan });
-}
-
 export function trackSubscriptionPurchased(type: string) {
   track("subscription_purchased", { type });
 }
