@@ -8,13 +8,14 @@ export interface FunnelStep {
 
 export async function getFunnelStats(
   idToken: string,
-  days = 30
+  days = 30,
+  funnel: "onboarding" | "paywall" = "onboarding"
 ): Promise<FunnelStep[]> {
-  const cacheKey = `analytics:funnel:${days}`;
+  const cacheKey = `analytics:funnel:${funnel}:${days}`;
   const cached = readLocalCache<FunnelStep[]>(cacheKey, HOUR_MS);
   if (cached) return cached;
 
-  const res = await fetch(`/api/analytics/funnel?days=${days}`, {
+  const res = await fetch(`/api/analytics/funnel?days=${days}&funnel=${funnel}`, {
     headers: { Authorization: `Bearer ${idToken}` }
   });
 

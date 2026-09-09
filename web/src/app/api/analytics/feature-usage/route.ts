@@ -63,11 +63,6 @@ const FEATURE_DOMAINS = [
     id: "spotify",
     label: "Spotify",
     events: ["spotify_connected", "spotify_playlist_added"]
-  },
-  {
-    id: "subscriptions",
-    label: "Subscriptions",
-    events: ["subscription_purchased", "subscription_restored"]
   }
 ] as const;
 

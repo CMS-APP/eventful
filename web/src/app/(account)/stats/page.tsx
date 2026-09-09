@@ -392,11 +392,15 @@ export default function Stats() {
     null
   );
   const [funnelSteps, setFunnelSteps] = useState<FunnelStep[]>([]);
+  const [paywallFunnelSteps, setPaywallFunnelSteps] = useState<FunnelStep[]>(
+    []
+  );
   const [featureUsage, setFeatureUsage] = useState<FeatureUsageDomain[]>([]);
   const [realtimeUsers, setRealtimeUsers] = useState<number | null>(null);
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [loadingSubscriptions, setLoadingSubscriptions] = useState(true);
   const [loadingFunnel, setLoadingFunnel] = useState(true);
+  const [loadingPaywallFunnel, setLoadingPaywallFunnel] = useState(true);
   const [loadingFeatureUsage, setLoadingFeatureUsage] = useState(true);
 
   const totalUserWeeklyHistory = useMemo(() => {
@@ -490,12 +494,24 @@ export default function Stats() {
     async function getFunnelData() {
       try {
         const idToken = await user!.getIdToken();
-        const steps = await getFunnelStats(idToken, 30);
+        const steps = await getFunnelStats(idToken, 30, "onboarding");
         setFunnelSteps(steps);
       } catch (error) {
         console.error("Error fetching funnel stats:", error);
       } finally {
         setLoadingFunnel(false);
+      }
+    }
+
+    async function getPaywallFunnelData() {
+      try {
+        const idToken = await user!.getIdToken();
+        const steps = await getFunnelStats(idToken, 30, "paywall");
+        setPaywallFunnelSteps(steps);
+      } catch (error) {
+        console.error("Error fetching paywall funnel stats:", error);
+      } finally {
+        setLoadingPaywallFunnel(false);
       }
     }
 
@@ -524,6 +540,7 @@ export default function Stats() {
     getUserStats();
     getSubscriptionStats();
     getFunnelData();
+    getPaywallFunnelData();
     getRealtimeUsers();
     getFeatureUsageData();
 
@@ -695,6 +712,20 @@ export default function Stats() {
               Downloads → Signup → Onboarding
             </h2>
             <FunnelChart steps={funnelSteps} loading={loadingFunnel} />
+          </section>
+        </div>
+
+        <div className="charts-section">
+          <h2 className="charts-section-title">Paywall conversion funnel</h2>
+          <section className="chart-card chart-card-full">
+            <h2 className="chart-card-title">
+              <FontAwesomeIcon icon={faFilter} />
+              Viewed → Plan selected → Purchased
+            </h2>
+            <FunnelChart
+              steps={paywallFunnelSteps}
+              loading={loadingPaywallFunnel}
+            />
           </section>
         </div>
 

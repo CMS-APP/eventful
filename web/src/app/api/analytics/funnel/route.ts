@@ -3,20 +3,41 @@ import { NextRequest, NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin-request";
 import { getGa4Client } from "@/lib/ga4";
 
-const FUNNEL_STEPS = [
-  { id: "downloads", label: "Downloads", event: "first_open" },
-  { id: "signup", label: "Signup", event: "auth_sign_up" },
-  {
-    id: "onboarding_started",
-    label: "Onboarding started",
-    event: "onboarding_started"
-  },
-  {
-    id: "onboarding_completed",
-    label: "Onboarding completed",
-    event: "onboarding_completed"
-  }
-] as const;
+const FUNNELS = {
+  onboarding: [
+    { id: "downloads", label: "Downloads", event: "first_open" },
+    { id: "signup", label: "Signup", event: "auth_sign_up" },
+    {
+      id: "onboarding_started",
+      label: "Onboarding started",
+      event: "onboarding_started"
+    },
+    {
+      id: "onboarding_completed",
+      label: "Onboarding completed",
+      event: "onboarding_completed"
+    }
+  ],
+  paywall: [
+    { id: "paywall_viewed", label: "Paywall viewed", event: "paywall_viewed" },
+    {
+      id: "plan_selected",
+      label: "Plan selected",
+      event: "paywall_plan_selected"
+    },
+    {
+      id: "purchased",
+      label: "Purchase completed",
+      event: "subscription_purchased"
+    }
+  ]
+} as const;
+
+type FunnelName = keyof typeof FUNNELS;
+
+function isFunnelName(value: string): value is FunnelName {
+  return value in FUNNELS;
+}
 
 export async function GET(request: NextRequest) {
   if (!(await isAdminRequest(request))) {
@@ -34,6 +55,11 @@ export async function GET(request: NextRequest) {
 
   const { searchParams } = new URL(request.url);
   const days = Number(searchParams.get("days")) || 30;
+  const funnelParam = searchParams.get("funnel") ?? "onboarding";
+  if (!isFunnelName(funnelParam)) {
+    return NextResponse.json({ error: "Unknown funnel" }, { status: 400 });
+  }
+  const funnelSteps = FUNNELS[funnelParam];
 
   try {
     const [response] = await client.runReport({
@@ -44,7 +70,7 @@ export async function GET(request: NextRequest) {
       dimensionFilter: {
         filter: {
           fieldName: "eventName",
-          inListFilter: { values: FUNNEL_STEPS.map((step) => step.event) }
+          inListFilter: { values: funnelSteps.map((step) => step.event) }
         }
       }
     });
@@ -56,7 +82,7 @@ export async function GET(request: NextRequest) {
       if (eventName) usersByEvent.set(eventName, users);
     }
 
-    const steps = FUNNEL_STEPS.map((step) => ({
+    const steps = funnelSteps.map((step) => ({
       id: step.id,
       label: step.label,
       users: usersByEvent.get(step.event) ?? 0
