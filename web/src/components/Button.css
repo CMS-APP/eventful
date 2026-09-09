@@ -6,7 +6,7 @@
   padding: 14px;
   border: none;
   border-radius: var(--radius-full, 999px);
-  color: var(--color-white, #fff);
+  color: var(--color-white);
   font-family: var(--font-poppins-bold);
   font-size: 14px;
   letter-spacing: 0.08em;
@@ -64,7 +64,7 @@
   width: 15px;
   height: 15px;
   border: 2px solid rgba(255, 255, 255, 0.4);
-  border-top-color: #fff;
+  border-top-color: var(--color-white);
   border-radius: 50%;
   animation: button-spin 0.7s linear infinite;
 }

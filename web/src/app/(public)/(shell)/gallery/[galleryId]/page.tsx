@@ -1,9 +1,10 @@
 "use client";
 
 import {
+  faCamera,
   faDownload,
-  faImage,
-  faImages
+  faImages,
+  faLink
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import JSZip from "jszip";
@@ -11,6 +12,7 @@ import Link from "next/link";
 
 import { useEffect, useState } from "react";
 
+import Button from "@/components/Button";
 import Loading from "@/components/Loading";
 import { getGalleryImages } from "@/services/FirebaseFunctions";
 
@@ -22,17 +24,30 @@ export interface GalleryImage {
   url: string;
   fullPath: string;
   size: number;
+  timeCreated: string | null;
 }
 
-interface GalleryStats {
-  imageCount: number;
-  totalSize: number;
-  hasImages: boolean;
+interface GalleryInfo {
+  eventTitle: string;
+  date: string | null;
+  hostName: string | null;
+}
+
+function formatDate(date: string | null) {
+  if (!date) return null;
+  return new Date(date)
+    .toLocaleDateString("en-GB", {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    })
+    .toUpperCase();
 }
 
 export default function Gallery() {
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
-  const [galleryStats, setGalleryStats] = useState<GalleryStats | null>(null);
+  const [galleryInfo, setGalleryInfo] = useState<GalleryInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [downloadingImage, setDownloadingImage] = useState<string | null>(null);
@@ -63,18 +78,13 @@ export default function Gallery() {
       setIsLoading(true);
       setError(null);
 
-      const images = await getGalleryImages(userId, eventId);
-      setGalleryImages(images);
+      const [images, info] = await Promise.all([
+        getGalleryImages(userId, eventId),
+        fetchGalleryInfo(userId, eventId)
+      ]);
 
-      const totalSize = images.reduce(
-        (sum: number, image: GalleryImage) => sum + (image.size || 0),
-        0
-      );
-      setGalleryStats({
-        imageCount: images.length,
-        totalSize,
-        hasImages: images.length > 0
-      });
+      setGalleryImages(images);
+      setGalleryInfo(info);
 
       console.log("Gallery loaded successfully:", images);
     } catch (error) {
@@ -82,6 +92,24 @@ export default function Gallery() {
       setError("Failed to load gallery images");
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function fetchGalleryInfo(
+    userId: string,
+    eventHash: string
+  ): Promise<GalleryInfo | null> {
+    try {
+      const response = await fetch(
+        `https://api.eventfulapp.com/galleryInfo?userId=${encodeURIComponent(userId)}&eventHash=${encodeURIComponent(eventHash)}`
+      );
+
+      if (!response.ok) return null;
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error loading gallery info:", error);
+      return null;
     }
   }
 
@@ -99,8 +127,7 @@ export default function Gallery() {
       const batch = images.slice(i, i + BATCH_SIZE);
       await Promise.all(
         batch.map(async (image) => {
-          const apiUrl = `/api/download-image?url=${encodeURIComponent(image.url)}&fileName=${encodeURIComponent(image.name)}`;
-          const response = await fetch(apiUrl);
+          const response = await fetch(image.url);
           const blob = await response.blob();
           zip.file(image.name, blob);
 
@@ -122,6 +149,15 @@ export default function Gallery() {
     setDownloadProgress(0);
   }
 
+  async function shareGallery() {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      alert("Gallery link copied to clipboard");
+    } catch {
+      alert("Failed to copy gallery link");
+    }
+  }
+
   if (isLoading) {
     return <Loading message="Loading gallery..." />;
   }
@@ -140,6 +176,7 @@ export default function Gallery() {
   }
 
   const hasImages = galleryImages.length > 0;
+  const formattedDate = formatDate(galleryInfo?.date ?? null);
 
   return (
     <>
@@ -149,45 +186,62 @@ export default function Gallery() {
         />
       )}
       <main className="gallery-page">
-        <div className="gallery-page-inner">
-          <header className="gallery-page-header">
-            <h1 className="gallery-page-title">Event Gallery</h1>
-            {galleryStats && (
-              <div className="gallery-page-stats">
-                <div className="gallery-page-stat">
-                  <FontAwesomeIcon
-                    icon={faImages}
-                    className="gallery-page-stat-icon"
-                  />
-                  <span>{galleryStats.imageCount} photos</span>
+        <div className="gallery-page-banner">
+          <div className="gallery-page-banner-inner">
+            <div className="gallery-page-badge">
+              <FontAwesomeIcon icon={faCamera} />
+              <span>Photo Booth Gallery</span>
+            </div>
+
+            <div className="gallery-page-heading-row">
+              <div className="gallery-page-heading-text">
+                <h1 className="gallery-page-title">
+                  {galleryInfo?.eventTitle || "Event Gallery"}
+                </h1>
+                <div className="gallery-page-meta">
+                  {[
+                    formattedDate,
+                    galleryInfo?.hostName &&
+                      `HOSTED BY ${galleryInfo.hostName.toUpperCase()}`,
+                    `${galleryImages.length} ${galleryImages.length === 1 ? "PHOTO" : "PHOTOS"}`
+                  ]
+                    .filter(Boolean)
+                    .map((item, index, all) => (
+                      <span key={item}>
+                        {item}
+                        {index < all.length - 1 && (
+                          <span className="gallery-page-meta-dot">·</span>
+                        )}
+                      </span>
+                    ))}
                 </div>
-                {galleryStats.totalSize > 0 && (
-                  <div className="gallery-page-stat">
-                    <FontAwesomeIcon
-                      icon={faImage}
-                      className="gallery-page-stat-icon"
-                    />
-                    <span>
-                      {(galleryStats.totalSize / 1024 / 1024).toFixed(1)} MB
-                    </span>
-                  </div>
-                )}
-                <button
-                  type="button"
-                  className="gallery-page-download"
-                  disabled={!hasImages || isDownloadingAll}
+              </div>
+
+              <div className="gallery-page-actions">
+                <Button
+                  variant="secondary"
+                  icon={faDownload}
+                  disabled={!hasImages}
+                  loading={isDownloadingAll}
+                  className="gallery-page-button"
                   onClick={() => downloadAllImages(galleryImages)}
                 >
-                  <FontAwesomeIcon
-                    icon={faDownload}
-                    className="gallery-page-stat-icon"
-                  />
-                  <span>Download All</span>
-                </button>
+                  Download All
+                </Button>
+                <Button
+                  variant="muted"
+                  icon={faLink}
+                  className="gallery-page-button"
+                  onClick={shareGallery}
+                >
+                  Share Gallery
+                </Button>
               </div>
-            )}
-          </header>
+            </div>
+          </div>
+        </div>
 
+        <div className="gallery-page-content">
           {!hasImages ? (
             <div className="gallery-page-empty">
               <FontAwesomeIcon
@@ -208,6 +262,7 @@ export default function Gallery() {
                   key={image.fullPath}
                   url={image.url}
                   name={image.name}
+                  timeCreated={image.timeCreated}
                   index={index}
                   downloadingImage={downloadingImage}
                   setDownloadingImage={setDownloadingImage}

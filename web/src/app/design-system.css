@@ -44,7 +44,7 @@
   --color-info-dark: #2563eb;
   --color-info-alpha-20: rgba(59, 130, 246, 0.2);
 
-  --color-white: #ffffff;
+  --color-white: #faf9f6;
   --color-black: #000000;
   --color-gray-50: #f9fafb;
   --color-gray-100: #f3f4f6;
@@ -57,7 +57,7 @@
   --color-gray-800: #1f2937;
   --color-gray-900: #111827;
 
-  --color-background: #ffffff;
+  --color-background: #faf9f6;
   --color-background-dark: #0a0a0a;
   --color-foreground: #171717;
   --color-foreground-dark: #ededed;

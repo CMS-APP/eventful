@@ -1,18 +1,29 @@
-import { faDownload, faImage } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 
 import { GalleryImage } from "./page";
 
+function formatTime(timeCreated: string | null) {
+  if (!timeCreated) return "";
+  return new Date(timeCreated).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
+}
+
 export default function GalleryImageView({
   url,
   name,
+  timeCreated,
   index,
   downloadingImage,
   setDownloadingImage
 }: {
   url: string;
   name: string;
+  timeCreated: string | null;
   index: number;
   downloadingImage: string | null;
   setDownloadingImage: (image: string | null) => void;
@@ -21,15 +32,18 @@ export default function GalleryImageView({
     try {
       setDownloadingImage(image.name);
 
-      const downloadUrl = `/api/download-image?url=${encodeURIComponent(image.url)}&fileName=${encodeURIComponent(image.name)}`;
+      const response = await fetch(image.url);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
 
       const link = document.createElement("a");
-      link.href = downloadUrl;
+      link.href = blobUrl;
       link.download = image.name;
 
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
     } catch {
       alert("Failed to download image. Please try again.");
     } finally {
@@ -37,38 +51,43 @@ export default function GalleryImageView({
     }
   }
 
-  return (
-    <div key={index} className="relative group">
-      <Image
-        src={url}
-        alt={`Gallery image ${index + 1}`}
-        width={1200}
-        height={800}
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
-        className="w-full h-auto rounded-lg shadow-lg transition-transform duration-200 pointer-events-none select-none"
-        loading="lazy"
-        draggable={false}
-      />
-      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 rounded-lg"></div>
+  const isDownloading = downloadingImage === name;
 
-      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        <button
-          onClick={() => downloadImage({ url, name, fullPath: "", size: 0 })}
-          disabled={downloadingImage === name}
-          className="bg-[#FEBA12] hover:bg-[#FEBA12]/90 disabled:bg-[#FEBA12]/50 text-black font-poppins-bold p-2 rounded-lg transition-colors duration-200 shadow-lg"
-          title="Download image"
-        >
-          {downloadingImage === name ? (
-            <FontAwesomeIcon icon={faImage} className="animate-spin w-4 h-4" />
-          ) : (
-            <FontAwesomeIcon icon={faDownload} className="w-4 h-4" />
-          )}
-        </button>
+  return (
+    <div className="gallery-photo-card">
+      <div className="gallery-photo-card-image">
+        <Image
+          src={url}
+          alt={`Gallery photo ${index + 1}`}
+          width={600}
+          height={900}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 300px"
+          className="gallery-photo-card-img"
+          loading="lazy"
+          draggable={false}
+        />
       </div>
 
-      <div className="absolute bottom-2 left-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        <div className="bg-black/70 text-white text-xs font-poppins px-2 py-1 rounded">
-          {name}
+      <div className="gallery-photo-card-footer">
+        <div className="gallery-photo-card-meta">
+          <span className="gallery-photo-card-time">
+            {formatTime(timeCreated)}
+          </span>
+          <button
+            type="button"
+            className="gallery-photo-card-download"
+            disabled={isDownloading}
+            onClick={() =>
+              downloadImage({ url, name, fullPath: "", size: 0, timeCreated })
+            }
+            title="Download photo"
+            aria-label="Download photo"
+          >
+            <FontAwesomeIcon
+              icon={isDownloading ? faSpinner : faDownload}
+              className={isDownloading ? "animate-spin" : ""}
+            />
+          </button>
         </div>
       </div>
     </div>

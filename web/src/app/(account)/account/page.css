@@ -12,7 +12,7 @@
 
 .profile-header h1 {
   margin-bottom: 10px;
-  color: #ffffff;
+  color: var(--color-white);
 }
 
 .profile-subtitle {
@@ -40,7 +40,7 @@
 .profile-card-title {
   font-size: 1.5rem;
   margin-bottom: 24px;
-  color: white;
+  color: var(--color-white);
   font-family: var(--font-playfair-display);
 }
 
@@ -66,7 +66,7 @@
 
 .profile-info-value {
   font-size: 1.1rem;
-  color: white;
+  color: var(--color-white);
   font-family: var(--font-poppins-bold);
   word-break: break-word;
 }
@@ -88,7 +88,7 @@
 .profile-section-title {
   font-size: 1.3rem;
   margin-bottom: 20px;
-  color: white;
+  color: var(--color-white);
   font-family: var(--font-playfair-display);
 }
 

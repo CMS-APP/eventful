@@ -21,7 +21,7 @@
 
 .not-found-numeral {
   margin: 0;
-  color: #ffffff;
+  color: var(--color-white);
   font-family: var(--font-playfair-display);
   font-size: clamp(72px, 18vw, 140px);
   line-height: 1;
@@ -29,7 +29,7 @@
 
 .not-found-title {
   margin: 0;
-  color: #ffffff;
+  color: var(--color-white);
   font-family: var(--font-playfair-display);
   font-size: 24px;
 }
@@ -68,5 +68,5 @@
 }
 
 .not-found-secondary:hover {
-  color: #ffffff;
+  color: var(--color-white);
 }

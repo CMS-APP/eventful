@@ -20,7 +20,7 @@
   padding: 0 16px;
   border: 1px solid rgba(10, 59, 46, 0.15);
   border-radius: 12px;
-  background-color: var(--color-white, #fff);
+  background-color: var(--color-white);
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
@@ -57,8 +57,8 @@
 .text-input:-webkit-autofill:focus,
 .text-input:-webkit-autofill:active {
   -webkit-text-fill-color: var(--color-primary-dark);
-  -webkit-box-shadow: 0 0 0 1000px #fff inset;
-  box-shadow: 0 0 0 1000px #fff inset;
+  -webkit-box-shadow: 0 0 0 1000px var(--color-white) inset;
+  box-shadow: 0 0 0 1000px var(--color-white) inset;
   transition: background-color 9999s ease-in-out 0s;
 }
 

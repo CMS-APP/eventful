@@ -7,7 +7,7 @@
 .privacy-content a,
 .privacy-content span,
 .privacy-content li {
-  color: #ffffff !important;
+  color: var(--color-white) !important;
 }
 
 .privacy-content a {

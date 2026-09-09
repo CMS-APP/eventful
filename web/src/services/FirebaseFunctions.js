@@ -132,7 +132,8 @@ export async function getGalleryImages(userId, eventId) {
         name: itemRef.name,
         url: downloadURL,
         fullPath: itemRef.fullPath,
-        size: metadata.size || 0
+        size: metadata.size || 0,
+        timeCreated: metadata.timeCreated || null
       };
     });
 

@@ -12,7 +12,7 @@
   flex-direction: column;
   width: 100%;
   min-width: 0;
-  color: #ffffff;
+  color: var(--color-white);
 }
 
 .public-shell-content > * {

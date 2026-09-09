@@ -56,7 +56,7 @@ const TOOLTIP_STYLE = {
   background: "rgba(10, 10, 10, 0.92)",
   border: "1px solid rgba(255, 255, 255, 0.15)",
   borderRadius: 8,
-  color: "#fff",
+  color: "var(--color-white)",
   fontSize: 13
 };
 
@@ -720,7 +720,7 @@ export default function Stats() {
           <section className="chart-card chart-card-full">
             <h2 className="chart-card-title">
               <FontAwesomeIcon icon={faFilter} />
-              Viewed → Plan selected → Purchased
+              Viewed → Purchased
             </h2>
             <FunnelChart
               steps={paywallFunnelSteps}

@@ -21,11 +21,6 @@ const FUNNELS = {
   paywall: [
     { id: "paywall_viewed", label: "Paywall viewed", event: "paywall_viewed" },
     {
-      id: "plan_selected",
-      label: "Plan selected",
-      event: "paywall_plan_selected"
-    },
-    {
       id: "purchased",
       label: "Purchase completed",
       event: "subscription_purchased"

@@ -83,7 +83,7 @@
 }
 
 .app-header-nav-link.is-active {
-  color: #ffffff;
+  color: var(--color-white);
   font-family: var(--font-poppins-bold);
   border-bottom-color: var(--color-secondary);
 }
@@ -117,7 +117,7 @@
   height: 32px;
   border-radius: 999px;
   background-color: var(--color-accent-green);
-  color: #ffffff;
+  color: var(--color-white);
   font-family: var(--font-poppins-bold);
   font-size: 13px;
   flex-shrink: 0;

@@ -12,7 +12,7 @@
 
 .stats-header h1 {
   margin-bottom: 10px;
-  color: #ffffff;
+  color: var(--color-white);
 }
 
 .stats-subtitle {

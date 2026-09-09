@@ -38,7 +38,7 @@
 }
 
 .loading-text {
-  color: white;
+  color: var(--color-white);
   font-family: var(--font-poppins-medium);
   font-size: 18px;
   margin: 0;
