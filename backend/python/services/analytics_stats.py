@@ -190,60 +190,77 @@ def handle_funnel_request(req: https_fn.Request, property_id: str) -> https_fn.R
     if funnel_param not in FUNNELS:
         return _json_response({"error": "Unknown funnel"}, status=400)
     funnel_steps = FUNNELS[funnel_param]
-
-    dimensions = [{"name": "eventName"}]
-    if any("screen_name" in step for step in funnel_steps):
-        dimensions.append({"name": "unifiedScreenName"})
-
-    def _step_filter(step: dict) -> dict:
-        event_filter = {
-            "filter": {"fieldName": "eventName", "stringFilter": {"value": step["event"]}}
-        }
-        if "screen_name" not in step:
-            return event_filter
-        return {
-            "andGroup": {
-                "expressions": [
-                    event_filter,
-                    {
-                        "filter": {
-                            "fieldName": "unifiedScreenName",
-                            "stringFilter": {"value": step["screen_name"]},
-                        }
-                    },
-                ]
-            }
-        }
-
-    def _row_matches(row: dict, step: dict) -> bool:
-        values = [dv.get("value") for dv in row.get("dimensionValues", [])]
-        if not values or values[0] != step["event"]:
-            return False
-        if "screen_name" in step:
-            return len(values) > 1 and values[1] == step["screen_name"]
-        return True
+    screen_steps = [step for step in funnel_steps if "screen_name" in step]
+    event_steps = [step for step in funnel_steps if "screen_name" not in step]
 
     try:
-        data = run_report(
-            property_id,
-            {
-                "dateRanges": [{"startDate": f"{days}daysAgo", "endDate": "today"}],
-                "dimensions": dimensions,
-                "metrics": [{"name": "activeUsers"}],
-                "dimensionFilter": {
-                    "orGroup": {"expressions": [_step_filter(step) for step in funnel_steps]}
-                },
-            },
-        )
-
         users_by_step_id = {}
-        for row in data.get("rows", []):
-            metric_values = row.get("metricValues", [])
-            users = int(metric_values[0].get("value", 0)) if metric_values else 0
-            for step in funnel_steps:
-                if _row_matches(row, step):
-                    users_by_step_id[step["id"]] = users
-                    break
+
+        if event_steps:
+            data = run_report(
+                property_id,
+                {
+                    "dateRanges": [{"startDate": f"{days}daysAgo", "endDate": "today"}],
+                    "dimensions": [{"name": "eventName"}],
+                    "metrics": [{"name": "activeUsers"}],
+                    "dimensionFilter": {
+                        "filter": {
+                            "fieldName": "eventName",
+                            "inListFilter": {
+                                "values": [step["event"] for step in event_steps]
+                            },
+                        }
+                    },
+                },
+            )
+
+            users_by_event = {}
+            for row in data.get("rows", []):
+                dimension_values = row.get("dimensionValues", [])
+                event_name = dimension_values[0].get("value") if dimension_values else None
+                metric_values = row.get("metricValues", [])
+                users = int(metric_values[0].get("value", 0)) if metric_values else 0
+                if event_name:
+                    users_by_event[event_name] = users
+
+            for step in event_steps:
+                users_by_step_id[step["id"]] = users_by_event.get(step["event"], 0)
+
+        for step in screen_steps:
+            data = run_report(
+                property_id,
+                {
+                    "dateRanges": [{"startDate": f"{days}daysAgo", "endDate": "today"}],
+                    "dimensions": [{"name": "eventName"}, {"name": "unifiedScreenName"}],
+                    "metrics": [{"name": "activeUsers"}],
+                    "dimensionFilter": {
+                        "andGroup": {
+                            "expressions": [
+                                {
+                                    "filter": {
+                                        "fieldName": "eventName",
+                                        "stringFilter": {"value": step["event"]},
+                                    }
+                                },
+                                {
+                                    "filter": {
+                                        "fieldName": "unifiedScreenName",
+                                        "stringFilter": {"value": step["screen_name"]},
+                                    }
+                                },
+                            ]
+                        }
+                    },
+                },
+            )
+
+            rows = data.get("rows", [])
+            users = 0
+            if rows:
+                metric_values = rows[0].get("metricValues", [])
+                if metric_values:
+                    users = int(metric_values[0].get("value", 0))
+            users_by_step_id[step["id"]] = users
 
         steps = [
             {
