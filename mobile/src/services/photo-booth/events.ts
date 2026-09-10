@@ -1,8 +1,20 @@
-import { GalleryEvent } from "@/types/photoBoothGallery";
+import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
+import { parseDatabaseDate } from "@/utils/date";
 
 import { getCloudEvents } from "./cloudPhotos";
 import { getLocalEvents } from "./localPhotos";
 import { checkIfPhotoExistsInLocalEvent } from "./utils";
+
+export function getLatestPhotoTime(event: GalleryEvent): number {
+  return event.photos.reduce((latest, photo) => {
+    const photoTime =
+      photo.createdAt ?? (photo as GalleryPhoto & { date?: string }).date;
+    const photoDate = parseDatabaseDate(photoTime);
+    return photoDate && photoDate.getTime() > latest
+      ? photoDate.getTime()
+      : latest;
+  }, 0);
+}
 
 export async function getEvents(userId: string) {
   let events: GalleryEvent[] = [];
@@ -31,6 +43,8 @@ export async function getEvents(userId: string) {
       }
     }
   }
+
+  events.sort((a, b) => getLatestPhotoTime(b) - getLatestPhotoTime(a));
 
   return events;
 }

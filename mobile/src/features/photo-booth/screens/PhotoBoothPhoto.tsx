@@ -7,6 +7,7 @@ import { Alert, StyleSheet, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
+import { usePhotoBoothUpload } from "@/app/context/photoBoothUpload/PhotoBoothUploadContext";
 import {
   AppStackParamList,
   PhotoBoothStackNavigation,
@@ -18,8 +19,7 @@ import { colors } from "@/design-system/tokens/colors";
 import { trackPhotoBoothPhotoShared } from "@/services/analytics/events";
 import {
   deletePhotoCloud,
-  downloadCloudPhoto,
-  uploadPhotosToCloud
+  downloadCloudPhoto
 } from "@/services/photo-booth/cloudPhotos";
 import {
   PhotoDeletionCancelledError,
@@ -45,6 +45,7 @@ export function PhotoBoothPhoto() {
   const [photo, setPhoto] = useState(initialPhoto);
   const [uploading, setUploading] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const { queueUpload, isUploading: isUploadingGlobal } = usePhotoBoothUpload();
 
   function getSubTitle() {
     if (photo.type === "cloud") {
@@ -119,26 +120,20 @@ export function PhotoBoothPhoto() {
       return;
     }
 
+    if (isUploadingGlobal) return;
+
     try {
       setUploading(true);
-      const [result] = await uploadPhotosToCloud(userId, photo.eventTitle, [
+      const { succeeded } = await queueUpload(userId, photo.eventTitle, [
         photo
       ]);
-      setPhoto({
-        ...photo,
-        type: "both",
-        storageId: result?.storageId,
-        url: result?.url,
-        width: result?.width,
-        height: result?.height
-      });
-    } catch (error) {
-      log(`Error Uploading Photos: ${error}`, "error");
-      showErrorToast("Error Uploading Photos");
+      if (succeeded[0]) {
+        setPhoto(succeeded[0]);
+      }
     } finally {
       setUploading(false);
     }
-  }, [photo, userId, premium, appNavigation]);
+  }, [photo, userId, premium, appNavigation, queueUpload, isUploadingGlobal]);
 
   const handleDownload = useCallback(async () => {
     try {
@@ -174,12 +169,19 @@ export function PhotoBoothPhoto() {
 
         {photo.type === "local" && (
           <Button
-            text={premium ? "Upload" : "Upgrade to upload"}
+            text={
+              premium
+                ? isUploadingGlobal && !uploading
+                  ? "Waiting for other upload…"
+                  : "Upload"
+                : "Upgrade to upload"
+            }
             leadingIcon="upload"
             onPress={handleUpload}
             color={colors.primary}
             textColor={colors.white}
             loading={uploading}
+            disabled={premium && isUploadingGlobal}
           />
         )}
 

@@ -26,6 +26,8 @@ import { TabBarBorder } from "./TabBarBorder";
 import { TabBarCamera } from "./TabBarCamera";
 import { TabBarIcon } from "./TabBarIcon";
 
+export const TAB_BAR_HEIGHT = 48;
+
 const RAISED_TAB_ROUTE_NAME = "PhotoBooth";
 
 const FULL_SCREEN_ROUTE_NAMES = [
@@ -143,7 +145,7 @@ export function TabBar({ state, navigation }: TabBarProps) {
 
   const mainContainerStyle = {
     ...styles.mainContainer,
-    height: 48 + safeArea.paddingBottom
+    height: TAB_BAR_HEIGHT + safeArea.paddingBottom
   };
 
   return (

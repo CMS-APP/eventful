@@ -157,69 +157,93 @@ export async function deletePhotoCloud(photo: GalleryPhoto, userId: string) {
   await deleteDocument(API_COLLECTIONS.PHOTO_BOOTH_PHOTOS, storageId);
 }
 
+export interface UploadPhotoResult {
+  photoId: string;
+  storageId: string;
+  url: string;
+  width?: number;
+  height?: number;
+}
+
 export async function uploadPhotosToCloud(
   userId: string,
   eventTitle: string,
-  photos: GalleryPhoto[]
+  photos: GalleryPhoto[],
+  onPhotoSettled?: (photo: GalleryPhoto, result: UploadPhotoResult | null) => void
 ) {
   const eventTitleHash = await convertEventTitleToHash(eventTitle);
   const storagePath = `gallery/${userId}/${eventTitleHash}`;
 
   const uploadPromises = photos.map(async (photo) => {
-    const photoId = photo.photoId;
-    const localMatchId = photoId.split("/")[0];
-    const storageId = generateUUID();
-    const photoRef = ref(FIREBASE_STORAGE, `${storagePath}/${storageId}.jpg`);
-    const asset = await MediaLibrary.getAssetInfoAsync(photoId);
-    const localUri = asset.localUri || asset.uri;
-    const response = await fetch(localUri);
-    const blob = await response.blob();
+    try {
+      const photoId = photo.photoId;
+      const localMatchId = photoId.split("/")[0];
+      const storageId = generateUUID();
+      const photoRef = ref(FIREBASE_STORAGE, `${storagePath}/${storageId}.jpg`);
+      const asset = await MediaLibrary.getAssetInfoAsync(photoId);
+      const localUri = asset.localUri || asset.uri;
+      const response = await fetch(localUri);
+      const blob = await response.blob();
 
-    await uploadBytesResumable(photoRef, blob as Blob);
-    const downloadURL = await getDownloadURL(photoRef);
+      await uploadBytesResumable(photoRef, blob as Blob);
+      const downloadURL = await getDownloadURL(photoRef);
 
-    await createDocument(
-      {
-        url: downloadURL,
-        userId,
-        eventTitle,
+      await createDocument(
+        {
+          url: downloadURL,
+          userId,
+          eventTitle,
+          photoId: localMatchId,
+          width: asset.width,
+          height: asset.height,
+          createdAt: serverTimestamp()
+        },
+        API_COLLECTIONS.PHOTO_BOOTH_PHOTOS,
+        storageId
+      );
+
+      const result: UploadPhotoResult = {
         photoId: localMatchId,
+        storageId,
+        url: downloadURL,
         width: asset.width,
-        height: asset.height,
-        createdAt: serverTimestamp()
-      },
-      API_COLLECTIONS.PHOTO_BOOTH_PHOTOS,
-      storageId
+        height: asset.height
+      };
+      onPhotoSettled?.(photo, result);
+      return result;
+    } catch (error) {
+      onPhotoSettled?.(photo, null);
+      throw error;
+    }
+  });
+
+  const settled = await Promise.allSettled(uploadPromises);
+  const results = settled
+    .filter(
+      (settledResult): settledResult is PromiseFulfilledResult<UploadPhotoResult> =>
+        settledResult.status === "fulfilled"
+    )
+    .map((settledResult) => settledResult.value);
+
+  if (results.length > 0) {
+    const resultsByPhotoId = new Map(
+      results.map((result) => [result.photoId, result])
     );
-
-    return {
-      photoId: localMatchId,
-      storageId,
-      url: downloadURL,
-      width: asset.width,
-      height: asset.height
-    };
-  });
-
-  const results = await Promise.all(uploadPromises);
-
-  const resultsByPhotoId = new Map(
-    results.map((result) => [result.photoId, result])
-  );
-  const photoData = await getPhotosDataLocally();
-  const updatedPhotoData = photoData.map((localPhoto: GalleryPhoto) => {
-    const result = resultsByPhotoId.get(getPhotoIdSplit(localPhoto));
-    return result
-      ? {
-          ...localPhoto,
-          storageId: result.storageId,
-          url: result.url,
-          width: result.width,
-          height: result.height
-        }
-      : localPhoto;
-  });
-  await AsyncStorage.setItem("photosData", JSON.stringify(updatedPhotoData));
+    const photoData = await getPhotosDataLocally();
+    const updatedPhotoData = photoData.map((localPhoto: GalleryPhoto) => {
+      const result = resultsByPhotoId.get(getPhotoIdSplit(localPhoto));
+      return result
+        ? {
+            ...localPhoto,
+            storageId: result.storageId,
+            url: result.url,
+            width: result.width,
+            height: result.height
+          }
+        : localPhoto;
+    });
+    await AsyncStorage.setItem("photosData", JSON.stringify(updatedPhotoData));
+  }
 
   return results;
 }

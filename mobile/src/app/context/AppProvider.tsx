@@ -11,6 +11,7 @@ import { ErrorBoundary } from "@/app/context/error/ErrorBoundary";
 import { BootProvider } from "@/app/context/loading/BootProvider";
 import { LoadingModalProvider } from "@/app/context/loading/LoadingModalProvider";
 import { PaymentProvider } from "@/app/context/payment/PaymentProvider";
+import { PhotoBoothUploadProvider } from "@/app/context/photoBoothUpload/PhotoBoothUploadProvider";
 import { ToastProvider } from "@/app/context/toast/ToastProvider";
 import { userStore } from "@/store/UserSlice";
 
@@ -23,13 +24,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             <AlertModalProvider>
               <LoadingModalProvider>
                 <PaymentProvider>
-                  <BootProvider>
-                    <GestureHandlerRootView
-                      style={styles.gestureHandlerRootView}
-                    >
-                      {children}
-                    </GestureHandlerRootView>
-                  </BootProvider>
+                  <PhotoBoothUploadProvider>
+                    <BootProvider>
+                      <GestureHandlerRootView
+                        style={styles.gestureHandlerRootView}
+                      >
+                        {children}
+                      </GestureHandlerRootView>
+                    </BootProvider>
+                  </PhotoBoothUploadProvider>
                 </PaymentProvider>
               </LoadingModalProvider>
             </AlertModalProvider>

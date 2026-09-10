@@ -19,18 +19,16 @@ export function setGlobalToastFunction(
   }
 }
 
-export function showErrorToast(message: string) {
-  if (globalShowToast) {
-    globalShowToast(message, "error");
-  } else {
-    toastQueue.push({ message, type: "error" });
-  }
+function showToastOfType(type: ToastType) {
+  return (message: string) => {
+    if (globalShowToast) {
+      globalShowToast(message, type);
+    } else {
+      toastQueue.push({ message, type });
+    }
+  };
 }
 
-export function showWarningToast(message: string) {
-  if (globalShowToast) {
-    globalShowToast(message, "warning");
-  } else {
-    toastQueue.push({ message, type: "warning" });
-  }
-}
+export const showSuccessToast = showToastOfType("success");
+export const showErrorToast = showToastOfType("error");
+export const showWarningToast = showToastOfType("warning");

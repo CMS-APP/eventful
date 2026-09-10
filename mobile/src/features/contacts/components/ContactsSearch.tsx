@@ -38,7 +38,7 @@ export function ContactsSearch({
   dark = false
 }: ContactsSearchProps) {
   const iconColor = dark ? colors.white : colors.black;
-  const textColor = dark ? colors.white : colors.gray;
+  const textColor = dark ? colors.white : colors.black;
 
   const renderSearch = useCallback(
     (disabled: boolean) => {
@@ -58,7 +58,7 @@ export function ContactsSearch({
         >
           <FontAwesome5 name="search" size={16} color={iconColor} />
           {disabled ? (
-            <Text type="body" style={styles.buttonLabel} color={textColor}>
+            <Text type="body" style={styles.buttonLabel} color={colors.gray}>
               {placeholder}
             </Text>
           ) : (
