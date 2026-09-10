@@ -1,7 +1,6 @@
 "use client";
 
 import AppHeader from "@/components/AppHeader";
-import Footer from "@/components/Footer";
 import { useUser } from "@/contexts/UserContext";
 
 import "./PublicShell.css";
@@ -18,7 +17,6 @@ export default function PublicShell({ children }: PublicShellProps) {
     <div className="public-shell">
       <AppHeader authenticated={authenticated} />
       <div className="public-shell-content">{children}</div>
-      <Footer />
     </div>
   );
 }
