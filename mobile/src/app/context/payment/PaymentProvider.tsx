@@ -63,12 +63,12 @@ export function PaymentProvider({ children }: { children: React.ReactNode }) {
           dispatch(setPhotoBooth(true));
         }
         if (checkIfPremiumSubscription(customerInfo)) {
-          dispatch(setPremium(false));
+          dispatch(setPremium(true));
           dispatch(setPhotoBooth(false));
         }
       } else {
         dispatch(setPhotoBooth(false));
-        dispatch(setPremium(false));
+        dispatch(setPremium(__DEV__));
       }
     },
     [dispatch]
