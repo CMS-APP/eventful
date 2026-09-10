@@ -12,8 +12,8 @@ import { colors } from "@/design-system/tokens/colors";
 import { AmazonButton } from "@/features/events/components/misc/AmazonButton";
 import { UserState } from "@/store/UserSlice";
 
-import { EventDecorEdit } from "../components/essentials/EventDecorEdit";
-import { useEventFieldUpdate } from "../hooks/useEventFieldUpdate";
+import { EventBudgetItemsEdit } from "../components/budget/EventBudgetItemsEdit";
+import { useEventEditor } from "../hooks/useEventEditor";
 
 interface EventDecorScreenEditProps {
   navigation: StackNavigationProp<AllStackParamList>;
@@ -24,10 +24,7 @@ export function EventDecorScreenEdit({
   navigation,
   route
 }: EventDecorScreenEditProps) {
-  const { event, setEventField: setEventDecor } = useEventFieldUpdate(
-    route.params.event,
-    "decor"
-  );
+  const { event, setEvent } = useEventEditor(route.params.event);
   const premium = useSelector((state: UserState) => state.premium);
 
   return (
@@ -49,12 +46,19 @@ export function EventDecorScreenEdit({
       }}
     >
       <View style={styles.contentContainer}>
-        <EventDecorEdit route={route} />
+        <EventBudgetItemsEdit
+          event={event}
+          setEvent={setEvent}
+          field="decorItems"
+          title="Decor"
+        />
 
         <Input
           placeholder={premium ? "Decor Notes" : "Decor"}
           value={event.decor}
-          onChangeText={(text) => setEventDecor(text)}
+          onChangeText={(text) =>
+            setEvent((prev) => ({ ...prev, decor: text ?? "" }))
+          }
           dark
           backgroundColor={colors.white}
           textColor={colors.black}

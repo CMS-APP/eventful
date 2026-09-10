@@ -7,17 +7,14 @@ import { Screen } from "@/components/screen/Screen";
 import { Input } from "@/design-system/components/inputs/Input";
 import { colors } from "@/design-system/tokens/colors";
 
-import { useEventFieldUpdate } from "../hooks/useEventFieldUpdate";
+import { useEventEditor } from "../hooks/useEventEditor";
 
 interface EventNotesScreenEditProps {
   route: RouteProp<EventsStackParamList, "EventEditNotes">;
 }
 
 export function EventNotesScreenEdit({ route }: EventNotesScreenEditProps) {
-  const { event, setEventField: setEventNotes } = useEventFieldUpdate(
-    route.params.event,
-    "notes"
-  );
+  const { event, setEvent } = useEventEditor(route.params.event);
 
   return (
     <Screen
@@ -41,7 +38,9 @@ export function EventNotesScreenEdit({ route }: EventNotesScreenEditProps) {
         <Input
           placeholder="Notes"
           value={event.notes ?? ""}
-          onChangeText={setEventNotes}
+          onChangeText={(text) =>
+            setEvent((prev) => ({ ...prev, notes: text ?? "" }))
+          }
           dark
           backgroundColor={colors.lightGray}
           textColor={colors.black}

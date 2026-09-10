@@ -12,8 +12,8 @@ import { colors } from "@/design-system/tokens/colors";
 import { AmazonButton } from "@/features/events/components/misc/AmazonButton";
 import { UserState } from "@/store/UserSlice";
 
-import { EventFoodEdit } from "../components/essentials/EventFoodEdit";
-import { useEventFieldUpdate } from "../hooks/useEventFieldUpdate";
+import { EventBudgetItemsEdit } from "../components/budget/EventBudgetItemsEdit";
+import { useEventEditor } from "../hooks/useEventEditor";
 
 interface EventFoodScreenEditProps {
   navigation: StackNavigationProp<AllStackParamList>;
@@ -24,10 +24,7 @@ export function EventFoodScreenEdit({
   navigation,
   route
 }: EventFoodScreenEditProps) {
-  const { event, setEventField: setEventFood } = useEventFieldUpdate(
-    route.params.event,
-    "food"
-  );
+  const { event, setEvent } = useEventEditor(route.params.event);
   const premium = useSelector((state: UserState) => state.premium);
 
   return (
@@ -49,12 +46,19 @@ export function EventFoodScreenEdit({
       }}
     >
       <View style={styles.contentContainer}>
-        <EventFoodEdit route={route} />
+        <EventBudgetItemsEdit
+          event={event}
+          setEvent={setEvent}
+          field="foodItems"
+          title="Food"
+        />
 
         <Input
           placeholder={premium ? "Food Notes" : "Food"}
           value={event.food}
-          onChangeText={(text) => setEventFood(text)}
+          onChangeText={(text) =>
+            setEvent((prev) => ({ ...prev, food: text ?? "" }))
+          }
           dark
           backgroundColor={colors.white}
           textColor={colors.black}

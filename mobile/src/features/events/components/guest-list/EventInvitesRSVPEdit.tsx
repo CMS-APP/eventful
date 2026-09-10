@@ -29,11 +29,13 @@ import { EventInvitesStatsCard } from "./EventInvitesStatsCard";
 interface EventInvitesRSVPEditProps {
   event: Event;
   setEvent: (event: Event) => void;
+  saveNow: (updater: Event | ((prev: Event) => Event)) => Promise<void>;
 }
 
 export function EventInvitesRSVPEdit({
   event,
-  setEvent
+  setEvent,
+  saveNow
 }: EventInvitesRSVPEditProps) {
   const [fetchingData, setFetchingData] = useState(false);
   const [appList, setAppList] = useState<UserInvite[]>([]);
@@ -198,6 +200,7 @@ export function EventInvitesRSVPEdit({
       <EventInvitesRSVPUserList
         event={event}
         setEvent={setEvent}
+        saveNow={saveNow}
         userList={userList}
         fetchingData={fetchingData}
         fetchData={fetchData}

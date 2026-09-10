@@ -32,7 +32,7 @@ import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { SectionButton } from "../components/edit/SectionButton";
-import { useEventEdit } from "../hooks/useEventEdit";
+import { useEventEditor } from "../hooks/useEventEditor";
 
 interface EventEditScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;
@@ -41,7 +41,7 @@ interface EventEditScreenProps {
 
 export function EventEditScreen({ navigation, route }: EventEditScreenProps) {
   const originalEvent = route.params.event;
-  const { event } = useEventEdit(originalEvent, navigation);
+  const { event } = useEventEditor(originalEvent);
 
   const [scrollY, setScrollY] = useState(0);
   const userId = useSelector((state: UserState) => state.uid);

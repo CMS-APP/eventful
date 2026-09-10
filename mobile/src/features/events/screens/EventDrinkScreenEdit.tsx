@@ -12,8 +12,8 @@ import { colors } from "@/design-system/tokens/colors";
 import { AmazonButton } from "@/features/events/components/misc/AmazonButton";
 import { UserState } from "@/store/UserSlice";
 
-import { EventDrinkEdit } from "../components/essentials/EventDrinkEdit";
-import { useEventFieldUpdate } from "../hooks/useEventFieldUpdate";
+import { EventBudgetItemsEdit } from "../components/budget/EventBudgetItemsEdit";
+import { useEventEditor } from "../hooks/useEventEditor";
 
 interface EventDrinkScreenEditProps {
   navigation: StackNavigationProp<AllStackParamList>;
@@ -22,10 +22,7 @@ interface EventDrinkScreenEditProps {
 
 export function EventDrinkScreenEdit({ route }: EventDrinkScreenEditProps) {
   const premium = useSelector((state: UserState) => state.premium);
-  const { event, setEventField: setEventDrink } = useEventFieldUpdate(
-    route.params.event,
-    "drink"
-  );
+  const { event, setEvent } = useEventEditor(route.params.event);
 
   return (
     <Screen
@@ -46,12 +43,18 @@ export function EventDrinkScreenEdit({ route }: EventDrinkScreenEditProps) {
       }}
     >
       <View style={styles.contentContainer}>
-        <EventDrinkEdit route={route} />
-
+        <EventBudgetItemsEdit
+          event={event}
+          setEvent={setEvent}
+          field="drinkItems"
+          title="Drink"
+        />
         <Input
           placeholder={premium ? "Drink Notes" : "Drink"}
           value={event.drink}
-          onChangeText={(text) => setEventDrink(text)}
+          onChangeText={(text) =>
+            setEvent((prev) => ({ ...prev, drink: text ?? "" }))
+          }
           dark
           backgroundColor={colors.white}
           textColor={colors.black}

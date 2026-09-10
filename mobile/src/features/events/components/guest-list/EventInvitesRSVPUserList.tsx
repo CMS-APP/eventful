@@ -5,7 +5,6 @@ import { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { colors } from "@/design-system/tokens/colors";
-import { updateEventInDatabase } from "@/services/firebase/event";
 import { Event } from "@/types/Event";
 import { UserInvite } from "@/types/UserInvite";
 
@@ -14,6 +13,7 @@ import { EventInviteUserItem } from "./EventInviteUserItem";
 interface EventInvitesRSVPUserListProps {
   event: Event;
   setEvent: (event: Event) => void;
+  saveNow: (updater: Event | ((prev: Event) => Event)) => Promise<void>;
   userList: UserInvite[];
   fetchingData: boolean;
   fetchData: () => void;
@@ -27,7 +27,7 @@ export type DeleteGuestManual = (user: UserInvite) => Promise<void>;
 
 export function EventInvitesRSVPUserList({
   event,
-  setEvent,
+  saveNow,
   userList,
   fetchingData,
   fetchData
@@ -37,11 +37,9 @@ export function EventInvitesRSVPUserList({
       const guestList = (event.guestList || []).map((guest) =>
         guest.id === user.user.uid ? { ...guest, response } : guest
       );
-      const updatedEvent = { ...event, guestList };
-      setEvent(updatedEvent);
-      await updateEventInDatabase({ id: event.id, guestList });
+      await saveNow({ ...event, guestList });
     },
-    [event, setEvent]
+    [event, saveNow]
   );
 
   const deleteGuestManual = useCallback(
@@ -49,10 +47,9 @@ export function EventInvitesRSVPUserList({
       const guestList = (event.guestList || []).filter(
         (guest) => guest.id !== user.user.uid
       );
-      setEvent({ ...event, guestList });
-      await updateEventInDatabase({ id: event.id, guestList });
+      await saveNow({ ...event, guestList });
     },
-    [event, setEvent]
+    [event, saveNow]
   );
 
   return (

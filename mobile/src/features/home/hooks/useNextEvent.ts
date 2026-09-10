@@ -43,7 +43,7 @@ export function useNextEvent(event: Event | null) {
     }
     setNextEvent(nextEvent);
     setPercentageComplete(calculatePercentageComplete(nextEvent));
-    const responses = await getEventResponses(nextEvent);
+    const responses = await getEventResponses(nextEvent, userId);
     setAccepted(responses);
     setLoading(false);
     hasLoadedOnce.current = true;

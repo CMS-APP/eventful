@@ -518,7 +518,10 @@ export async function getEventInvites(event: Event): Promise<UserInvite[]> {
   return userInvites;
 }
 
-export async function getEventResponses(event: Event): Promise<UserInvite[]> {
+export async function getEventResponses(
+  event: Event,
+  viewerId: string
+): Promise<UserInvite[]> {
   if (!event) {
     return [];
   }
@@ -568,7 +571,7 @@ export async function getEventResponses(event: Event): Promise<UserInvite[]> {
     (response): response is UserInvite => response !== null
   );
 
-  const webUsers = (await getRSVPWebUsers(event, event.userId)).filter(
+  const webUsers = (await getRSVPWebUsers(event, viewerId)).filter(
     (user: UserInvite) => user.invite.response === "accept"
   );
 

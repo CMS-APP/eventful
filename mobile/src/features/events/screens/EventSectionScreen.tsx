@@ -1,22 +1,9 @@
-import { useSelector } from "react-redux";
-
-import { useCallback, useEffect, useRef, useState } from "react";
-
-import { RouteProp, useFocusEffect } from "@react-navigation/native";
+import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { colors } from "@/design-system/tokens/colors";
-import { trackEventUpdated } from "@/services/analytics/events";
-import { getEventInfo, updateEventInDatabase } from "@/services/firebase/event";
-import { updateEventLinkInDatabase } from "@/services/firebase/invite";
-import { updateNotificationsForEvent } from "@/services/pushNotifications";
-import { UserState } from "@/store/UserSlice";
-import type { Event } from "@/types/Event";
-import { parseDatabaseDate } from "@/utils/date";
-import { log } from "@/utils/logging";
-import { showErrorToast } from "@/utils/toast";
 
 import { EventDetailsEdit } from "../components/edit/EventDetailsEdit";
 import { EventItineraryEdit } from "../components/edit/EventItineraryEdit";
@@ -26,6 +13,7 @@ import { EventTimelineEdit } from "../components/edit/EventTimelineEdit";
 import { EventToDoShoppingEdit } from "../components/edit/EventToDoShoppingEdit";
 import { EventEssentialsEdit } from "../components/essentials/EventEssentialsEdit";
 import { EventInvitesRSVPEdit } from "../components/guest-list/EventInvitesRSVPEdit";
+import { useEventEditor } from "../hooks/useEventEditor";
 
 interface EventSectionScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;
@@ -36,70 +24,8 @@ export function EventSectionScreen({
   navigation,
   route
 }: EventSectionScreenProps) {
-  const [originalEvent, setOriginalEvent] = useState(route.params.event);
-  const [event, setEvent] = useState(route.params.event);
+  const { event, setEvent, saveNow } = useEventEditor(route.params.event);
   const section = route.params.section;
-  const eventId = route.params.event.id ?? "";
-  const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const userId = useSelector((state: UserState) => state.uid);
-
-  useFocusEffect(
-    useCallback(() => {
-      let cancelled = false;
-
-      async function load() {
-        const eventData = await getEventInfo({ id: eventId } as Event);
-        if (cancelled) return;
-        if (eventData) {
-          setEvent(eventData);
-        } else {
-          log("Error Loading Event: Event not found", "error");
-          showErrorToast("Error Loading Event");
-        }
-      }
-
-      load();
-      return () => {
-        cancelled = true;
-      };
-    }, [eventId])
-  );
-
-  useEffect(() => {
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current);
-    }
-
-    debounceTimeout.current = setTimeout(async () => {
-      if (JSON.stringify(event) === JSON.stringify(originalEvent)) {
-        return;
-      }
-
-      await updateEventInDatabase(event);
-      trackEventUpdated();
-      setOriginalEvent(event);
-
-      if (event.eventLinkEnabled) {
-        await updateEventLinkInDatabase(event);
-      }
-
-      if (
-        parseDatabaseDate(event.date).getTime() !==
-        parseDatabaseDate(originalEvent?.date).getTime()
-      ) {
-        await updateNotificationsForEvent(event);
-      }
-    }, 250);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [event, userId]);
-
-  useEffect(() => {
-    return () => {
-      if (debounceTimeout.current) {
-        clearTimeout(debounceTimeout.current);
-      }
-    };
-  }, []);
 
   function getBackgroundColor() {
     if (section === "Details") return colors.primary;
@@ -166,7 +92,11 @@ export function EventSectionScreen({
       )}
 
       {section === "Invites" && (
-        <EventInvitesRSVPEdit event={event} setEvent={setEvent} />
+        <EventInvitesRSVPEdit
+          event={event}
+          setEvent={setEvent}
+          saveNow={saveNow}
+        />
       )}
 
       {section === "Music" && (

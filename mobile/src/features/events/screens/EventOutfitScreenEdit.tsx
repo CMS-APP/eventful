@@ -10,8 +10,8 @@ import { Input } from "@/design-system/components/inputs/Input";
 import { colors } from "@/design-system/tokens/colors";
 import { UserState } from "@/store/UserSlice";
 
-import { EventOutfitEdit } from "../components/essentials/EventOutfitEdit";
-import { useEventFieldUpdate } from "../hooks/useEventFieldUpdate";
+import { EventBudgetItemsEdit } from "../components/budget/EventBudgetItemsEdit";
+import { useEventEditor } from "../hooks/useEventEditor";
 
 interface EventOutfitScreenEditProps {
   route: RouteProp<EventsStackParamList, "EventEditOutfit">;
@@ -19,10 +19,7 @@ interface EventOutfitScreenEditProps {
 
 export function EventOutfitScreenEdit({ route }: EventOutfitScreenEditProps) {
   const premium = useSelector((state: UserState) => state.premium);
-  const { event, setEventField: setEventOutfit } = useEventFieldUpdate(
-    route.params.event,
-    "outfit"
-  );
+  const { event, setEvent } = useEventEditor(route.params.event);
 
   return (
     <Screen
@@ -43,12 +40,19 @@ export function EventOutfitScreenEdit({ route }: EventOutfitScreenEditProps) {
       }}
     >
       <View style={styles.content}>
-        <EventOutfitEdit route={route} />
+        <EventBudgetItemsEdit
+          event={event}
+          setEvent={setEvent}
+          field="outfitItems"
+          title="Outfit"
+        />
 
         <Input
           placeholder={premium ? "Outfit Notes" : "Outfit"}
           value={event.outfit}
-          onChangeText={(text) => setEventOutfit(text)}
+          onChangeText={(text) =>
+            setEvent((prev) => ({ ...prev, outfit: text ?? "" }))
+          }
           dark
           backgroundColor={colors.white}
           textColor={colors.black}
