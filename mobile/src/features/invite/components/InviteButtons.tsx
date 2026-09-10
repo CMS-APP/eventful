@@ -6,12 +6,12 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { EventInviteStackParamList } from "@/app/navigation";
-import { Button } from "@/design-system/components/buttons/Button";
-import { colors } from "@/design-system/tokens/colors";
 import { getEventInvites } from "@/services/firebase/invite";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
+
+import { InviteMenuRow } from "./InviteMenuRow";
 
 export function InviteButtons({
   event,
@@ -45,41 +45,33 @@ export function InviteButtons({
 
   return (
     <View style={styles.container}>
-      <Button
+      <InviteMenuRow
         text={"Guests: " + guestCount}
-        leadingIcon="user"
-        color={colors.primary}
-        textColor={colors.white}
+        icon="user"
         onPress={() =>
           navigation.navigate("EventInviteGuests", { invite, event, host })
         }
       />
 
-      <Button
+      <InviteMenuRow
         text={"Activities: " + getActivityCount()}
-        leadingIcon="calendar"
-        color={colors.primary}
-        textColor={colors.white}
+        icon="calendar"
         onPress={() =>
           navigation.navigate("EventInviteItinerary", { invite, event, host })
         }
       />
 
-      <Button
+      <InviteMenuRow
         text={"Music: " + getPlaylistCount()}
-        leadingIcon="play-circle"
-        color={colors.primary}
-        textColor={colors.white}
+        icon="play-circle"
         onPress={() =>
           navigation.navigate("EventInviteMusic", { invite, event, host })
         }
       />
 
-      <Button
+      <InviteMenuRow
         text="Food & Drink"
-        leadingIcon="coffee"
-        color={colors.primary}
-        textColor={colors.white}
+        icon="coffee"
         onPress={() =>
           navigation.navigate("EventInviteDietary", { invite, event, host })
         }

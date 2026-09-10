@@ -8,6 +8,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { Text } from "@/design-system/components/text/Text";
+import { colors } from "@/design-system/tokens/colors";
 import { getInvitedGuests } from "@/services/firebase/invite";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
@@ -46,7 +47,7 @@ export function EventGuestListInvited({
     <View style={styles.container}>
       {host && (
         <>
-          <Text type="subHeader" color="white">
+          <Text type="subHeader" color={colors.black}>
             Host:
           </Text>
 
@@ -65,7 +66,7 @@ export function EventGuestListInvited({
         </>
       )}
 
-      <Text type="subHeader" color="white">
+      <Text type="subHeader" color={colors.black}>
         Invited Guests:
       </Text>
 
@@ -91,7 +92,6 @@ export function EventGuestListInvited({
 
 const styles = StyleSheet.create({
   container: {
-    gap: 12,
-    paddingHorizontal: 24
+    gap: 12
   }
 });

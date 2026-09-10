@@ -28,28 +28,27 @@ export function EventInviteMusicScreen({ route }: Props) {
     <Screen
       headerConfig={{
         type: "flat",
-        backgroundColor: colors.primary,
+        backgroundColor: colors.white,
         flatHeaderProps: {
           title: "Music",
-          backgroundColor: colors.primary,
-          dark: true,
+          backgroundColor: colors.white,
           backAction: true,
           icon: "play-circle"
         }
       }}
       contentConfig={{
-        backgroundColor: colors.primary,
+        backgroundColor: colors.white,
         tabBarPresent: false
       }}
     >
       <View style={styles.playlistsContainer}>
         {event.music && (
-          <Text type="subHeader" color="white">
+          <Text type="subHeader" color={colors.black}>
             {event.music}
           </Text>
         )}
 
-        <Text type="subHeader" color="white" center>
+        <Text type="subHeader" color={colors.black} center>
           Playlists
         </Text>
 
@@ -60,6 +59,7 @@ export function EventInviteMusicScreen({ route }: Props) {
               onPress={() => openPlaylist(playlist)}
               added={false}
               playlist={playlist}
+              backgroundColor={colors.lightGray}
             />
           ))
         ) : (
@@ -77,6 +77,6 @@ export function EventInviteMusicScreen({ route }: Props) {
 const styles = StyleSheet.create({
   playlistsContainer: {
     gap: 12,
-    paddingHorizontal: 24
+    paddingHorizontal: 16
   }
 });

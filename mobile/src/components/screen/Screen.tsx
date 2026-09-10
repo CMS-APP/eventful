@@ -21,7 +21,7 @@ import { FootNote } from "./Footnote";
 import { CurvyHeaderProps, FlatHeaderProps } from "./props";
 
 interface HeaderProps {
-  type: "curvy" | "flat";
+  type?: "curvy" | "flat";
   backgroundColor?: string;
   modal?: boolean;
   flatHeaderProps?: FlatHeaderProps;

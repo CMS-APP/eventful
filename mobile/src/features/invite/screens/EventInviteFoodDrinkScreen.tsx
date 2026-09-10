@@ -43,17 +43,16 @@ export function EventInviteFoodDrinkScreen({ route }: Props) {
     <Screen
       headerConfig={{
         type: "flat",
-        backgroundColor: colors.primary,
+        backgroundColor: colors.white,
         flatHeaderProps: {
           title: "Food & Drink",
-          backgroundColor: colors.primary,
-          dark: true,
+          backgroundColor: colors.white,
           backAction: true,
           icon: "utensils"
         }
       }}
       contentConfig={{
-        backgroundColor: colors.primary,
+        backgroundColor: colors.white,
         tabBarPresent: false
       }}
     >
@@ -62,7 +61,7 @@ export function EventInviteFoodDrinkScreen({ route }: Props) {
           placeholder="Dietary Preferences"
           onChangeText={setDietary}
           value={dietary}
-          dark
+          backgroundColor={colors.white}
         />
       </View>
     </Screen>
@@ -71,6 +70,6 @@ export function EventInviteFoodDrinkScreen({ route }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 24
+    paddingHorizontal: 16
   }
 });

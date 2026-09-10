@@ -1,3 +1,5 @@
+import { StyleSheet, View } from "react-native";
+
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { EventInviteStackParamList } from "@/app/navigation";
@@ -19,22 +21,29 @@ export function EventInviteGuestsScreen({ route }: Props) {
     <Screen
       headerConfig={{
         type: "flat",
-        backgroundColor: colors.primary,
+        backgroundColor: colors.white,
         flatHeaderProps: {
           title: "Guests",
-          backgroundColor: colors.primary,
-          dark: true,
+          backgroundColor: colors.white,
           backAction: true,
           icon: "users"
         }
       }}
       contentConfig={{
-        backgroundColor: colors.primary,
+        backgroundColor: colors.white,
         tabBarPresent: false
       }}
     >
-      <EventGuestListInvited event={event} host={host} />
-      <InviteLinkGuests event={event} />
+      <View style={styles.container}>
+        <EventGuestListInvited event={event} host={host} />
+        <InviteLinkGuests event={event} />
+      </View>
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 16
+  }
+});

@@ -7,7 +7,7 @@ import { StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, FontAwesome5 } from "@expo/vector-icons";
 
 import { EventInviteStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
@@ -15,19 +15,22 @@ import { Text } from "@/design-system/components/text/Text";
 import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { textFormatter } from "@/design-system/tokens/fonts";
-import { ResponseButtonIcon } from "@/features/events/components/invite/ResponseButtonIcon";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { formatEventAddressDisplay } from "@/services/address/eventAddress";
 import { trackInviteResponseChanged } from "@/services/analytics/events";
 import { updateResponseInDatabase } from "@/services/firebase/invite";
 import { openInMaps } from "@/services/maps/openInMaps";
 import { updateResponseNotification } from "@/services/pushNotifications";
 import { UserState } from "@/store/UserSlice";
+import { parseDatabaseDate } from "@/utils/date";
+import { haptics } from "@/utils/haptics";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { InviteButtons } from "../components/InviteButtons";
 import { InviteDateView } from "../components/InviteDateView";
 import { InviteDateViewMulti } from "../components/InviteDateViewMulti";
+import { InviteRSVPButton } from "../components/InviteRSVPButton";
 
 type EventInviteHomeScreenProps = NativeStackScreenProps<
   EventInviteStackParamList,
@@ -72,112 +75,173 @@ export function EventInviteHomeScreen({
     [invite, host, name, username, event]
   );
 
+  const duration =
+    event.multiDate && event.endDate
+      ? (() => {
+          const start = parseDatabaseDate(event.date);
+          const end = parseDatabaseDate(event.endDate);
+          const nights = Math.round(
+            (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
+          );
+          return { nights, days: nights + 1, year: end.getFullYear() };
+        })()
+      : null;
+
   return (
     <View style={styles.screenContainer}>
       <Screen
         headerConfig={{
-          type: "flat",
-          backgroundColor: colors.white,
-          flatHeaderProps: {
-            title: "Invite",
-            backAction: true
-          }
+          backgroundColor: colors.white
         }}
         contentConfig={{
           tabBarPresent: false
         }}
       >
         <View style={styles.container}>
-          <Text type="subHeader" style={styles.eventText} center>
+          <View style={styles.headerRow}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => {
+                haptics.soft();
+                navigation.goBack();
+              }}
+              hitSlop={getHitSlop("small")}
+            >
+              <FontAwesome5 name="arrow-left" size={22} color={colors.black} />
+            </TouchableOpacity>
+
+            <View style={styles.envelopeCircle}>
+              <FontAwesome5 name="envelope" size={26} color={colors.primary} />
+            </View>
+          </View>
+
+          <Text
+            type="caption"
+            color={colors.gray}
+            style={styles.eventText}
+            center
+          >
             You Are Invited To
           </Text>
-          <Text type="header" style={styles.eventText} center>
+          <Text
+            type="title"
+            color={colors.primary}
+            style={styles.eventText}
+            center
+          >
             {(host.firstName ?? host.name) + "'s"}
           </Text>
-          <Text type="subHeader" style={styles.eventText} center>
+          <Text
+            type="subHeader"
+            color={colors.black}
+            style={styles.eventText}
+            center
+          >
             {textFormatter(event.name.trim(), 50, "Event")}
           </Text>
 
+          <View style={styles.divider} />
+
           {event.multiDate && event.endDate ? (
             <View>
-              <View style={styles.dateLabelsRow}>
-                <Text type="subHeader" style={styles.startDateLabel}>
-                  Start Date
-                </Text>
-
-                <Text type="subHeader" style={styles.endDateLabel}>
-                  End Date
-                </Text>
-              </View>
-
-              <View style={styles.dateContainer}>
+              <View style={styles.dateRow}>
                 <InviteDateViewMulti
                   date={event.date}
                   startDate={true}
                   endDate={false}
                 />
 
-                {event.multiDate && event.endDate && (
-                  <InviteDateViewMulti
-                    date={event.endDate}
-                    startDate={false}
-                    endDate={true}
-                  />
-                )}
+                <View style={styles.middleColumn}>
+                  <View style={styles.verticalDivider} />
+                  <View style={styles.arrowBox}>
+                    <FontAwesome5
+                      name="arrow-right"
+                      size={14}
+                      color={colors.secondary}
+                    />
+                  </View>
+                </View>
+
+                <InviteDateViewMulti
+                  date={event.endDate}
+                  startDate={false}
+                  endDate={true}
+                />
               </View>
+
+              {duration && <View style={styles.divider} />}
+
+              {duration && (
+                <View style={styles.durationPill}>
+                  <FontAwesome5 name="clock" size={12} color={colors.primary} />
+                  <Text type="caption" color={colors.primary}>
+                    {duration.days} Days · {duration.nights} Nights ·{" "}
+                    {duration.year}
+                  </Text>
+                </View>
+              )}
             </View>
           ) : (
             <InviteDateView date={event.date} />
           )}
 
           {address && (
-            <TouchableOpacity onPress={() => openInMaps(address)}>
-              <View style={styles.locationIcon}>
-                <Entypo name="location-pin" size={50} color={colors.black} />
+            <TouchableOpacity
+              style={styles.addressRow}
+              onPress={() => openInMaps(address)}
+            >
+              <View style={styles.addressIconCircle}>
+                <Entypo name="location-pin" size={18} color={colors.primary} />
               </View>
-              <View style={styles.addressContainer}>
-                <Text type="subHeader" center>
-                  {address}
-                </Text>
-              </View>
+              <Text
+                type="subHeader"
+                color={colors.black}
+                style={styles.addressText}
+              >
+                {address}
+              </Text>
             </TouchableOpacity>
           )}
 
           {event.theme && event.theme.length > 0 && (
             <Text
-              type="subHeader"
-              color={colors.black}
+              type="body"
+              color={colors.gray}
               style={styles.themeText}
+              center
             >
               Theme: {event.theme}
             </Text>
           )}
 
-          <View>
+          <View style={styles.rsvpSection}>
             <Text type="header" style={styles.rsvpText}>
               RSVP
             </Text>
 
             <View style={styles.responseButtonsContainer}>
-              <ResponseButtonIcon
-                icon={"check"}
-                title="accept"
+              <InviteRSVPButton
+                icon="check"
+                label="Accept"
+                value="accept"
                 color={colors.primary}
                 updateResponse={handleUpdateResponse}
                 response={response}
               />
 
-              <ResponseButtonIcon
-                icon={"question"}
-                title="maybe"
+              <InviteRSVPButton
+                icon="question"
+                label="Maybe"
+                value="maybe"
                 color={colors.secondary}
                 updateResponse={handleUpdateResponse}
                 response={response}
               />
 
-              <ResponseButtonIcon
-                icon={"times"}
-                title="decline"
+              <InviteRSVPButton
+                icon="times"
+                label="Decline"
+                value="decline"
                 color={colors.tertiary}
                 updateResponse={handleUpdateResponse}
                 response={response}
@@ -193,70 +257,107 @@ export function EventInviteHomeScreen({
 }
 
 const styles = StyleSheet.create({
-  addressContainer: {
+  addressIconCircle: {
+    ...card.small,
     alignItems: "center",
-    borderColor: colors.secondary,
-    borderRadius: 12,
-    borderWidth: 2,
-    marginHorizontal: 12,
-    padding: 12
+    borderRadius: 20,
+    height: 40,
+    justifyContent: "center",
+    width: 40
+  },
+  addressRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 12,
+    marginTop: 8
+  },
+  addressText: {
+    flex: 1
+  },
+  arrowBox: {
+    ...card.small,
+    alignItems: "center",
+    backgroundColor: colors.white,
+    borderRadius: 8,
+    height: 32,
+    justifyContent: "center",
+    position: "absolute",
+    top: "50%",
+    transform: [{ translateY: -16 }],
+    width: 32
+  },
+  backButton: {
+    left: 0,
+    position: "absolute",
+    top: "50%",
+    transform: [{ translateY: -16 }],
+    width: 32
   },
   container: {
-    borderColor: colors.secondary,
-    borderRadius: 30,
-    borderWidth: 3,
-    marginHorizontal: 12,
-    padding: 12
+    paddingBottom: 40,
+    paddingHorizontal: 20
   },
-  dateContainer: {
-    ...card.medium,
+  dateRow: {
+    flexDirection: "row"
+  },
+  divider: {
+    backgroundColor: colors.lightGray,
+    height: 1,
+    marginVertical: 20
+  },
+  durationPill: {
     alignItems: "center",
+    alignSelf: "center",
+    backgroundColor: colors.secondaryTint,
+    borderRadius: 20,
     flexDirection: "row",
-    gap: 60,
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 6
+  },
+  envelopeCircle: {
+    ...card.small,
+    alignItems: "center",
+    alignSelf: "center",
+    borderRadius: 36,
+    height: 72,
     justifyContent: "center",
-    marginHorizontal: 12
-  },
-  dateLabelsRow: {
-    flexDirection: "row",
-    gap: 60,
-    marginBottom: 12,
-    marginHorizontal: 12
-  },
-  endDateLabel: {
-    color: colors.secondary,
-    flex: 1,
-    textAlign: "center"
+    width: 72
   },
   eventText: {
     marginTop: 6
   },
-  locationIcon: {
+  headerRow: {
     alignItems: "center",
-    marginBottom: 6,
-    marginTop: 12
+    justifyContent: "center"
+  },
+  middleColumn: {
+    alignItems: "center",
+    width: 32
   },
   responseButtonsContainer: {
     flexDirection: "row",
-    gap: 24,
-    justifyContent: "center"
+    gap: 12
+  },
+  rsvpSection: {
+    marginTop: 8
   },
   rsvpText: {
-    flex: 1,
-    marginBottom: 12,
-    marginTop: 12,
-    textAlign: "center"
+    marginBottom: 16
   },
   screenContainer: {
     backgroundColor: colors.white,
     flex: 1
   },
-  startDateLabel: {
-    color: colors.primary,
-    flex: 1,
-    textAlign: "center"
-  },
   themeText: {
-    marginTop: 12,
-    textAlign: "center"
+    marginTop: 16
+  },
+  verticalDivider: {
+    backgroundColor: colors.lightGray,
+    bottom: 0,
+    left: 15,
+    position: "absolute",
+    top: 0,
+    width: 1
   }
 });

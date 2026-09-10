@@ -15,18 +15,26 @@ interface SpotifyPlaylistItemProps {
     | { name: string; tracks: { total: number }; icon: string | null };
   onPress: () => void;
   added: boolean;
+  backgroundColor?: string;
 }
 
 export function SpotifyPlaylistItem({
   playlist,
   onPress,
-  added
+  added,
+  backgroundColor
 }: SpotifyPlaylistItemProps) {
   const trackText = playlist?.tracks?.total === 1 ? "Track" : "Tracks";
 
   return (
     <TouchableOpacity onPress={onPress} hitSlop={getHitSlop("medium")}>
-      <View style={[padding.mediumWidget, styles.container]}>
+      <View
+        style={[
+          padding.mediumWidget,
+          styles.container,
+          backgroundColor && { backgroundColor }
+        ]}
+      >
         {playlist?.icon ? (
           <Image
             source={{ uri: playlist?.icon }}

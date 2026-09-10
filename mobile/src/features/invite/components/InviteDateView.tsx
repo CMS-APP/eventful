@@ -23,68 +23,56 @@ export function InviteDateView({ date }: InviteDateViewProps) {
 
   return (
     <View>
-      <Text type="subHeader" style={styles.monthText}>
+      <Text type="caption" color={colors.gray} style={styles.monthText} center>
         {month}
       </Text>
-      <View style={styles.dateTimeContainer}>
-        <View style={styles.lineContainer}>
-          <View style={styles.line} />
-          <Text type="subHeader" style={styles.dayName}>
+      <View style={styles.row}>
+        <View style={styles.column}>
+          <Text type="subHeader" center>
             {dayName}
           </Text>
-          <View style={styles.line} />
         </View>
-        <Text type="title" style={styles.day}>
-          {day}
-        </Text>
-        <View style={styles.lineContainer}>
-          <View style={styles.line} />
-          <Text type="subHeader" style={styles.time}>
+
+        <View style={styles.divider} />
+
+        <View style={styles.column}>
+          <Text type="title" color={colors.primary} center>
+            {day}
+          </Text>
+          <Text type="caption" color={colors.gray} center>
+            {year}
+          </Text>
+        </View>
+
+        <View style={styles.divider} />
+
+        <View style={styles.column}>
+          <Text type="subHeader" center>
             {time}
           </Text>
-          <View style={styles.line} />
         </View>
       </View>
-      <Text type="subHeader" style={styles.yearText}>
-        {year}
-      </Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  dateTimeContainer: {
+  column: {
     alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 12
-  },
-  day: {
     flex: 1,
-    textAlign: "center"
+    justifyContent: "center"
   },
-  dayName: {
-    fontSize: 12,
-    textAlign: "center"
-  },
-  line: {
-    backgroundColor: colors.black,
-    height: 2
-  },
-  lineContainer: {
-    flex: 1,
-    gap: 12
+  divider: {
+    backgroundColor: colors.lightGray,
+    height: "100%",
+    width: 1
   },
   monthText: {
-    marginTop: 12,
-    textAlign: "center"
+    marginBottom: 8
   },
-  time: {
-    fontSize: 12,
-    textAlign: "center"
-  },
-  yearText: {
-    marginTop: 12,
-    textAlign: "center"
+  row: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center"
   }
 });

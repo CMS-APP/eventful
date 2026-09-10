@@ -1,3 +1,5 @@
+import { StyleSheet, View } from "react-native";
+
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { EventInviteStackParamList } from "@/app/navigation";
@@ -17,27 +19,32 @@ export function EventInviteItineraryScreen({ route }: Props) {
     <Screen
       headerConfig={{
         type: "flat",
-        backgroundColor: colors.primary,
+        backgroundColor: colors.white,
         flatHeaderProps: {
           title: "Itinerary",
-          backgroundColor: colors.primary,
-          dark: true,
+          backgroundColor: colors.white,
           backAction: true,
           icon: "calendar"
         }
       }}
       contentConfig={{
-        backgroundColor: colors.primary,
+        backgroundColor: colors.white,
         tabBarPresent: false
       }}
     >
-      <ItineraryList
-        event={event}
-        itinerary={event.itinerary || []}
-        onActivityPress={() => {}}
-        theme="light"
-        disabled={true}
-      />
+      <View style={styles.container}>
+        <ItineraryList
+          event={event}
+          itinerary={event.itinerary || []}
+          onActivityPress={() => {}}
+          theme="light"
+          disabled={true}
+        />
+      </View>
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { paddingHorizontal: 16 }
+});

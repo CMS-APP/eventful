@@ -7,6 +7,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { EventInviteStackParamList } from "@/app/navigation";
 import { Text } from "@/design-system/components/text/Text";
+import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
@@ -96,6 +97,7 @@ export function EventGuestListInvitedItem({
 
 const styles = StyleSheet.create({
   button: {
+    ...card.small,
     ...padding.smallWidget,
     backgroundColor: colors.primary
   },
@@ -127,8 +129,8 @@ const styles = StyleSheet.create({
     flex: 1
   },
   userContainer: {
+    ...card.small,
     ...padding.mediumWidget,
-    backgroundColor: colors.lightGray,
     flexDirection: "row",
     gap: 12
   },
