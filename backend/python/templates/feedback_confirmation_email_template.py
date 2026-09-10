@@ -115,7 +115,7 @@ def feedback_confirmation_email_template(feedback_data: dict) -> str:
     <div class="footer">
       &copy; 2025 Eventful. All vibes reserved.<br />
       <a
-        href="https://app.eventfulapp.com/contact"
+        href="https://www.eventfulapp.com"
         style="color: #ffffff; text-decoration: none; font-weight: 600"
       >
         Need help? Hit us up anytime!

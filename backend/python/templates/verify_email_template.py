@@ -104,7 +104,7 @@ def verify_email_template(verification_link: str) -> str:
     <div class="footer">
       &copy; 2025 Eventful. All vibes reserved.<br />
       <a
-        href="https://app.eventfulapp.com/contact"
+        href="https://www.eventfulapp.com"
         class="footer-link"
         style="color: #ffffff; text-decoration: none; font-weight: 600"
       >

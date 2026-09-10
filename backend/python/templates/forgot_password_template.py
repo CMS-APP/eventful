@@ -110,7 +110,7 @@ def forgot_password_template(forgot_password_link: str) -> str:
     <div class="footer">
       &copy; 2025 Eventful. All vibes reserved.<br />
       <a
-        href="https://app.eventfulapp.com/contact"
+        href="https://www.eventfulapp.com"
         class="footer-link"
         style="color: #ffffff; text-decoration: none; font-weight: 600"
       >
