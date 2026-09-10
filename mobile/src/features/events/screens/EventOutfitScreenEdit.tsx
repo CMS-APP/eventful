@@ -10,7 +10,7 @@ import { Input } from "@/design-system/components/inputs/Input";
 import { colors } from "@/design-system/tokens/colors";
 import { UserState } from "@/store/UserSlice";
 
-import { EventBudgetItemsEdit } from "../components/budget/EventBudgetItemsEdit";
+import { EventBudgetCategoryEdit } from "../components/budget/EventBudgetCategoryEdit";
 import { useEventEditor } from "../hooks/useEventEditor";
 
 interface EventOutfitScreenEditProps {
@@ -40,7 +40,7 @@ export function EventOutfitScreenEdit({ route }: EventOutfitScreenEditProps) {
       }}
     >
       <View style={styles.content}>
-        <EventBudgetItemsEdit
+        <EventBudgetCategoryEdit
           event={event}
           setEvent={setEvent}
           field="outfitItems"

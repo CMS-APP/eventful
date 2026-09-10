@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+
 import { useCallback } from "react";
 
 import { StyleSheet, View } from "react-native";
@@ -5,42 +7,13 @@ import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { EventsStackParamList } from "@/app/navigation";
-import { Input } from "@/design-system/components/inputs/Input";
-import { colors } from "@/design-system/tokens/colors";
-import { EventBudget } from "@/features/events/components/budget/EventBudget";
+import { AppStackParamList, EventsStackParamList } from "@/app/navigation";
+import { BudgetCategoryGridButton } from "@/features/events/components/budget/BudgetCategoryGridButton";
+import { BudgetNotesRow } from "@/features/events/components/budget/BudgetNotesRow";
+import { BudgetOverviewCard } from "@/features/events/components/budget/BudgetOverviewCard";
+import { CATEGORY_CONFIG, getBudgetSummary } from "@/features/events/utils/budget";
+import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
-import { getCurrencySymbolForDevice } from "@/utils/currency";
-
-import { EventEssentialsButton } from "./EventEssentialsButton";
-
-const essentialsButtons = [
-  {
-    title: "Food",
-    image: require("@/assets/icons/food.png"),
-    screen: "EventEditFood"
-  },
-  {
-    title: "Drink",
-    image: require("@/assets/icons/drink.png"),
-    screen: "EventEditDrink"
-  },
-  {
-    title: "Decor",
-    image: require("@/assets/icons/decor.png"),
-    screen: "EventEditDecor"
-  },
-  {
-    title: "Outfit",
-    image: require("@/assets/icons/outfit.png"),
-    screen: "EventEditOutfit"
-  },
-  {
-    title: "Notes",
-    image: require("@/assets/icons/notes.png"),
-    screen: "EventEditNotes"
-  }
-];
 
 interface EventEssentialsEditProps {
   event: Event;
@@ -51,91 +24,69 @@ export function EventEssentialsEdit({
   event,
   setEvent
 }: EventEssentialsEditProps) {
-  const navigation =
+  const premium = useSelector((state: UserState) => state.premium);
+  const eventsNavigation =
     useNavigation() as StackNavigationProp<EventsStackParamList>;
-  const setBudgetMaximum = useCallback(
-    (text: string) => {
-      setEvent({ ...event, budgetMaximum: Number(text) });
-    },
-    [event, setEvent]
-  );
+  const appNavigation = useNavigation() as StackNavigationProp<AppStackParamList>;
 
-  const handlePress = useCallback(
+  const summary = getBudgetSummary(event);
+  const gridDenominator = Math.max(summary.totalSpent, summary.budgetMaximum);
+
+  const handlePaywallPress = useCallback(() => {
+    appNavigation.navigate("Paywall", { type: "Premium" });
+  }, [appNavigation]);
+
+  const handleCategoryPress = useCallback(
     (screen: string) => {
-      navigation.navigate(screen as any, {
-        event
-      });
+      eventsNavigation.navigate(screen as any, { event });
     },
-    [navigation, event]
+    [eventsNavigation, event]
   );
 
   return (
     <View style={styles.container}>
-      <View style={styles.contentContainer}>
-        <View style={styles.row}>
-          {essentialsButtons.slice(0, 2).map((button) => (
-            <EventEssentialsButton
-              key={button.screen}
-              title={button.title}
-              image={button.image}
-              onPress={() => handlePress(button.screen)}
-            />
-          ))}
-        </View>
+      <BudgetOverviewCard
+        event={event}
+        setEvent={setEvent}
+        premium={premium}
+        onPaywallPress={handlePaywallPress}
+      />
 
-        <View style={styles.row}>
-          {essentialsButtons.slice(2, 4).map((button) => (
-            <EventEssentialsButton
-              key={button.screen}
-              title={button.title}
-              image={button.image}
-              onPress={() => handlePress(button.screen)}
-            />
-          ))}
-        </View>
-
-        <View style={styles.row}>
-          {essentialsButtons.slice(4, 5).map((button) => (
-            <EventEssentialsButton
-              key={button.screen}
-              title={button.title}
-              image={button.image}
-              onPress={() => handlePress(button.screen)}
-            />
-          ))}
-          <View style={styles.flex1} />
-        </View>
-
-        <Input
-          placeholder={`Budget (${getCurrencySymbolForDevice()})`}
-          value={event.budgetMaximum?.toString() ?? ""}
-          onChangeText={setBudgetMaximum}
-          keyboardType="numeric"
-          dark
-          backgroundColor={colors.white}
-          textColor={colors.black}
-        />
-
-        <EventBudget event={event} />
+      <View style={styles.grid}>
+        {[CATEGORY_CONFIG.slice(0, 2), CATEGORY_CONFIG.slice(2, 4)].map(
+          (row, rowIndex) => (
+            <View key={rowIndex} style={styles.gridRow}>
+              {row.map((category) => (
+                <BudgetCategoryGridButton
+                  key={category.field}
+                  title={category.title}
+                  image={category.image}
+                  color={category.color}
+                  spent={summary.perCategory[category.field].spent}
+                  itemCount={summary.perCategory[category.field].itemCount}
+                  denominator={gridDenominator}
+                  onPress={() => handleCategoryPress(category.screen)}
+                />
+              ))}
+            </View>
+          )
+        )}
       </View>
+
+      <BudgetNotesRow event={event} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.primaryTint,
-    flex: 1,
-    gap: 12
-  },
-  contentContainer: {
-    gap: 12,
+    gap: 16,
     paddingHorizontal: 16
   },
-  flex1: {
-    flex: 1
+  grid: {
+    gap: 12
   },
-  row: {
+  gridRow: {
     flexDirection: "row",
     gap: 12
   }

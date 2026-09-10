@@ -48,6 +48,17 @@ export function trackEventBudgetItemAdded(category: string) {
   track("event_budget_item_added", { category });
 }
 
+export function trackEventBudgetItemPaidToggled(
+  category: string,
+  paid: boolean
+) {
+  track("event_budget_item_paid_toggled", { category, paid });
+}
+
+export function trackEventBudgetItemRemoved(category: string) {
+  track("event_budget_item_removed", { category });
+}
+
 export function trackEventLocationSearched() {
   track("event_location_searched");
 }

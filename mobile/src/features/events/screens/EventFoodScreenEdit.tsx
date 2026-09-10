@@ -12,7 +12,7 @@ import { colors } from "@/design-system/tokens/colors";
 import { AmazonButton } from "@/features/events/components/misc/AmazonButton";
 import { UserState } from "@/store/UserSlice";
 
-import { EventBudgetItemsEdit } from "../components/budget/EventBudgetItemsEdit";
+import { EventBudgetCategoryEdit } from "../components/budget/EventBudgetCategoryEdit";
 import { useEventEditor } from "../hooks/useEventEditor";
 
 interface EventFoodScreenEditProps {
@@ -46,7 +46,7 @@ export function EventFoodScreenEdit({
       }}
     >
       <View style={styles.contentContainer}>
-        <EventBudgetItemsEdit
+        <EventBudgetCategoryEdit
           event={event}
           setEvent={setEvent}
           field="foodItems"
