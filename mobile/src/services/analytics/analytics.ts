@@ -13,8 +13,6 @@ import Constants from "expo-constants";
 import { isDuplicate } from "@/services/analytics/dedupe";
 import { log } from "@/utils/logging";
 
-const isDevBuild = Constants.expoConfig?.extra?.appVariant === "development";
-
 let userId: string | null = null;
 let ready = false;
 
@@ -36,8 +34,8 @@ export async function initAnalytics(): Promise<void> {
   ready = true;
 
   const analytics = getAnalytics();
-  await setAnalyticsCollectionEnabled(analytics, !isDevBuild);
-  if (isDevBuild) return;
+  await setAnalyticsCollectionEnabled(analytics, !__DEV__);
+  if (__DEV__) return;
 
   await setDefaultEventParameters(analytics, {
     app_version: appVersion(),
@@ -47,7 +45,7 @@ export async function initAnalytics(): Promise<void> {
 
 export function setAnalyticsUserId(id: string | null): void {
   userId = id;
-  if (isDevBuild) return;
+  if (__DEV__) return;
   firebaseSetUserId(getAnalytics(), id);
 }
 
@@ -56,7 +54,7 @@ export function track(
   params?: Record<string, string | number | boolean>,
   dedupeKey?: string
 ): void {
-  if (isDevBuild) return;
+  if (__DEV__) return;
   if (dedupeKey && isDuplicate(`${name}:${dedupeKey}`)) return;
 
   log(`Tracking event: ${name}`, "debug");
@@ -67,7 +65,7 @@ export function track(
 }
 
 export function trackScreen(screenName: string | undefined): void {
-  if (isDevBuild || !screenName) return;
+  if (__DEV__ || !screenName) return;
 
   log(`Tracking screen view: ${screenName}`, "debug");
   logEvent(getAnalytics(), "screen_view", {
