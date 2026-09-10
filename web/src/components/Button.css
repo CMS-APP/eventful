@@ -60,6 +60,16 @@
   background-color: var(--color-gray-700);
 }
 
+.button--outline {
+  background-color: transparent;
+  color: var(--color-text, #1a1a1a);
+  border: 1px solid var(--color-border, #ddd);
+}
+
+.button--outline:hover:not(:disabled) {
+  background-color: var(--color-gray-100, #f5f5f5);
+}
+
 .button-spinner {
   width: 15px;
   height: 15px;

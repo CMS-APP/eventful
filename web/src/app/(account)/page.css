@@ -5,3 +5,45 @@
   color: var(--color-primary-dark);
   text-decoration: underline;
 }
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0;
+  color: var(--color-text-muted, #888);
+  font-size: 13px;
+  font-family: var(--font-poppins-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-border, #e0e0e0);
+}
+
+.oauth-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.oauth-buttons .button {
+  width: auto;
+  flex: 1;
+}
+
+.oauth-button-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.oauth-icon {
+  width: 18px;
+  height: 18px;
+}

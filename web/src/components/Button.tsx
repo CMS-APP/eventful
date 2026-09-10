@@ -12,7 +12,7 @@ type ButtonProps = {
   disabled?: boolean;
   loading?: boolean;
   className?: string;
-  variant?: "secondary" | "primary" | "danger" | "muted";
+  variant?: "secondary" | "primary" | "danger" | "muted" | "outline";
   icon?: IconDefinition;
 };
 
