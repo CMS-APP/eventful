@@ -50,20 +50,6 @@
         "function": { "functionId": "forgotPassword", "region": "europe-west2" }
       },
       {
-        "source": "/incrementUserCount",
-        "function": {
-          "functionId": "incrementUserCount",
-          "region": "europe-west2"
-        }
-      },
-      {
-        "source": "/incrementEventCount",
-        "function": {
-          "functionId": "incrementEventCount",
-          "region": "europe-west2"
-        }
-      },
-      {
         "source": "/searchUsers",
         "function": { "functionId": "searchUsers", "region": "europe-west2" }
       },
