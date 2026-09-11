@@ -3,7 +3,6 @@ from firebase_functions import firestore_fn, https_fn, options, scheduler_fn
 from firebase_functions.options import set_global_options
 from firebase_functions.params import SecretParam
 
-from functions.location import handle_location_search_request
 from services.active_users import snapshot_active_users
 from services.algolia_user_search import handle_search_users_request
 from services.analytics_stats import (
@@ -18,6 +17,7 @@ from services.auth_http import (
 from services.event_responses import handle_respond_to_event_request
 from services.feedback import handle_send_feedback_email
 from services.followers import handle_sync_followers, handle_sync_following
+from services.google_places import handle_location_search_request
 from services.notifications import handle_invite_written, handle_notification_written
 from services.photo_booth_gallery import handle_gallery_info_request
 from services.revenuecat_stats import handle_subscriptions_request
