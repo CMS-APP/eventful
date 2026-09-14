@@ -346,7 +346,7 @@ function FeatureUsageChart({
         <div
           className="feature-usage-row"
           key={feature.event}
-          title={`${feature.count.toLocaleString()} uses · ${feature.users.toLocaleString()} users`}
+          data-tooltip={`${feature.count.toLocaleString()} uses · ${feature.users.toLocaleString()} users`}
         >
           <span className="feature-usage-label">{feature.label}</span>
           <div className="feature-usage-row-bottom">

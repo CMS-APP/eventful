@@ -364,6 +364,46 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  position: relative;
+}
+
+.feature-usage-row[data-tooltip]::after,
+.feature-usage-row[data-tooltip]::before {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-base);
+}
+
+.feature-usage-row[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  background: rgba(20, 20, 20, 0.95);
+  color: var(--color-white);
+  font-family: var(--font-poppins-regular);
+  font-size: 0.7rem;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-md);
+  z-index: 10;
+}
+
+.feature-usage-row[data-tooltip]::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 12px;
+  border: 5px solid transparent;
+  border-top-color: rgba(20, 20, 20, 0.95);
+  z-index: 10;
+}
+
+.feature-usage-row[data-tooltip]:hover::after,
+.feature-usage-row[data-tooltip]:hover::before {
+  opacity: 1;
 }
 
 .feature-usage-label {
