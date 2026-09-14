@@ -1,15 +1,19 @@
 from firebase_admin import app_check
-from firebase_functions import https_fn
+
+from utils.https import response
 
 
-def verify_app_check(req: https_fn.Request) -> https_fn.Response | None:
-    token = req.headers.get("X-Firebase-AppCheck")
-    if not token:
-        return https_fn.Response("Missing app token", status=400)
+def verify_app_check(req):
+    if not (token := req.headers.get("X-Firebase-AppCheck")):
+        return response("Missing app token", status=400)
 
     try:
         app_check.verify_token(token)
-        return None
+        return True
     except Exception as exc:
         print(f"App Check verification failed: {exc}")
-        return https_fn.Response("Unauthorized", status=401)
+        return False
+
+
+def app_check_error():
+    return response("Unauthorized", status=401)

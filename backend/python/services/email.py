@@ -20,7 +20,7 @@ def _client(mj_api_key, mj_secret) -> Client:
     return Client(auth=(mj_api_key.value, mj_secret.value), version="v3")
 
 
-def send_verification_email_mailjet(mj_api_key, mj_secret, to: str, verification_link: str) -> None:
+def send_verification_email_mailjet(mj_api_key, mj_secret, to, verification_link) -> None:
     client = _client(mj_api_key, mj_secret)
     payload = {
         "FromEmail": FROM_EMAIL,

@@ -8,6 +8,7 @@ from services.email import (
     send_verification_email_mailjet,
 )
 from utils.auth_action_links import build_auth_action_link
+from utils.https import response
 
 RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"
 VERIFY_EMAIL_URL = "https://app.eventfulapp.com/verify-email"
@@ -24,9 +25,7 @@ def _verify_recaptcha(recaptcha_secret, recaptcha_token: str) -> bool:
     return bool(recaptcha_response.get("success"))
 
 
-def handle_send_verification_email_request(
-    req: https_fn.Request, mj_api_key, mj_secret
-) -> https_fn.Response:
+def handle_send_verification_email_request(req: https_fn.Request, mj_api_key, mj_secret):
     try:
         app_check_error = verify_app_check(req)
         if app_check_error:
@@ -68,9 +67,8 @@ def handle_forgot_password_request(
     if req.method != "POST":
         return https_fn.Response("Method Not Allowed", status=405)
 
-    generic_success = https_fn.Response(
-        "If your email is registered, you will receive a password reset link.", status=200
-    )
+    msg = "If your email is registered, you will receive a password reset link."
+    generic_success = response(msg, 200)
 
     try:
         body = req.get_json(silent=True) or {}

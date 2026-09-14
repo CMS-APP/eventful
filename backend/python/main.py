@@ -5,11 +5,6 @@ from firebase_functions.params import SecretParam
 
 from services.active_users import snapshot_active_users
 from services.algolia_user_search import handle_search_users_request
-from services.analytics_stats import (
-    handle_feature_usage_request,
-    handle_funnel_request,
-    handle_realtime_users_request,
-)
 from services.auth_http import (
     handle_forgot_password_request,
     handle_send_verification_email_request,
@@ -17,10 +12,15 @@ from services.auth_http import (
 from services.event_responses import handle_respond_to_event_request
 from services.feedback import handle_send_feedback_email
 from services.followers import handle_sync_followers, handle_sync_following
-from services.google_places import handle_location_search_request
+from services.gallery import handle_gallery_info_request
+from services.location import handle_location_search_request
 from services.notifications import handle_invite_written, handle_notification_written
-from services.photo_booth_gallery import handle_gallery_info_request
 from services.revenuecat_stats import handle_subscriptions_request
+from services.stats import (
+    handle_feature_usage_request,
+    handle_funnel_request,
+    handle_realtime_users_request,
+)
 from services.total_users import snapshot_total_users
 
 set_global_options(max_instances=10, region="europe-west2")

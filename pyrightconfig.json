@@ -1,0 +1,10 @@
+{
+  "venvPath": "backend/python",
+  "venv": "venv",
+  "reportPrivateImportUsage": "none",
+  "executionEnvironments": [
+    {
+      "root": "backend/python"
+    }
+  ]
+}
