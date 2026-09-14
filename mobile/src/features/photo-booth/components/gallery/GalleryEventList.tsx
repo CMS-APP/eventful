@@ -6,7 +6,7 @@ import { StyleSheet, View } from "react-native";
 
 import { useFocusEffect } from "@react-navigation/native";
 
-import { Text } from "@/design-system/components/text/Text";
+import { EmptyStateContainer } from "@/components/views/EmptyStateContainer";
 import { getEvents } from "@/services/photo-booth/events";
 import { UserState } from "@/store/UserSlice";
 import { GalleryEvent } from "@/types/photoBoothGallery";
@@ -45,14 +45,11 @@ export function GalleryEventList() {
           ))}
         </>
       ) : (
-        <>
-          <Text type="header" center>
-            No Past Events
-          </Text>
-          <Text type="subHeader" center>
-            Take some photos to save photos to the cloud
-          </Text>
-        </>
+        <EmptyStateContainer
+          title="No Past Events"
+          description="Take some photos to save photos to the cloud"
+          icon="camera"
+        />
       )}
     </View>
   );

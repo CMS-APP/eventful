@@ -215,7 +215,7 @@ export function EventInviteHomeScreen({
           )}
 
           <View style={styles.rsvpSection}>
-            <Text type="header" style={styles.rsvpText}>
+            <Text type="header" style={styles.rsvpText} center>
               RSVP
             </Text>
 
