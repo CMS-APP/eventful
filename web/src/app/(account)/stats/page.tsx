@@ -50,6 +50,8 @@ import "./page.css";
 
 const GROWTH_COLOR = "#199e70";
 const REVENUE_COLOR = "#c98500";
+const ROLLING_MONTH_WINDOW_DAYS = 30;
+const ROLLING_MONTH_CHART_SPAN_DAYS = 90;
 
 const AXIS_TICK = { fontSize: 11, fill: "rgba(255, 255, 255, 0.55)" };
 const TOOLTIP_STYLE = {
@@ -418,6 +420,19 @@ export default function Stats() {
     return diffs.slice(-30);
   }, [totalUserHistory]);
 
+  const newUserRollingMonthlyHistory = useMemo(() => {
+    const result: { date: string; newUsersRollingMonth: number }[] = [];
+    for (let i = ROLLING_MONTH_WINDOW_DAYS; i < totalUserHistory.length; i++) {
+      result.push({
+        date: totalUserHistory[i].date,
+        newUsersRollingMonth:
+          totalUserHistory[i].totalUsers -
+          totalUserHistory[i - ROLLING_MONTH_WINDOW_DAYS].totalUsers
+      });
+    }
+    return result.slice(-ROLLING_MONTH_CHART_SPAN_DAYS);
+  }, [totalUserHistory]);
+
   const growthLastUpdated = useMemo(() => {
     const dates = [
       totalUserHistory.at(-1)?.date,
@@ -681,6 +696,21 @@ export default function Stats() {
                 color={GROWTH_COLOR}
                 formatValue={(v) => v.toLocaleString()}
                 emptyMessage="No new-user history yet — daily tracking started today. Check back tomorrow to see the trend build up."
+                loading={loadingUsers}
+              />
+            </section>
+
+            <section className="chart-card">
+              <h2 className="chart-card-title">
+                <FontAwesomeIcon icon={faUsers} />
+                New users per month (rolling)
+              </h2>
+              <TrendChart
+                history={newUserRollingMonthlyHistory}
+                metric="newUsersRollingMonth"
+                color={GROWTH_COLOR}
+                formatValue={(v) => v.toLocaleString()}
+                emptyMessage="Needs 30 days of history to compute a rolling monthly trend. Check back once tracking has run for a month."
                 loading={loadingUsers}
               />
             </section>
