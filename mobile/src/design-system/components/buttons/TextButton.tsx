@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
   text: {
     paddingVertical: 6,
     textAlign: "right",
-    textDecorationLine: "underline",
-    textTransform: "capitalize"
+    textDecorationLine: "underline"
   }
 });

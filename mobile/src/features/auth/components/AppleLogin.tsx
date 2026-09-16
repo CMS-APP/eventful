@@ -86,8 +86,8 @@ export function AppleLogin() {
     <Button
       text="Apple"
       onPress={onAppleButtonPress}
-      color={colors.primary}
-      textColor={colors.white}
+      color={colors.white}
+      textColor={colors.black}
       leadingIcon="apple"
     />
   );

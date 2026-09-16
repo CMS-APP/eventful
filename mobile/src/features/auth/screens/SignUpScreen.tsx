@@ -23,7 +23,7 @@ import { HeaderArcs } from "../components/HeaderArcs";
 import {
   EmailValidationHint,
   PasswordMatchCheck,
-  PasswordStrengthChecks
+  PasswordStrengthMeter
 } from "../components/PasswordRequirements";
 import { formStyles } from "../styles/formStyles";
 
@@ -36,6 +36,11 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
   const [errors, setErrors] = useState<FormErrors>({});
   const [headerHeight, setHeaderHeight] = useState(0);
   const [isSigningUp, setIsSigningUp] = useState(false);
+
+  const handleEmailChange = useCallback((value: string) => {
+    setEmail(value);
+    setErrors((prev) => ({ ...prev, email: undefined }));
+  }, []);
 
   const validateForm = useCallback((): boolean => {
     const newErrors: FormErrors = {};
@@ -119,7 +124,7 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
             <Input
               placeholder="Email"
               value={email}
-              onChangeText={setEmail}
+              onChangeText={handleEmailChange}
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
@@ -127,13 +132,7 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
               textColor={colors.black}
             />
 
-            <EmailValidationHint
-              message={
-                email.length > 0 && !emailValid(email)
-                  ? "Please enter a valid email address."
-                  : errors.email
-              }
-            />
+            <EmailValidationHint email={email} error={errors.email} />
           </View>
 
           <View style={styles.inputContainer}>
@@ -146,7 +145,7 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
               textColor={colors.black}
             />
 
-            <PasswordStrengthChecks password={password} />
+            <PasswordStrengthMeter password={password} />
           </View>
 
           <View style={styles.inputContainer}>
@@ -184,7 +183,7 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
               text="Sign in"
               textColor={colors.black}
               textAlign="center"
-              type="subHeader"
+              type="body"
               onPress={handleSignIn}
             />
           </View>
@@ -203,6 +202,9 @@ const styles = StyleSheet.create({
   },
   orContainer: {
     alignItems: "center",
+    flexDirection: "row",
+    gap: 8,
+    justifyContent: "center",
     marginTop: 12
   }
 });

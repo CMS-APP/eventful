@@ -73,7 +73,7 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
               text="Sign up"
               textColor={colors.primary}
               textAlign="center"
-              type="subHeader"
+              type="body"
               onPress={handleSignUp}
             />
           </View>
@@ -117,7 +117,8 @@ const styles = StyleSheet.create({
   },
   orContainer: {
     alignItems: "center",
-    gap: 4,
+    flexDirection: "row",
+    gap: 8,
     justifyContent: "center",
     marginTop: 12
   },

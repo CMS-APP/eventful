@@ -4,6 +4,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { emailValid, getPasswordStrength } from "@/utils/validation";
 
 interface RequirementRowProps {
   label: string;
@@ -25,38 +26,80 @@ function RequirementRow({ label, met }: RequirementRowProps) {
   );
 }
 
-interface PasswordStrengthChecksProps {
+const STRENGTH_BAR_COUNT = 4;
+const STRENGTH_COLORS = [
+  colors.lightGray,
+  colors.red,
+  colors.amber,
+  colors.yellow,
+  colors.green
+];
+
+interface PasswordStrengthMeterProps {
   password: string;
 }
 
-export function PasswordStrengthChecks({
-  password
-}: PasswordStrengthChecksProps) {
-  const hasLength = password.length >= 8;
-  const hasNumber = /\d/.test(password);
-  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>_-]/.test(password);
+export function PasswordStrengthMeter({ password }: PasswordStrengthMeterProps) {
+  const { score, label, message } = getPasswordStrength(password);
+  const color = STRENGTH_COLORS[score];
 
   return (
-    <View style={styles.container}>
-      <RequirementRow label="8 characters" met={hasLength} />
-      <RequirementRow label="Number" met={hasNumber} />
-      <RequirementRow label="Special character" met={hasSpecialChar} />
+    <View style={styles.meterContainer}>
+      <View style={styles.barRow}>
+        {Array.from({ length: STRENGTH_BAR_COUNT }, (_, index) => (
+          <View
+            key={index}
+            style={[
+              styles.bar,
+              { backgroundColor: index < score ? color : colors.lightGray }
+            ]}
+          />
+        ))}
+      </View>
+      <View style={styles.labelRow}>
+        <Text type="caption" color={colors.gray} style={styles.hintMessage}>
+          {message || "Enter a password"}
+        </Text>
+        <Text type="caption" color={color} style={styles.strengthLabel}>
+          {label}
+        </Text>
+      </View>
     </View>
   );
 }
 
 interface EmailValidationHintProps {
-  message: string | null | undefined;
+  email: string;
+  error?: string | null;
 }
 
-export function EmailValidationHint({ message }: EmailValidationHintProps) {
-  if (!message) {
-    return null;
+export function EmailValidationHint({ email, error }: EmailValidationHintProps) {
+  if (email.length === 0) {
+    return (
+      <View style={styles.container}>
+        <Text type="caption" color={colors.gray}>
+          Enter an email
+        </Text>
+      </View>
+    );
   }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <RequirementRow label={error} met={false} />
+      </View>
+    );
+  }
+
+  const valid = emailValid(email);
 
   return (
     <View style={styles.container}>
-      <RequirementRow label={message} met={false} />
+      <RequirementRow
+        label={valid ? "Valid email" : "Please enter a valid email address."}
+        met={valid}
+      />
     </View>
   );
 }
@@ -70,6 +113,10 @@ export function PasswordMatchCheck({
   password,
   confirmPassword
 }: PasswordMatchCheckProps) {
+  if (password.length === 0 && confirmPassword.length === 0) {
+    return null;
+  }
+
   const passwordsMatch =
     confirmPassword.length > 0 && password === confirmPassword;
 
@@ -81,14 +128,40 @@ export function PasswordMatchCheck({
 }
 
 const styles = StyleSheet.create({
+  bar: {
+    borderRadius: 2,
+    flex: 1,
+    height: 4
+  },
+  barRow: {
+    flexDirection: "row",
+    gap: 4
+  },
   container: {
     gap: 2,
     paddingLeft: 4,
     paddingTop: 2
   },
+  hintMessage: {
+    flex: 1
+  },
+  labelRow: {
+    alignItems: "flex-start",
+    flexDirection: "row",
+    gap: 8,
+    justifyContent: "space-between"
+  },
+  meterContainer: {
+    gap: 6,
+    paddingTop: 6
+  },
   row: {
     alignItems: "center",
     flexDirection: "row",
     gap: 6
+  },
+  strengthLabel: {
+    flexShrink: 0,
+    fontWeight: "700"
   }
 });

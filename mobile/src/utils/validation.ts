@@ -3,7 +3,9 @@ import { Alert } from "react-native";
 import { containsProfanity } from "./profanity";
 
 export function emailValid(email: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/.test(
+    email
+  );
 }
 
 function nameValid(value: string) {
@@ -24,6 +26,46 @@ export function passwordValid(password: string) {
   return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>_-])[A-Za-z\d!@#$%^&*(),.?":{}|<>_-]{8,}$/g.test(
     password
   );
+}
+
+export interface PasswordStrength {
+  score: 0 | 1 | 2 | 3 | 4;
+  label: string;
+  message: string;
+}
+
+function joinWithAmpersand(items: string[]): string {
+  if (items.length === 1) return items[0];
+  return `${items.slice(0, -1).join(", ")} & ${items[items.length - 1]}`;
+}
+
+export function getPasswordStrength(password: string): PasswordStrength {
+  if (password.length === 0) {
+    return { score: 0, label: "", message: "" };
+  }
+
+  const missing: string[] = [];
+  if (password.length < 8) missing.push("8+ characters");
+  if (!/[a-z]/.test(password)) missing.push("a lowercase letter");
+  if (!/[A-Z]/.test(password)) missing.push("an uppercase letter");
+  if (!/\d/.test(password)) missing.push("a number");
+  if (!/[!@#$%^&*(),.?":{}|<>_-]/.test(password)) missing.push("a symbol");
+
+  const criteriaMet = 5 - missing.length;
+
+  if (missing.length === 0) {
+    return { score: 4, label: "Strong", message: "Strong enough — nice one" };
+  }
+
+  const message = `Add ${joinWithAmpersand(missing)}`;
+
+  if (criteriaMet <= 2) {
+    return { score: 1, label: "Weak", message };
+  }
+  if (criteriaMet === 3) {
+    return { score: 2, label: "Fair", message };
+  }
+  return { score: 3, label: "Good", message };
 }
 
 export type NameFieldCheckResult = {
