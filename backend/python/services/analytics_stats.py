@@ -3,7 +3,7 @@ import json
 from firebase_functions import https_fn
 
 from services.admin_auth import require_admin
-from services.ga4_client import run_realtime_report, run_report
+from services.ga4_client import run_funnel_report, run_realtime_report, run_report
 
 FEATURE_DOMAINS = [
     {
@@ -180,6 +180,30 @@ def handle_feature_usage_request(req: https_fn.Request, property_id: str) -> htt
         return _json_response({"error": "Failed to fetch Firebase Analytics data"}, status=502)
 
 
+def _funnel_step_filter(step: dict) -> dict:
+    if "screen_name" in step:
+        return {
+            "andGroup": {
+                "expressions": [
+                    {
+                        "funnelFieldFilter": {
+                            "fieldName": "eventName",
+                            "stringFilter": {"value": step["event"]},
+                        }
+                    },
+                    {
+                        "funnelFieldFilter": {
+                            "fieldName": "unifiedScreenName",
+                            "stringFilter": {"value": step["screen_name"]},
+                        }
+                    },
+                ]
+            }
+        }
+
+    return {"funnelEventFilter": {"eventName": step["event"]}}
+
+
 def handle_funnel_request(req: https_fn.Request, property_id: str) -> https_fn.Response:
     admin_error = require_admin(req)
     if admin_error:
@@ -190,86 +214,36 @@ def handle_funnel_request(req: https_fn.Request, property_id: str) -> https_fn.R
     if funnel_param not in FUNNELS:
         return _json_response({"error": "Unknown funnel"}, status=400)
     funnel_steps = FUNNELS[funnel_param]
-    screen_steps = [step for step in funnel_steps if "screen_name" in step]
-    event_steps = [step for step in funnel_steps if "screen_name" not in step]
 
     try:
-        users_by_step_id = {}
-
-        if event_steps:
-            data = run_report(
-                property_id,
-                {
-                    "dateRanges": [{"startDate": f"{days}daysAgo", "endDate": "today"}],
-                    "dimensions": [{"name": "eventName"}],
-                    "metrics": [{"name": "activeUsers"}],
-                    "dimensionFilter": {
-                        "filter": {
-                            "fieldName": "eventName",
-                            "inListFilter": {
-                                "values": [step["event"] for step in event_steps]
-                            },
-                        }
-                    },
-                },
-            )
-
-            users_by_event = {}
-            for row in data.get("rows", []):
-                dimension_values = row.get("dimensionValues", [])
-                event_name = dimension_values[0].get("value") if dimension_values else None
-                metric_values = row.get("metricValues", [])
-                users = int(metric_values[0].get("value", 0)) if metric_values else 0
-                if event_name:
-                    users_by_event[event_name] = users
-
-            for step in event_steps:
-                users_by_step_id[step["id"]] = users_by_event.get(step["event"], 0)
-
-        for step in screen_steps:
-            data = run_report(
-                property_id,
-                {
-                    "dateRanges": [{"startDate": f"{days}daysAgo", "endDate": "today"}],
-                    "dimensions": [{"name": "eventName"}, {"name": "unifiedScreenName"}],
-                    "metrics": [{"name": "activeUsers"}],
-                    "dimensionFilter": {
-                        "andGroup": {
-                            "expressions": [
-                                {
-                                    "filter": {
-                                        "fieldName": "eventName",
-                                        "stringFilter": {"value": step["event"]},
-                                    }
-                                },
-                                {
-                                    "filter": {
-                                        "fieldName": "unifiedScreenName",
-                                        "stringFilter": {"value": step["screen_name"]},
-                                    }
-                                },
-                            ]
-                        }
-                    },
-                },
-            )
-
-            rows = data.get("rows", [])
-            users = 0
-            if rows:
-                metric_values = rows[0].get("metricValues", [])
-                if metric_values:
-                    users = int(metric_values[0].get("value", 0))
-            users_by_step_id[step["id"]] = users
-
-        steps = [
+        data = run_funnel_report(
+            property_id,
             {
-                "id": step["id"],
-                "label": step["label"],
-                "users": users_by_step_id.get(step["id"], 0),
-            }
-            for step in funnel_steps
-        ]
+                "dateRanges": [{"startDate": f"{days}daysAgo", "endDate": "today"}],
+                "funnel": {
+                    "steps": [
+                        {"name": step["label"], "filterExpression": _funnel_step_filter(step)}
+                        for step in funnel_steps
+                    ]
+                },
+            },
+        )
+
+        table = data.get("funnelTable", {})
+        metric_names = [header.get("name") for header in table.get("metricHeaders", [])]
+        active_users_index = (
+            metric_names.index("activeUsers") if "activeUsers" in metric_names else 0
+        )
+        rows = table.get("rows", [])
+
+        steps = []
+        for index, step in enumerate(funnel_steps):
+            users = 0
+            if index < len(rows):
+                metric_values = rows[index].get("metricValues", [])
+                if active_users_index < len(metric_values):
+                    users = int(metric_values[active_users_index].get("value", 0))
+            steps.append({"id": step["id"], "label": step["label"], "users": users})
 
         return _json_response({"steps": steps})
     except Exception as exc:

@@ -3,6 +3,7 @@ import google.auth.transport.requests
 import requests
 
 GA4_BASE_URL = "https://analyticsdata.googleapis.com/v1beta"
+GA4_ALPHA_BASE_URL = "https://analyticsdata.googleapis.com/v1alpha"
 _SCOPES = ["https://www.googleapis.com/auth/analytics.readonly"]
 
 _cached_credentials = None
@@ -32,9 +33,20 @@ def run_report(property_id: str, body: dict) -> dict:
         timeout=15,
     )
     if not response.ok:
-        raise Exception(
-            f"GA4 runReport failed: {response.status_code} {response.text}"
-        )
+        raise Exception(f"GA4 runReport failed: {response.status_code} {response.text}")
+    return response.json()
+
+
+def run_funnel_report(property_id: str, body: dict) -> dict:
+    token = _get_access_token()
+    response = requests.post(
+        f"{GA4_ALPHA_BASE_URL}/properties/{property_id}:runFunnelReport",
+        headers={"Authorization": f"Bearer {token}"},
+        json=body,
+        timeout=15,
+    )
+    if not response.ok:
+        raise Exception(f"GA4 runFunnelReport failed: {response.status_code} {response.text}")
     return response.json()
 
 
@@ -47,7 +59,5 @@ def run_realtime_report(property_id: str, body: dict) -> dict:
         timeout=15,
     )
     if not response.ok:
-        raise Exception(
-            f"GA4 runRealtimeReport failed: {response.status_code} {response.text}"
-        )
+        raise Exception(f"GA4 runRealtimeReport failed: {response.status_code} {response.text}")
     return response.json()
