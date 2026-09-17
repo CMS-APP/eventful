@@ -17,7 +17,7 @@ export async function generateMetadata({
     : null;
 
   const title = info?.eventTitle
-    ? `${info.eventTitle} — Photo Gallery`
+    ? `${info.eventTitle} - Photo Gallery`
     : "Event Photo Gallery";
   const description = info?.hostName
     ? `See photos from ${info.hostName}'s event, shared via Eventful.`
