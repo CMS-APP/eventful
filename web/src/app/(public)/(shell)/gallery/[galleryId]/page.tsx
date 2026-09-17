@@ -23,11 +23,13 @@ export async function generateMetadata({
     ? `See photos from ${info.hostName}'s event, shared via Eventful.`
     : "See event photos shared via Eventful.";
 
+  const images = [{ url: "/og-image.png", width: 1200, height: 630 }];
+
   return {
     title,
     description,
-    openGraph: { title, description },
-    twitter: { title, description }
+    openGraph: { title, description, images },
+    twitter: { card: "summary_large_image", title, description, images }
   };
 }
 

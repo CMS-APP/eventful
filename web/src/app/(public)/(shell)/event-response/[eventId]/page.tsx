@@ -17,14 +17,16 @@ export async function generateMetadata({
 
   const title = `You're invited to ${eventName}`;
   const description = hostName
-    ? `${hostName} invited you on Eventful. RSVP and get the app to see the full guest list.`
-    : "You've been invited on Eventful. RSVP and get the app to see the full guest list.";
+    ? `${hostName} invited you to an event on Eventful. Tap to RSVP.`
+    : "You've been invited to an event on Eventful. Tap to RSVP.";
+
+  const images = [{ url: "/og-image.png", width: 1200, height: 630 }];
 
   return {
     title,
     description,
-    openGraph: { title, description },
-    twitter: { title, description }
+    openGraph: { title, description, images },
+    twitter: { card: "summary_large_image", title, description, images }
   };
 }
 
