@@ -88,6 +88,59 @@
   white-space: nowrap;
 }
 
+.gallery-page-install {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 28px;
+  padding: 18px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.gallery-page-install-title {
+  margin: 0;
+  color: var(--color-white);
+  font-family: var(--font-poppins-medium);
+  font-size: 15px;
+}
+
+.gallery-page-install-subtitle {
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-poppins-regular);
+  font-size: 13px;
+}
+
+.gallery-page-install-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.gallery-page-install-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.06);
+  color: var(--color-white);
+  font-family: var(--font-poppins-medium);
+  font-size: 14px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.gallery-page-install-link:hover {
+  background-color: rgba(255, 255, 255, 0.14);
+}
+
 .gallery-page-content {
   flex: 1;
   background-color: var(--color-white);
