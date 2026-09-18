@@ -2,7 +2,9 @@ import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 import { getAppCheckToken } from "@/app/init/firebase";
 
-const BASE_URL = "https://api.eventfulapp.com";
+const BASE_URL = __DEV__
+  ? "http://localhost:5050"
+  : "https://api.eventfulapp.com";
 
 const ENDPOINTS = {
   sendVerificationEmail: `${BASE_URL}/sendVerificationEmail`,
