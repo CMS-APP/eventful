@@ -96,6 +96,7 @@ export async function downloadCloudPhotos(
     photoData.push({
       photoId: photoIdFormatted,
       eventTitle: event.eventTitle,
+      eventId: photo.eventId,
       createdAt,
       url: combinedAsset.uri,
       uri: combinedAsset.uri
@@ -120,6 +121,7 @@ export async function downloadCloudPhoto(photo: GalleryPhoto, userId: string) {
   photoData.push({
     photoId: photoIdFormatted,
     eventTitle: photo.eventTitle,
+    eventId: photo.eventId,
     createdAt: photo.createdAt,
     url: combinedAsset.uri,
     uri: combinedAsset.uri
@@ -169,7 +171,10 @@ export async function uploadPhotosToCloud(
   userId: string,
   eventTitle: string,
   photos: GalleryPhoto[],
-  onPhotoSettled?: (photo: GalleryPhoto, result: UploadPhotoResult | null) => void
+  onPhotoSettled?: (
+    photo: GalleryPhoto,
+    result: UploadPhotoResult | null
+  ) => void
 ) {
   const eventTitleHash = await convertEventTitleToHash(eventTitle);
   const storagePath = `gallery/${userId}/${eventTitleHash}`;
@@ -193,6 +198,7 @@ export async function uploadPhotosToCloud(
           url: downloadURL,
           userId,
           eventTitle,
+          eventId: photo.eventId ?? null,
           photoId: localMatchId,
           width: asset.width,
           height: asset.height,
@@ -220,7 +226,9 @@ export async function uploadPhotosToCloud(
   const settled = await Promise.allSettled(uploadPromises);
   const results = settled
     .filter(
-      (settledResult): settledResult is PromiseFulfilledResult<UploadPhotoResult> =>
+      (
+        settledResult
+      ): settledResult is PromiseFulfilledResult<UploadPhotoResult> =>
         settledResult.status === "fulfilled"
     )
     .map((settledResult) => settledResult.value);

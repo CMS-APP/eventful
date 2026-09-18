@@ -54,7 +54,8 @@ export async function savePhotoDataLocally(
   eventTitle: string,
   subtitle: string,
   date: Date,
-  uri: string
+  uri: string,
+  eventId?: string | null
 ): Promise<void> {
   try {
     const photoData = await getPhotosDataLocally();
@@ -69,6 +70,7 @@ export async function savePhotoDataLocally(
     photoData.push({
       photoId: photoIdFormatted,
       eventTitle: eventTitle ?? stringDate,
+      eventId: eventId ?? undefined,
       subtitle: subtitle,
       createdAt: stringDate,
       url: uri
