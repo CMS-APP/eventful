@@ -94,12 +94,18 @@
       }
     ]
   },
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
   "emulators": {
     "functions": {
       "port": 5001
     },
     "hosting": {
-      "port": 5000
+      "port": 5050
     },
     "ui": {
       "enabled": true,
