@@ -2,9 +2,10 @@
   "name": "eventful-backend",
   "private": true,
   "scripts": {
-    "deploy": "firebase deploy --only functions:node,functions:python,hosting",
+    "deploy": "firebase deploy --only functions:node,functions:python,hosting,firestore:rules",
     "deploy:node": "firebase deploy --only functions:node",
     "deploy:python": "firebase deploy --only functions:python",
-    "deploy:hosting": "firebase deploy --only hosting"
+    "deploy:hosting": "firebase deploy --only hosting",
+    "deploy:rules": "firebase deploy --only firestore:rules"
   }
 }
