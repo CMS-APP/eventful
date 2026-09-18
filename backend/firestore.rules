@@ -1,0 +1,138 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+  	function isValidUser() {
+    	return request.auth != null && request.auth.token.email_verified == true;
+    }
+  
+    function isAdmin() {
+      return isValidUser() && exists(/databases/$(database)/documents/admin/admin) &&
+             request.auth.uid in get(/databases/$(database)/documents/admin/admin).data.uids;
+    }
+  
+    match /event/{eventId} {
+  		allow read: if isValidUser() && (request.auth.uid == resource.data.userId || (resource.data.invited != null && resource.data.invited.hasAny([request.auth.uid])) || isAdmin());
+      allow create: if isValidUser();
+      allow write, delete, update: if isValidUser() && request.auth.uid == resource.data.userId;
+    }
+    
+    match /eventLinks/{eventLinkId} {
+      allow read: if isValidUser() && request.auth.uid == resource.data.userId || (
+        resource.data.enabled == true &&
+        resource.data.dateTime > request.time
+      );
+
+      allow create: if isValidUser() && request.auth.uid == request.resource.data.userId;
+			allow update: if isValidUser() && resource.data != null && request.auth.uid == resource.data.userId;
+    }
+
+    match /eventResponses/{eventResponseId} {
+      allow read, update, delete: if isValidUser() && (request.auth.uid == resource.data.hostId || isAdmin());
+    }
+
+    match /stats/{statId} {
+      allow read: if true;
+      allow write: if false;
+    }
+    
+		match /user/{userId} {
+      allow read: if isValidUser();
+      allow create: if isValidUser();
+      allow update, delete: if isValidUser() && request.auth.uid == userId;
+    }
+    
+    match /invite/{inviteId} {
+    	allow read, create: if isValidUser();
+      allow delete, write, update: if isValidUser() && (resource.data.sender == request.auth.uid || resource.data.recipient == request.auth.uid);
+    }
+    
+    match /feedback/{feedbackId} {
+    	allow create: if isValidUser();
+      allow read, delete: if isAdmin();
+    }
+    
+    match /admin/{adminId} {
+    	allow read: if isValidUser();
+    }
+    
+    match /subscriptions/{subscriptionId} {
+    	allow read: if isAdmin();
+    }
+    
+    match /subscriptionLog/{subscriptionLogId} {
+    	allow read: if isAdmin();
+    }
+    
+    match /poll/{pollId} {
+    	allow read: if isValidUser();
+      allow create, update, delete, write: if isAdmin();
+    }
+    
+    match /pollVote/{voteId} {
+      allow read, create: if isValidUser();
+      allow update, delete: if isValidUser() && (request.auth.uid == resource.data.userID || request.auth.uid == resource.data.userId);
+    }
+    
+    match /following/{userId=**} {
+      allow read: if isValidUser();
+    }
+
+    match /following/{userId}/{followUserId=**} {
+      allow write: if isValidUser() && request.auth.uid == userId;
+    }
+
+    match /followers/{userId=**} {
+      allow read: if isValidUser();
+    }
+
+    match /followers/{userId}/followers/{followerId} {
+      allow delete: if isValidUser() && (request.auth.uid == followerId || request.auth.uid == userId);
+      allow read: if isValidUser();
+      allow write: if false;
+    }
+    
+    match /notifications/{notificationId} {
+      allow read: if isValidUser() && (request.auth.uid == resource.data.senderId || request.auth.uid == resource.data.userId);
+      allow create: if isValidUser() && request.auth.uid == request.resource.data.senderId;
+      allow update, delete: if isValidUser() && (request.auth.uid == resource.data.senderId || request.auth.uid == resource.data.userId);
+    }
+    
+    match /photoBoothConfig/{userId} {
+      allow read: if isValidUser() && (request.auth.uid == userId || isAdmin());
+      allow write: if isValidUser() && request.auth.uid == userId;
+    }
+    
+    match /photoBoothPhotos/{photoId} {
+    	allow create: if isValidUser();
+      allow write: if isValidUser() && request.auth.uid == resource.data.userId;
+      allow read: if isValidUser();
+    }
+    
+    match /posts/{postId} {
+    	allow write: if isAdmin();
+      allow read: if isValidUser();
+    }
+    
+    match /postLikes/{likeId} {
+      allow read: if isValidUser();
+      allow create, update, delete: if isValidUser() && likeId.matches('.*_' + request.auth.uid);
+    }
+
+    match /activeUserStats/{date} {
+      allow read: if isAdmin();
+    }
+
+    match /revenuecatLiveStats/{docId} {
+      allow read: if isAdmin();
+    }
+
+    match /revenuecatDailyStats/{date} {
+      allow read: if isAdmin();
+    }
+
+    match /totalUserStats/{date} {
+      allow read: if isAdmin();
+    }
+  }
+}
