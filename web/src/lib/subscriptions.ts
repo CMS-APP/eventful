@@ -1,3 +1,4 @@
+import { BACKEND_URL } from "@/lib/backendUrl";
 import { HOUR_MS, readLocalCache, writeLocalCache } from "@/lib/localCache";
 
 export interface RevenueCatDailyStat {
@@ -22,7 +23,7 @@ export async function getRevenueCatStats(
   if (cached) return cached;
 
   const res = await fetch(
-    `https://api.eventfulapp.com/subscriptions?days=${days}`,
+    `${BACKEND_URL}/subscriptions?days=${days}`,
     {
       headers: { Authorization: `Bearer ${idToken}` },
     }

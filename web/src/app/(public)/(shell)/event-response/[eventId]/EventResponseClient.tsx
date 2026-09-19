@@ -18,6 +18,7 @@ import { useEffect, useRef, useState } from "react";
 import Button from "@/components/Button";
 import TextInput from "@/components/TextInput";
 import { APP_STORE_LINK, GOOGLE_PLAY_LINK } from "@/lib/appLinks";
+import { BACKEND_URL } from "@/lib/backendUrl";
 import { checkEventLink } from "@/services/firebase/firebaseFunctions";
 
 import "./page.css";
@@ -32,11 +33,7 @@ const RESPONSES = [
   { key: "Decline", label: "Decline", icon: faXmark, modifier: "decline" }
 ] as const;
 
-export default function EventResponseClient({
-  eventId
-}: {
-  eventId: string;
-}) {
+export default function EventResponseClient({ eventId }: { eventId: string }) {
   const [response, setResponse] = useState<null | string>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -113,7 +110,7 @@ export default function EventResponseClient({
     const deviceId = getOrCreateDeviceId();
 
     try {
-      const res = await fetch("https://api.eventfulapp.com/respondToEvent", {
+      const res = await fetch(`${BACKEND_URL}/respondToEvent`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -310,9 +307,7 @@ export default function EventResponseClient({
                   label={
                     <>
                       Email{" "}
-                      <span className="event-response-optional">
-                        optional
-                      </span>
+                      <span className="event-response-optional">optional</span>
                     </>
                   }
                   type="email"

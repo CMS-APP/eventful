@@ -14,4 +14,4 @@ if [[ -s "$HOME/.nvm/nvm.sh" ]]; then
 fi
 
 cd "$ROOT"
-exec firebase emulators:start --only functions,hosting "$@"
+firebase emulators:start --only functions,hosting "$@" 2>&1 | tee emulate.log

@@ -1,4 +1,5 @@
 import { GalleryInfo } from "@/features/gallery/types";
+import { BACKEND_URL } from "@/lib/backendUrl";
 
 export function parseGalleryId(galleryId: string) {
   const [userId, eventId] = decodeURIComponent(galleryId).split("=");
@@ -11,7 +12,7 @@ export async function fetchGalleryInfo(
 ): Promise<GalleryInfo | null> {
   try {
     const response = await fetch(
-      `https://api.eventfulapp.com/galleryInfo?userId=${encodeURIComponent(userId)}&eventHash=${encodeURIComponent(eventId)}`
+      `${BACKEND_URL}/galleryInfo?userId=${encodeURIComponent(userId)}&eventHash=${encodeURIComponent(eventId)}`
     );
 
     if (!response.ok) return null;
