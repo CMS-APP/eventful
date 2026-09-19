@@ -3,6 +3,7 @@ import { Timestamp } from "@react-native-firebase/firestore";
 export type GalleryPhoto = {
   createdAt: Timestamp;
   eventTitle: string;
+  eventId?: string;
   photoId: string;
   storageId?: string;
   url?: string;

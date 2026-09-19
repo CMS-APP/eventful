@@ -68,6 +68,7 @@ export function HomeNotificationButtons() {
   }, [navigation, updates]);
 
   const handleInvitePress = useCallback(() => {
+    navMain.navigate("Contacts", { screen: "ContactsHome", params: undefined });
     navMain.navigate("Contacts", {
       screen: "ContactsInvitations",
       params: undefined

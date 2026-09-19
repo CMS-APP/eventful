@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import AuthShell from "@/components/AuthShell";
 import Button from "@/components/Button";
 import TextInput from "@/components/TextInput";
+import { BACKEND_URL } from "@/lib/backendUrl";
 
 declare global {
   interface Window {
@@ -19,7 +20,7 @@ declare global {
 }
 
 const RECAPTCHA_SITE_KEY = "6LfDpgQrAAAAAO0TSbcQban4TrA16CjelRzF_Urp";
-const FORGOT_PASSWORD_URL = "https://api.eventfulapp.com/forgotPassword";
+const FORGOT_PASSWORD_URL = `${BACKEND_URL}/forgotPassword`;
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");

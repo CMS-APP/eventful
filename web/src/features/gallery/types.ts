@@ -5,3 +5,9 @@ export interface GalleryImage {
   size: number;
   timeCreated: string | null;
 }
+
+export interface GalleryInfo {
+  eventTitle: string;
+  date: string | null;
+  hostName: string | null;
+}

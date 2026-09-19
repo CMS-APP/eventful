@@ -38,11 +38,19 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://app.eventfulapp.com"),
   title: "Eventful | The Ultimate Event Planner",
   description: "Plan with Ease, Connect with Joy.",
   icons: {
     icon: "/icon.png",
     apple: "/icon.png"
+  },
+  openGraph: {
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }]
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }]
   }
 };
 

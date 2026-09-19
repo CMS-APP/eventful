@@ -13,6 +13,7 @@ import * as MediaLibrary from "expo-media-library";
 import type { PhotoBoothStackParamList } from "@/app/navigation";
 import { colors } from "@/design-system/tokens/colors";
 import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
+import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 import {
   trackPhotoBoothPhotoSaved,
@@ -39,6 +40,7 @@ export function PhotoBoothResultsButtons({
   const navigation = useNavigation<NavigationProp<PhotoBoothStackParamList>>();
 
   const { photos, setPhotos } = usePhotoBoothCamera();
+  const { linkedEventId } = usePhotoBoothSession();
   const {
     title,
     subTitle,
@@ -84,7 +86,8 @@ export function PhotoBoothResultsButtons({
         title,
         subTitle,
         new Date(),
-        combinedAsset.uri
+        combinedAsset.uri,
+        linkedEventId
       );
 
       trackPhotoBoothPhotoSaved();

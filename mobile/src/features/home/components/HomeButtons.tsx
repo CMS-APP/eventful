@@ -90,9 +90,7 @@ export function HomeButtons({ scrollY }: HomeButtonsProps) {
               <HomePageButton
                 icon="camera"
                 text={"Photo Booth"}
-                color={
-                  premium || photoBooth ? colors.secondary : colors.white
-                }
+                color={premium || photoBooth ? colors.secondary : colors.white}
                 textColor={premium || photoBooth ? colors.white : colors.black}
                 buttonAction={onPhotoBoothPress}
                 style={{ height: buttonHeight }}

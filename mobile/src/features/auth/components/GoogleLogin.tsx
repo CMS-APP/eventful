@@ -88,8 +88,8 @@ export function GoogleLogin() {
     <Button
       text="Google"
       onPress={onGoogleButtonPress}
-      color={colors.primary}
-      textColor={colors.white}
+      color={colors.white}
+      textColor={colors.black}
       leadingIcon="google"
       disabled={isSubmitting}
       loading={isSubmitting}

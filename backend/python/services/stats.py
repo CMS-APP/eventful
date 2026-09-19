@@ -82,8 +82,6 @@ def handle_funnel_request(req, property_id):
         return response("Unknown funnel", status=400)
 
     funnel_steps = FUNNELS[funnel_param]
-    screen_steps = [step for step in funnel_steps if "screen_name" in step]
-    event_steps = [step for step in funnel_steps if "screen_name" not in step]
 
     try:
         users_by_step_id = {}
@@ -143,8 +141,28 @@ def handle_funnel_request(req, property_id):
                     },
                 },
             )
+        data = run_funnel_report(
+            property_id,
+            {
+                "dateRanges": [{"startDate": f"{days}daysAgo", "endDate": "today"}],
+                "funnel": {
+                    "steps": [
+                        {"name": step["label"], "filterExpression": _funnel_step_filter(step)}
+                        for step in funnel_steps
+                    ]
+                },
+            },
+        )
 
-            rows = data.get("rows", [])
+        table = data.get("funnelTable", {})
+        metric_names = [header.get("name") for header in table.get("metricHeaders", [])]
+        active_users_index = (
+            metric_names.index("activeUsers") if "activeUsers" in metric_names else 0
+        )
+        rows = table.get("rows", [])
+
+        steps = []
+        for index, step in enumerate(funnel_steps):
             users = 0
             if rows:
                 metric_values = rows[0].get("metricValues", [])

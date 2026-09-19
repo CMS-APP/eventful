@@ -1,3 +1,4 @@
+import { BACKEND_URL } from "@/lib/backendUrl";
 import { HOUR_MS, readLocalCache, writeLocalCache } from "@/lib/localCache";
 
 export interface FunnelStep {
@@ -16,7 +17,7 @@ export async function getFunnelStats(
   if (cached) return cached;
 
   const res = await fetch(
-    `https://api.eventfulapp.com/analytics/funnel?days=${days}&funnel=${funnel}`,
+    `${BACKEND_URL}/analytics/funnel?days=${days}&funnel=${funnel}`,
     {
       headers: { Authorization: `Bearer ${idToken}` }
     }
@@ -33,7 +34,7 @@ export async function getFunnelStats(
 }
 
 export async function getRealtimeActiveUsers(idToken: string): Promise<number> {
-  const res = await fetch("https://api.eventfulapp.com/analytics/realtime-users", {
+  const res = await fetch(`${BACKEND_URL}/analytics/realtime-users`, {
     headers: { Authorization: `Bearer ${idToken}` }
   });
 
@@ -67,7 +68,7 @@ export async function getFeatureUsageStats(
   if (cached) return cached;
 
   const res = await fetch(
-    `https://api.eventfulapp.com/analytics/feature-usage?days=${days}`,
+    `${BACKEND_URL}/analytics/feature-usage?days=${days}`,
     {
       headers: { Authorization: `Bearer ${idToken}` }
     }

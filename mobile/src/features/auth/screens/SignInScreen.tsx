@@ -263,7 +263,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
               text="Sign up"
               textColor={colors.black}
               textAlign="center"
-              type="subHeader"
+              type="body"
               onPress={handleSignUp}
             />
           </View>
@@ -283,6 +283,9 @@ const styles = StyleSheet.create({
   },
   orContainer: {
     alignItems: "center",
+    flexDirection: "row",
+    gap: 8,
+    justifyContent: "center",
     marginTop: 12
   }
 });

@@ -15,6 +15,7 @@ export type PhotoBoothSessionContextValue = Pick<
 > & {
   isBoothRunning: boolean;
   setIsBoothRunning: (running: boolean) => void;
+  linkedEventId: string | null;
 };
 
 export const PhotoBoothSessionContext =

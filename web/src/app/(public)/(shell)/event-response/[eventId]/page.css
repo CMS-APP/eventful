@@ -131,25 +131,57 @@
   font-size: 14px;
 }
 
-.event-response-download-links {
+.event-response-install {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 16px;
-  margin-top: 6px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: auto;
+  padding: 18px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  background-color: rgba(255, 255, 255, 0.06);
 }
 
-.event-response-download-link {
-  display: inline-block;
-  color: var(--color-secondary);
-  font-family: var(--font-poppins-bold);
+.event-response-install-title {
+  margin: 0;
+  color: var(--color-white);
+  font-family: var(--font-poppins-medium);
+  font-size: 15px;
+}
+
+.event-response-install-subtitle {
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-poppins-regular);
   font-size: 13px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-decoration: none;
 }
 
-.event-response-download-link:hover {
-  text-decoration: underline;
+.event-response-install-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.event-response-install-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.06);
+  color: var(--color-white);
+  font-family: var(--font-poppins-medium);
+  font-size: 14px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.event-response-install-link:hover {
+  background-color: rgba(255, 255, 255, 0.14);
 }
 
 .event-response-question {
