@@ -50,13 +50,19 @@ export function PanSnapGestureRoot({
   }, [count, initialIndex]);
 
   const [activeIndex, setActiveIndex] = useState(clampedInitial);
+  const [syncedClampedInitial, setSyncedClampedInitial] =
+    useState(clampedInitial);
+
+  if (clampedInitial !== syncedClampedInitial) {
+    setSyncedClampedInitial(clampedInitial);
+    setActiveIndex(clampedInitial);
+  }
 
   const onIndexChangeRef = useRef(onIndexChange);
-  onIndexChangeRef.current = onIndexChange;
 
   useEffect(() => {
-    setActiveIndex(clampedInitial);
-  }, [clampedInitial]);
+    onIndexChangeRef.current = onIndexChange;
+  });
 
   useEffect(() => {
     itemCount.value = count;
@@ -77,6 +83,7 @@ export function PanSnapGestureRoot({
     (e: LayoutChangeEvent) => {
       const w = e.nativeEvent.layout.width;
       setLayoutWidth(w);
+      // eslint-disable-next-line react-hooks/immutability -- reanimated shared value mutation, runs in a layout callback, not during render
       pageWidth.value = w;
     },
     [pageWidth]
@@ -88,6 +95,7 @@ export function PanSnapGestureRoot({
       .failOffsetY([-12, 12])
       .activeOffsetX([-24, 24])
       .onBegin(() => {
+        // eslint-disable-next-line react-hooks/immutability -- reanimated shared value mutation, runs in a gesture callback, not during render
         startX.value = translateX.value;
       })
       .onUpdate((e) => {
@@ -97,8 +105,10 @@ export function PanSnapGestureRoot({
         let next = startX.value + e.translationX;
         if (next > 0) next *= 0.35;
         if (next < minX) next = minX + (next - minX) * 0.35;
+        // eslint-disable-next-line react-hooks/immutability -- reanimated shared value mutation, runs in a gesture callback, not during render
         translateX.value = next;
       })
+      // eslint-disable-next-line react-hooks/refs -- gesture handler callback, invoked on gesture end, not during render
       .onEnd((e) => {
         const w = pageWidth.value;
         if (w < 1) return;
@@ -107,6 +117,7 @@ export function PanSnapGestureRoot({
         if (vx < -400) idx = Math.ceil(-translateX.value / w);
         if (vx > 400) idx = Math.floor(-translateX.value / w);
         idx = Math.max(0, Math.min(n - 1, idx));
+        // eslint-disable-next-line react-hooks/immutability -- reanimated shared value mutation, runs in a gesture callback, not during render
         translateX.value = withSpring(-idx * w, SPRING);
         runOnJS(emitIndex)(idx);
       });

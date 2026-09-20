@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Animated,
@@ -33,7 +33,7 @@ export function KeyboardScrollView({
   bottomMargin?: boolean;
 }) {
   const customEasing = Easing.bezier(0.25, 0.1, 0.25, 1);
-  const keyboardMarginBottom = useRef(new Animated.Value(0)).current;
+  const [keyboardMarginBottom] = useState(() => new Animated.Value(0));
   const safeArea = useSafeAreaStyles().safeArea;
   const tabBarHeight = 48;
   const height = tabBarHeight + safeArea.paddingBottom;

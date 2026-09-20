@@ -102,7 +102,7 @@ export function PaymentProvider({ children }: { children: React.ReactNode }) {
     if (!userId) {
       return;
     }
-    init();
+    void Promise.resolve().then(() => init());
   }, [userId, init]);
 
   const restorePermissions = useCallback(async () => {

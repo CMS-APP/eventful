@@ -15,6 +15,48 @@ import { haptics } from "@/utils/haptics";
 
 import { FlatHeaderProps } from "./props";
 
+function Side({
+  isLeft,
+  backAction,
+  iconRight,
+  color,
+  leftAction,
+  rightAction
+}: {
+  isLeft: boolean;
+  backAction: FlatHeaderProps["backAction"];
+  iconRight: FlatHeaderProps["iconRight"];
+  color: string;
+  leftAction: () => void;
+  rightAction: () => void;
+}) {
+  if (isLeft && backAction) {
+    return (
+      <TouchableOpacity
+        onPress={leftAction}
+        hitSlop={getHitSlop("small")}
+        style={styles.iconButton}
+      >
+        <FontAwesome5 name="arrow-left" size={26} color={color} />
+      </TouchableOpacity>
+    );
+  }
+
+  if (!isLeft && iconRight) {
+    return (
+      <TouchableOpacity
+        onPress={rightAction}
+        hitSlop={getHitSlop("small")}
+        style={styles.iconButton}
+      >
+        <FontAwesome5 name={iconRight} size={26} color={color} />
+      </TouchableOpacity>
+    );
+  }
+
+  return <View style={styles.spacer} />;
+}
+
 export function FlatHeader({
   backgroundColor,
   title,
@@ -40,44 +82,20 @@ export function FlatHeader({
     iconRightAction?.();
   }, [iconRightAction]);
 
-  const Side = useCallback(
-    ({ isLeft }: { isLeft: boolean }) => {
-      if (isLeft && backAction) {
-        return (
-          <TouchableOpacity
-            onPress={leftAction}
-            hitSlop={getHitSlop("small")}
-            style={styles.iconButton}
-          >
-            <FontAwesome5 name="arrow-left" size={26} color={color} />
-          </TouchableOpacity>
-        );
-      }
-
-      if (!isLeft && iconRight) {
-        return (
-          <TouchableOpacity
-            onPress={rightAction}
-            hitSlop={getHitSlop("small")}
-            style={styles.iconButton}
-          >
-            <FontAwesome5 name={iconRight} size={26} color={color} />
-          </TouchableOpacity>
-        );
-      }
-
-      return <View style={styles.spacer} />;
-    },
-    [leftAction, rightAction, iconRight, backAction, color]
-  );
-
   const paddingTop = Platform.OS === "android" ? 12 : 0;
 
   let containerStyle = { ...styles.container, paddingTop: paddingTop };
 
   return (
     <View style={[containerStyle, { backgroundColor }]}>
-      <Side isLeft={true} />
+      <Side
+        isLeft={true}
+        backAction={backAction}
+        iconRight={iconRight}
+        color={color}
+        leftAction={leftAction}
+        rightAction={rightAction}
+      />
       <View style={styles.titleContainer}>
         {icon && (
           <FontAwesome5
@@ -91,7 +109,14 @@ export function FlatHeader({
           {title}
         </Text>
       </View>
-      <Side isLeft={false} />
+      <Side
+        isLeft={false}
+        backAction={backAction}
+        iconRight={iconRight}
+        color={color}
+        leftAction={leftAction}
+        rightAction={rightAction}
+      />
     </View>
   );
 }

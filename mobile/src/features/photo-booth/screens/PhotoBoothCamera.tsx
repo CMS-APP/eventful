@@ -10,6 +10,7 @@ import {
 
 import { CameraView } from "expo-camera";
 
+import { PhotoBoothStackNavigation } from "@/app/navigation";
 import {
   CameraScreenLayout,
   cameraPreviewStyle
@@ -26,7 +27,6 @@ import {
   PhotoBoothTimer,
   PhotoBoothTimerHandle
 } from "../components/camera/PhotoBoothTimer";
-import type { PhotoBoothStackNavigation } from "../photoBoothStackParams";
 
 export function PhotoBoothCamera() {
   const navigation = useNavigation<PhotoBoothStackNavigation>();
@@ -50,7 +50,6 @@ export function PhotoBoothCamera() {
   const [canRenderCamera, setCanRenderCamera] = useState(true);
   const [showCustomiseCollageModal, setShowCustomiseCollageModal] =
     useState(false);
-  const [photoPrompts, setPhotoPrompts] = useState<string[]>([]);
 
   const flashMode = flash ? "on" : "off";
 
@@ -83,10 +82,9 @@ export function PhotoBoothCamera() {
     return () => subscription.remove();
   }, [isBoothRunning, setIsBoothRunning, setPhotos]);
 
-  useEffect(() => {
-    if (!isBoothRunning || !photoPromptsEnabled) return;
-    setPhotoPrompts(getRandomPrompts(4));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  const photoPrompts = useMemo(() => {
+    if (!isBoothRunning || !photoPromptsEnabled) return [];
+    return getRandomPrompts(4);
   }, [isBoothRunning, photoPromptsEnabled]);
 
   const currentPhotoPrompt =
@@ -102,6 +100,7 @@ export function PhotoBoothCamera() {
     if (!isLayoutReady || !isFocused) return;
     if (Platform.OS !== "android") return;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- must run synchronously before the setTimeout below to force the camera unmount that precedes the remount workaround
     setCanRenderCamera(false);
     const timer = setTimeout(() => {
       setCameraSessionKey((prev) => prev + 1);

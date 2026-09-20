@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 
 import {
   KeyboardTypeOptions,
@@ -62,7 +62,7 @@ export function Input({
   flex = false
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const accessoryId = useRef(`input-${placeholder}`).current;
+  const [accessoryId] = useState(() => `input-${placeholder}`);
   const isEmailInput = keyboardType === "email-address";
   const resolvedAutoCapitalize =
     autoCapitalize ?? (password || isEmailInput ? "none" : "sentences");

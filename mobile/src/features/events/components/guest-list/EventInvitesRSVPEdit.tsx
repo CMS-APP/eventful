@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { Alert, StyleSheet, View } from "react-native";
 
@@ -41,7 +41,6 @@ export function EventInvitesRSVPEdit({
   const [appList, setAppList] = useState<UserInvite[]>([]);
   const [linkList, setLinkList] = useState<UserInvite[]>([]);
   const [manualList, setManualList] = useState<UserInvite[]>([]);
-  const [userList, setUserList] = useState<UserInvite[]>([]);
   const [selectedButton, setSelectedButton] = useState("accept");
   const [acceptNum, setAcceptNum] = useState(0);
   const [maybeNum, setMaybeNum] = useState(0);
@@ -64,17 +63,6 @@ export function EventInvitesRSVPEdit({
     setMaybeNum(maybeCount);
     setDeclineNum(declineCount);
   }, []);
-
-  const getUserList = useCallback(
-    (allUsers: UserInvite[]) => {
-      const filteredUsers = allUsers.filter((user: UserInvite) => {
-        return user.invite.response === selectedButton;
-      });
-
-      setUserList(filteredUsers);
-    },
-    [selectedButton]
-  );
 
   const fetchData = useCallback(async () => {
     setFetchingData(true);
@@ -106,10 +94,12 @@ export function EventInvitesRSVPEdit({
     }, [fetchData])
   );
 
-  useEffect(() => {
+  const userList = useMemo(() => {
     const allUsers = [...appList, ...linkList, ...manualList];
-    getUserList(allUsers);
-  }, [selectedButton, appList, linkList, manualList, getUserList]);
+    return allUsers.filter(
+      (user: UserInvite) => user.invite.response === selectedButton
+    );
+  }, [selectedButton, appList, linkList, manualList]);
 
   const openInviteFriends = useCallback(() => {
     const date = new Date();

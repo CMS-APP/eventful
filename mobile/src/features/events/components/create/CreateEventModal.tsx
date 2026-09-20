@@ -70,7 +70,8 @@ export function CreateEventModal({
   }, [draftEvent, eventName, userId, navigation, setShowModal]);
 
   useEffect(() => {
-    if (showModal) {
+    if (!showModal) return;
+    void Promise.resolve().then(() => {
       setDraftEvent(NewEvent(getDefaultEventDate(), userId, ""));
       fadeAnim.setValue(0);
       Animated.timing(fadeAnim, {
@@ -78,7 +79,7 @@ export function CreateEventModal({
         duration: 300,
         useNativeDriver: true
       }).start();
-    }
+    });
   }, [showModal, fadeAnim, userId]);
 
   return (

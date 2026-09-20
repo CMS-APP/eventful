@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 
 import { Animated, StyleSheet, View } from "react-native";
 
@@ -15,7 +15,7 @@ export function EventListProgressBar({
   total
 }: EventListProgressBarProps) {
   const percentage = total > 0 ? Math.round((doneCount / total) * 100) : 0;
-  const animatedWidth = useRef(new Animated.Value(percentage)).current;
+  const [animatedWidth] = useState(() => new Animated.Value(percentage));
 
   useEffect(() => {
     Animated.timing(animatedWidth, {

@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 
 import {
   Animated,
@@ -88,9 +88,9 @@ export function TabBar({ state, navigation }: TabBarProps) {
     return modalScreenNames.includes(currentRoute.name);
   });
 
-  const scaleValues = useRef(
+  const [scaleValues] = useState(() =>
     state.routes.map(() => new Animated.Value(1))
-  ).current;
+  );
 
   const onPress = useCallback(
     (

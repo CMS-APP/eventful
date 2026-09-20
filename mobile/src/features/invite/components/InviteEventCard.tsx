@@ -71,8 +71,10 @@ export function InviteEventCard({
   }, [event, userId]);
 
   useEffect(() => {
-    fetchHost();
-    fetchInvite();
+    void Promise.resolve().then(() => {
+      fetchHost();
+      fetchInvite();
+    });
   }, [fetchHost, fetchInvite]);
 
   const handleInvite = useCallback(async () => {
@@ -91,7 +93,7 @@ export function InviteEventCard({
       log(`Error Inviting User: ${error}`, "error");
       showErrorToast("Error Inviting User");
     }
-  }, [host?.uid, host?.name, host?.username, user, event]);
+  }, [host, user, event]);
 
   const inviteToEventAlert = useCallback(() => {
     showOptionsAlert(

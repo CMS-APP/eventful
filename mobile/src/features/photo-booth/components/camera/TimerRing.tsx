@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   labelWrap: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 8

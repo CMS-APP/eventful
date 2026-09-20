@@ -46,30 +46,37 @@ export function useAccountProfilePicture() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!userId) {
-      setImage(null);
-      setLoading(false);
-      return;
-    }
-
     let cancelled = false;
-    setLoading(true);
 
-    getCachedProfilePicture(userId, profilePictureHash)
-      .then((imageUri) => {
-        if (!cancelled) {
-          setImage(imageUri);
-          setLoading(false);
-        }
-      })
-      .catch((error) => {
-        if (!cancelled) {
-          log(`Error syncing profile picture: ${error}`, "error");
-          showErrorToast("Error Loading Photo");
-          setImage(null);
-          setLoading(false);
-        }
-      });
+    void Promise.resolve().then(() => {
+      if (cancelled) {
+        return;
+      }
+
+      if (!userId) {
+        setImage(null);
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+
+      getCachedProfilePicture(userId, profilePictureHash)
+        .then((imageUri) => {
+          if (!cancelled) {
+            setImage(imageUri);
+            setLoading(false);
+          }
+        })
+        .catch((error) => {
+          if (!cancelled) {
+            log(`Error syncing profile picture: ${error}`, "error");
+            showErrorToast("Error Loading Photo");
+            setImage(null);
+            setLoading(false);
+          }
+        });
+    });
 
     return () => {
       cancelled = true;

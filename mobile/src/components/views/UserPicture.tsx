@@ -48,7 +48,7 @@ export function UserPicture({ uid, size = 50 }: UserPictureProps) {
   }, [uid]);
 
   useEffect(() => {
-    syncPicture();
+    void Promise.resolve().then(() => syncPicture());
   }, [syncPicture]);
 
   const height = size;

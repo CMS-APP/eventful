@@ -40,6 +40,7 @@ export function EventToDoShoppingEdit({
 
   useEffect(() => {
     const data = (event as any)[listType] || [];
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reinitializes locally-editable list state when the source event/listType changes; state must stay mutable for editing, so it can't be derived at render
     setItemList(data.map((item: { item: string }) => item.item));
     setCompleteList(data.map((item: { complete: boolean }) => item.complete));
   }, [event, listType]);

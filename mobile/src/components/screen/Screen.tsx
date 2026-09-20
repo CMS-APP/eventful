@@ -183,11 +183,11 @@ const styles = StyleSheet.create({
     zIndex: 0
   },
   blurOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     zIndex: 2000
   },
   blurOverlayContent: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     alignItems: "center",
     gap: 12,
     justifyContent: "center",

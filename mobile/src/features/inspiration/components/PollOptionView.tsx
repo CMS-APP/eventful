@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Animated, StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -34,9 +34,9 @@ export function PollOptionView({
   userVote,
   setUserVote
 }: PollOptionViewProps) {
-  const [isUserVote, setIsUserVote] = useState(false);
+  const isUserVote = userVote?.option === option;
   const userId = useSelector((state: UserState) => state.uid);
-  const animatedWidth = useRef(new Animated.Value(0)).current;
+  const [animatedWidth] = useState(() => new Animated.Value(0));
 
   const calculatePercentage = useCallback(() => {
     const totalVotes = votes.length;
@@ -53,10 +53,6 @@ export function PollOptionView({
   useEffect(() => {
     calculatePercentage();
   }, [votes, option, animatedWidth, calculatePercentage]);
-
-  useEffect(() => {
-    setIsUserVote(userVote?.option === option);
-  }, [userVote, option]);
 
   const handleVote = useCallback(async () => {
     if (userVote?.option === option) {

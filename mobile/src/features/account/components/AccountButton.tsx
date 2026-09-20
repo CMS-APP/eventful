@@ -1,8 +1,6 @@
 import { ActivityIndicator } from "react-native-paper";
 import { useSelector } from "react-redux";
 
-import { useEffect, useState } from "react";
-
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
@@ -32,8 +30,6 @@ export function AccountButton({
   const lastName = useSelector((state: UserState) => state.lastName);
   const photoBooth = useSelector((state: UserState) => state.photoBooth);
   const premium = useSelector((state: UserState) => state.premium);
-  const [accountType, setAccountType] = useState<string | null>(null);
-
   const { image, loading } = useAccountProfilePicture();
 
   function handlePress() {
@@ -41,11 +37,7 @@ export function AccountButton({
     haptics.soft();
   }
 
-  useEffect(() => {
-    if (photoBooth) setAccountType("Booth");
-    else if (premium) setAccountType("Premium");
-    else setAccountType("Free");
-  }, [photoBooth, premium]);
+  const accountType = photoBooth ? "Booth" : premium ? "Premium" : "Free";
 
   const getPulseColor = () => {
     if (photoBooth) {

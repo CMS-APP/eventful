@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 
 import { Alert, StyleSheet, View } from "react-native";
 
@@ -41,32 +41,20 @@ export function CalendarView({
   allEvents,
   allInvitedEvents
 }: CalendarViewProps) {
-  const [calendarWeeks, setCalendarWeeks] = useState<CalendarDate[][]>([]);
-  const [activeEventDays, setActiveEventDays] = useState<boolean[]>(
-    Array(42).fill(false)
-  );
-  const [activeInviteDays, setActiveInviteDays] = useState<boolean[]>(
-    Array(42).fill(false)
-  );
   const userId = useSelector((state: UserState) => state.uid);
 
-  useEffect(() => {
-    const weeks = getCalendarWeeks(currentMonth, currentYear);
-
-    setCalendarWeeks(weeks);
-    const activeEventDays = calculateEventActiveDays(
-      allEvents,
-      currentMonth,
-      currentYear
-    );
-    setActiveEventDays(activeEventDays);
-    const activeInviteDays = calculateEventActiveDays(
-      allInvitedEvents,
-      currentMonth,
-      currentYear
-    );
-    setActiveInviteDays(activeInviteDays);
-  }, [currentMonth, currentYear, allEvents, allInvitedEvents]);
+  const calendarWeeks = useMemo(
+    () => getCalendarWeeks(currentMonth, currentYear),
+    [currentMonth, currentYear]
+  );
+  const activeEventDays = useMemo(
+    () => calculateEventActiveDays(allEvents, currentMonth, currentYear),
+    [allEvents, currentMonth, currentYear]
+  );
+  const activeInviteDays = useMemo(
+    () => calculateEventActiveDays(allInvitedEvents, currentMonth, currentYear),
+    [allInvitedEvents, currentMonth, currentYear]
+  );
 
   function onDayPress(date: Date, type: string) {
     if (type === "previous") {

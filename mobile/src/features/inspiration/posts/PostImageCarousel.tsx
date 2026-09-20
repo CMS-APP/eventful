@@ -42,7 +42,7 @@ export function PostImageCarousel({ photos, postId }: PostImageCarouselProps) {
   }
 
   useEffect(() => {
-    loadCachedImage();
+    void Promise.resolve().then(() => loadCachedImage());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, photos, postId]);
 

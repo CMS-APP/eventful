@@ -1,6 +1,6 @@
 import Svg, { Circle, G } from "react-native-svg";
 
-import { type ReactNode, useEffect, useRef } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 
 import { Animated, StyleSheet, View } from "react-native";
 
@@ -28,7 +28,7 @@ export function PhotoBoothUploadRing({
   const circumference = 2 * Math.PI * radius;
 
   const clampedPercentage = Math.min(Math.max(percentage, 0), 100);
-  const progress = useRef(new Animated.Value(clampedPercentage)).current;
+  const [progress] = useState(() => new Animated.Value(clampedPercentage));
 
   useEffect(() => {
     Animated.timing(progress, {
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   content: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     alignItems: "center",
     justifyContent: "center"
   }

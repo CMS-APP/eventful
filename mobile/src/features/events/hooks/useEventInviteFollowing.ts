@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -23,7 +23,6 @@ export interface InviteGuest {
 
 export function useEventInviteFollowing(event: Event) {
   const [guests, setGuests] = useState<InviteGuest[]>([]);
-  const [filteredGuests, setFilteredGuests] = useState<InviteGuest[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const userId = useSelector((state: UserState) => state.uid);
@@ -67,18 +66,15 @@ export function useEventInviteFollowing(event: Event) {
     setLoading(false);
   }, [userId, event]);
 
-  useEffect(() => {
+  const filteredGuests = useMemo(() => {
     const lowercasedSearch = search.trim().toLowerCase();
     if (!lowercasedSearch) {
-      setFilteredGuests(guests);
-      return;
+      return guests;
     }
-    setFilteredGuests(
-      guests.filter(
-        ({ user }) =>
-          user.username.includes(lowercasedSearch) ||
-          (user.searchName?.includes(lowercasedSearch) ?? false)
-      )
+    return guests.filter(
+      ({ user }) =>
+        user.username.includes(lowercasedSearch) ||
+        (user.searchName?.includes(lowercasedSearch) ?? false)
     );
   }, [search, guests]);
 

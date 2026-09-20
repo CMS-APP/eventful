@@ -37,7 +37,7 @@ export function NextEventCountdown({ event }: NextEventCountdownProps) {
 
   useEffect(() => {
     if (event) {
-      getRemainingTime();
+      void Promise.resolve().then(() => getRemainingTime());
       const interval = setInterval(() => getRemainingTime(), 1000);
       return () => clearInterval(interval);
     }

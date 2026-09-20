@@ -2,11 +2,10 @@ import { StyleSheet, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 
+import type { PhotoBoothStackNavigation } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
-
-import type { PhotoBoothStackNavigation } from "../photoBoothStackParams";
 
 export function PhotoBoothCustomise() {
   const navigation = useNavigation<PhotoBoothStackNavigation>();

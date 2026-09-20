@@ -118,7 +118,7 @@ export const Confetti = forwardRef<ConfettiHandle, ConfettiProps>(
 
     useEffect(() => {
       if (autoPlay) {
-        play();
+        void Promise.resolve().then(() => play());
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -203,7 +203,7 @@ function ConfettiParticle({
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     zIndex: 999
   },
   particle: {

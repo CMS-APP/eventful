@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Alert, LayoutChangeEvent, StyleSheet, View } from "react-native";
 
@@ -37,8 +37,10 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
   const emailRef = useRef(email);
   const passwordRef = useRef(password);
 
-  emailRef.current = email;
-  passwordRef.current = password;
+  useEffect(() => {
+    emailRef.current = email;
+    passwordRef.current = password;
+  }, [email, password]);
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [headerHeight, setHeaderHeight] = useState(0);

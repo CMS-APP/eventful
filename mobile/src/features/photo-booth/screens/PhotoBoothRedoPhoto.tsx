@@ -93,6 +93,7 @@ export function PhotoBoothRedoPhoto() {
     if (!isLayoutReady || !isFocused) return;
     if (Platform.OS !== "android") return;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- must run synchronously before the setTimeout below to force the camera unmount that precedes the remount workaround
     setCanRenderCamera(false);
     const timer = setTimeout(() => {
       setCameraSessionKey((prev) => prev + 1);

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -33,14 +33,11 @@ export function AccountPictureCameraScreen({
   const [facing, setFacing] = useState<CameraFacing>("front");
   const [photo, setPhoto] = useState<PhotoResult | null>(null);
   const [presentModal, setPresentModal] = useState(false);
-  const [isCameraReady, setIsCameraReady] = useState(false);
+  const [readyFacing, setReadyFacing] = useState<CameraFacing | null>(null);
   const [flash, setFlash] = useState(false);
 
   const flashMode = flash ? "on" : "off";
-
-  useEffect(() => {
-    setIsCameraReady(false);
-  }, [facing]);
+  const isCameraReady = readyFacing === facing;
 
   function flipCamera() {
     setFacing((prev) => (prev === "front" ? "back" : "front"));
@@ -75,7 +72,7 @@ export function AccountPictureCameraScreen({
             flash={flashMode}
             mirror={facing === "front"}
             onCameraReady={() => {
-              setIsCameraReady(true);
+              setReadyFacing(facing);
             }}
             style={cameraPreviewStyle}
           />

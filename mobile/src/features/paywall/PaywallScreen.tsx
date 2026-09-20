@@ -68,17 +68,19 @@ export function PaywallScreen({ navigation, route }: PaywallScreenProps) {
   );
 
   useEffect(() => {
-    if (type === "Premium") {
-      setSelectedSubscriptionType("Premium");
-      if (premium_subscriptions && premium_subscriptions.length > 0) {
-        setSelectedSubscription(premium_subscriptions[0]);
+    void Promise.resolve().then(() => {
+      if (type === "Premium") {
+        setSelectedSubscriptionType("Premium");
+        if (premium_subscriptions && premium_subscriptions.length > 0) {
+          setSelectedSubscription(premium_subscriptions[0]);
+        }
+      } else {
+        setSelectedSubscriptionType("Photo Booth");
+        if (photo_booth_subscriptions && photo_booth_subscriptions.length > 0) {
+          setSelectedSubscription(photo_booth_subscriptions[0]);
+        }
       }
-    } else {
-      setSelectedSubscriptionType("Photo Booth");
-      if (photo_booth_subscriptions && photo_booth_subscriptions.length > 0) {
-        setSelectedSubscription(photo_booth_subscriptions[0]);
-      }
-    }
+    });
   }, [type, premium_subscriptions, photo_booth_subscriptions]);
 
   const handleSubscribeToProduct = useCallback(async () => {

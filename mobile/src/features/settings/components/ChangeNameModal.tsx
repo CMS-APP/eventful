@@ -62,14 +62,16 @@ export function ChangeNameModal({
   useEffect(() => {
     if (!presentModal) return;
 
-    if (type === "name") {
-      setNewName(firstName);
-      setNewSecondName(lastName);
-    } else if (type === "username") {
-      setNewName(username);
-    }
-    setUsernameExists(null);
-    setHelperText("");
+    void Promise.resolve().then(() => {
+      if (type === "name") {
+        setNewName(firstName);
+        setNewSecondName(lastName);
+      } else if (type === "username") {
+        setNewName(username);
+      }
+      setUsernameExists(null);
+      setHelperText("");
+    });
   }, [presentModal, type, firstName, lastName, username]);
 
   const usernameExistsFunc = useCallback(async (username: string) => {
@@ -126,7 +128,7 @@ export function ChangeNameModal({
   }, [newName, newSecondName, type, username, usernameExistsFunc]);
 
   useEffect(() => {
-    checkNames();
+    void Promise.resolve().then(() => checkNames());
   }, [newName, newSecondName, type, checkNames]);
 
   const changeName = useCallback(async () => {
