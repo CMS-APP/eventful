@@ -10,24 +10,19 @@ export interface RevenueCatDailyStat {
 export interface RevenueCatStats {
   history: RevenueCatDailyStat[];
   activeSubscriptions: number | null;
-  mrrChangePercent: number | null;
-  activeSubscriptionsChangePercent: number | null;
 }
 
 export async function getRevenueCatStats(
   idToken: string,
-  days = 30,
+  days = 30
 ): Promise<RevenueCatStats> {
   const cacheKey = `subscriptions:revenueCatStats:${days}`;
   const cached = readLocalCache<RevenueCatStats>(cacheKey, HOUR_MS);
   if (cached) return cached;
 
-  const res = await fetch(
-    `${BACKEND_URL}/subscriptions?days=${days}`,
-    {
-      headers: { Authorization: `Bearer ${idToken}` },
-    }
-  );
+  const res = await fetch(`${BACKEND_URL}/subscriptions?days=${days}`, {
+    headers: { Authorization: `Bearer ${idToken}` }
+  });
 
   if (!res.ok) {
     throw new Error(`Failed to load subscription stats (${res.status})`);
@@ -39,13 +34,7 @@ export async function getRevenueCatStats(
     activeSubscriptions:
       typeof data.activeSubscriptions === "number"
         ? data.activeSubscriptions
-        : null,
-    mrrChangePercent:
-      typeof data.mrrChangePercent === "number" ? data.mrrChangePercent : null,
-    activeSubscriptionsChangePercent:
-      typeof data.activeSubscriptionsChangePercent === "number"
-        ? data.activeSubscriptionsChangePercent
-        : null,
+        : null
   };
   writeLocalCache(cacheKey, result);
   return result;
