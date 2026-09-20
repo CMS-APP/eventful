@@ -3,9 +3,9 @@ from firebase_admin import app_check
 from utils.https import response
 
 
-def verify_app_check(req):
+def verify_app_check(req) -> bool:
     if not (token := req.headers.get("X-Firebase-AppCheck")):
-        return response("Missing app token", status=400)
+        return False
 
     try:
         app_check.verify_token(token)

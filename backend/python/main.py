@@ -3,9 +3,8 @@ from firebase_functions import firestore_fn, https_fn, options, scheduler_fn
 from firebase_functions.options import set_global_options
 from firebase_functions.params import SecretParam
 
-from services.active_users import snapshot_active_users
-from services.algolia_user_search import handle_search_users_request
-from services.auth_http import (
+from sdk.users import snapshot_active_users, snapshot_total_users
+from services.auth import (
     handle_forgot_password_request,
     handle_send_verification_email_request,
 )
@@ -15,13 +14,13 @@ from services.followers import handle_sync_followers, handle_sync_following
 from services.gallery import handle_gallery_info_request
 from services.location import handle_location_search_request
 from services.notifications import handle_invite_written, handle_notification_written
-from services.revenuecat_stats import handle_subscriptions_request
 from services.stats import (
     handle_feature_usage_request,
     handle_funnel_request,
     handle_realtime_users_request,
 )
-from services.total_users import snapshot_total_users
+from services.subscriptions import handle_subscriptions_request
+from services.user_search import handle_search_users_request
 
 set_global_options(max_instances=10, region="europe-west2")
 initialize_app()

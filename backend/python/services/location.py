@@ -1,7 +1,7 @@
 from firebase_functions import https_fn
 
+from sdk.app_check import app_check_error, verify_app_check
 from sdk.google import details_search, places_search
-from services.app_check import app_check_error, verify_app_check
 from utils.https import format_request, response
 
 PLACES_API_BASE = "https://places.googleapis.com/v1"
@@ -33,13 +33,13 @@ def _pick_address_components(c):
 
 
 def handle_autocomplete_request(req, api_key):
-    if not (input_text := req.get("input", "")):
+    if not (inputText := req.get("input", "")):
         return response("Missing input", status=400)
-    if not (session_token := req.get("sessionToken", "")):
+    if not (sessionToken := req.get("sessionToken", "")):
         return response("Missing sessionToken", status=400)
 
     try:
-        res = places_search(input_text, session_token, api_key)
+        res = places_search(inputText, sessionToken, api_key)
         if not res.ok:
             print(f"Places autocomplete error: {res.status_code} {res.text}")
             return response("Places lookup failed", status=502)
@@ -53,13 +53,13 @@ def handle_autocomplete_request(req, api_key):
 
 
 def handle_place_details_request(req, api_key):
-    if not (place_id := req.get("placeId")):
+    if not (placeId := req.get("placeId")):
         return response("Missing placeId", status=400)
-    if not (session_token := req.get("sessionToken")):
+    if not (sessionToken := req.get("sessionToken")):
         return response("Missing sessionToken", status=400)
 
     try:
-        res = details_search(place_id, session_token, api_key)
+        res = details_search(placeId, sessionToken, api_key)
         if not res.ok:
             print(f"Place details error: {res.status_code} {res.text}")
             return response("Place details lookup failed", status=502)
@@ -74,7 +74,7 @@ def handle_place_details_request(req, api_key):
 
 
 def handle_location_search_request(req, api_key: str) -> https_fn.Response:
-    if verify_app_check(req):
+    if not verify_app_check(req):
         return app_check_error()
 
     req = format_request(req)

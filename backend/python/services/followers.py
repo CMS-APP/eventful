@@ -1,99 +1,77 @@
 from datetime import datetime, timezone
 
 from firebase_admin import firestore
-from firebase_functions import firestore_fn
 
-from services.user import get_user_info
+from sdk.firestore import query
+from sdk.users import get_user_info
 
 
-def handle_sync_following(
-    event: firestore_fn.Event[firestore_fn.Change[firestore_fn.DocumentSnapshot | None]],
-) -> None:
+def handle_sync_following(event) -> None:
     if event.data.after is not None:
         return
 
-    user_id = event.params["userId"]
-    follower_id = event.params["followerId"]
+    userId = event.params["userId"]
+    followerId = event.params["followerId"]
 
     db = firestore.client()
-    db.collection("following").document(follower_id).collection("following").document(
-        user_id
-    ).delete()
+    followerDoc = db.collection("following").document(followerId)
+    followerDoc.collection("following").document(userId).delete()
 
 
-def handle_sync_followers(
-    event: firestore_fn.Event[firestore_fn.Change[firestore_fn.DocumentSnapshot | None]],
-) -> None:
-    user_a = event.params["userA"]
-    user_b = event.params["userB"]
-    new_data = event.data.after.to_dict() if event.data.after else None
+def handle_sync_followers(event):
+    userA = event.params["userA"]
+    userB = event.params["userB"]
+    data = event.data.after.to_dict() if event.data.after else None
 
     db = firestore.client()
-    follower_doc_ref = (
-        db.collection("followers").document(user_b).collection("followers").document(user_a)
-    )
+    now = datetime.now(timezone.utc)
+    followerDoc = db.collection("following").document(userB).collection("followers").document(userA)
 
-    if not new_data:
-        follower_doc_ref.delete()
+    if not data:
+        followerDoc.delete()
         return
 
-    now = datetime.now(timezone.utc)
+    shouldSendNotification = True
+    shouldDeleteNotification = False
+    if data.get("status") == "inactive":
+        shouldSendNotification = False
+        shouldDeleteNotification = True
 
-    should_send_notification = True
-    should_delete_notification = False
-    if new_data.get("status") == "inactive":
-        should_send_notification = False
-        should_delete_notification = True
+    existingDoc = followerDoc.get()
+    if existingDoc.exists:
+        previousFollowedAt = (existingDoc.to_dict() or {}).get("followedAt")
+        if previousFollowedAt:
+            tenMinutes = 10 * 60
+            seconds = (now - previousFollowedAt).total_seconds()
+            if seconds < tenMinutes:
+                shouldSendNotification = False
+                print("Not sending notification: followed recently")
 
-    try:
-        existing_doc = follower_doc_ref.get()
-        if existing_doc.exists:
-            previous_followed_at = (existing_doc.to_dict() or {}).get("followedAt")
-            if previous_followed_at:
-                ten_minutes_seconds = 10 * 60
-                elapsed_seconds = (now - previous_followed_at).total_seconds()
-                if elapsed_seconds < ten_minutes_seconds:
-                    should_send_notification = False
-                    print("Not sending notification: followed recently")
-    except Exception as exc:
-        print(f"Error checking previous follow time: {exc}")
-
-    follower_doc_ref.set(
+    followerDoc.set(
         {
-            "status": new_data.get("status"),
-            "followedAt": new_data.get("followedAt"),
-            "unfollowedAt": new_data.get("unfollowedAt"),
+            "status": data.get("status"),
+            "followedAt": data.get("followedAt"),
+            "unfollowedAt": data.get("unfollowedAt"),
         },
         merge=True,
     )
 
-    if should_send_notification and new_data.get("status") == "active":
-        try:
-            followed_user_info = get_user_info(user_a) or {}
-            notification = {
-                "type": "follow",
-                "title": followed_user_info.get("name", ""),
-                "body": f"({followed_user_info.get('username', '')}) started following you.",
-                "timestamp": now,
-                "userId": user_b,
-                "senderId": user_a,
-                "read": False,
-            }
-            db.collection("notifications").add(notification)
-            print("Notification sent.")
-        except Exception as exc:
-            print(f"Error sending notification: {exc}")
+    if shouldSendNotification and data.get("status") == "active":
+        followedUserInfo = get_user_info(userA) or {}
+        notification = {
+            "type": "follow",
+            "title": followedUserInfo.get("name", ""),
+            "body": f"({followedUserInfo.get('username', '')}) started following you.",
+            "timestamp": now,
+            "userId": userB,
+            "senderId": userA,
+            "read": False,
+        }
+        db.collection("notifications").add(notification)
+        print("Notification sent.")
 
-    if should_delete_notification:
-        try:
-            query = (
-                db.collection("notifications")
-                .where("type", "==", "follow")
-                .where("userId", "==", user_b)
-                .where("senderId", "==", user_a)
-            )
-            for doc in query.stream():
-                doc.reference.delete()
-                print("Successfully deleted follow notification")
-        except Exception as exc:
-            print(f"Error deleting notification: {exc}")
+    if shouldDeleteNotification:
+        matches = query("notifications", type="follow", userId=userB, senderId=userA)
+        for doc in matches.stream():
+            doc.reference.delete()
+            print("Successfully deleted follow notification")

@@ -13,5 +13,7 @@ if [[ -s "$HOME/.nvm/nvm.sh" ]]; then
   nvm use 22 >/dev/null
 fi
 
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+
 cd "$ROOT"
 firebase emulators:start --only functions,hosting "$@" 2>&1 | tee emulate.log
