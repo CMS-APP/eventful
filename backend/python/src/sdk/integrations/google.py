@@ -33,9 +33,10 @@ def autocomplete(input_text: str, session_token: str, api_key: str) -> list[dict
     headers = {"Content-Type": "application/json", "X-Goog-Api-Key": api_key}
     payload = {"input": input_text, "sessionToken": session_token}
     res = post(url, headers=headers, json=payload)
-    if not res.ok or not (data := res.json()):
+    if not res.ok:
         raise RuntimeError(f"Places autocomplete error: {res.status_code} {res.text}")
 
+    data = res.json()
     return [suggestion for s in data.get("suggestions", []) if (suggestion := _pick_suggestion(s))]
 
 
