@@ -40,7 +40,7 @@ export function InviteButtons({
   }, [event]);
 
   useEffect(() => {
-    getGuestCount();
+    void Promise.resolve().then(() => getGuestCount());
   }, [getGuestCount]);
 
   return (

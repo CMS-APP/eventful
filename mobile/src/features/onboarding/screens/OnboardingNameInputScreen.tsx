@@ -157,11 +157,11 @@ export function OnboardingNameInputScreen({
   }
 
   useEffect(() => {
-    checkUsername();
+    void Promise.resolve().then(() => checkUsername());
   }, [username, checkUsername]);
 
   useEffect(() => {
-    _getLoginNames();
+    void Promise.resolve().then(() => _getLoginNames());
   }, []);
 
   return (

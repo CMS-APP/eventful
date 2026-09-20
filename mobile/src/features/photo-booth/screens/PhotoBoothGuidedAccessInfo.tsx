@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     position: "absolute"
   },
   image: {
-    ...StyleSheet.absoluteFillObject
+    ...StyleSheet.absoluteFill
   },
   imageContainer: {
     alignItems: "center",

@@ -1,6 +1,6 @@
 import Svg, { Path } from "react-native-svg";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Animated, Easing } from "react-native";
 
@@ -9,23 +9,26 @@ interface LoadingIndicatorProps {
 }
 
 export function LoadingIndicator({ size = 100 }: LoadingIndicatorProps) {
-  const strokeDashoffset = useRef(new Animated.Value(800)).current;
+  const [strokeDashoffset] = useState(() => new Animated.Value(800));
 
-  const animate = useCallback(() => {
-    Animated.sequence([
-      Animated.timing(strokeDashoffset, {
-        toValue: 0,
-        duration: 2000,
-        easing: Easing.inOut(Easing.ease),
-        useNativeDriver: false
-      }),
-      Animated.timing(strokeDashoffset, {
-        toValue: 800,
-        duration: 0,
-        useNativeDriver: false
-      })
-    ]).start(() => animate());
-  }, [strokeDashoffset]);
+  const animate = useCallback(
+    function loop() {
+      Animated.sequence([
+        Animated.timing(strokeDashoffset, {
+          toValue: 0,
+          duration: 2000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: false
+        }),
+        Animated.timing(strokeDashoffset, {
+          toValue: 800,
+          duration: 0,
+          useNativeDriver: false
+        })
+      ]).start(() => loop());
+    },
+    [strokeDashoffset]
+  );
 
   useEffect(() => {
     animate();

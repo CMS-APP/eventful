@@ -77,7 +77,7 @@ export function EventsListItem({
 
   useEffect(() => {
     if (userId) {
-      fetchHostInfo();
+      void Promise.resolve().then(() => fetchHostInfo());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [event, userId]);

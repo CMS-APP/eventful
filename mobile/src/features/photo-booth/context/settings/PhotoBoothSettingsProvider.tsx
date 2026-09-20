@@ -137,7 +137,7 @@ export function PhotoBoothSettingsProvider({
   }, [userId, premium]);
 
   useEffect(() => {
-    loadConfig();
+    void Promise.resolve().then(() => loadConfig());
   }, [loadConfig]);
 
   const saveConfig = useCallback(async () => {

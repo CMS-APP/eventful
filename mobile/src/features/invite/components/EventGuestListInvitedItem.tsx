@@ -37,7 +37,7 @@ export function EventGuestListInvitedItem({
   }, [user]);
 
   useEffect(() => {
-    fetchUserImage();
+    void Promise.resolve().then(() => fetchUserImage());
   }, [fetchUserImage]);
 
   const viewProfile = useCallback(() => {

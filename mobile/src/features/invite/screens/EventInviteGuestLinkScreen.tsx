@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Alert, Clipboard, StyleSheet, View } from "react-native";
 
@@ -48,13 +48,9 @@ export function EventInviteGuestLinkScreen({
   const [enableLinkInvite, setEnableLinkInvite] = useState<boolean | undefined>(
     undefined
   );
-  const [acceptNum, setAcceptNum] = useState(0);
-  const [maybeNum, setMaybeNum] = useState(0);
-  const [declineNum, setDeclineNum] = useState(0);
   const [selectedButton, setSelectedButton] = useState("accept");
   const [showDisclaimerModal, setShowDisclaimerModal] = useState(false);
   const [linkList, setLinkList] = useState(route.params?.linkList || []);
-  const [userList, setUserList] = useState(linkList);
   const userId = useSelector((state: UserState) => state.uid);
 
   const name =
@@ -112,7 +108,7 @@ export function EventInviteGuestLinkScreen({
     setLinkList(linkUsers);
   }
 
-  const getUserNumbers = useCallback(() => {
+  const { acceptNum, maybeNum, declineNum } = useMemo(() => {
     const acceptCount = linkList.filter(
       (user: UserInvite) => user.invite.response === "accept"
     ).length;
@@ -122,37 +118,35 @@ export function EventInviteGuestLinkScreen({
     const declineCount = linkList.filter(
       (user: UserInvite) => user.invite.response === "decline"
     ).length;
-    setAcceptNum(acceptCount);
-    setMaybeNum(maybeCount);
-    setDeclineNum(declineCount);
+    return {
+      acceptNum: acceptCount,
+      maybeNum: maybeCount,
+      declineNum: declineCount
+    };
   }, [linkList]);
 
-  const getUsers = useCallback(() => {
+  const userList = useMemo(() => {
     if (selectedButton === "accept") {
-      setUserList(
-        linkList.filter((user: UserInvite) => user.invite.response === "accept")
+      return linkList.filter(
+        (user: UserInvite) => user.invite.response === "accept"
       );
     } else if (selectedButton === "maybe") {
-      setUserList(
-        linkList.filter((user: UserInvite) => user.invite.response === "maybe")
+      return linkList.filter(
+        (user: UserInvite) => user.invite.response === "maybe"
       );
     } else if (selectedButton === "decline") {
-      setUserList(
-        linkList.filter(
-          (user: UserInvite) => user.invite.response === "decline"
-        )
+      return linkList.filter(
+        (user: UserInvite) => user.invite.response === "decline"
       );
     }
+    return [];
   }, [selectedButton, linkList]);
 
   useEffect(() => {
-    setEnableLinkInvite(event?.eventLinkEnabled);
+    void Promise.resolve().then(() =>
+      setEnableLinkInvite(event?.eventLinkEnabled)
+    );
   }, [event?.eventLinkEnabled]);
-
-  useEffect(() => {
-    getUserNumbers();
-    getUsers();
-  }, [linkList, selectedButton, getUserNumbers, getUsers]);
 
   if (!event) {
     return null;

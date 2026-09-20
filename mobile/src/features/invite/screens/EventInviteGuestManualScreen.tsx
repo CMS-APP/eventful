@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
@@ -36,11 +36,7 @@ export function EventInviteGuestManualScreen({
 }: EventInviteGuestManualScreenProps) {
   const event = route.params?.event;
   const [guestList, setGuestList] = useState<Guest[]>(event?.guestList || []);
-  const [acceptNum, setAcceptNum] = useState(0);
-  const [maybeNum, setMaybeNum] = useState(0);
-  const [declineNum, setDeclineNum] = useState(0);
   const [selectedButton, setSelectedButton] = useState("accept");
-  const [sortedGuestList, setSortedGuestList] = useState<UserInvite[]>([]);
   const [newGuest, setNewGuest] = useState("");
 
   const userId = useSelector((state: UserState) => state.uid);
@@ -116,7 +112,7 @@ export function EventInviteGuestManualScreen({
     return () => clearTimeout(timeoutId);
   }, [guestList, event]);
 
-  useEffect(() => {
+  const { acceptNum, maybeNum, declineNum, sortedGuestList } = useMemo(() => {
     let finalGuestList: Guest[] = [];
 
     const acceptCount = guestList.filter(
@@ -143,35 +139,36 @@ export function EventInviteGuestManualScreen({
       );
     }
 
-    setAcceptNum(acceptCount);
-    setMaybeNum(maybeCount);
-    setDeclineNum(declineCount);
+    const sortedGuestList = finalGuestList.map((guest: Guest) => {
+      const user: User = {
+        uid: guest.id,
+        name: guest.name,
+        username: "",
+        email: "",
+        emailVerified: false,
+        pushTokens: [],
+        firstName: "",
+        lastName: "",
+        searchName: guest.name
+      };
 
-    setSortedGuestList(
-      finalGuestList.map((guest: Guest) => {
-        const user: User = {
-          uid: guest.id,
-          name: guest.name,
-          username: "",
-          email: "",
-          emailVerified: false,
-          pushTokens: [],
-          firstName: "",
-          lastName: "",
-          searchName: guest.name
-        };
+      const invite: Invite = {
+        id: guest.id,
+        type: "manual",
+        response: guest.response,
+        recipient: guest.id,
+        sender: userId,
+        eventId: event?.id || ""
+      };
+      return { user, invite };
+    });
 
-        const invite: Invite = {
-          id: guest.id,
-          type: "manual",
-          response: guest.response,
-          recipient: guest.id,
-          sender: userId,
-          eventId: event?.id || ""
-        };
-        return { user, invite };
-      })
-    );
+    return {
+      acceptNum: acceptCount,
+      maybeNum: maybeCount,
+      declineNum: declineCount,
+      sortedGuestList
+    };
   }, [guestList, selectedButton, userId, event]);
 
   return (

@@ -5,12 +5,12 @@ import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/P
 
 import { CustomiseCollageItem } from "./CustomiseCollageItem";
 
+function CollageBox() {
+  return <View style={styles.collageBox} />;
+}
+
 export function CustomiseCollage() {
   const { collageStyle, setCollageStyle } = usePhotoBoothSettings();
-
-  function CollageBox() {
-    return <View style={styles.collageBox} />;
-  }
 
   return (
     <View style={styles.container}>

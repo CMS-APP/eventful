@@ -14,8 +14,8 @@ import {
 } from "@/app/context/photoBoothUpload/PhotoBoothUploadContext";
 import { trackPhotoBoothPhotosUploaded } from "@/services/analytics/events";
 import { uploadPhotosToCloud } from "@/services/photo-booth/cloudPhotos";
-import { GalleryPhoto } from "@/types/photoBoothGallery";
 import { UploadQueueItem } from "@/types/PhotoBoothUpload";
+import { GalleryPhoto } from "@/types/photoBoothGallery";
 import { generateUUID } from "@/utils/uuid";
 
 const CLEAR_DELAY_MS = 2000;

@@ -26,6 +26,7 @@ export function BudgetMaxEditModal({
 
   useEffect(() => {
     if (!visible) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- resets editable form field when the modal opens; state must stay mutable for user input, so it can't be derived at render
     setAmountText(budgetMaximum ? String(budgetMaximum) : "");
   }, [visible, budgetMaximum]);
 

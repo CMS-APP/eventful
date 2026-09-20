@@ -52,10 +52,13 @@ export function EventInviteGuestItem({
   const removeUserFromEvent = useCallback(async () => {
     setProcessing(true);
     try {
-      event.invited = event.invited.filter(
-        (invited: string) => invited !== guestId
-      );
-      await updateEventInDatabase(event);
+      const updatedEvent: Event = {
+        ...event,
+        invited: event.invited.filter(
+          (invited: string) => invited !== guestId
+        )
+      };
+      await updateEventInDatabase(updatedEvent);
       setInvited(false);
       await deleteInviteFromDatabase(inviteId ?? "");
       await deleteUpdateNotification(userId, guestId, event.id);

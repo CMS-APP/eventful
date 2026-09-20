@@ -41,11 +41,12 @@ export function AddActivityModal({
   const isEditing = !!initialActivity;
 
   const initialStart = useMemo(() => {
-    if (initialActivity?.startTime)
-      return parseDatabaseDate(initialActivity.startTime);
-    if (presetStartTime) return presetStartTime;
-    return parseDatabaseDate(event.date);
-  }, [event.date, initialActivity?.startTime, presetStartTime]);
+    return initialActivity?.startTime
+      ? parseDatabaseDate(initialActivity.startTime)
+      : presetStartTime
+        ? presetStartTime
+        : parseDatabaseDate(event.date);
+  }, [event.date, initialActivity, presetStartTime]);
 
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
@@ -57,11 +58,13 @@ export function AddActivityModal({
 
   useEffect(() => {
     if (!visible) return;
-    setName(initialActivity?.name ?? presetTitle ?? "");
-    setLocation(initialActivity?.location ?? "");
-    setNotes(initialActivity?.notes ?? "");
-    setStartTime(initialStart);
-    setDurationMinutesText(String(initialActivity?.durationMinutes || 60));
+    void Promise.resolve().then(() => {
+      setName(initialActivity?.name ?? presetTitle ?? "");
+      setLocation(initialActivity?.location ?? "");
+      setNotes(initialActivity?.notes ?? "");
+      setStartTime(initialStart);
+      setDurationMinutesText(String(initialActivity?.durationMinutes || 60));
+    });
   }, [visible, initialActivity, presetTitle, initialStart]);
 
   const handleSave = () => {

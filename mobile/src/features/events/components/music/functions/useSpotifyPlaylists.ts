@@ -28,6 +28,7 @@ export function useSpotifyPlaylists({
   );
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- syncs locally-editable added-playlists state when the source event prop changes; state must stay mutable for optimistic add/remove, so it can't be derived at render
     setAddedPlaylists(event.playlists ?? []);
   }, [event.playlists]);
 

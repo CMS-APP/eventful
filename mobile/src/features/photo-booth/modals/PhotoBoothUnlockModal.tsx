@@ -24,6 +24,7 @@ export function PhotoBoothUnlockModal({
   setLockPin
 }: PhotoBoothUnlockModalProps) {
   const [input, setInput] = useState("");
+  const [prevPresentModal, setPrevPresentModal] = useState(presentModal);
 
   const unlockButtonAction = useCallback(() => {
     if (lockPin.length !== 4) {
@@ -43,17 +44,19 @@ export function PhotoBoothUnlockModal({
   }, [lockPin, input, setLockPin, setInput, setLocked, setPresentModal]);
 
   useEffect(() => {
-    if (input.length === 4) {
+    if (input.length !== 4) return;
+    void Promise.resolve().then(() => {
       Keyboard.dismiss();
       unlockButtonAction();
-    }
+    });
   }, [input, unlockButtonAction]);
 
-  useEffect(() => {
+  if (presentModal !== prevPresentModal) {
+    setPrevPresentModal(presentModal);
     if (presentModal) {
       setInput("");
     }
-  }, [presentModal]);
+  }
 
   return (
     <ModalView

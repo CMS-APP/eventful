@@ -47,7 +47,7 @@ export function AlertModal({
     >
       <View style={styles.backdrop}>
         <TouchableWithoutFeedback onPress={onDismiss}>
-          <View style={StyleSheet.absoluteFillObject} />
+          <View style={StyleSheet.absoluteFill} />
         </TouchableWithoutFeedback>
 
         <View style={[styles.sheet, { paddingBottom: bottom + 16 }]}>

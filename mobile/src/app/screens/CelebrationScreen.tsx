@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Animated,
@@ -33,8 +33,8 @@ export function CelebrationScreen({
 }: CelebrationScreenProps) {
   const type = (route.params as { type: string })?.type || "premium";
   const width = useAppDimensions().screenWidth;
-  const scaleValue = useRef(new Animated.Value(0)).current;
-  const fadeValue = useRef(new Animated.Value(0)).current;
+  const [scaleValue] = useState(() => new Animated.Value(0));
+  const [fadeValue] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
     Animated.parallel([

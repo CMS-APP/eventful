@@ -41,7 +41,9 @@ export function useEventEditor(seedEvent: Event): UseEventEditorResult {
   const eventRef = useRef<Event>(seedEvent);
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  eventRef.current = event;
+  useEffect(() => {
+    eventRef.current = event;
+  }, [event]);
 
   useFocusEffect(
     useCallback(() => {

@@ -51,7 +51,9 @@ interface LocationSearchProps {
 }
 
 export function LocationSearch({ event, setEvent }: LocationSearchProps) {
-  const initialAddress = useRef(normalizeEventAddress(event.address)).current;
+  const [initialAddress] = useState(() =>
+    normalizeEventAddress(event.address)
+  );
 
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
@@ -75,10 +77,13 @@ export function LocationSearch({ event, setEvent }: LocationSearchProps) {
   const user = getAuth().currentUser;
   const sessionTokenRef = useRef(generateUUID());
   const eventRef = useRef(event);
-  eventRef.current = event;
   const fieldSaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
+
+  useEffect(() => {
+    eventRef.current = event;
+  }, [event]);
 
   useEffect(() => {
     return () => {
@@ -106,43 +111,51 @@ export function LocationSearch({ event, setEvent }: LocationSearchProps) {
   }, []);
 
   useEffect(() => {
-    if (!query.trim() || !user) {
-      setSuggestions([]);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
     let cancelled = false;
+    let debounceTimeout: ReturnType<typeof setTimeout> | undefined;
 
-    const debounceTimeout = setTimeout(async () => {
+    void Promise.resolve().then(() => {
       if (cancelled) return;
 
-      try {
-        const results = await searchPlaces(
-          query,
-          sessionTokenRef.current,
-          user
-        );
-        if (!cancelled) {
-          setSuggestions(results);
-          trackEventLocationSearched();
-        }
-      } catch (error) {
-        if (!cancelled) {
-          log("Error Loading Locations " + error, "error");
-          showErrorToast("Error Loading Locations");
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+      if (!query.trim() || !user) {
+        setSuggestions([]);
+        setLoading(false);
+        return;
       }
-    }, SEARCH_DEBOUNCE_MS);
+
+      setLoading(true);
+
+      debounceTimeout = setTimeout(async () => {
+        if (cancelled) return;
+
+        try {
+          const results = await searchPlaces(
+            query,
+            sessionTokenRef.current,
+            user
+          );
+          if (!cancelled) {
+            setSuggestions(results);
+            trackEventLocationSearched();
+          }
+        } catch (error) {
+          if (!cancelled) {
+            log("Error Loading Locations " + error, "error");
+            showErrorToast("Error Loading Locations");
+          }
+        } finally {
+          if (!cancelled) {
+            setLoading(false);
+          }
+        }
+      }, SEARCH_DEBOUNCE_MS);
+    });
 
     return () => {
       cancelled = true;
-      clearTimeout(debounceTimeout);
+      if (debounceTimeout) {
+        clearTimeout(debounceTimeout);
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, user?.uid]);

@@ -38,6 +38,7 @@ export function BudgetItemModal({
 
   useEffect(() => {
     if (!visible) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- resets editable form fields when the modal opens; state must stay mutable for user input, so it can't be derived at render
     setName(initialItem?.item ?? "");
     setCostText(initialItem ? String(initialItem.cost) : "");
     setQuantityText(String(initialItem?.quantity ?? 1));

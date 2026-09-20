@@ -1,6 +1,6 @@
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   Animated,
@@ -30,7 +30,7 @@ export function PhotoBoothUploadBar({
   visible,
   onDismiss
 }: PhotoBoothUploadBarProps) {
-  const animation = useRef(new Animated.Value(0)).current;
+  const [animation] = useState(() => new Animated.Value(0));
   const insets = useSafeAreaInsets();
 
   useEffect(() => {

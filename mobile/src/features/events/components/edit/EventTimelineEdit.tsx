@@ -53,6 +53,7 @@ export function EventTimelineEdit({ event, setEvent }: EventTimelineEditProps) {
         ? event.timelineList
         : Array(TIMELINE_TEXT_LIST.length).fill(false);
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reinitializes locally-editable timeline state when the source event prop changes; state must stay mutable for toggling, so it can't be derived at render
     setTimelineList(newTimelineList);
     setPercentageComplete(calculatePercentageComplete(newTimelineList));
     isInitializedRef.current = true;

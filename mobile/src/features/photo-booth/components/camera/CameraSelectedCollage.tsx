@@ -6,6 +6,45 @@ import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/P
 
 import { CustomiseCollageModal } from "./CustomiseCollageModal";
 
+function CollageBox() {
+  return <View style={styles.collageBox} />;
+}
+
+function SquareCollage() {
+  return (
+    <View style={styles.collageContainer}>
+      <View style={styles.collageRow}>
+        <CollageBox />
+        <CollageBox />
+      </View>
+      <View style={styles.collageRow}>
+        <CollageBox />
+        <CollageBox />
+      </View>
+    </View>
+  );
+}
+
+function RowCollage() {
+  return (
+    <View style={styles.collageRow}>
+      <CollageBox />
+      <CollageBox />
+      <CollageBox />
+    </View>
+  );
+}
+
+function ColumnCollage() {
+  return (
+    <View style={styles.collageColumn}>
+      <CollageBox />
+      <CollageBox />
+      <CollageBox />
+    </View>
+  );
+}
+
 export function CameraSelectedCollage({
   show,
   setShow
@@ -20,45 +59,6 @@ export function CameraSelectedCollage({
   }
 
   const isColumnStyle = collageStyle === "column";
-
-  function CollageBox() {
-    return <View style={styles.collageBox} />;
-  }
-
-  function SquareCollage() {
-    return (
-      <View style={styles.collageContainer}>
-        <View style={styles.collageRow}>
-          <CollageBox />
-          <CollageBox />
-        </View>
-        <View style={styles.collageRow}>
-          <CollageBox />
-          <CollageBox />
-        </View>
-      </View>
-    );
-  }
-
-  function RowCollage() {
-    return (
-      <View style={styles.collageRow}>
-        <CollageBox />
-        <CollageBox />
-        <CollageBox />
-      </View>
-    );
-  }
-
-  function ColumnCollage() {
-    return (
-      <View style={styles.collageColumn}>
-        <CollageBox />
-        <CollageBox />
-        <CollageBox />
-      </View>
-    );
-  }
 
   const textBlock = (
     <View

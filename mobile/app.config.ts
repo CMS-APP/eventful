@@ -15,8 +15,8 @@ export default ({ config }: ConfigContext) => {
     slug: "Eventful",
     scheme: "eventful",
     owner: "chrissharp",
-    version: "6.13.0",
-    runtimeVersion: "6.13.0",
+    version: "6.13.1",
+    runtimeVersion: "6.13.1",
     orientation: "portrait",
     icon: "./src/assets/logos/eventful-logo.png",
     userInterfaceStyle: "light",
@@ -28,7 +28,7 @@ export default ({ config }: ConfigContext) => {
     android: {
       package: bundleId,
       icon: "./src/assets/logos/eventful-logo-android.png",
-      versionCode: 366,
+      versionCode: 368,
       softwareKeyboardLayoutMode: "pan",
       permissions: [
         "android.permission.READ_EXTERNAL_STORAGE",
@@ -44,7 +44,7 @@ export default ({ config }: ConfigContext) => {
     ios: {
       bundleIdentifier: bundleId,
       icon: "./src/assets/logos/eventful-logo.png",
-      buildNumber: "372",
+      buildNumber: "374",
       supportsTablet: true,
       appleTeamId: "4LMZHG2P3T",
       infoPlist: {
@@ -74,6 +74,10 @@ export default ({ config }: ConfigContext) => {
       "@react-native-firebase/auth",
       "@react-native-firebase/crashlytics",
       "@react-native-google-signin/google-signin",
+      "@react-native-community/datetimepicker",
+      "expo-image",
+      "expo-splash-screen",
+      "expo-status-bar",
       [
         "expo-font",
         {
@@ -147,6 +151,7 @@ export default ({ config }: ConfigContext) => {
       ],
       "@bacons/apple-targets",
       "./plugins/withBoringSSLHeaderFix"
+      
     ],
     extra: {
       appVariant: IS_DEV ? "development" : "production",

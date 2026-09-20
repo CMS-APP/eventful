@@ -23,6 +23,14 @@ export function PhotoBoothLockModal({
   setLockPin
 }: PhotoBoothLockModalProps) {
   const [input, setInput] = useState("");
+  const [prevPresentModal, setPrevPresentModal] = useState(presentModal);
+
+  if (presentModal !== prevPresentModal) {
+    setPrevPresentModal(presentModal);
+    if (presentModal) {
+      setInput("");
+    }
+  }
 
   useEffect(() => {
     if (input.length === 4) {
@@ -42,12 +50,6 @@ export function PhotoBoothLockModal({
     setPresentModal(false);
     trackPhotoBoothLocked();
   }
-
-  useEffect(() => {
-    if (presentModal) {
-      setInput("");
-    }
-  }, [presentModal]);
 
   return (
     <ModalView

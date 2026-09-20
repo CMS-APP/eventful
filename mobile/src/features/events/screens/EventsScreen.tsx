@@ -29,6 +29,7 @@ export function EventsScreen({ navigation, route }: EventsScreenProps) {
 
   useEffect(() => {
     if (route.params?.newEvent) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- opens the create-event modal in response to a navigation param; showModal is also toggled by user interaction, so it can't be derived at render
       setShowModal(true);
     }
   }, [route]);

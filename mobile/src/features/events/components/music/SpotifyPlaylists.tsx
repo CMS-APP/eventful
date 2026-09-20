@@ -51,8 +51,10 @@ export function SpotifyPlaylists({ event, setEvent }: SpotifyPlaylistsProps) {
       spotifyData.spotifyAccessToken &&
       new Date(spotifyData.spotifyExpirationDate) > new Date()
     ) {
-      getPlaylists(spotifyData.spotifyAccessToken);
-      setSignedIn(true);
+      void Promise.resolve().then(() => {
+        getPlaylists(spotifyData.spotifyAccessToken);
+        setSignedIn(true);
+      });
     }
   }, [spotifyData, getPlaylists]);
 

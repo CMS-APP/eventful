@@ -11,6 +11,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { PanSnapGestureRoot } from "@/app/context/panSnap/PanSnapGestureRoot";
 import { PanSnapScrollHint } from "@/app/context/panSnap/PanSnapScrollHint";
 import { useAppDimensions } from "@/app/hooks/useAppDimensions";
+import type { PhotoBoothStackNavigation } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { Text } from "@/design-system/components/text/Text";
 import { card } from "@/design-system/tokens/card";
@@ -24,7 +25,6 @@ import { PhotoBoothGridCollage } from "../components/result/PhotoBoothGridCollag
 import { PhotoBoothResultsButtons } from "../components/result/PhotoBoothResultsButtons";
 import { PhotoBoothRowCollage } from "../components/result/PhotoBoothRowCollage";
 import { filters } from "../filters";
-import type { PhotoBoothStackNavigation } from "../photoBoothStackParams";
 
 export function PhotoBoothResult() {
   const { setPhotos } = usePhotoBoothCamera();

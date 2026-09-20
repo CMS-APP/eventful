@@ -77,7 +77,9 @@ export function EventInviteUserItem({
   useEffect(() => {
     if (!user || !appUser) return;
 
-    getInviteId();
+    void Promise.resolve().then(() => {
+      getInviteId();
+    });
   }, [user, appUser, event, getInviteId]);
 
   const handlePress = useCallback(() => {
@@ -92,10 +94,13 @@ export function EventInviteUserItem({
   const deleteGuest = useCallback(async () => {
     if (invite.type === "app") {
       try {
-        event.invited = event.invited.filter(
-          (invited: string) => invited !== user.uid
-        );
-        await updateEventInDatabase(event);
+        const updatedEvent: Event = {
+          ...event,
+          invited: event.invited.filter(
+            (invited: string) => invited !== user.uid
+          )
+        };
+        await updateEventInDatabase(updatedEvent);
         await deleteInviteFromDatabase(inviteId ?? "");
       } catch (error) {
         log(`Error Removing User: ${error}`, "error");

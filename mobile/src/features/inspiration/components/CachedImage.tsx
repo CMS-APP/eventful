@@ -31,11 +31,6 @@ export function CachedImage({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  useEffect(() => {
-    loadCachedImage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [photo.uri]);
-
   const loadCachedImage = async () => {
     try {
       setLoading(true);
@@ -79,6 +74,13 @@ export function CachedImage({
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    void Promise.resolve().then(() => {
+      loadCachedImage();
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [photo.uri]);
 
   if (loading) {
     return (
