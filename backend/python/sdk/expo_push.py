@@ -39,7 +39,7 @@ def send_expo_notifications(
 
     messages = []
     for token in valid_tokens:
-        message = {"to": token}
+        message: dict[str, str | int] = {"to": token}
         if title is not None:
             message["title"] = title
         if body is not None:

@@ -1,16 +1,6 @@
-from firebase_functions import https_fn
-
 from sdk.algolia import search_users
 from sdk.app_check import app_check_error, verify_app_check
 from utils.https import format_request, response
-
-
-def _parse_positive_int(value, fallback: int) -> int:
-    try:
-        parsed = int(value)
-        return parsed if parsed > 0 else fallback
-    except (TypeError, ValueError):
-        return fallback
 
 
 def _pick_user_fields(hit: dict) -> dict:
@@ -28,11 +18,6 @@ def _is_searchable_user(user: dict) -> bool:
     name = (user.get("name") or "").strip()
     username = (user.get("username") or "").strip()
     return bool(name or username)
-
-
-def _string_param(req: https_fn.Request, key: str, body: dict) -> str:
-    value = req.args.get(key, "") if req.method == "GET" else body.get(key, "")
-    return str(value or "").strip()
 
 
 def handle_search_users_request(req, algolia_app_id, algolia_api_key):

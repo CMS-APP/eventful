@@ -3,7 +3,7 @@ from typing import cast
 
 from firebase_admin import auth, firestore
 from google.cloud.firestore import SERVER_TIMESTAMP
-from google.cloud.firestore_v1.aggregation import AggregationResult
+from google.cloud.firestore_v1.base_aggregation import AggregationResult
 
 from sdk.firestore import get
 from utils.https import response
