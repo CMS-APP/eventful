@@ -41,12 +41,13 @@ def handle_forgot_password_request(req, recaptchaSecret, mjApiKey, mjSecret):
     if err := require_method(req, "POST"):
         return err
 
+    hasAppCheck = verify_app_check(req)
     req = format_request(req)
     email = req.get("email", "")
     if not email:
         return response("Missing required fields", 400)
 
-    if not verify_app_check(req):
+    if not hasAppCheck:
         recaptchaToken = req.get("recaptchaToken", "")
         if not recaptchaToken:
             return response("Missing required fields", 400)
