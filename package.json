@@ -2,8 +2,9 @@
   "name": "eventful",
   "private": true,
   "scripts": {
-    "web": "npm --prefix web run dev",
+    "backend": "cd backend && bash ./emulate.sh",
     "mobile": "cd mobile && npx expo",
+    "web": "npm --prefix web run dev",
     "ios:dev": "npm --prefix mobile run ios:dev",
     "ios:build": "npm --prefix mobile run ios:build",
     "android:dev": "npm --prefix mobile run android:dev",

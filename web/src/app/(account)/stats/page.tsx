@@ -22,10 +22,16 @@ import {
 
 import { useEffect, useMemo, useState } from "react";
 
-import { checkAdmin } from "@/services/firebase/user";
 import Loading from "@/components/Loading";
-import UnauthorizedAccess from "@/features/stats/components/UnauthorizedAccess";
 import { useUser } from "@/contexts/UserContext";
+import UnauthorizedAccess from "@/features/stats/components/UnauthorizedAccess";
+import {
+  type ActiveUserStatsPoint,
+  type TotalUserStatsPoint,
+  getActiveUserStatsHistory,
+  getTotalUser,
+  getTotalUserStatsHistory
+} from "@/features/stats/services/database";
 import {
   type FeatureUsageDomain,
   type FeatureUsageStat,
@@ -38,14 +44,8 @@ import {
   type RevenueCatDailyStat,
   getRevenueCatStats
 } from "@/lib/subscriptions";
+import { checkAdmin } from "@/services/firebase/user";
 
-import {
-  type ActiveUserStatsPoint,
-  type TotalUserStatsPoint,
-  getActiveUserStatsHistory,
-  getTotalUser,
-  getTotalUserStatsHistory
-} from "@/features/stats/services/database";
 import "./page.css";
 
 const GROWTH_COLOR = "#199e70";
