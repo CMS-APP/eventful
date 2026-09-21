@@ -35,6 +35,10 @@
         "function": { "functionId": "respondToEvent", "region": "europe-west2" }
       },
       {
+        "source": "/eventGuestList",
+        "function": { "functionId": "eventGuestList", "region": "europe-west2" }
+      },
+      {
         "source": "/appCheckToken",
         "function": { "functionId": "appCheckToken", "region": "europe-west2" }
       },

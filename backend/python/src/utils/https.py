@@ -21,3 +21,8 @@ def require_method(req, method: str) -> https_fn.Response | None:
     if req.method != method:
         return response("Method Not Allowed", status=405)
     return None
+
+
+def get_bearer_token(req) -> str | None:
+    authHeader = req.headers.get("Authorization", "")
+    return authHeader[7:] if authHeader.startswith("Bearer ") else None

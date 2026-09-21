@@ -11,6 +11,7 @@ from src.functions.http_handlers import (
     analyticsFeatureUsage,
     analyticsFunnel,
     analyticsRealtimeUsers,
+    eventGuestList,
     forgotPassword,
     galleryInfo,
     locationSearch,

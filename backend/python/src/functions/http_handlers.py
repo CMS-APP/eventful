@@ -16,6 +16,7 @@ from src.services.auth import (
     handle_forgot_password_request,
     handle_send_verification_email_request,
 )
+from src.services.event_guest_list import handle_event_guest_list_request
 from src.services.event_responses import handle_respond_to_event_request
 from src.services.gallery import handle_gallery_info_request
 from src.services.location import handle_location_search_request
@@ -61,6 +62,11 @@ def subscriptionStats(req):
 @https_fn.on_request(cors=CORS, secrets=[RECAPTCHA_SECRET])
 def respondToEvent(req):
     return handle_respond_to_event_request(req, RECAPTCHA_SECRET)
+
+
+@https_fn.on_request(cors=CORS)
+def eventGuestList(req):
+    return handle_event_guest_list_request(req)
 
 
 @https_fn.on_request(cors=CORS, secrets=[MJ_API_KEY, MJ_SECRET])

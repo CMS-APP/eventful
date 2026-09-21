@@ -6,7 +6,7 @@ from google.cloud.firestore import SERVER_TIMESTAMP
 from google.cloud.firestore_v1.base_aggregation import AggregationResult
 
 from src.sdk.firebase.firestore import get
-from src.utils.https import response
+from src.utils.https import get_bearer_token, response
 
 TOTAL_USER_STATS_COLLECTION = "totalUserStats"
 
@@ -75,8 +75,7 @@ def admin_auth_error():
 
 
 def is_admin(req):
-    auth_header = req.headers.get("Authorization", "")
-    if not (token := auth_header[7:] if auth_header.startswith("Bearer ") else None):
+    if not (token := get_bearer_token(req)):
         return False
 
     try:
