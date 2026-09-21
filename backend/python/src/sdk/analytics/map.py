@@ -64,6 +64,12 @@ FEATURE_DOMAINS = [
 FUNNELS = {
     "onboarding": [
         {"id": "downloads", "label": "Downloads", "event": "first_open"},
+        {
+            "id": "welcome_viewed",
+            "label": "Welcome screen viewed",
+            "event": "screen_view",
+            "screen_name": "Welcome",
+        },
         {"id": "signup", "label": "Signup", "event": "auth_sign_up"},
         {
             "id": "onboarding_started",
