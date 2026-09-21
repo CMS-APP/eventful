@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 
 import { FIRESTORE_DB } from "@/services/firebase/firebase";
-import { DAY_MS, HOUR_MS, readLocalCache, writeLocalCache } from "@/lib/localCache";
+import { HOUR_MS, readLocalCache, writeLocalCache } from "@/lib/localCache";
 
 export interface FeedbackItem {
   id: string;
@@ -176,7 +176,7 @@ export async function getTotalUserStatsHistory(): Promise<
   TotalUserStatsPoint[]
 > {
   const cacheKey = "stats:totalUserStatsHistory";
-  const cached = readLocalCache<TotalUserStatsPoint[]>(cacheKey, DAY_MS);
+  const cached = readLocalCache<TotalUserStatsPoint[]>(cacheKey, HOUR_MS);
   if (cached) return cached;
 
   try {
@@ -205,7 +205,7 @@ export async function getActiveUserStatsHistory(
   maxDays = 90
 ): Promise<ActiveUserStatsPoint[]> {
   const cacheKey = `stats:activeUserStatsHistory:${maxDays}`;
-  const cached = readLocalCache<ActiveUserStatsPoint[]>(cacheKey, DAY_MS);
+  const cached = readLocalCache<ActiveUserStatsPoint[]>(cacheKey, HOUR_MS);
   if (cached) return cached;
 
   try {
