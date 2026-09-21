@@ -113,6 +113,7 @@ export const Confetti = forwardRef<ConfettiHandle, ConfettiProps>(
           }
         }
       );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [count, palette, onComplete]);
 
     useImperativeHandle(ref, () => ({ play }), [play]);

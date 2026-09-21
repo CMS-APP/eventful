@@ -7,7 +7,7 @@ import { StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { Entypo, FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome6 } from "@expo/vector-icons";
 
 import { EventInviteStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
@@ -107,22 +107,19 @@ export function EventInviteHomeScreen({
               }}
               hitSlop={getHitSlop("small")}
             >
-              <FontAwesome5 name="arrow-left" size={22} color={colors.black} />
+              <FontAwesome6 name="arrow-left" size={22} color={colors.black} />
             </TouchableOpacity>
 
-            <View style={styles.envelopeCircle}>
-              <FontAwesome5 name="envelope" size={26} color={colors.primary} />
-            </View>
+            <Text
+              type="caption"
+              color={colors.gray}
+              style={styles.eventText}
+              center
+            >
+              You Are Invited To
+            </Text>
           </View>
 
-          <Text
-            type="caption"
-            color={colors.gray}
-            style={styles.eventText}
-            center
-          >
-            You Are Invited To
-          </Text>
           <Text
             type="title"
             color={colors.primary}
@@ -143,7 +140,7 @@ export function EventInviteHomeScreen({
           <View style={styles.divider} />
 
           {event.multiDate && event.endDate ? (
-            <View>
+            <View style={styles.dateContainer}>
               <View style={styles.dateRow}>
                 <InviteDateViewMulti
                   date={event.date}
@@ -154,7 +151,7 @@ export function EventInviteHomeScreen({
                 <View style={styles.middleColumn}>
                   <View style={styles.verticalDivider} />
                   <View style={styles.arrowBox}>
-                    <FontAwesome5
+                    <FontAwesome6
                       name="arrow-right"
                       size={14}
                       color={colors.secondary}
@@ -169,17 +166,17 @@ export function EventInviteHomeScreen({
                 />
               </View>
 
-              {duration && <View style={styles.divider} />}
-
               {duration && (
                 <View style={styles.durationPill}>
-                  <FontAwesome5 name="clock" size={12} color={colors.primary} />
-                  <Text type="caption" color={colors.primary}>
+                  <FontAwesome6 name="clock" size={12} color={colors.white} />
+                  <Text type="caption" color={colors.white}>
                     {duration.days} Days · {duration.nights} Nights ·{" "}
                     {duration.year}
                   </Text>
                 </View>
               )}
+
+              {duration && <View style={styles.divider} />}
             </View>
           ) : (
             <InviteDateView date={event.date} />
@@ -191,7 +188,11 @@ export function EventInviteHomeScreen({
               onPress={() => openInMaps(address)}
             >
               <View style={styles.addressIconCircle}>
-                <Entypo name="location-pin" size={18} color={colors.primary} />
+                <FontAwesome6
+                  name="location-dot"
+                  size={18}
+                  color={colors.primary}
+                />
               </View>
               <Text
                 type="subHeader"
@@ -213,6 +214,8 @@ export function EventInviteHomeScreen({
               Theme: {event.theme}
             </Text>
           )}
+
+          <View style={[styles.divider, styles.rsvpDivider]} />
 
           <View style={styles.rsvpSection}>
             <Text type="header" style={styles.rsvpText} center>
@@ -267,12 +270,13 @@ const styles = StyleSheet.create({
   },
   addressRow: {
     alignItems: "center",
-    flexDirection: "row",
+    flexDirection: "column",
     gap: 12,
-    marginTop: 8
+    justifyContent: "center",
+    marginTop: 16
   },
   addressText: {
-    flex: 1
+    textAlign: "center"
   },
   arrowBox: {
     ...card.small,
@@ -297,35 +301,30 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     paddingHorizontal: 20
   },
+  dateContainer: {
+    gap: 12,
+    marginTop: 12
+  },
   dateRow: {
     flexDirection: "row"
   },
   divider: {
     backgroundColor: colors.lightGray,
-    height: 1,
-    marginVertical: 20
+    height: 1
   },
   durationPill: {
     alignItems: "center",
     alignSelf: "center",
-    backgroundColor: colors.secondaryTint,
+    backgroundColor: colors.primary,
     borderRadius: 20,
     flexDirection: "row",
     gap: 8,
     paddingHorizontal: 16,
     paddingVertical: 6
   },
-  envelopeCircle: {
-    ...card.small,
-    alignItems: "center",
-    alignSelf: "center",
-    borderRadius: 36,
-    height: 72,
-    justifyContent: "center",
-    width: 72
-  },
   eventText: {
-    marginTop: 6
+    marginBottom: 8,
+    marginTop: 4
   },
   headerRow: {
     alignItems: "center",
@@ -338,6 +337,9 @@ const styles = StyleSheet.create({
   responseButtonsContainer: {
     flexDirection: "row",
     gap: 12
+  },
+  rsvpDivider: {
+    marginTop: 12
   },
   rsvpSection: {
     marginTop: 8
