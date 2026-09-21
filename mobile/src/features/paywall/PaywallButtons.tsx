@@ -53,7 +53,7 @@ export function PaywallButtons({
         />
 
         <Button
-          text={`Terms of\nService`}
+          text={`TOS`}
           onPress={() =>
             navigateToWebView(
               "Terms of Service",

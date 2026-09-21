@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -36,13 +36,15 @@ export function BudgetItemModal({
   const [costText, setCostText] = useState("");
   const [quantityText, setQuantityText] = useState("1");
 
-  useEffect(() => {
-    if (!visible) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- resets editable form fields when the modal opens; state must stay mutable for user input, so it can't be derived at render
-    setName(initialItem?.item ?? "");
-    setCostText(initialItem ? String(initialItem.cost) : "");
-    setQuantityText(String(initialItem?.quantity ?? 1));
-  }, [visible, initialItem]);
+  const [prevVisible, setPrevVisible] = useState(visible);
+  if (visible !== prevVisible) {
+    setPrevVisible(visible);
+    if (visible) {
+      setName(initialItem?.item ?? "");
+      setCostText(initialItem ? String(initialItem.cost) : "");
+      setQuantityText(String(initialItem?.quantity ?? 1));
+    }
+  }
 
   const handleSave = () => {
     if (!name.trim()) return;

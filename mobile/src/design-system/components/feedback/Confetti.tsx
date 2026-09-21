@@ -92,8 +92,10 @@ export const Confetti = forwardRef<ConfettiHandle, ConfettiProps>(
     ref
   ) {
     const progress = useSharedValue(0);
-    const [particles, setParticles] = useState<Particle[]>([]);
-    const [active, setActive] = useState(false);
+    const [particles, setParticles] = useState<Particle[]>(() =>
+      autoPlay ? createParticles(count, palette) : []
+    );
+    const [active, setActive] = useState(autoPlay);
 
     const play = useCallback(() => {
       setParticles(createParticles(count, palette));
@@ -111,17 +113,14 @@ export const Confetti = forwardRef<ConfettiHandle, ConfettiProps>(
           }
         }
       );
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [count, palette, onComplete]);
 
     useImperativeHandle(ref, () => ({ play }), [play]);
 
     useEffect(() => {
-      if (autoPlay) {
-        void Promise.resolve().then(() => play());
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+      if (!autoPlay) return;
+      void Promise.resolve().then(() => play());
+    }, [autoPlay, play]);
 
     if (!active) {
       return null;

@@ -76,9 +76,9 @@ export function CachedImage({
   };
 
   useEffect(() => {
-    void Promise.resolve().then(() => {
-      loadCachedImage();
-    });
+    (async () => {
+      await loadCachedImage();
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [photo.uri]);
 

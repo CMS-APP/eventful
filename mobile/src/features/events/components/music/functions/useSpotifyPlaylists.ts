@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { trackSpotifyPlaylistAdded } from "@/services/analytics/events";
 import { Event } from "@/types/Event";
@@ -27,10 +27,13 @@ export function useSpotifyPlaylists({
     event.playlists ?? []
   );
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- syncs locally-editable added-playlists state when the source event prop changes; state must stay mutable for optimistic add/remove, so it can't be derived at render
+  const [prevEventPlaylists, setPrevEventPlaylists] = useState(
+    event.playlists
+  );
+  if (event.playlists !== prevEventPlaylists) {
+    setPrevEventPlaylists(event.playlists);
     setAddedPlaylists(event.playlists ?? []);
-  }, [event.playlists]);
+  }
 
   const getPlaylists = useCallback(async (accessToken: string) => {
     try {

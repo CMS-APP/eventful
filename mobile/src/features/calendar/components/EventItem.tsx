@@ -39,7 +39,9 @@ export function EventItem({ index, event }: EventItemProps) {
 
   useEffect(() => {
     if (userId && event.userId !== userId) {
-      void Promise.resolve().then(() => fetchUserDetails());
+      (async () => {
+        await fetchUserDetails();
+      })();
     }
   }, [event, userId, fetchUserDetails]);
 

@@ -59,10 +59,10 @@ export function ChangeNameModal({
   );
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (!presentModal) return;
-
-    void Promise.resolve().then(() => {
+  const [prevPresentModal, setPrevPresentModal] = useState(presentModal);
+  if (presentModal !== prevPresentModal) {
+    setPrevPresentModal(presentModal);
+    if (presentModal) {
       if (type === "name") {
         setNewName(firstName);
         setNewSecondName(lastName);
@@ -71,8 +71,8 @@ export function ChangeNameModal({
       }
       setUsernameExists(null);
       setHelperText("");
-    });
-  }, [presentModal, type, firstName, lastName, username]);
+    }
+  }
 
   const usernameExistsFunc = useCallback(async (username: string) => {
     return await checkUsernameExists(username.toLowerCase());
@@ -128,7 +128,9 @@ export function ChangeNameModal({
   }, [newName, newSecondName, type, username, usernameExistsFunc]);
 
   useEffect(() => {
-    void Promise.resolve().then(() => checkNames());
+    (async () => {
+      await checkNames();
+    })();
   }, [newName, newSecondName, type, checkNames]);
 
   const changeName = useCallback(async () => {

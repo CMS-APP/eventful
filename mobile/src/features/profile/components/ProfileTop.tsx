@@ -51,10 +51,10 @@ export function ProfileTop({ user }: { user: User }) {
   }, [user.uid]);
 
   useEffect(() => {
-    void Promise.resolve().then(() => {
+    (async () => {
       getUsers();
       checkIsFollowing();
-    });
+    })();
   }, [getUsers, checkIsFollowing]);
 
   function followText(title: string, length: number) {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -56,16 +56,17 @@ export function AddActivityModal({
     String(initialActivity?.durationMinutes || 60)
   );
 
-  useEffect(() => {
-    if (!visible) return;
-    void Promise.resolve().then(() => {
+  const [prevVisible, setPrevVisible] = useState(visible);
+  if (visible !== prevVisible) {
+    setPrevVisible(visible);
+    if (visible) {
       setName(initialActivity?.name ?? presetTitle ?? "");
       setLocation(initialActivity?.location ?? "");
       setNotes(initialActivity?.notes ?? "");
       setStartTime(initialStart);
       setDurationMinutesText(String(initialActivity?.durationMinutes || 60));
-    });
-  }, [visible, initialActivity, presetTitle, initialStart]);
+    }
+  }
 
   const handleSave = () => {
     const startTimeString = startTime.toISOString();

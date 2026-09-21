@@ -67,21 +67,29 @@ export function PaywallScreen({ navigation, route }: PaywallScreenProps) {
       : ({} as Subscription)
   );
 
-  useEffect(() => {
-    void Promise.resolve().then(() => {
-      if (type === "Premium") {
-        setSelectedSubscriptionType("Premium");
-        if (premium_subscriptions && premium_subscriptions.length > 0) {
-          setSelectedSubscription(premium_subscriptions[0]);
-        }
-      } else {
-        setSelectedSubscriptionType("Photo Booth");
-        if (photo_booth_subscriptions && photo_booth_subscriptions.length > 0) {
-          setSelectedSubscription(photo_booth_subscriptions[0]);
-        }
+  const [prevSelectionDeps, setPrevSelectionDeps] = useState({
+    type,
+    premium_subscriptions,
+    photo_booth_subscriptions
+  });
+  if (
+    type !== prevSelectionDeps.type ||
+    premium_subscriptions !== prevSelectionDeps.premium_subscriptions ||
+    photo_booth_subscriptions !== prevSelectionDeps.photo_booth_subscriptions
+  ) {
+    setPrevSelectionDeps({ type, premium_subscriptions, photo_booth_subscriptions });
+    if (type === "Premium") {
+      setSelectedSubscriptionType("Premium");
+      if (premium_subscriptions && premium_subscriptions.length > 0) {
+        setSelectedSubscription(premium_subscriptions[0]);
       }
-    });
-  }, [type, premium_subscriptions, photo_booth_subscriptions]);
+    } else {
+      setSelectedSubscriptionType("Photo Booth");
+      if (photo_booth_subscriptions && photo_booth_subscriptions.length > 0) {
+        setSelectedSubscription(photo_booth_subscriptions[0]);
+      }
+    }
+  }
 
   const handleSubscribeToProduct = useCallback(async () => {
     if (!selectedSubscription?.id || products.length === 0 || loading) {

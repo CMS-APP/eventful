@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
@@ -38,12 +38,15 @@ export function EventToDoShoppingEdit({
   const [completeList, setCompleteList] = useState<boolean[]>([]);
   const [newText, setNewText] = useState("");
 
-  useEffect(() => {
+  const [prevEvent, setPrevEvent] = useState(event);
+  const [prevListType, setPrevListType] = useState(listType);
+  if (event !== prevEvent || listType !== prevListType) {
+    setPrevEvent(event);
+    setPrevListType(listType);
     const data = (event as any)[listType] || [];
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- reinitializes locally-editable list state when the source event/listType changes; state must stay mutable for editing, so it can't be derived at render
     setItemList(data.map((item: { item: string }) => item.item));
     setCompleteList(data.map((item: { complete: boolean }) => item.complete));
-  }, [event, listType]);
+  }
 
   const createDataToBeSaved = useCallback(
     (items: string[], completes: boolean[]) =>

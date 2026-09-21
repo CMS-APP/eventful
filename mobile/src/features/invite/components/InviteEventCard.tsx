@@ -71,10 +71,10 @@ export function InviteEventCard({
   }, [event, userId]);
 
   useEffect(() => {
-    void Promise.resolve().then(() => {
+    (async () => {
       fetchHost();
       fetchInvite();
-    });
+    })();
   }, [fetchHost, fetchInvite]);
 
   const handleInvite = useCallback(async () => {

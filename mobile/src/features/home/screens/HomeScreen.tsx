@@ -45,7 +45,9 @@ export function HomeScreen(_: HomeScreenProps) {
 
   useEffect(() => {
     if (uid) {
-      void Promise.resolve().then(() => checkIsAdmin());
+      (async () => {
+        await checkIsAdmin();
+      })();
     }
   }, [checkIsAdmin, uid]);
 

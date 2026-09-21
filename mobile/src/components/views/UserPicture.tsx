@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Image, StyleSheet, View } from "react-native";
 
@@ -17,39 +17,41 @@ export function UserPicture({ uid, size = 50 }: UserPictureProps) {
   const [name, setName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const syncPicture = useCallback(async () => {
+  const [prevUid, setPrevUid] = useState(uid);
+  if (uid !== prevUid) {
+    setPrevUid(uid);
     setImage(null);
-
     if (!uid) {
       setLoading(false);
-      return;
     }
-
-    const user = await getUserInfo(uid);
-
-    if (!user) {
-      setLoading(false);
-      return;
-    }
-
-    if (user.firstName && user.lastName) {
-      setName(
-        `${user.firstName.charAt(0).toUpperCase()}${user.lastName.charAt(0).toUpperCase()}`
-      );
-    } else if (user.name) {
-      setName(user.name.charAt(0).toUpperCase());
-    } else {
-      setName("?");
-    }
-
-    const imageUri = await syncUserPicture(user, false);
-    setImage(imageUri ?? null);
-    setLoading(false);
-  }, [uid]);
+  }
 
   useEffect(() => {
-    void Promise.resolve().then(() => syncPicture());
-  }, [syncPicture]);
+    if (!uid) return;
+
+    (async () => {
+      const user = await getUserInfo(uid);
+
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      if (user.firstName && user.lastName) {
+        setName(
+          `${user.firstName.charAt(0).toUpperCase()}${user.lastName.charAt(0).toUpperCase()}`
+        );
+      } else if (user.name) {
+        setName(user.name.charAt(0).toUpperCase());
+      } else {
+        setName("?");
+      }
+
+      const imageUri = await syncUserPicture(user, false);
+      setImage(imageUri ?? null);
+      setLoading(false);
+    })();
+  }, [uid]);
 
   const height = size;
   const width = size;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
@@ -23,12 +23,13 @@ export function BudgetMaxEditModal({
   onSave
 }: BudgetMaxEditModalProps) {
   const [amountText, setAmountText] = useState(String(budgetMaximum || ""));
-
-  useEffect(() => {
-    if (!visible) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- resets editable form field when the modal opens; state must stay mutable for user input, so it can't be derived at render
-    setAmountText(budgetMaximum ? String(budgetMaximum) : "");
-  }, [visible, budgetMaximum]);
+  const [prevVisible, setPrevVisible] = useState(visible);
+  if (visible !== prevVisible) {
+    setPrevVisible(visible);
+    if (visible) {
+      setAmountText(budgetMaximum ? String(budgetMaximum) : "");
+    }
+  }
 
   const handleSave = () => {
     onSave(Number(amountText) || 0);

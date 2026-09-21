@@ -48,7 +48,9 @@ export function ProfilePicture({
   }
 
   useEffect(() => {
-    void Promise.resolve().then(() => syncPicture());
+    (async () => {
+      await syncPicture();
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 

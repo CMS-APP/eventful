@@ -27,9 +27,11 @@ export function PostImage({ currentImageUri, loading }: PostImageProps) {
   }
 
   useEffect(() => {
-    if (currentImageUri) {
-      void Promise.resolve().then(() => getImageDimensions(currentImageUri));
-    }
+    if (!currentImageUri) return;
+
+    (async () => {
+      await getImageDimensions(currentImageUri);
+    })();
   }, [currentImageUri]);
 
   if (loading) {

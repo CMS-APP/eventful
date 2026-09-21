@@ -66,18 +66,12 @@ export function EventsListItem({
     }
   }, [event, userId, navigation, navEvents, isUpcoming, isDecline, isOwner]);
 
-  async function fetchHostInfo() {
-    if (isOwner) {
-      setHost("You");
-    } else {
-      const hostDocData = await getUserInfo(event.userId);
-      setHost(hostDocData ? hostDocData.name : "");
-    }
-  }
-
   useEffect(() => {
-    if (userId) {
-      void Promise.resolve().then(() => fetchHostInfo());
+    if (userId && !isOwner) {
+      (async () => {
+        const hostDocData = await getUserInfo(event.userId);
+        setHost(hostDocData ? hostDocData.name : "");
+      })();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [event, userId]);
@@ -108,7 +102,7 @@ export function EventsListItem({
           <View style={styles.detailRow}>
             <FontAwesome5 name="user" size={12} color={colors.gray} />
             <Text type="caption" color={colors.black} numberOfLines={1}>
-              {host}
+              {isOwner ? "You" : host}
             </Text>
             <FontAwesome5 name="clock" size={12} color={colors.gray} />
             <Text type="caption" color={colors.black}>

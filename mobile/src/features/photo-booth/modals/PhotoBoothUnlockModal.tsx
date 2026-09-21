@@ -45,10 +45,10 @@ export function PhotoBoothUnlockModal({
 
   useEffect(() => {
     if (input.length !== 4) return;
-    void Promise.resolve().then(() => {
+    (() => {
       Keyboard.dismiss();
       unlockButtonAction();
-    });
+    })();
   }, [input, unlockButtonAction]);
 
   if (presentModal !== prevPresentModal) {

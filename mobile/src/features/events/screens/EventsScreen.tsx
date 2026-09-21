@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
@@ -27,12 +27,13 @@ export function EventsScreen({ navigation, route }: EventsScreenProps) {
   const { upcomingEvents, pastEvents, declineEvents } =
     useEventList(navigation);
 
-  useEffect(() => {
+  const [prevRoute, setPrevRoute] = useState(route);
+  if (route !== prevRoute) {
+    setPrevRoute(route);
     if (route.params?.newEvent) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- opens the create-event modal in response to a navigation param; showModal is also toggled by user interaction, so it can't be derived at render
       setShowModal(true);
     }
-  }, [route]);
+  }
 
   function newEventAction() {
     setShowModal(true);

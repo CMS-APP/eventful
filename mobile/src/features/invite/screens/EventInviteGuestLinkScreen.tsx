@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { Alert, Clipboard, StyleSheet, View } from "react-native";
 
@@ -48,6 +48,13 @@ export function EventInviteGuestLinkScreen({
   const [enableLinkInvite, setEnableLinkInvite] = useState<boolean | undefined>(
     undefined
   );
+  const [prevEventLinkEnabled, setPrevEventLinkEnabled] = useState(
+    event?.eventLinkEnabled
+  );
+  if (event?.eventLinkEnabled !== prevEventLinkEnabled) {
+    setPrevEventLinkEnabled(event?.eventLinkEnabled);
+    setEnableLinkInvite(event?.eventLinkEnabled);
+  }
   const [selectedButton, setSelectedButton] = useState("accept");
   const [showDisclaimerModal, setShowDisclaimerModal] = useState(false);
   const [linkList, setLinkList] = useState(route.params?.linkList || []);
@@ -141,12 +148,6 @@ export function EventInviteGuestLinkScreen({
     }
     return [];
   }, [selectedButton, linkList]);
-
-  useEffect(() => {
-    void Promise.resolve().then(() =>
-      setEnableLinkInvite(event?.eventLinkEnabled)
-    );
-  }, [event?.eventLinkEnabled]);
 
   if (!event) {
     return null;

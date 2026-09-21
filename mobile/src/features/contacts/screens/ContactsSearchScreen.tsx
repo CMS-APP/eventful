@@ -53,18 +53,19 @@ export function ContactsSearchScreen({ route }: ContactsSearchScreenProps) {
     }
   }
 
-  useEffect(() => {
+  const [prevSearch, setPrevSearch] = useState(search);
+  if (search !== prevSearch) {
+    setPrevSearch(search);
     if (!search.trim()) {
-      void Promise.resolve().then(() => {
-        setUsers([]);
-        setLoading(false);
-      });
-      return;
-    }
-
-    void Promise.resolve().then(() => {
+      setUsers([]);
+      setLoading(false);
+    } else {
       setLoading(true);
-    });
+    }
+  }
+
+  useEffect(() => {
+    if (!search.trim()) return;
 
     const debounceTimeout = setTimeout(() => {
       getUsers();

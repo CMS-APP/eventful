@@ -48,11 +48,7 @@ export function useAccountProfilePicture() {
   useEffect(() => {
     let cancelled = false;
 
-    void Promise.resolve().then(() => {
-      if (cancelled) {
-        return;
-      }
-
+    (() => {
       if (!userId) {
         setImage(null);
         setLoading(false);
@@ -76,7 +72,7 @@ export function useAccountProfilePicture() {
             setLoading(false);
           }
         });
-    });
+    })();
 
     return () => {
       cancelled = true;

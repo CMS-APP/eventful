@@ -67,10 +67,10 @@ export function PostItem({ post }: { post: Post }) {
   useEffect(() => {
     if (!currentUserId) return;
 
-    void Promise.resolve().then(() => {
+    (async () => {
       fetchAuthor();
       loadLikeData();
-    });
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post.id, post.authorId, currentUserId]);
 

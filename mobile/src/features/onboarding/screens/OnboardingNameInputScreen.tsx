@@ -109,59 +109,64 @@ export function OnboardingNameInputScreen({
     }
   }, [firstName, lastName, username, userId, dispatch, navigation, email]);
 
-  const checkUsername = useCallback(async () => {
+  const [prevUsername, setPrevUsername] = useState(username);
+  if (username !== prevUsername) {
+    setPrevUsername(username);
     const { valid, helperText } = checkUsernameValid(username);
     if (!valid) {
       setUsernameValid(false);
       setHelperText(helperText);
-      return;
-    }
-    try {
-      if (await checkUsernameExists(username.trim().toLowerCase())) {
-        setUsernameValid(false);
-        setHelperText("Username already exists.");
-      } else {
-        setUsernameValid(true);
-        setHelperText("Username Available");
-      }
-    } catch (error) {
-      const errorMessage = "Username validation failed";
-      Sentry.captureMessage(errorMessage, "error");
-      await createDocument(
-        {
-          type: "username-validation-failed",
-          message: errorMessage,
-          context: "OnboardingNameInputScreen",
-          uid: userId ?? null,
-          email: email ?? null,
-          username: username.trim().toLowerCase(),
-          error: error instanceof Error ? error.message : String(error),
-          timestamp: new Date()
-        },
-        API_COLLECTIONS.FEEDBACK
-      );
-      setUsernameValid(false);
-      setHelperText("Couldn't validate username right now. Please try again.");
-    }
-  }, [email, userId, username]);
-
-  async function _getLoginNames() {
-    const loginNames = await getLoginNames();
-    if (loginNames) {
-      if (loginNames.type === "apple") {
-        setEditable(false);
-      }
-      setFirstName(loginNames?.firstName);
-      setLastName(loginNames?.lastName || "");
     }
   }
 
   useEffect(() => {
-    void Promise.resolve().then(() => checkUsername());
-  }, [username, checkUsername]);
+    const { valid } = checkUsernameValid(username);
+    if (!valid) return;
+
+    (async () => {
+      try {
+        if (await checkUsernameExists(username.trim().toLowerCase())) {
+          setUsernameValid(false);
+          setHelperText("Username already exists.");
+        } else {
+          setUsernameValid(true);
+          setHelperText("Username Available");
+        }
+      } catch (error) {
+        const errorMessage = "Username validation failed";
+        Sentry.captureMessage(errorMessage, "error");
+        await createDocument(
+          {
+            type: "username-validation-failed",
+            message: errorMessage,
+            context: "OnboardingNameInputScreen",
+            uid: userId ?? null,
+            email: email ?? null,
+            username: username.trim().toLowerCase(),
+            error: error instanceof Error ? error.message : String(error),
+            timestamp: new Date()
+          },
+          API_COLLECTIONS.FEEDBACK
+        );
+        setUsernameValid(false);
+        setHelperText(
+          "Couldn't validate username right now. Please try again."
+        );
+      }
+    })();
+  }, [username, email, userId]);
 
   useEffect(() => {
-    void Promise.resolve().then(() => _getLoginNames());
+    (async () => {
+      const loginNames = await getLoginNames();
+      if (loginNames) {
+        if (loginNames.type === "apple") {
+          setEditable(false);
+        }
+        setFirstName(loginNames?.firstName);
+        setLastName(loginNames?.lastName || "");
+      }
+    })();
   }, []);
 
   return (

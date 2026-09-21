@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
@@ -28,36 +28,38 @@ export function EventTimelineEdit({ event, setEvent }: EventTimelineEditProps) {
   const navigation =
     useNavigation() as StackNavigationProp<EventsStackParamList>;
   const [timelineList, setTimelineList] = useState<boolean[]>([]);
-  const [percentageComplete, setPercentageComplete] = useState(0);
-
-  const isInitializedRef = useRef(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const calculatePercentageComplete = useCallback((list: boolean[]) => {
     const completed = list.filter((item: boolean) => item).length;
     return Math.round((completed / TIMELINE_TEXT_LIST.length) * 100);
   }, []);
 
-  useEffect(() => {
-    if (timelineList !== null && isInitializedRef.current) {
-      setEvent((prevEvent: Event) => ({
-        ...prevEvent,
-        timelineList: timelineList as unknown as boolean[]
-      }));
-      setPercentageComplete(calculatePercentageComplete(timelineList));
-    }
-  }, [timelineList, setEvent, calculatePercentageComplete]);
+  const percentageComplete = useMemo(
+    () => calculatePercentageComplete(timelineList),
+    [timelineList, calculatePercentageComplete]
+  );
 
-  useEffect(() => {
-    const newTimelineList =
+  const [prevEventTimelineList, setPrevEventTimelineList] = useState(
+    event.timelineList
+  );
+  if (event.timelineList !== prevEventTimelineList) {
+    setPrevEventTimelineList(event.timelineList);
+    setTimelineList(
       event.timelineList && event.timelineList.length > 0
         ? event.timelineList
-        : Array(TIMELINE_TEXT_LIST.length).fill(false);
+        : Array(TIMELINE_TEXT_LIST.length).fill(false)
+    );
+    setIsInitialized(true);
+  }
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- reinitializes locally-editable timeline state when the source event prop changes; state must stay mutable for toggling, so it can't be derived at render
-    setTimelineList(newTimelineList);
-    setPercentageComplete(calculatePercentageComplete(newTimelineList));
-    isInitializedRef.current = true;
-  }, [event.timelineList, calculatePercentageComplete]);
+  useEffect(() => {
+    if (!isInitialized) return;
+    setEvent((prevEvent: Event) => ({
+      ...prevEvent,
+      timelineList: timelineList as unknown as boolean[]
+    }));
+  }, [timelineList, isInitialized, setEvent]);
 
   const updateList = useCallback(
     (index: number) => {

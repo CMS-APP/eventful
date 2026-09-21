@@ -27,7 +27,9 @@ export function InviteLinkGuests({ event }: InviteLinkGuestsProps) {
   }, [event, userId]);
 
   useEffect(() => {
-    void Promise.resolve().then(() => fetchData());
+    (async () => {
+      await fetchData();
+    })();
   }, [fetchData]);
 
   return (

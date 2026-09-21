@@ -43,7 +43,9 @@ export function ProfileInvites({ user }: ProfileInvitesProps) {
   }, [userId, user.uid]);
 
   useEffect(() => {
-    void Promise.resolve().then(() => fetchInvites());
+    (async () => {
+      await fetchInvites();
+    })();
   }, [fetchInvites]);
 
   return (

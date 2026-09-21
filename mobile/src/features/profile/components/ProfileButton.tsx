@@ -36,7 +36,9 @@ export function ProfileButton({ uid }: ProfileButtonProps) {
   }
 
   useEffect(() => {
-    void Promise.resolve().then(() => fetchUser());
+    (async () => {
+      await fetchUser();
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uid]);
 

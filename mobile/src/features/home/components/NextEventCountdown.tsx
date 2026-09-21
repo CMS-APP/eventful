@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
@@ -12,36 +12,45 @@ interface NextEventCountdownProps {
   event: Event;
 }
 
+function calculateRemainingTime(event: Event) {
+  if (!event) {
+    return { days: 0, hours: 0, minutes: 0 };
+  }
+
+  const { difference, days, hours, minutes } = calculateTimeDifference(
+    parseDatabaseDate(event.date)
+  );
+
+  if (difference <= 0) {
+    return { days: 0, hours: 0, minutes: 0 };
+  }
+
+  return { days, hours, minutes };
+}
+
 export function NextEventCountdown({ event }: NextEventCountdownProps) {
-  const [remainingDays, setRemainingDays] = useState(0);
-  const [remainingHours, setRemainingHours] = useState(0);
-  const [remainingMinutes, setRemainingMinutes] = useState(0);
+  const [remaining, setRemaining] = useState(() => calculateRemainingTime(event));
 
-  const getRemainingTime = useCallback(() => {
-    if (!event) return;
-
-    const { difference, days, hours, minutes } = calculateTimeDifference(
-      parseDatabaseDate(event.date)
-    );
-
-    if (difference <= 0) {
-      setRemainingDays(0);
-      setRemainingHours(0);
-      setRemainingMinutes(0);
-    } else {
-      setRemainingDays(days);
-      setRemainingHours(hours);
-      setRemainingMinutes(minutes);
-    }
-  }, [event]);
+  const [prevEvent, setPrevEvent] = useState(event);
+  if (event !== prevEvent) {
+    setPrevEvent(event);
+    setRemaining(calculateRemainingTime(event));
+  }
 
   useEffect(() => {
-    if (event) {
-      void Promise.resolve().then(() => getRemainingTime());
-      const interval = setInterval(() => getRemainingTime(), 1000);
-      return () => clearInterval(interval);
-    }
-  }, [event, getRemainingTime]);
+    if (!event) return;
+
+    const interval = setInterval(() => {
+      setRemaining(calculateRemainingTime(event));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [event]);
+
+  const {
+    days: remainingDays,
+    hours: remainingHours,
+    minutes: remainingMinutes
+  } = remaining;
 
   return (
     <View style={styles.countdownContainer}>

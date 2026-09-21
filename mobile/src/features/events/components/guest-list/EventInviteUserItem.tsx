@@ -67,20 +67,16 @@ export function EventInviteUserItem({
     useNavigation() as StackNavigationProp<AccountStackParamList>;
   const appUser = invite.type === "app";
 
-  const getInviteId = useCallback(async () => {
-    const invite = await checkInvitedToEvent(event, user.uid);
-    if (invite) {
-      setInviteId(invite.id);
-    }
-  }, [user, event]);
-
   useEffect(() => {
     if (!user || !appUser) return;
 
-    void Promise.resolve().then(() => {
-      getInviteId();
-    });
-  }, [user, appUser, event, getInviteId]);
+    (async () => {
+      const invite = await checkInvitedToEvent(event, user.uid);
+      if (invite) {
+        setInviteId(invite.id);
+      }
+    })();
+  }, [user, appUser, event]);
 
   const handlePress = useCallback(() => {
     if (appUser) {

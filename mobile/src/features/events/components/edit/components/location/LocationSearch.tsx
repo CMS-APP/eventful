@@ -114,9 +114,7 @@ export function LocationSearch({ event, setEvent }: LocationSearchProps) {
     let cancelled = false;
     let debounceTimeout: ReturnType<typeof setTimeout> | undefined;
 
-    void Promise.resolve().then(() => {
-      if (cancelled) return;
-
+    (() => {
       if (!query.trim() || !user) {
         setSuggestions([]);
         setLoading(false);
@@ -149,7 +147,7 @@ export function LocationSearch({ event, setEvent }: LocationSearchProps) {
           }
         }
       }, SEARCH_DEBOUNCE_MS);
-    });
+    })();
 
     return () => {
       cancelled = true;

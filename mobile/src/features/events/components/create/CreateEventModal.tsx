@@ -69,18 +69,23 @@ export function CreateEventModal({
     }
   }, [draftEvent, eventName, userId, navigation, setShowModal]);
 
+  const [prevShowModal, setPrevShowModal] = useState(showModal);
+  if (showModal !== prevShowModal) {
+    setPrevShowModal(showModal);
+    if (showModal) {
+      setDraftEvent(NewEvent(getDefaultEventDate(), userId, ""));
+    }
+  }
+
   useEffect(() => {
     if (!showModal) return;
-    void Promise.resolve().then(() => {
-      setDraftEvent(NewEvent(getDefaultEventDate(), userId, ""));
-      fadeAnim.setValue(0);
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true
-      }).start();
-    });
-  }, [showModal, fadeAnim, userId]);
+    fadeAnim.setValue(0);
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true
+    }).start();
+  }, [showModal, fadeAnim]);
 
   return (
     <ModalView
