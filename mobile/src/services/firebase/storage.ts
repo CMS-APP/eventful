@@ -69,7 +69,7 @@ export async function deleteImageAsync(storageString: string) {
 
 export async function deleteUserImageAsnyc(userId: string) {
   try {
-    await deleteImageAsync(`${userId}/profilePicture`);
+    await deleteImageAsync(`profilePhotos/${userId}/profilePicture`);
   } catch (error) {
     if ((error as any).code === "storage/object-not-found") {
       log(`User image "${userId}" does not exist`, "warn");

@@ -203,7 +203,7 @@ async function handleImageDownload(
   overwrite: boolean = false
 ) {
   try {
-    const url = await downloadImageAsync(`${user.uid}/profilePicture`);
+    const url = await downloadImageAsync(`profilePhotos/${user.uid}/profilePicture`);
     return await saveDatabaseImageToCache(url, path, overwrite);
   } catch (error) {
     if ((error as { code: string }).code === "storage/object-not-found") {

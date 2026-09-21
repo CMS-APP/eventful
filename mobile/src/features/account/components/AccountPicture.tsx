@@ -82,7 +82,7 @@ export function AccountPicture() {
 
           await saveLocalImageToCache(uri, "profilePicture", true);
           setImage(uri);
-          await uploadImageAsync(uri, `${userId}/profilePicture`, 0);
+          await uploadImageAsync(uri, `profilePhotos/${userId}/profilePicture`, 0);
 
           const imageHash = await computeImageHash(uri);
           await updateUserInfo(userId, {
@@ -119,7 +119,7 @@ export function AccountPicture() {
       await updateUserInfo(userId, {
         profilePictureHash: deleteField() as any
       });
-      await deleteImageAsync(`${userId}/profilePicture`);
+      await deleteImageAsync(`profilePhotos/${userId}/profilePicture`);
       dispatch(setProfilePictureHash(undefined));
     } catch (error) {
       log(`Error Deleting Photo: ${error}`, "error");

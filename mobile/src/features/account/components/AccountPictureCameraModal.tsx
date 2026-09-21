@@ -62,7 +62,11 @@ export function AccountPictureCameraModal({
         );
       }
 
-      await uploadImageAsync(processedImage.uri, `${userId}/profilePicture`, 0);
+      await uploadImageAsync(
+        processedImage.uri,
+        `profilePhotos/${userId}/profilePicture`,
+        0
+      );
 
       const imageHash = await computeImageHash(processedImage.uri);
 
