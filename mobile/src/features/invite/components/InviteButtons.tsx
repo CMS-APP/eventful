@@ -1,3 +1,5 @@
+import { getAuth } from "@react-native-firebase/auth";
+
 import { useCallback, useEffect, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
@@ -6,10 +8,11 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { EventInviteStackParamList } from "@/app/navigation";
-import { getEventInvites } from "@/services/firebase/invite";
+import { getEventGuestList } from "@/services/firebase/backend";
 import { Event } from "@/types/Event";
 import { Invite } from "@/types/Invite";
 import { User } from "@/types/User";
+import { log } from "@/utils/logging";
 
 import { InviteMenuRow } from "./InviteMenuRow";
 
@@ -27,8 +30,15 @@ export function InviteButtons({
     useNavigation() as StackNavigationProp<EventInviteStackParamList>;
 
   const getGuestCount = useCallback(async () => {
-    const invites = await getEventInvites(event);
-    setGuestCount(invites.length);
+    const currentUser = getAuth().currentUser;
+    if (!currentUser) return;
+
+    try {
+      const guests = await getEventGuestList(event.id, currentUser);
+      setGuestCount(guests.length + 1);
+    } catch (error) {
+      log(`Error fetching guest count: ${error}`, "error");
+    }
   }, [event]);
 
   const getActivityCount = useCallback(() => {
@@ -48,7 +58,7 @@ export function InviteButtons({
   return (
     <View style={styles.container}>
       <InviteMenuRow
-        text={"Guests: " + guestCount}
+        text={"Attendees: " + guestCount}
         icon="user"
         onPress={() =>
           navigation.navigate("EventInviteGuests", { invite, event, host })

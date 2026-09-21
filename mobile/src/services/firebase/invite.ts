@@ -503,21 +503,6 @@ export async function getInvitedGuests(event: Event, userId: string) {
   return users as UserInvite[];
 }
 
-export async function getEventInvites(event: Event): Promise<UserInvite[]> {
-  const invites = (await getDocumentsByQuery(
-    [where("eventId", "==", event.id)],
-    API_COLLECTIONS.INVITE
-  )) as Invite[];
-  const userInvites: UserInvite[] = [];
-  for (const invite of invites) {
-    const user = await getUserInfo(invite.recipient);
-    if (user) {
-      userInvites.push({ user, invite });
-    }
-  }
-  return userInvites;
-}
-
 export async function getEventResponses(
   event: Event,
   viewerId: string

@@ -10,7 +10,8 @@ const ENDPOINTS = {
   sendVerificationEmail: `${BASE_URL}/sendVerificationEmail`,
   forgotPassword: `${BASE_URL}/forgotPassword`,
   userSearch: `${BASE_URL}/searchUsers`,
-  locationSearch: `${BASE_URL}/locationSearch`
+  locationSearch: `${BASE_URL}/locationSearch`,
+  eventGuestList: `${BASE_URL}/eventGuestList`
 };
 
 async function post(
@@ -29,6 +30,31 @@ async function post(
   });
 
   if (throwOnError && !response.ok) {
+    throw new Error(`FirebaseBackend: Request failed (${response.status})`);
+  }
+
+  return response;
+}
+
+async function get(
+  endpoint: string,
+  params: Record<string, string>,
+  user: FirebaseAuthTypes.User
+) {
+  const [appCheckToken, idToken] = await Promise.all([
+    getAppCheckToken(),
+    user.getIdToken()
+  ]);
+  const query = new URLSearchParams(params).toString();
+  const response = await fetch(`${endpoint}?${query}`, {
+    method: "GET",
+    headers: {
+      "X-Firebase-AppCheck": appCheckToken,
+      Authorization: `Bearer ${idToken}`
+    }
+  });
+
+  if (!response.ok) {
     throw new Error(`FirebaseBackend: Request failed (${response.status})`);
   }
 
@@ -60,6 +86,8 @@ export async function userSearch(
   return hits;
 }
 
+export type EventGuestResponse = "accept" | "maybe" | "decline";
+
 export interface PlaceSuggestion {
   placeId: string | null;
   text: string | null;
@@ -76,6 +104,11 @@ export interface PlaceAddressComponent {
 export interface PlaceDetailsResult {
   formattedAddress: string | null;
   addressComponents: PlaceAddressComponent[];
+}
+
+export interface EventGuest {
+  name: string;
+  response: EventGuestResponse;
 }
 
 export async function searchPlaces(
@@ -103,4 +136,13 @@ export async function getPlaceDetails(
     sessionToken
   });
   return await response.json();
+}
+
+export async function getEventGuestList(
+  eventId: string,
+  user: FirebaseAuthTypes.User
+): Promise<EventGuest[]> {
+  const response = await get(ENDPOINTS.eventGuestList, { eventId }, user);
+  const { guests } = await response.json();
+  return guests;
 }

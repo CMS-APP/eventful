@@ -4,10 +4,11 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { EventInviteStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { EventGuestListInvited } from "@/features/invite/components/EventGuestListInvited";
+import { EventGuestListInvitedItem } from "@/features/invite/components/EventGuestListInvitedItem";
 
-import { InviteLinkGuests } from "../components/InviteLinkGuests";
+import { EventGuestList } from "../components/EventGuestList";
 
 type Props = NativeStackScreenProps<
   EventInviteStackParamList,
@@ -23,7 +24,7 @@ export function EventInviteGuestsScreen({ route }: Props) {
         type: "flat",
         backgroundColor: colors.white,
         flatHeaderProps: {
-          title: "Guests",
+          title: "Attendees",
           backgroundColor: colors.white,
           backAction: true,
           icon: "users"
@@ -35,8 +36,23 @@ export function EventInviteGuestsScreen({ route }: Props) {
       }}
     >
       <View style={styles.container}>
-        <EventGuestListInvited event={event} host={host} />
-        <InviteLinkGuests event={event} />
+        <Text type="subHeader" color={colors.black}>
+          Host:
+        </Text>
+
+        <EventGuestListInvitedItem
+          user={host}
+          invite={{
+            id: host.uid,
+            recipient: host.uid,
+            sender: host.uid,
+            eventId: event.id,
+            response: "accept",
+            dietary: ""
+          }}
+        />
+
+        <EventGuestList event={event} />
       </View>
     </Screen>
   );
@@ -44,6 +60,7 @@ export function EventInviteGuestsScreen({ route }: Props) {
 
 const styles = StyleSheet.create({
   container: {
+    gap: 12,
     paddingHorizontal: 16
   }
 });
