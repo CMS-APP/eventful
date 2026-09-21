@@ -131,6 +131,119 @@
   font-size: 14px;
 }
 
+.event-response-guest-list-container {
+  min-width: 0;
+  flex: 1;
+}
+
+.event-response-guest-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.event-response-guest-summary-item {
+  font-family: var(--font-poppins-bold);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+.event-response-guest-summary-item--accept {
+  color: var(--color-accent-green-light);
+}
+
+.event-response-guest-summary-item--maybe {
+  color: var(--color-secondary);
+}
+
+.event-response-guest-summary-item--decline {
+  color: var(--color-danger-light);
+}
+
+.event-response-guest-toggle {
+  display: block;
+  margin-top: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-white);
+  font-family: var(--font-poppins-bold);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.event-response-guest-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.event-response-guest-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 3px 0;
+}
+
+.event-response-guest-status {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-poppins-bold);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+.event-response-guest-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+.event-response-guest-status--accept {
+  color: var(--color-accent-green-light);
+}
+
+.event-response-guest-status--maybe {
+  color: var(--color-secondary);
+}
+
+.event-response-guest-status--decline {
+  color: var(--color-danger-light);
+}
+
+.event-response-guest-avatar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background-color: var(--color-accent-green);
+  color: var(--color-white);
+  font-family: var(--font-poppins-bold);
+  font-size: 13px;
+}
+
+.event-response-guest-name {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-white);
+  font-family: var(--font-poppins-medium);
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .event-response-install {
   display: flex;
   flex-wrap: wrap;
