@@ -96,7 +96,10 @@ function TrendChart<T extends { date: string }>({
   color,
   formatValue,
   emptyMessage,
-  loading
+  loading,
+  secondaryMetric,
+  secondaryLabel,
+  formatSecondaryValue
 }: {
   history: T[];
   metric: keyof T;
@@ -104,6 +107,9 @@ function TrendChart<T extends { date: string }>({
   formatValue: (value: number) => string;
   emptyMessage: string;
   loading: boolean;
+  secondaryMetric?: keyof T;
+  secondaryLabel?: string;
+  formatSecondaryValue?: (value: number) => string;
 }) {
   if (loading) {
     return (
@@ -119,6 +125,32 @@ function TrendChart<T extends { date: string }>({
   }
 
   const latest = Number(history[history.length - 1][metric]) || 0;
+
+  function renderTooltip({
+    active,
+    payload,
+    label
+  }: {
+    active?: boolean;
+    payload?: readonly unknown[];
+    label?: unknown;
+  }) {
+    if (!active || !payload || payload.length === 0) return null;
+    const point = (payload[0] as { payload: T }).payload;
+
+    return (
+      <div style={{ ...TOOLTIP_STYLE, padding: "8px 12px" }}>
+        <div>{formatShortDate(String(label))}</div>
+        <div>{formatValue(Number(point[metric]) || 0)}</div>
+        {secondaryMetric && (
+          <div style={{ opacity: 0.75 }}>
+            {secondaryLabel}:{" "}
+            {(formatSecondaryValue ?? String)(Number(point[secondaryMetric]) || 0)}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -147,12 +179,7 @@ function TrendChart<T extends { date: string }>({
             tickLine={false}
             width={56}
           />
-          <Tooltip
-            separator=""
-            contentStyle={TOOLTIP_STYLE}
-            labelFormatter={(label) => formatShortDate(String(label))}
-            formatter={(value) => [formatValue(Number(value)), ""]}
-          />
+          <Tooltip content={renderTooltip} />
           <Line
             type="monotone"
             dataKey={metric as string}
@@ -641,6 +668,9 @@ export default function Stats() {
                 formatValue={formatCurrency}
                 emptyMessage="No subscription data yet from RevenueCat for this range."
                 loading={loadingSubscriptions}
+                secondaryMetric="activeSubs"
+                secondaryLabel="Subscribers"
+                formatSecondaryValue={(v) => v.toLocaleString()}
               />
             </section>
 

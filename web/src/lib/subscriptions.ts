@@ -5,6 +5,7 @@ export interface RevenueCatDailyStat {
   date: string;
   mrr: number;
   revenue: number;
+  activeSubs: number;
 }
 
 export interface RevenueCatStats {

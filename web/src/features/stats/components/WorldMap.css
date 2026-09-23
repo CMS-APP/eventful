@@ -1,0 +1,54 @@
+.world-map-wrapper {
+  position: relative;
+}
+
+.world-map-svg {
+  width: 100%;
+  height: auto;
+}
+
+.world-map-country {
+  outline: none;
+  transition: fill-opacity var(--transition-base);
+}
+
+.world-map-country:hover {
+  fill-opacity: 1 !important;
+  stroke: var(--color-white);
+}
+
+.world-map-loading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 60px 20px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: var(--font-poppins-regular);
+}
+
+.world-map-tooltip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 12px));
+  background: rgba(20, 20, 20, 0.95);
+  color: var(--color-white);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+  z-index: 20;
+  white-space: nowrap;
+}
+
+.world-map-tooltip-name {
+  font-family: var(--font-poppins-medium);
+  font-size: 0.85rem;
+}
+
+.world-map-tooltip-count {
+  font-family: var(--font-poppins-regular);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}

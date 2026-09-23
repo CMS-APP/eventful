@@ -73,6 +73,21 @@
   gap: 24px;
 }
 
+.user-stats-map-card {
+  margin-top: 24px;
+}
+
+.user-stats-map-caption {
+  margin: -8px 0 16px 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--font-poppins-regular);
+  font-size: 0.85rem;
+}
+
+.user-stats-map-list {
+  margin-top: 20px;
+}
+
 .user-stats-card {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);

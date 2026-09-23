@@ -70,17 +70,23 @@ def subscription_stats(project_id: str, api_key: str, days: int) -> dict:
         revenue_future = executor.submit(
             fetch_chart, "revenue", project_id, api_key, start_date, end_date
         )
+        actives_future = executor.submit(
+            fetch_chart, "actives", project_id, api_key, start_date, end_date
+        )
         active_subs_future = executor.submit(fetch_active_subscriptions, project_id, api_key)
         mrr = mrr_future.result()
         revenue = revenue_future.result()
+        actives = actives_future.result()
         active_subscriptions = active_subs_future.result()
 
     revenue_by_date = {point["date"]: point["value"] for point in revenue}
+    actives_by_date = {point["date"]: point["value"] for point in actives}
     history = [
         {
             "date": point["date"],
             "mrr": point["value"],
             "revenue": revenue_by_date.get(point["date"], 0),
+            "activeSubs": actives_by_date.get(point["date"], 0),
         }
         for point in mrr
     ]

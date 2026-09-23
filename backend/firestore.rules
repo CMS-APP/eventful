@@ -134,5 +134,9 @@ service cloud.firestore {
     match /totalUserStats/{date} {
       allow read: if isAdmin();
     }
+
+    match /countryUserStats/{date} {
+      allow read: if isAdmin();
+    }
   }
 }

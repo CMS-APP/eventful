@@ -65,6 +65,27 @@ def snapshot_active_users(as_of: datetime | None = None) -> None:
     db.collection("activeUserStats").document(date).set({**snapshot, "createdAt": SERVER_TIMESTAMP})
 
 
+def snapshot_users_by_country(as_of: datetime | None = None) -> None:
+    db = firestore.client()
+    now = as_of or datetime.now(timezone.utc)
+    day = timedelta(days=1)
+
+    by_region: dict[str, int] = {}
+    total = 0
+
+    for doc in db.collection("user").stream():
+        region = (doc.to_dict() or {}).get("region")
+        key = region if isinstance(region, str) and region else "unknown"
+        by_region[key] = by_region.get(key, 0) + 1
+        total += 1
+
+    date = (now - day).strftime("%Y-%m-%d")
+    snapshot = {"date": date, "total": total, "byRegion": by_region}
+    db.collection("countryUserStats").document(date).set(
+        {**snapshot, "createdAt": SERVER_TIMESTAMP}
+    )
+
+
 def verify_token(token):
     result = auth.verify_id_token(token)
     return result.get("uid")

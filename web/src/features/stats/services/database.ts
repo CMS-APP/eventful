@@ -66,7 +66,7 @@ export interface UserDeviceStatsRow {
   lastLaunchedAt: string | null;
 }
 
-const DEVICE_STATS_ACTIVE_WINDOW_DAYS = 30;
+const DEVICE_STATS_ACTIVE_WINDOW_DAYS = 90;
 
 export async function getUsersForDeviceStats(): Promise<UserDeviceStatsRow[]> {
   const cacheKey = "stats:usersForDeviceStats";
@@ -113,6 +113,50 @@ export async function getUsersForDeviceStats(): Promise<UserDeviceStatsRow[]> {
   } catch (error) {
     console.error("Error fetching users for device stats:", error);
     return [];
+  }
+}
+
+export interface CountryUserStat {
+  region: string;
+  count: number;
+}
+
+export interface CountryUserStats {
+  date: string | null;
+  total: number;
+  byRegion: CountryUserStat[];
+}
+
+export async function getUsersByCountryStats(): Promise<CountryUserStats> {
+  const cacheKey = "stats:usersByCountry";
+  const cached = readLocalCache<CountryUserStats>(cacheKey, HOUR_MS);
+  if (cached) return cached;
+
+  try {
+    const ref = collection(FIRESTORE_DB, "countryUserStats");
+    const q = query(ref, orderBy("date", "desc"), limit(1));
+    const snapshot = await getDocs(q);
+    const data = snapshot.docs[0]?.data();
+
+    const byRegionRaw =
+      data?.byRegion && typeof data.byRegion === "object" ? data.byRegion : {};
+    const byRegion = Object.entries(byRegionRaw)
+      .map(([region, count]) => ({
+        region,
+        count: typeof count === "number" ? count : 0
+      }))
+      .sort((a, b) => b.count - a.count);
+
+    const result: CountryUserStats = {
+      date: typeof data?.date === "string" ? data.date : null,
+      total: typeof data?.total === "number" ? data.total : 0,
+      byRegion
+    };
+    writeLocalCache(cacheKey, result);
+    return result;
+  } catch (error) {
+    console.error("Error fetching users-by-country stats:", error);
+    return { date: null, total: 0, byRegion: [] };
   }
 }
 

@@ -20,6 +20,10 @@ from src.functions.http_handlers import (
     sendVerificationEmail,
     subscriptionStats,
 )
-from src.functions.scheduled_handlers import snapshotActiveUsers, snapshotTotalUsers
+from src.functions.scheduled_handlers import (
+    snapshotActiveUsers,
+    snapshotTotalUsers,
+    snapshotUsersByCountry,
+)
 
 initialize_app()

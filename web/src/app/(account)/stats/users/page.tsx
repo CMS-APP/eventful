@@ -17,8 +17,24 @@ import Loading from "@/components/Loading";
 import UnauthorizedAccess from "@/features/stats/components/UnauthorizedAccess";
 import { useUser } from "@/contexts/UserContext";
 
-import { type UserDeviceStatsRow, getUsersForDeviceStats } from "@/features/stats/services/database";
+import {
+  type CountryUserStats,
+  type UserDeviceStatsRow,
+  getUsersByCountryStats,
+  getUsersForDeviceStats
+} from "@/features/stats/services/database";
+import WorldMap from "@/features/stats/components/WorldMap";
 import "./users.css";
+
+function formatDate(dateStr: string): string {
+  const date = new Date(`${dateStr}T00:00:00Z`);
+  return date.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC"
+  });
+}
 
 function aggregateBy(
   rows: UserDeviceStatsRow[],
@@ -28,6 +44,34 @@ function aggregateBy(
   for (const row of rows) {
     const v = String(row[field] ?? "unknown");
     map.set(v, (map.get(v) ?? 0) + 1);
+  }
+  return Array.from(map.entries())
+    .map(([value, count]) => ({ value, count }))
+    .sort((a, b) => b.count - a.count);
+}
+
+function deviceTypeLabel(code: string): string {
+  switch (code) {
+    case "1":
+      return "Phone";
+    case "2":
+      return "Tablet";
+    case "3":
+      return "Desktop";
+    case "4":
+      return "TV";
+    default:
+      return "Unknown";
+  }
+}
+
+function aggregateDeviceType(
+  rows: UserDeviceStatsRow[]
+): { value: string; count: number }[] {
+  const map = new Map<string, number>();
+  for (const row of rows) {
+    const label = deviceTypeLabel(row.deviceType);
+    map.set(label, (map.get(label) ?? 0) + 1);
   }
   return Array.from(map.entries())
     .map(([value, count]) => ({ value, count }))
@@ -57,6 +101,12 @@ export default function UserStatsPage() {
   const [checkingAdmin, setCheckingAdmin] = useState(true);
   const [rows, setRows] = useState<UserDeviceStatsRow[]>([]);
   const [loadingData, setLoadingData] = useState(true);
+  const [countryStats, setCountryStats] = useState<CountryUserStats>({
+    date: null,
+    total: 0,
+    byRegion: []
+  });
+  const [loadingCountryStats, setLoadingCountryStats] = useState(true);
 
   useEffect(() => {
     async function verifyAdmin() {
@@ -90,23 +140,44 @@ export default function UserStatsPage() {
     fetchData();
   }, [isAdmin, checkingAdmin]);
 
+  useEffect(() => {
+    if (!isAdmin || checkingAdmin) return;
+    async function fetchCountryStats() {
+      setLoadingCountryStats(true);
+      try {
+        const result = await getUsersByCountryStats();
+        setCountryStats(result);
+      } catch (error) {
+        console.error("Error fetching users-by-country stats:", error);
+      } finally {
+        setLoadingCountryStats(false);
+      }
+    }
+    fetchCountryStats();
+  }, [isAdmin, checkingAdmin]);
+
   const stats = useMemo(() => {
     const total = rows.length;
     const byPlatform = aggregateBy(rows, "platform");
     const byAppVersion = aggregateBy(rows, "appVersion").sort((a, b) =>
       compareVersionsDescending(a.value, b.value)
     );
-    const byRegion = aggregateBy(rows, "region");
-    const byDeviceModel = aggregateBy(rows, "deviceModel");
+    const byDeviceType = aggregateDeviceType(rows);
 
     return {
       total,
       byPlatform,
       byAppVersion,
-      byRegion,
-      byDeviceModel
+      byDeviceType
     };
   }, [rows]);
+
+  const countryMapData = useMemo(() => {
+    const known = countryStats.byRegion.filter((r) => r.region !== "unknown");
+    return {
+      known: known.map((r) => ({ value: r.region, count: r.count }))
+    };
+  }, [countryStats]);
 
   if (loading || checkingAdmin) {
     return <Loading />;
@@ -133,7 +204,7 @@ export default function UserStatsPage() {
             <h1>User stats</h1>
             <p className="user-stats-subtitle">
               Platform, version, region and device breakdown ({stats.total}{" "}
-              users active in the last 30 days)
+              users active in the last 90 days)
             </p>
           </div>
 
@@ -182,28 +253,11 @@ export default function UserStatsPage() {
 
               <section className="user-stats-card">
                 <h2 className="user-stats-card-title">
-                  <FontAwesomeIcon icon={faMapMarkerAlt} />
-                  Region
-                </h2>
-                <ul className="user-stats-list">
-                  {stats.byRegion.map(({ value, count }) => (
-                    <li key={value} className="user-stats-row">
-                      <span className="user-stats-label">{value}</span>
-                      <span className="user-stats-count">
-                        {count.toLocaleString()}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-
-              <section className="user-stats-card">
-                <h2 className="user-stats-card-title">
                   <FontAwesomeIcon icon={faLaptop} />
-                  Device model
+                  Device type
                 </h2>
                 <ul className="user-stats-list">
-                  {stats.byDeviceModel.map(({ value, count }) => (
+                  {stats.byDeviceType.map(({ value, count }) => (
                     <li key={value} className="user-stats-row">
                       <span className="user-stats-label">{value}</span>
                       <span className="user-stats-count">
@@ -214,6 +268,38 @@ export default function UserStatsPage() {
                 </ul>
               </section>
             </div>
+          )}
+
+          {!loadingCountryStats && (
+            <section className="user-stats-card user-stats-map-card">
+              <h2 className="user-stats-card-title">
+                <FontAwesomeIcon icon={faMapMarkerAlt} />
+                Users by country
+              </h2>
+              {countryStats.date && countryStats.total > 0 && (
+                <p className="user-stats-map-caption">
+                  {countryStats.total.toLocaleString()} users total as of{" "}
+                  {formatDate(countryStats.date)}
+                </p>
+              )}
+              <WorldMap
+                data={countryMapData.known}
+                total={countryStats.total}
+                loading={loadingCountryStats}
+              />
+              <ul className="user-stats-list user-stats-map-list">
+                {countryStats.byRegion.map(({ region, count }) => (
+                  <li key={region} className="user-stats-row">
+                    <span className="user-stats-label">
+                      {region === "unknown" ? "Unknown" : region}
+                    </span>
+                    <span className="user-stats-count">
+                      {count.toLocaleString()}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
           )}
         </div>
       </main>
