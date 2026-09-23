@@ -90,6 +90,11 @@ FUNNELS = {
             "screen_name": "Paywall",
         },
         {
+            "id": "subscribe_clicked",
+            "label": "Subscribe button clicked",
+            "event": "subscribe_button_clicked",
+        },
+        {
             "id": "purchased",
             "label": "Purchase completed",
             "event": "subscription_purchased",
