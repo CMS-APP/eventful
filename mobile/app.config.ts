@@ -28,7 +28,7 @@ export default ({ config }: ConfigContext) => {
     android: {
       package: bundleId,
       icon: "./src/assets/logos/eventful-logo-android.png",
-      versionCode: 372,
+      versionCode: 373,
       softwareKeyboardLayoutMode: "pan",
       permissions: [
         "android.permission.READ_EXTERNAL_STORAGE",
@@ -44,7 +44,7 @@ export default ({ config }: ConfigContext) => {
     ios: {
       bundleIdentifier: bundleId,
       icon: "./src/assets/logos/eventful-logo.png",
-      buildNumber: "378",
+      buildNumber: "379",
       supportsTablet: true,
       appleTeamId: "4LMZHG2P3T",
       infoPlist: {
@@ -137,6 +137,7 @@ export default ({ config }: ConfigContext) => {
           ios: {
             deploymentTarget: "16.4",
             useFrameworks: "static",
+            enableSceneSupport: true,
             forceStaticLinking: [
               "RNFBApp",
               "RNFBAnalytics",
@@ -151,7 +152,6 @@ export default ({ config }: ConfigContext) => {
       ],
       "@bacons/apple-targets",
       "./plugins/withBoringSSLHeaderFix"
-      
     ],
     extra: {
       appVariant: IS_DEV ? "development" : "production",
