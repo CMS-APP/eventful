@@ -7,10 +7,7 @@ import { StyleSheet, View } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import {
-  PaymentContextType,
-  usePaymentProvider
-} from "@/app/context/payment/PaymentContext";
+import { usePaymentProvider } from "@/app/context/payment/PaymentContext";
 import {
   getPhotoBoothProducts,
   getPremiumProducts,
@@ -22,7 +19,10 @@ import { Screen } from "@/components/screen/Screen";
 import { SegmentedControl } from "@/design-system/components/buttons/SegmentedControl";
 import { TextButton } from "@/design-system/components/buttons/TextButton";
 import { colors } from "@/design-system/tokens/colors";
-import { trackPaywallViewed } from "@/services/analytics/events";
+import {
+  trackPaywallViewed,
+  trackSubscribeButtonClicked
+} from "@/services/analytics/events";
 import { Subscription } from "@/types/Subscription";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
@@ -40,8 +40,7 @@ interface PaywallScreenProps {
 export function PaywallScreen({ navigation, route }: PaywallScreenProps) {
   const type = route.params?.type || "Photo Booth";
   const [loading, setLoading] = useState(false);
-  const { products, purchasePackage, user } =
-    usePaymentProvider() as PaymentContextType;
+  const { products, purchasePackage, user } = usePaymentProvider();
 
   const hasActiveSubscription = (user?.activeSubscriptions?.length ?? 0) > 0;
 
@@ -77,7 +76,11 @@ export function PaywallScreen({ navigation, route }: PaywallScreenProps) {
     premium_subscriptions !== prevSelectionDeps.premium_subscriptions ||
     photo_booth_subscriptions !== prevSelectionDeps.photo_booth_subscriptions
   ) {
-    setPrevSelectionDeps({ type, premium_subscriptions, photo_booth_subscriptions });
+    setPrevSelectionDeps({
+      type,
+      premium_subscriptions,
+      photo_booth_subscriptions
+    });
     if (type === "Premium") {
       setSelectedSubscriptionType("Premium");
       if (premium_subscriptions && premium_subscriptions.length > 0) {
@@ -95,6 +98,7 @@ export function PaywallScreen({ navigation, route }: PaywallScreenProps) {
     if (!selectedSubscription?.id || products.length === 0 || loading) {
       return;
     }
+    trackSubscribeButtonClicked(selectedSubscriptionType);
     setLoading(true);
     try {
       await subscribeToProduct(

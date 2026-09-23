@@ -168,6 +168,10 @@ export function trackPaywallViewed(source: string) {
   track("paywall_viewed", { source });
 }
 
+export function trackSubscribeButtonClicked(type: string) {
+  track("subscribe_button_clicked", { type });
+}
+
 export function trackSubscriptionPurchased(type: string) {
   track("subscription_purchased", { type });
 }
