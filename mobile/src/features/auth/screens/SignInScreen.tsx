@@ -17,12 +17,14 @@ import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { Header } from "@/features/auth/components/Header";
 import { HeaderArcs } from "@/features/auth/components/HeaderArcs";
+import { SIGN_IN_ERROR_DETAILS } from "@/features/auth/signInErrors";
 import { formStyles } from "@/features/auth/styles/formStyles";
 import { handleSignIn } from "@/services/firebase/auth";
 import { sendVerificationEmail } from "@/services/firebase/backend";
 import { showOptionsAlert } from "@/utils/alertModal";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
+import { emailValid } from "@/utils/validation";
 
 interface FormErrors {
   email?: string;
@@ -50,9 +52,12 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
 
   const validateForm = useCallback((): boolean => {
     const newErrors: FormErrors = {};
+    const trimmedEmail = email.trim();
 
-    if (!email) {
+    if (!trimmedEmail) {
       newErrors.email = "Please enter an email address.";
+    } else if (!emailValid(trimmedEmail)) {
+      newErrors.email = "Please enter a valid email address.";
     }
 
     if (!password) {
@@ -128,7 +133,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
 
   const signIn = useCallback(
     async (devEmail?: string, devPassword?: string) => {
-      let currentEmail = emailRef.current;
+      let currentEmail = emailRef.current.trim();
       let currentPassword = passwordRef.current;
 
       if (devEmail && devPassword) {
@@ -140,15 +145,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
 
       setIsSigningIn(true);
       try {
-        const user: any | null = await handleSignIn(
-          currentEmail,
-          currentPassword
-        );
-
-        if (!user) {
-          setErrors({ password: "Wrong password" });
-          return;
-        }
+        const user = await handleSignIn(currentEmail, currentPassword);
 
         if (!user.emailVerified) {
           emailVerificationAlert(user);
@@ -164,20 +161,11 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
         );
       } catch (error) {
         if (error instanceof Error) {
-          const errorMessages: Record<string, string> = {
-            "auth/user-not-found": "Wrong password",
-            "auth/wrong-password": "Wrong password",
-            "auth/too-many-requests": "Too many requests",
-            "auth/invalid-email": "Invalid email",
-            "auth/user-disabled": "User disabled",
-            "auth/network-request-failed": "Network request failed",
-            "auth/invalid-credential": "Invalid credentials"
-          };
+          const code = (error as { code?: string }).code;
+          const detail = code ? SIGN_IN_ERROR_DETAILS[code] : undefined;
 
-          const errorMessage = errorMessages[error.message];
-
-          if (errorMessage) {
-            setErrors({ password: errorMessage });
+          if (detail) {
+            setErrors({ [detail.field]: detail.message });
           } else {
             log(`Error Logging In: ${error}`, "error");
             showErrorToast("Error Logging In");

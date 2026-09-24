@@ -123,6 +123,7 @@ export function Input({
             textContentType={resolvedTextContentType}
             secureTextEntry={password && !showPassword}
             editable={editable}
+            allowFontScaling={false}
           />
           {password && (
             <TouchableOpacity

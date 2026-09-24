@@ -29,19 +29,15 @@ import { removeExpoToken } from "./user";
 export async function handleSignIn(
   email: string,
   password: string
-): Promise<FirebaseAuthTypes.User | null> {
-  try {
-    const auth = getAuth();
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    trackAuthSignIn();
-    return userCredential.user;
-  } catch {
-    return null;
-  }
+): Promise<FirebaseAuthTypes.User> {
+  const auth = getAuth();
+  const userCredential = await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+  trackAuthSignIn();
+  return userCredential.user;
 }
 
 export async function handleSignOut(dispatch: Dispatch<Action>) {

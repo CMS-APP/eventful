@@ -51,7 +51,7 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
 
     if (!passwordValid(password)) {
       newErrors.password =
-        "Password must be at least 8 characters and contain one number, letter, and special character.";
+        "Password must be at least 8 characters and include an uppercase letter, a lowercase letter, a number, and a special character.";
     }
 
     if (password !== confirmPassword) {

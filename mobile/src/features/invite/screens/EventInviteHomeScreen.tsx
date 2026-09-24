@@ -328,7 +328,8 @@ const styles = StyleSheet.create({
   },
   headerRow: {
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    marginTop: 16
   },
   middleColumn: {
     alignItems: "center",

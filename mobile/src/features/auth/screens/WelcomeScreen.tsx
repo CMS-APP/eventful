@@ -55,7 +55,7 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
 
           <Button
             text="Email"
-            onPress={handleSignIn}
+            onPress={handleSignUp}
             color={colors.primary}
             textColor={colors.white}
             leadingIcon="envelope"
@@ -66,15 +66,15 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
 
           <View style={styles.orContainer}>
             <Text type="body" color={colors.primary}>
-              Don&apos;t have an account?
+              Already have an account?
             </Text>
 
             <TextButton
-              text="Sign up"
+              text="Sign in"
               textColor={colors.primary}
               textAlign="center"
               type="body"
-              onPress={handleSignUp}
+              onPress={handleSignIn}
             />
           </View>
         </View>
