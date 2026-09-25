@@ -84,8 +84,60 @@
   font-size: 0.85rem;
 }
 
-.user-stats-map-list {
+.user-stats-list.user-stats-map-list {
   margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 16px;
+  max-height: 420px;
+}
+
+.user-stats-row.user-stats-map-row {
+  border-bottom: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 16px 18px;
+}
+
+.user-stats-map-region {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.user-stats-map-region .user-stats-label {
+  font-family: var(--font-poppins-medium);
+}
+
+.user-stats-map-country-name {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.78rem;
+  font-family: var(--font-poppins-regular);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-stats-map-count-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.user-stats-map-percentage {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.78rem;
+  font-family: var(--font-poppins-regular);
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .user-stats-list.user-stats-map-list {
+    grid-template-columns: 1fr;
+  }
 }
 
 .user-stats-card {

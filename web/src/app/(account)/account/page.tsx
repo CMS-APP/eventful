@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 
-import { deleteUserAccount } from "@/services/firebase/user";
-import DeleteAccountModal from "@/features/account/components/DeleteAccountModal";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { useUser } from "@/contexts/UserContext";
+import { DeleteAccountModal } from "@/features/account/components/DeleteAccountModal";
+import { deleteUserAccount } from "@/services/firebase/user";
 
 import "./page.css";
 
@@ -34,9 +34,7 @@ export default function Home() {
 
   return (
     <>
-      <main
-        className="flex flex-1 flex-col gap-4 p-4 md:flex-row md:gap-10 md:p-10"
-      >
+      <main className="flex flex-1 flex-col gap-4 p-4 md:flex-row md:gap-10 md:p-10">
         <div className="profile-container">
           <div className="profile-header">
             <h1>Account</h1>

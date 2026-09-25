@@ -1,4 +1,4 @@
-import AccountAuthGuard from "@/components/AccountAuthGuard";
+import { AccountAuthGuard } from "@/components/AccountAuthGuard";
 
 export default function HomeLayout({
   children,

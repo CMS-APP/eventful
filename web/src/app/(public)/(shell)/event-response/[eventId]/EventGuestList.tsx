@@ -3,6 +3,8 @@
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { getGuestInitials } from "@/lib/initials";
+
 export type EventGuestResponse = "accept" | "maybe" | "decline";
 
 export interface EventGuest {
@@ -22,20 +24,13 @@ const GUEST_RESPONSE_ORDER: EventGuestResponse[] = [
   "decline"
 ];
 
-function getInitials(name: string) {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  if (parts.length === 0) return "?";
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-}
-
 interface EventGuestListProps {
   guests: EventGuest[];
   expanded: boolean;
   onToggle: () => void;
 }
 
-export default function EventGuestList({
+export function EventGuestList({
   guests,
   expanded,
   onToggle
@@ -78,7 +73,7 @@ export default function EventGuestList({
                     className="event-response-guest-row"
                   >
                     <div className="event-response-guest-avatar">
-                      {getInitials(guest.name)}
+                      {getGuestInitials(guest.name)}
                     </div>
                     <span className="event-response-guest-name">
                       {guest.name}

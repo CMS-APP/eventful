@@ -13,29 +13,18 @@ import Link from "next/link";
 
 import { useEffect, useState } from "react";
 
-import Button from "@/components/Button";
-import Loading from "@/components/Loading";
+import { Button } from "@/components/Button";
+import { Loading } from "@/components/Loading";
 import { fetchGalleryInfo, parseGalleryId } from "@/features/gallery/api";
-import GalleryImageView from "@/features/gallery/components/GalleryImageView";
+import { GalleryImageView } from "@/features/gallery/components/GalleryImageView";
 import { GalleryImage, GalleryInfo } from "@/features/gallery/types";
 import { APP_STORE_LINK, GOOGLE_PLAY_LINK } from "@/lib/appLinks";
+import { formatGalleryDate } from "@/lib/dates";
 import { getGalleryImages } from "@/services/firebase/firebaseFunctions";
 
 import "./page.css";
 
-function formatDate(date: string | null) {
-  if (!date) return null;
-  return new Date(date)
-    .toLocaleDateString("en-GB", {
-      weekday: "short",
-      day: "numeric",
-      month: "short",
-      year: "numeric"
-    })
-    .toUpperCase();
-}
-
-export default function GalleryClient({ galleryId }: { galleryId: string }) {
+export function GalleryClient({ galleryId }: { galleryId: string }) {
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
   const [galleryInfo, setGalleryInfo] = useState<GalleryInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -142,13 +131,13 @@ export default function GalleryClient({ galleryId }: { galleryId: string }) {
   }
 
   const hasImages = galleryImages.length > 0;
-  const formattedDate = formatDate(galleryInfo?.date ?? null);
+  const formattedDate = formatGalleryDate(galleryInfo?.date ?? null);
 
   return (
     <>
       {isDownloadingAll && (
         <Loading
-          message={`Creating gallery zip… ${Math.round(downloadProgress)}%`}
+          message={`Creating gallery zip... ${Math.round(downloadProgress)}%`}
         />
       )}
       <main className="gallery-page">

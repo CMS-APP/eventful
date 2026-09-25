@@ -12,10 +12,9 @@ import Link from "next/link";
 
 import { useState, useEffect, useMemo } from "react";
 
-import { checkAdmin } from "@/services/firebase/user";
-import Loading from "@/components/Loading";
-import UnauthorizedAccess from "@/features/stats/components/UnauthorizedAccess";
-import { useUser } from "@/contexts/UserContext";
+import { Loading } from "@/components/Loading";
+import { UnauthorizedAccess } from "@/features/stats/components/UnauthorizedAccess";
+import { formatMediumUtcDate } from "@/lib/dates";
 
 import {
   type CountryUserStats,
@@ -23,82 +22,18 @@ import {
   getUsersByCountryStats,
   getUsersForDeviceStats
 } from "@/features/stats/services/database";
-import WorldMap from "@/features/stats/components/WorldMap";
+import { useAdminGuard } from "@/features/stats/hooks/useAdminGuard";
+import { WorldMap } from "@/features/stats/components/WorldMap";
+import {
+  aggregateBy,
+  aggregateDeviceType,
+  compareVersionsDescending,
+  regionName
+} from "@/features/stats/utils/userStats";
 import "./users.css";
 
-function formatDate(dateStr: string): string {
-  const date = new Date(`${dateStr}T00:00:00Z`);
-  return date.toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "UTC"
-  });
-}
-
-function aggregateBy(
-  rows: UserDeviceStatsRow[],
-  field: keyof UserDeviceStatsRow
-): { value: string; count: number }[] {
-  const map = new Map<string, number>();
-  for (const row of rows) {
-    const v = String(row[field] ?? "unknown");
-    map.set(v, (map.get(v) ?? 0) + 1);
-  }
-  return Array.from(map.entries())
-    .map(([value, count]) => ({ value, count }))
-    .sort((a, b) => b.count - a.count);
-}
-
-function deviceTypeLabel(code: string): string {
-  switch (code) {
-    case "1":
-      return "Phone";
-    case "2":
-      return "Tablet";
-    case "3":
-      return "Desktop";
-    case "4":
-      return "TV";
-    default:
-      return "Unknown";
-  }
-}
-
-function aggregateDeviceType(
-  rows: UserDeviceStatsRow[]
-): { value: string; count: number }[] {
-  const map = new Map<string, number>();
-  for (const row of rows) {
-    const label = deviceTypeLabel(row.deviceType);
-    map.set(label, (map.get(label) ?? 0) + 1);
-  }
-  return Array.from(map.entries())
-    .map(([value, count]) => ({ value, count }))
-    .sort((a, b) => b.count - a.count);
-}
-
-function compareVersionsDescending(a: string, b: string): number {
-  if (a === b) return 0;
-  if (a === "unknown") return 1;
-  if (b === "unknown") return -1;
-
-  const aParts = a.split(".").map(Number);
-  const bParts = b.split(".").map(Number);
-  const length = Math.max(aParts.length, bParts.length);
-
-  for (let i = 0; i < length; i++) {
-    const an = aParts[i] || 0;
-    const bn = bParts[i] || 0;
-    if (an !== bn) return bn - an;
-  }
-  return 0;
-}
-
 export default function UserStatsPage() {
-  const { user, loading } = useUser();
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [checkingAdmin, setCheckingAdmin] = useState(true);
+  const { loading, isAdmin, checkingAdmin } = useAdminGuard();
   const [rows, setRows] = useState<UserDeviceStatsRow[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const [countryStats, setCountryStats] = useState<CountryUserStats>({
@@ -107,22 +42,6 @@ export default function UserStatsPage() {
     byRegion: []
   });
   const [loadingCountryStats, setLoadingCountryStats] = useState(true);
-
-  useEffect(() => {
-    async function verifyAdmin() {
-      if (loading || !user) return;
-      try {
-        const adminStatus = await checkAdmin(user.uid);
-        setIsAdmin(adminStatus);
-      } catch (error) {
-        console.error("Error checking admin status:", error);
-        setIsAdmin(false);
-      } finally {
-        setCheckingAdmin(false);
-      }
-    }
-    verifyAdmin();
-  }, [user, loading]);
 
   useEffect(() => {
     if (!isAdmin || checkingAdmin) return;
@@ -175,7 +94,8 @@ export default function UserStatsPage() {
   const countryMapData = useMemo(() => {
     const known = countryStats.byRegion.filter((r) => r.region !== "unknown");
     return {
-      known: known.map((r) => ({ value: r.region, count: r.count }))
+      known: known.map((r) => ({ value: r.region, count: r.count })),
+      knownTotal: known.reduce((sum, r) => sum + r.count, 0)
     };
   }, [countryStats]);
 
@@ -279,25 +199,37 @@ export default function UserStatsPage() {
               {countryStats.date && countryStats.total > 0 && (
                 <p className="user-stats-map-caption">
                   {countryStats.total.toLocaleString()} users total as of{" "}
-                  {formatDate(countryStats.date)}
+                  {formatMediumUtcDate(countryStats.date)}
                 </p>
               )}
               <WorldMap
                 data={countryMapData.known}
-                total={countryStats.total}
+                total={countryMapData.knownTotal}
                 loading={loadingCountryStats}
               />
               <ul className="user-stats-list user-stats-map-list">
-                {countryStats.byRegion.map(({ region, count }) => (
-                  <li key={region} className="user-stats-row">
-                    <span className="user-stats-label">
-                      {region === "unknown" ? "Unknown" : region}
-                    </span>
-                    <span className="user-stats-count">
-                      {count.toLocaleString()}
-                    </span>
-                  </li>
-                ))}
+                {countryStats.byRegion
+                  .filter(({ region }) => region !== "unknown")
+                  .map(({ region, count }) => (
+                    <li key={region} className="user-stats-row user-stats-map-row">
+                      <span className="user-stats-map-region">
+                        <span className="user-stats-label">{region}</span>
+                        <span className="user-stats-map-country-name">
+                          {regionName(region)}
+                        </span>
+                      </span>
+                      <span className="user-stats-map-count-group">
+                        <span className="user-stats-count">
+                          {count.toLocaleString()}
+                        </span>
+                        {countryMapData.knownTotal > 0 && (
+                          <span className="user-stats-map-percentage">
+                            {((count / countryMapData.knownTotal) * 100).toFixed(1)}%
+                          </span>
+                        )}
+                      </span>
+                    </li>
+                  ))}
               </ul>
             </section>
           )}

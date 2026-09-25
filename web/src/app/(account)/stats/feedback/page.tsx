@@ -1,9 +1,8 @@
 "use client";
 
-import { checkAdmin } from "@/services/firebase/user";
-import Loading from "@/components/Loading";
-import UnauthorizedAccess from "@/features/stats/components/UnauthorizedAccess";
-import { useUser } from "@/contexts/UserContext";
+import { Loading } from "@/components/Loading";
+import { UnauthorizedAccess } from "@/features/stats/components/UnauthorizedAccess";
+import { useAdminGuard } from "@/features/stats/hooks/useAdminGuard";
 import {
   faArrowLeft,
   faCommentDots,
@@ -20,24 +19,11 @@ import {
   getAllFeedback,
   type FeedbackItem,
 } from "@/features/stats/services/database";
+import { formatDateTime } from "@/lib/dates";
 import "./feedback.css";
 
-function formatDate(iso: string) {
-  try {
-    const d = new Date(iso);
-    return d.toLocaleString(undefined, {
-      dateStyle: "medium",
-      timeStyle: "short",
-    });
-  } catch {
-    return iso;
-  }
-}
-
 export default function FeedbackPage() {
-  const { user, loading } = useUser();
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [checkingAdmin, setCheckingAdmin] = useState(true);
+  const { loading, isAdmin, checkingAdmin } = useAdminGuard();
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>([]);
   const [loadingFeedback, setLoadingFeedback] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -55,22 +41,6 @@ export default function FeedbackPage() {
       setDeletingId(null);
     }
   }
-
-  useEffect(() => {
-    async function verifyAdmin() {
-      if (loading || !user) return;
-      try {
-        const adminStatus = await checkAdmin(user.uid);
-        setIsAdmin(adminStatus);
-      } catch (error) {
-        console.error("Error checking admin status:", error);
-        setIsAdmin(false);
-      } finally {
-        setCheckingAdmin(false);
-      }
-    }
-    verifyAdmin();
-  }, [user, loading]);
 
   useEffect(() => {
     if (!isAdmin || checkingAdmin) return;
@@ -147,7 +117,7 @@ export default function FeedbackPage() {
                       className="feedback-meta-item feedback-date"
                       dateTime={item.timestamp}
                     >
-                      {formatDate(item.timestamp)}
+                      {formatDateTime(item.timestamp)}
                     </time>
                     <button
                       type="button"

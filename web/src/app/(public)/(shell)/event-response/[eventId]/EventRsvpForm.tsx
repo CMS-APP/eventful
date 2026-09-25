@@ -11,11 +11,11 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 import { useRef, useState } from "react";
 
-import Button from "@/components/Button";
-import TextInput from "@/components/TextInput";
+import { Button } from "@/components/Button";
+import { TextInput } from "@/components/TextInput";
 import { BACKEND_URL } from "@/lib/backendUrl";
-
-const RECAPTCHA_SITE_KEY = "6LfDpgQrAAAAAO0TSbcQban4TrA16CjelRzF_Urp";
+import { getOrCreateDeviceId } from "@/lib/deviceId";
+import { RECAPTCHA_SITE_KEY } from "@/lib/recaptcha";
 
 const RESPONSES = [
   { key: "Accept", label: "Accept", icon: faCheck, modifier: "accept" },
@@ -31,7 +31,7 @@ interface EventRsvpFormProps {
   onResponded: () => void;
 }
 
-export default function EventRsvpForm({
+export function EventRsvpForm({
   eventId,
   hostId,
   eventName,
@@ -50,15 +50,6 @@ export default function EventRsvpForm({
 
   function handleResponse(type: string) {
     setResponse((current) => (current === type ? null : type));
-  }
-
-  function getOrCreateDeviceId() {
-    let deviceId = localStorage.getItem("deviceId");
-    if (!deviceId) {
-      deviceId = crypto.randomUUID();
-      localStorage.setItem("deviceId", deviceId);
-    }
-    return deviceId;
   }
 
   async function sendResponse() {

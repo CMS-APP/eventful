@@ -1,8 +1,10 @@
 "use client";
 
-import Button from "@/components/Button";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { Button } from "@/components/Button";
+import "@/components/EmptyState.css";
 
 interface UnauthorizedAccessProps {
   title?: string;
@@ -10,28 +12,27 @@ interface UnauthorizedAccessProps {
   showBackButton?: boolean;
 }
 
-export default function UnauthorizedAccess({
+export function UnauthorizedAccess({
   title = "Access Denied",
   message = "You don't have permission to access this page.",
   showBackButton = true,
 }: UnauthorizedAccessProps) {
   return (
-    <main className="flex flex-1 flex-col p-10 md:p-20 text-white items-center justify-center gap-5">
-      <div className="flex flex-row justify-center items-center gap-5">
-        <FontAwesomeIcon
-          icon={faLock}
-          width={75}
-          height={75}
-          className="text-white text-[75px]"
-        />
-        <h1>{title}</h1>
-      </div>
-      <h3 className="text-center max-w-2xl">{message}</h3>
+    <main className="empty-state">
+      <p className="empty-state-eyebrow">Restricted</p>
+      <FontAwesomeIcon icon={faLock} className="empty-state-icon" />
+      <h1 className="empty-state-title">{title}</h1>
+      <p className="empty-state-text">{message}</p>
 
       {showBackButton && (
-        <Button onClick={() => (window.location.href = "/account")}>
-          Go Back To Account
-        </Button>
+        <div className="empty-state-actions">
+          <Button
+            className="empty-state-primary"
+            onClick={() => (window.location.href = "/account")}
+          >
+            Go back to account
+          </Button>
+        </div>
       )}
     </main>
   );

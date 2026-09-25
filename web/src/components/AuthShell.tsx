@@ -16,7 +16,7 @@ type AuthShellProps = {
   children: ReactNode;
 };
 
-export default function AuthShell({
+export function AuthShell({
   eyebrow,
   title,
   description,

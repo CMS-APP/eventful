@@ -14,8 +14,9 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { useEffect, useRef, useState } from "react";
 
-import { signOutUser } from "@/services/firebase/user";
 import { useUser } from "@/contexts/UserContext";
+import { getUserInitials } from "@/lib/initials";
+import { signOutUser } from "@/services/firebase/user";
 
 import "./AppHeader.css";
 
@@ -23,21 +24,7 @@ type AppHeaderProps = {
   authenticated?: boolean;
 };
 
-function getInitials(name?: string, email?: string) {
-  const source = name?.trim();
-  if (source) {
-    const parts = source.split(/\s+/).filter(Boolean);
-    const initials = parts
-      .slice(0, 2)
-      .map((part) => part[0])
-      .join("");
-    if (initials) return initials.toUpperCase();
-  }
-  if (email) return email[0].toUpperCase();
-  return "";
-}
-
-export default function AppHeader({ authenticated = false }: AppHeaderProps) {
+export function AppHeader({ authenticated = false }: AppHeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { userData, isAdmin } = useUser();
@@ -51,7 +38,7 @@ export default function AppHeader({ authenticated = false }: AppHeaderProps) {
     authenticated &&
     (pathname === "/account" || pathname.startsWith("/account/"));
   const statsActive = pathname.startsWith("/stats");
-  const initials = getInitials(userData?.name, userData?.email);
+  const initials = getUserInitials(userData?.name, userData?.email);
   const label = userData?.name || userData?.username || "Account";
 
   useEffect(() => {

@@ -2,8 +2,9 @@
 
 import { useRouter } from "next/navigation";
 
-import AppShell from "@/components/AppShell";
-import Button from "@/components/Button";
+import { AppShell } from "@/components/AppShell";
+import { Button } from "@/components/Button";
+import "@/components/EmptyState.css";
 
 import "./not-found.css";
 
@@ -12,24 +13,24 @@ export default function NotFound() {
 
   return (
     <AppShell>
-      <main className="not-found">
-        <p className="not-found-eyebrow">Error 404</p>
+      <main className="empty-state">
+        <p className="empty-state-eyebrow">Error 404</p>
         <h1 className="not-found-numeral">404</h1>
-        <h2 className="not-found-title">Page not found</h2>
-        <p className="not-found-text">
+        <h2 className="empty-state-title">Page not found</h2>
+        <p className="empty-state-text">
           The page you&apos;re looking for doesn&apos;t exist or may have been
           moved.
         </p>
-        <div className="not-found-actions">
+        <div className="empty-state-actions">
           <Button
-            className="not-found-primary"
+            className="empty-state-primary"
             onClick={() => router.push("/")}
           >
             Return home
           </Button>
           <button
             type="button"
-            className="not-found-secondary"
+            className="empty-state-secondary"
             onClick={() => router.back()}
           >
             Go back

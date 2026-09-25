@@ -40,7 +40,7 @@ function VerifyEmailContent() {
       <div className="text-center">
         {status === "verifying" && (
           <>
-            <h1 className="text-2xl font-bold text-white">Verifying…</h1>
+            <h1 className="text-2xl font-bold text-white">Verifying...</h1>
             <p className="mt-4 text-lg text-white">
               Hang on while we verify your email address.
             </p>

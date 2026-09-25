@@ -10,21 +10,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis
-} from "recharts";
 
 import { useEffect, useMemo, useState } from "react";
 
-import Loading from "@/components/Loading";
-import { useUser } from "@/contexts/UserContext";
-import UnauthorizedAccess from "@/features/stats/components/UnauthorizedAccess";
+import { Loading } from "@/components/Loading";
+import { FeatureUsageChart } from "@/features/stats/components/FeatureUsageChart";
+import { FunnelChart } from "@/features/stats/components/FunnelChart";
+import { TrendChart } from "@/features/stats/components/TrendChart";
+import { UnauthorizedAccess } from "@/features/stats/components/UnauthorizedAccess";
+import { CHART_COLOR } from "@/features/stats/constants";
 import {
   type ActiveUserStatsPoint,
   type TotalUserStatsPoint,
@@ -32,371 +26,26 @@ import {
   getTotalUser,
   getTotalUserStatsHistory
 } from "@/features/stats/services/database";
+import { useAdminGuard } from "@/features/stats/hooks/useAdminGuard";
 import {
   type FeatureUsageDomain,
-  type FeatureUsageStat,
   type FunnelStep,
   getFeatureUsageStats,
   getFunnelStats,
   getRealtimeActiveUsers
 } from "@/lib/analytics";
+import { formatCurrency } from "@/lib/currency";
+import { formatMediumUtcDate } from "@/lib/dates";
 import {
   type RevenueCatDailyStat,
   getRevenueCatStats
 } from "@/lib/subscriptions";
-import { checkAdmin } from "@/services/firebase/user";
 
 import "./page.css";
 
-const GROWTH_COLOR = "#199e70";
-const REVENUE_COLOR = "#c98500";
 const ROLLING_MONTH_WINDOW_DAYS = 30;
 const ROLLING_MONTH_CHART_SPAN_DAYS = 90;
-
-const AXIS_TICK = { fontSize: 11, fill: "rgba(255, 255, 255, 0.55)" };
-const TOOLTIP_STYLE = {
-  background: "rgba(10, 10, 10, 0.92)",
-  border: "1px solid rgba(255, 255, 255, 0.15)",
-  borderRadius: 8,
-  color: "var(--color-white)",
-  fontSize: 13
-};
-
-function formatShortDate(dateStr: string): string {
-  const date = new Date(`${dateStr}T00:00:00Z`);
-  return date.toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    timeZone: "UTC"
-  });
-}
-
-function formatLastUpdated(dateStr: string): string {
-  const date = new Date(`${dateStr}T00:00:00Z`);
-  return date.toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "UTC"
-  });
-}
-
-function formatCurrency(value: number): string {
-  return value.toLocaleString("en-GB", {
-    style: "currency",
-    currency: "GBP",
-    currencyDisplay: "narrowSymbol",
-    maximumFractionDigits: 0
-  });
-}
-
-function TrendChart<T extends { date: string }>({
-  history,
-  metric,
-  color,
-  formatValue,
-  emptyMessage,
-  loading,
-  secondaryMetric,
-  secondaryLabel,
-  formatSecondaryValue
-}: {
-  history: T[];
-  metric: keyof T;
-  color: string;
-  formatValue: (value: number) => string;
-  emptyMessage: string;
-  loading: boolean;
-  secondaryMetric?: keyof T;
-  secondaryLabel?: string;
-  formatSecondaryValue?: (value: number) => string;
-}) {
-  if (loading) {
-    return (
-      <div className="chart-card-loading" role="status" aria-live="polite">
-        <span className="chart-card-spinner" aria-hidden />
-        <span>Loading...</span>
-      </div>
-    );
-  }
-
-  if (history.length === 0) {
-    return <p className="chart-card-empty">{emptyMessage}</p>;
-  }
-
-  const latest = Number(history[history.length - 1][metric]) || 0;
-
-  function renderTooltip({
-    active,
-    payload,
-    label
-  }: {
-    active?: boolean;
-    payload?: readonly unknown[];
-    label?: unknown;
-  }) {
-    if (!active || !payload || payload.length === 0) return null;
-    const point = (payload[0] as { payload: T }).payload;
-
-    return (
-      <div style={{ ...TOOLTIP_STYLE, padding: "8px 12px" }}>
-        <div>{formatShortDate(String(label))}</div>
-        <div>{formatValue(Number(point[metric]) || 0)}</div>
-        {secondaryMetric && (
-          <div style={{ opacity: 0.75 }}>
-            {secondaryLabel}:{" "}
-            {(formatSecondaryValue ?? String)(Number(point[secondaryMetric]) || 0)}
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <div className="chart-card-summary">
-        <span className="chart-card-summary-value">{formatValue(latest)}</span>
-      </div>
-      <ResponsiveContainer width="100%" height={180}>
-        <LineChart
-          data={history}
-          margin={{ top: 10, right: 12, left: 0, bottom: 0 }}
-        >
-          <CartesianGrid stroke="rgba(255, 255, 255, 0.08)" vertical={false} />
-          <XAxis
-            dataKey="date"
-            tickFormatter={formatShortDate}
-            tick={AXIS_TICK}
-            axisLine={false}
-            tickLine={false}
-            minTickGap={24}
-          />
-          <YAxis
-            domain={["auto", "auto"]}
-            tickFormatter={(v) => formatValue(Number(v))}
-            tick={AXIS_TICK}
-            axisLine={false}
-            tickLine={false}
-            width={56}
-          />
-          <Tooltip content={renderTooltip} />
-          <Line
-            type="monotone"
-            dataKey={metric as string}
-            stroke={color}
-            strokeWidth={2}
-            dot={{ r: 3, fill: color, strokeWidth: 0 }}
-            activeDot={{ r: 6 }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
-  );
-}
-
-const FUNNEL_STEP_OPACITY = [1, 0.72, 0.48, 0.32];
-
-const FUNNEL_CHART_WIDTH = 1000;
-const FUNNEL_CHART_HEIGHT = 220;
-const FUNNEL_MAX_BAR_HEIGHT = 180;
-
-function FunnelChart({
-  steps,
-  loading
-}: {
-  steps: FunnelStep[];
-  loading: boolean;
-}) {
-  if (loading) {
-    return (
-      <div className="chart-card-loading" role="status" aria-live="polite">
-        <span className="chart-card-spinner" aria-hidden />
-        <span>Loading...</span>
-      </div>
-    );
-  }
-
-  if (steps.length === 0 || steps.every((step) => step.users === 0)) {
-    return (
-      <p className="chart-card-empty">
-        No funnel data yet from Firebase Analytics for this range.
-      </p>
-    );
-  }
-
-  const maxUsers = Math.max(...steps.map((step) => step.users), 1);
-
-  const segmentWidth = FUNNEL_CHART_WIDTH / steps.length;
-  const midY = FUNNEL_CHART_HEIGHT / 2;
-  const barHeights = steps.map(
-    (step) => Math.max(step.users / maxUsers, 0.03) * FUNNEL_MAX_BAR_HEIGHT
-  );
-
-  return (
-    <div>
-      <div className="funnel">
-        <svg
-          className="funnel-svg"
-          viewBox={`0 0 ${FUNNEL_CHART_WIDTH} ${FUNNEL_CHART_HEIGHT}`}
-          preserveAspectRatio="none"
-          aria-hidden
-        >
-          {steps.map((step, index) => {
-            const xStart = index * segmentWidth;
-            const xEnd = xStart + segmentWidth;
-            const xMid = (xStart + xEnd) / 2;
-            const hStart = barHeights[index];
-            const hEnd = barHeights[index + 1] ?? barHeights[index];
-            const topStart = midY - hStart / 2;
-            const topEnd = midY - hEnd / 2;
-            const bottomStart = midY + hStart / 2;
-            const bottomEnd = midY + hEnd / 2;
-            const path = [
-              `M ${xStart} ${topStart}`,
-              `C ${xMid} ${topStart}, ${xMid} ${topEnd}, ${xEnd} ${topEnd}`,
-              `L ${xEnd} ${bottomEnd}`,
-              `C ${xMid} ${bottomEnd}, ${xMid} ${bottomStart}, ${xStart} ${bottomStart}`,
-              "Z"
-            ].join(" ");
-
-            return (
-              <path
-                key={step.id}
-                d={path}
-                fill={GROWTH_COLOR}
-                opacity={FUNNEL_STEP_OPACITY[index] ?? 0.32}
-              />
-            );
-          })}
-          {steps.slice(1).map((step, index) => (
-            <line
-              key={step.id}
-              x1={(index + 1) * segmentWidth}
-              y1={0}
-              x2={(index + 1) * segmentWidth}
-              y2={FUNNEL_CHART_HEIGHT}
-              stroke="rgba(10, 26, 20, 0.35)"
-              strokeWidth={2}
-              vectorEffect="non-scaling-stroke"
-            />
-          ))}
-        </svg>
-        <div className="funnel-labels">
-          {steps.map((step, index) => {
-            const previous = index > 0 ? steps[index - 1] : null;
-            const conversionFromPrevious =
-              previous && previous.users > 0
-                ? (step.users / previous.users) * 100
-                : null;
-
-            return (
-              <div className="funnel-label" key={step.id}>
-                <span className="funnel-label-name">{step.label}</span>
-                <span className="funnel-label-value">
-                  {step.users.toLocaleString()}
-                </span>
-                {conversionFromPrevious !== null && (
-                  <span className="funnel-label-conversion">
-                    {conversionFromPrevious.toFixed(0)}% of previous step
-                  </span>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      <div className="funnel-vertical">
-        {steps.map((step, index) => {
-          const previous = index > 0 ? steps[index - 1] : null;
-          const conversionFromPrevious =
-            previous && previous.users > 0
-              ? (step.users / previous.users) * 100
-              : null;
-          const barWidth = Math.max(step.users / maxUsers, 0.08) * 100;
-
-          return (
-            <div className="funnel-vertical-row" key={step.id}>
-              <div className="funnel-vertical-text">
-                <span className="funnel-label-name">{step.label}</span>
-                <span className="funnel-label-value">
-                  {step.users.toLocaleString()}
-                </span>
-                {conversionFromPrevious !== null && (
-                  <span className="funnel-label-conversion">
-                    {conversionFromPrevious.toFixed(0)}% of previous step
-                  </span>
-                )}
-              </div>
-              <div
-                className="funnel-vertical-bar"
-                style={{
-                  width: `${barWidth}%`,
-                  backgroundColor: GROWTH_COLOR,
-                  opacity: FUNNEL_STEP_OPACITY[index] ?? 0.32
-                }}
-              />
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function FeatureUsageChart({
-  features,
-  loading
-}: {
-  features: FeatureUsageStat[];
-  loading: boolean;
-}) {
-  if (loading) {
-    return (
-      <div className="chart-card-loading" role="status" aria-live="polite">
-        <span className="chart-card-spinner" aria-hidden />
-        <span>Loading...</span>
-      </div>
-    );
-  }
-
-  if (features.length === 0) {
-    return (
-      <p className="chart-card-empty">
-        No feature usage data yet from Firebase Analytics for this range.
-      </p>
-    );
-  }
-
-  const maxCount = Math.max(...features.map((feature) => feature.count), 1);
-
-  return (
-    <div className="feature-usage-list">
-      {features.map((feature) => (
-        <div
-          className="feature-usage-row"
-          key={feature.event}
-          data-tooltip={`${feature.count.toLocaleString()} uses · ${feature.users.toLocaleString()} users`}
-        >
-          <span className="feature-usage-label">{feature.label}</span>
-          <div className="feature-usage-row-bottom">
-            <div className="feature-usage-bar-track">
-              <div
-                className="feature-usage-bar-fill"
-                style={{
-                  width: `${Math.max((feature.count / maxCount) * 100, 4)}%`,
-                  backgroundColor: GROWTH_COLOR
-                }}
-              />
-            </div>
-            <span className="feature-usage-count">
-              {feature.count.toLocaleString()}
-            </span>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
+const TOTAL_USERS_WEEK_SPAN = 52;
 
 const ACTIVE_USER_METRICS = [
   { key: "dau", label: "Daily active users" },
@@ -404,9 +53,7 @@ const ACTIVE_USER_METRICS = [
 ] as const;
 
 export default function Stats() {
-  const { user, loading } = useUser();
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [checkingAdmin, setCheckingAdmin] = useState(true);
+  const { user, loading, isAdmin, checkingAdmin } = useAdminGuard();
   const [totalUser, setTotalUser] = useState(0);
   const [activeUserHistory, setActiveUserHistory] = useState<
     ActiveUserStatsPoint[]
@@ -433,11 +80,20 @@ export default function Stats() {
   const [loadingFeatureUsage, setLoadingFeatureUsage] = useState(true);
 
   const totalUserWeeklyHistory = useMemo(() => {
-    return totalUserHistory.filter((point) => {
-      const dayOfWeek = new Date(`${point.date}T00:00:00Z`).getUTCDay();
-      return dayOfWeek === 0;
-    });
-  }, [totalUserHistory]);
+    const weeklyPoints = totalUserHistory
+      .filter((point) => {
+        const dayOfWeek = new Date(`${point.date}T00:00:00Z`).getUTCDay();
+        return dayOfWeek === 0;
+      })
+      .slice(-TOTAL_USERS_WEEK_SPAN);
+
+    const todayDate = new Date().toISOString().slice(0, 10);
+    if (totalUser > 0 && weeklyPoints.at(-1)?.date !== todayDate) {
+      return [...weeklyPoints, { date: todayDate, totalUsers: totalUser }];
+    }
+
+    return weeklyPoints;
+  }, [totalUserHistory, totalUser]);
 
   const newUserHistory = useMemo(() => {
     const diffs = totalUserHistory.slice(1).map((point, index) => ({
@@ -474,26 +130,6 @@ export default function Stats() {
       (a, b) => b.features.length - a.features.length
     );
   }, [featureUsage]);
-
-  useEffect(() => {
-    async function verifyAdmin() {
-      if (loading || !user) {
-        return;
-      }
-
-      try {
-        const adminStatus = await checkAdmin(user.uid);
-        setIsAdmin(adminStatus);
-      } catch (error) {
-        console.error("Error checking admin status:", error);
-        setIsAdmin(false);
-      } finally {
-        setCheckingAdmin(false);
-      }
-    }
-
-    verifyAdmin();
-  }, [user, loading]);
 
   useEffect(() => {
     if (!isAdmin || checkingAdmin || !user) {
@@ -664,7 +300,7 @@ export default function Stats() {
               <TrendChart
                 history={subscriptionHistory}
                 metric="mrr"
-                color={REVENUE_COLOR}
+                color={CHART_COLOR}
                 formatValue={formatCurrency}
                 emptyMessage="No subscription data yet from RevenueCat for this range."
                 loading={loadingSubscriptions}
@@ -682,7 +318,7 @@ export default function Stats() {
               <TrendChart
                 history={subscriptionHistory}
                 metric="revenue"
-                color={REVENUE_COLOR}
+                color={CHART_COLOR}
                 formatValue={formatCurrency}
                 emptyMessage="No subscription data yet from RevenueCat for this range."
                 loading={loadingSubscriptions}
@@ -696,25 +332,24 @@ export default function Stats() {
           <p className="charts-section-subtitle">
             Updates daily at 12:00 UTC
             {growthLastUpdated
-              ? ` · Data last updated ${formatLastUpdated(growthLastUpdated)}`
+              ? ` · Data last updated ${formatMediumUtcDate(growthLastUpdated)}`
               : ""}
           </p>
+          <section className="chart-card chart-card-full">
+            <h2 className="chart-card-title">
+              <FontAwesomeIcon icon={faUsers} />
+              Total users (last 52 weeks)
+            </h2>
+            <TrendChart
+              history={totalUserWeeklyHistory}
+              metric="totalUsers"
+              color={CHART_COLOR}
+              formatValue={(v) => v.toLocaleString()}
+              emptyMessage="No total user history yet — daily tracking started today. Check back tomorrow to see the trend build up."
+              loading={loadingUsers}
+            />
+          </section>
           <div className="charts-grid">
-            <section className="chart-card">
-              <h2 className="chart-card-title">
-                <FontAwesomeIcon icon={faUsers} />
-                Total users (weekly)
-              </h2>
-              <TrendChart
-                history={totalUserWeeklyHistory}
-                metric="totalUsers"
-                color={GROWTH_COLOR}
-                formatValue={(v) => v.toLocaleString()}
-                emptyMessage="No total user history yet — daily tracking started today. Check back tomorrow to see the trend build up."
-                loading={loadingUsers}
-              />
-            </section>
-
             <section className="chart-card">
               <h2 className="chart-card-title">
                 <FontAwesomeIcon icon={faUsers} />
@@ -723,7 +358,7 @@ export default function Stats() {
               <TrendChart
                 history={newUserHistory}
                 metric="newUsers"
-                color={GROWTH_COLOR}
+                color={CHART_COLOR}
                 formatValue={(v) => v.toLocaleString()}
                 emptyMessage="No new-user history yet — daily tracking started today. Check back tomorrow to see the trend build up."
                 loading={loadingUsers}
@@ -738,7 +373,7 @@ export default function Stats() {
               <TrendChart
                 history={newUserRollingMonthlyHistory}
                 metric="newUsersRollingMonth"
-                color={GROWTH_COLOR}
+                color={CHART_COLOR}
                 formatValue={(v) => v.toLocaleString()}
                 emptyMessage="Needs 30 days of history to compute a rolling monthly trend. Check back once tracking has run for a month."
                 loading={loadingUsers}
@@ -754,7 +389,7 @@ export default function Stats() {
                 <TrendChart
                   history={activeUserHistory}
                   metric={key}
-                  color={GROWTH_COLOR}
+                  color={CHART_COLOR}
                   formatValue={(v) => v.toLocaleString()}
                   emptyMessage="No activity history yet — daily tracking started today. Check back tomorrow to see the trend build up."
                   loading={loadingUsers}

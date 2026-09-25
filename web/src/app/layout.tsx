@@ -6,7 +6,7 @@ import localFont from "next/font/local";
 
 import "./design-system.css";
 import "./globals.css";
-import Providers from "./providers";
+import { Providers } from "./providers";
 
 const poppinsBold = localFont({
   src: "./fonts/Poppins-Bold.ttf",

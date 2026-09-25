@@ -6,10 +6,15 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 import React, { useState } from "react";
 
-import AuthShell from "@/components/AuthShell";
-import Button from "@/components/Button";
-import TextInput from "@/components/TextInput";
+import {
+  AuthFormMessage,
+  type AuthFormMessageState
+} from "@/components/AuthFormMessage";
+import { AuthShell } from "@/components/AuthShell";
+import { Button } from "@/components/Button";
+import { TextInput } from "@/components/TextInput";
 import { BACKEND_URL } from "@/lib/backendUrl";
+import { RECAPTCHA_SITE_KEY } from "@/lib/recaptcha";
 
 declare global {
   interface Window {
@@ -19,13 +24,15 @@ declare global {
   }
 }
 
-const RECAPTCHA_SITE_KEY = "6LfDpgQrAAAAAO0TSbcQban4TrA16CjelRzF_Urp";
 const FORGOT_PASSWORD_URL = `${BACKEND_URL}/forgotPassword`;
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState({ text: "", type: "" });
+  const [message, setMessage] = useState<AuthFormMessageState>({
+    text: "",
+    type: ""
+  });
   const [recaptchaToken, setRecaptchaToken] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -139,17 +146,7 @@ export default function ForgotPassword() {
           size="normal"
         />
 
-        {message.text && (
-          <div
-            className={`auth-form-message ${
-              message.type === "error"
-                ? "auth-form-message--error"
-                : "auth-form-message--success"
-            }`}
-          >
-            {message.text}
-          </div>
-        )}
+        <AuthFormMessage text={message.text} type={message.type} />
 
         <Button
           type="submit"

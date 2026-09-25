@@ -6,7 +6,7 @@ type LoadingProps = {
   message?: string;
 };
 
-export default function Loading({ message = "Loading..." }: LoadingProps) {
+export function Loading({ message = "Loading..." }: LoadingProps) {
   return (
     <div className="loading-overlay" role="status" aria-live="polite">
       <div className="loading-container">

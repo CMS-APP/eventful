@@ -8,7 +8,7 @@ import { useState } from "react";
 
 import { APP_STORE_LINK, GOOGLE_PLAY_LINK } from "@/lib/appLinks";
 
-import EventGuestList, { EventGuest } from "./EventGuestList";
+import { EventGuest, EventGuestList } from "./EventGuestList";
 
 interface EventInvitePanelProps {
   eventName: string;
@@ -19,7 +19,7 @@ interface EventInvitePanelProps {
   guests: EventGuest[];
 }
 
-export default function EventInvitePanel({
+export function EventInvitePanel({
   eventName,
   hostName,
   eventDateLabel,

@@ -3,17 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 
 import { GalleryImage } from "@/features/gallery/types";
+import { formatTimeOfDay } from "@/lib/dates";
 
-function formatTime(timeCreated: string | null) {
-  if (!timeCreated) return "";
-  return new Date(timeCreated).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false
-  });
-}
-
-export default function GalleryImageView({
+export function GalleryImageView({
   url,
   name,
   timeCreated,
@@ -71,7 +63,7 @@ export default function GalleryImageView({
       <div className="gallery-photo-card-footer">
         <div className="gallery-photo-card-meta">
           <span className="gallery-photo-card-time">
-            {formatTime(timeCreated)}
+            {formatTimeOfDay(timeCreated)}
           </span>
           <button
             type="button"

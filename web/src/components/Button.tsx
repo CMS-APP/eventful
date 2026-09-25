@@ -16,7 +16,7 @@ type ButtonProps = {
   icon?: IconDefinition;
 };
 
-export default function Button({
+export function Button({
   children,
   onClick,
   type = "button",

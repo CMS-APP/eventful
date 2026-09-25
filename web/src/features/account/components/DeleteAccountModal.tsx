@@ -1,8 +1,8 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 import "./DeleteAccountModal.css";
-import Button from "@/components/Button";
-import TextInput from "@/components/TextInput";
+import { Button } from "@/components/Button";
+import { TextInput } from "@/components/TextInput";
 
 type DeleteAccountModalProps = {
   isOpen: boolean;
@@ -12,7 +12,7 @@ type DeleteAccountModalProps = {
   onDelete: () => Promise<void>;
 };
 
-export default function DeleteAccountModal({
+export function DeleteAccountModal({
   isOpen,
   password,
   setPassword,

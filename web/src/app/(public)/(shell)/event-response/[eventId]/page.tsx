@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { checkEventLink } from "@/services/firebase/firebaseFunctions";
 
-import EventResponseClient from "./EventResponseClient";
+import { EventResponseClient } from "./EventResponseClient";
 
 export async function generateMetadata({
   params

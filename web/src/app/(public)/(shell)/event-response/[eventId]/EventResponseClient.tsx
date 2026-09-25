@@ -2,31 +2,17 @@
 
 import { useEffect, useState } from "react";
 
+import { formatEventDateTime } from "@/lib/dates";
 import { BACKEND_URL } from "@/lib/backendUrl";
 import { checkEventLink } from "@/services/firebase/firebaseFunctions";
 
 import { EventGuest } from "./EventGuestList";
-import EventInvitePanel from "./EventInvitePanel";
-import EventRsvpForm from "./EventRsvpForm";
+import { EventInvitePanel } from "./EventInvitePanel";
+import { EventRsvpForm } from "./EventRsvpForm";
 
 import "./page.css";
 
-type EventDateTime = { seconds: number };
-
-function formatEventDateTime(dateTime: EventDateTime) {
-  const date = new Date(dateTime.seconds * 1000);
-  const weekday = date.toLocaleDateString("en-GB", { weekday: "long" });
-  const month = date.toLocaleDateString("en-GB", { month: "long" });
-  const dateLabel = `${weekday} ${date.getDate()} ${month} ${date.getFullYear()}`;
-  const timeLabel = date.toLocaleTimeString("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false
-  });
-  return { dateLabel, timeLabel };
-}
-
-export default function EventResponseClient({ eventId }: { eventId: string }) {
+export function EventResponseClient({ eventId }: { eventId: string }) {
   const [hostId, setHostId] = useState("");
   const [hostName, setHostName] = useState("");
   const [eventName, setEventName] = useState("");

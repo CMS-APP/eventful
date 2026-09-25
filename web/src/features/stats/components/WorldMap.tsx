@@ -25,7 +25,7 @@ interface TooltipState {
   y: number;
 }
 
-export default function WorldMap({ data, total, loading }: WorldMapProps) {
+export function WorldMap({ data, total, loading }: WorldMapProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
 

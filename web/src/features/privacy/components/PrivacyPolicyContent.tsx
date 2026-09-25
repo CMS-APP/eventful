@@ -1,6 +1,6 @@
 import "./PrivacyPolicyContent.css";
 
-export default function PrivacyPolicyContent() {
+export function PrivacyPolicyContent() {
   return (
     <div className="privacy-content flex flex-col gap-2">
       <h1>Privacy Policy</h1>

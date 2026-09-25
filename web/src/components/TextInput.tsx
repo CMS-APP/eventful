@@ -20,7 +20,7 @@ type TextInputProps = {
   className?: string;
 };
 
-export default function TextInput({
+export function TextInput({
   id,
   placeholder,
   value,

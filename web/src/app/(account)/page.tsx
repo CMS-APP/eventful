@@ -13,10 +13,10 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 import { FIREBASE_AUTH } from "@/services/firebase/firebase";
-import AuthShell from "@/components/AuthShell";
-import Button from "@/components/Button";
-import Loading from "@/components/Loading";
-import TextInput from "@/components/TextInput";
+import { AuthShell } from "@/components/AuthShell";
+import { Button } from "@/components/Button";
+import { Loading } from "@/components/Loading";
+import { TextInput } from "@/components/TextInput";
 import { useUser } from "@/contexts/UserContext";
 
 import "./page.css";

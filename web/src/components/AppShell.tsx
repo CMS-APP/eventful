@@ -2,7 +2,7 @@
 
 import { useUser } from "@/contexts/UserContext";
 
-import AppHeader from "./AppHeader";
+import { AppHeader } from "./AppHeader";
 import "./AppHeader.css";
 
 type AppShellProps = {
@@ -10,7 +10,7 @@ type AppShellProps = {
   className?: string;
 };
 
-export default function AppShell({ children, className = "" }: AppShellProps) {
+export function AppShell({ children, className = "" }: AppShellProps) {
   const { user, loading } = useUser();
   const authenticated = !loading && !!user;
 

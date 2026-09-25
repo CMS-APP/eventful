@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { fetchGalleryInfo, parseGalleryId } from "@/features/gallery/api";
 
-import GalleryClient from "./GalleryClient";
+import { GalleryClient } from "./GalleryClient";
 
 export async function generateMetadata({
   params

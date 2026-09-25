@@ -7,22 +7,18 @@ import { useSearchParams } from "next/navigation";
 
 import { Suspense, useEffect, useState } from "react";
 
+import {
+  AuthFormMessage,
+  type AuthFormMessageState
+} from "@/components/AuthFormMessage";
+import { AuthShell } from "@/components/AuthShell";
+import { Button } from "@/components/Button";
+import { Loading } from "@/components/Loading";
+import { TextInput } from "@/components/TextInput";
+import { PASSWORD_RULES_MESSAGE, passwordValid } from "@/lib/validation";
 import { FIREBASE_AUTH } from "@/services/firebase/firebase";
-import AuthShell from "@/components/AuthShell";
-import Button from "@/components/Button";
-import Loading from "@/components/Loading";
-import TextInput from "@/components/TextInput";
 
 type CodeStatus = "checking" | "valid" | "invalid";
-
-const PASSWORD_RULES_MESSAGE =
-  "Password must be at least 8 characters and contain one number, letter, and special character.";
-
-function passwordValid(password: string) {
-  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>_-])[A-Za-z\d!@#$%^&*(),.?":{}|<>_-]{8,}$/.test(
-    password
-  );
-}
 
 function ResetPasswordContent() {
   const searchParams = useSearchParams();
@@ -34,7 +30,10 @@ function ResetPasswordContent() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resetComplete, setResetComplete] = useState(false);
-  const [message, setMessage] = useState({ text: "", type: "" });
+  const [message, setMessage] = useState<AuthFormMessageState>({
+    text: "",
+    type: ""
+  });
 
   useEffect(() => {
     if (!oobCode) {
@@ -93,7 +92,7 @@ function ResetPasswordContent() {
   };
 
   if (codeStatus === "checking") {
-    return <Loading message="Checking your reset link…" />;
+    return <Loading message="Checking your reset link..." />;
   }
 
   if (codeStatus === "invalid") {
@@ -172,17 +171,7 @@ function ResetPasswordContent() {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
 
-            {message.text && (
-              <div
-                className={`auth-form-message ${
-                  message.type === "error"
-                    ? "auth-form-message--error"
-                    : "auth-form-message--success"
-                }`}
-              >
-                {message.text}
-              </div>
-            )}
+            <AuthFormMessage text={message.text} type={message.type} />
 
             <Button
               type="submit"

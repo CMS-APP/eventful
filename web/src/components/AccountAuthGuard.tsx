@@ -1,15 +1,13 @@
 "use client";
 
-import Loading from "@/components/Loading";
-import { useUser } from "@/contexts/UserContext";
 import { useRouter } from "next/navigation";
+
 import { useEffect } from "react";
 
-export default function AccountAuthGuard({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+import { Loading } from "@/components/Loading";
+import { useUser } from "@/contexts/UserContext";
+
+export function AccountAuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { user, loading } = useUser();
 
