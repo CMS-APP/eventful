@@ -8,7 +8,7 @@ import {
   PermissionStatus,
   useCameraPermissions
 } from "expo-camera";
-import * as MediaLibrary from "expo-media-library";
+import * as MediaLibrary from "expo-media-library/legacy";
 
 import { PhotoBoothPermissionsContext } from "@/features/photo-booth/context/permissions/PhotoBoothPermissionsContext";
 import type { PhotoBoothPermissionsContextValue } from "@/features/photo-booth/context/permissions/PhotoBoothPermissionsContext";

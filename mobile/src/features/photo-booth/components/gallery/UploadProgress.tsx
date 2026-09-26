@@ -146,9 +146,9 @@ export function UploadProgress({
           title={`Sync ${photoState.local.length} of ${totalPhotos}`}
           subtitle={
             uploading
-              ? "Uploading…"
+              ? "Uploading..."
               : isUploadingGlobal
-                ? "Waiting for other upload to finish…"
+                ? "Waiting for other upload to finish..."
                 : "Tap to sync"
           }
           actionLabel={`Sync ${photoState.local.length} photo${photoState.local.length === 1 ? "" : "s"}`}
@@ -173,7 +173,7 @@ export function UploadProgress({
               : 0
           }
           title={`Download ${photoState.cloud.length} of ${totalPhotos}`}
-          subtitle={downloading ? "Downloading…" : "Tap to download"}
+          subtitle={downloading ? "Downloading..." : "Tap to download"}
           actionLabel={`Download ${photoState.cloud.length} photo${photoState.cloud.length === 1 ? "" : "s"}`}
           actionIcon="download"
           caption="Saves the cloud photos to this device"
@@ -183,7 +183,9 @@ export function UploadProgress({
           premium={premium}
           onPaywallPress={handlePaywallPress}
           secondaryIcon={attachLinkToDownload ? "link" : undefined}
-          onSecondaryPress={attachLinkToDownload ? copyWebGalleryLink : undefined}
+          onSecondaryPress={
+            attachLinkToDownload ? copyWebGalleryLink : undefined
+          }
         />
       )}
 

@@ -1,5 +1,5 @@
 import { PhotoResult } from "expo-camera";
-import * as MediaLibrary from "expo-media-library";
+import * as MediaLibrary from "expo-media-library/legacy";
 
 import { log } from "@/utils/logging";
 

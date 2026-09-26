@@ -1,7 +1,7 @@
 import React from "react";
 
 import { PermissionResponse, PhotoResult } from "expo-camera";
-import * as MediaLibrary from "expo-media-library";
+import * as MediaLibrary from "expo-media-library/legacy";
 
 export interface PhotoBoothConfig {
   cameraPermission: PermissionResponse;

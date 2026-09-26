@@ -8,7 +8,7 @@ import {
 } from "@react-native-firebase/storage";
 
 import * as FileSystem from "expo-file-system/legacy";
-import * as MediaLibrary from "expo-media-library";
+import * as MediaLibrary from "expo-media-library/legacy";
 
 import { FIREBASE_STORAGE } from "@/app/init/firebase";
 import { API_COLLECTIONS } from "@/services/api/constants";

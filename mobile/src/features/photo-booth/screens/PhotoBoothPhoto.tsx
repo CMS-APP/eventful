@@ -172,7 +172,7 @@ export function PhotoBoothPhoto() {
             text={
               premium
                 ? isUploadingGlobal && !uploading
-                  ? "Waiting for other upload…"
+                  ? "Waiting for other upload..."
                   : "Upload"
                 : "Upgrade to upload"
             }

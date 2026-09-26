@@ -75,7 +75,7 @@ export function PhotoBoothUnlockModal({
         onChangeText={setInput}
         keyboardType="number-pad"
         password
-        backgroundColor={colors.lightGray}
+        backgroundColor={colors.white}
         textColor={colors.black}
       />
 

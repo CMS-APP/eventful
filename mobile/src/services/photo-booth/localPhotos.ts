@@ -3,7 +3,7 @@ import Share from "react-native-share";
 
 import { File, Paths } from "expo-file-system";
 import * as LegacyFileSystem from "expo-file-system/legacy";
-import * as MediaLibrary from "expo-media-library";
+import * as MediaLibrary from "expo-media-library/legacy";
 
 import { GalleryEvent, GalleryPhoto } from "@/types/photoBoothGallery";
 import { formatDate, parseDatabaseDate } from "@/utils/date";
