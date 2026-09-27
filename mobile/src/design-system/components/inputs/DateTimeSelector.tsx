@@ -72,7 +72,7 @@ export function DateTimeSelector({
             mode={mode}
             display={mode === "date" ? "inline" : "spinner"}
             minuteInterval={1}
-            accentColor={colors.primary}
+            accentColor={colors.secondary}
             onChange={(event, value) => {
               if (Platform.OS === "android") {
                 setShow(false);

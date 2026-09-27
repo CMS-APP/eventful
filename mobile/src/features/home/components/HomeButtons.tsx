@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
     flex: 1,
-    paddingBottom: 50,
+    paddingBottom: 24,
     paddingHorizontal: 24
   },
   buttonsRow: {

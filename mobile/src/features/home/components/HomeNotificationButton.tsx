@@ -17,6 +17,7 @@ interface HomeNotificationButtonProps {
   icon: keyof typeof FontAwesome5.glyphMap;
   text: string;
   unreadNotifications: number;
+  dark?: boolean;
 }
 
 export function HomeNotificationButton({
@@ -24,11 +25,18 @@ export function HomeNotificationButton({
   notifications,
   icon,
   text,
-  unreadNotifications
+  unreadNotifications,
+  dark = false
 }: HomeNotificationButtonProps) {
   const handlePress = useCallback(() => {
     onPress(notifications);
   }, [onPress, notifications]);
+
+  const textColor = dark ? colors.white : colors.black;
+  const iconStyle = {
+    ...styles.iconContainer,
+    ...(dark && styles.darkContainer)
+  };
 
   return (
     <TouchableOpacity
@@ -36,12 +44,10 @@ export function HomeNotificationButton({
       onPress={handlePress}
       hitSlop={getHitSlop("small")}
     >
-      <View style={styles.iconContainer}>
-        <FontAwesome5 name={icon} size={20} color={colors.black} />
-
+      <View style={iconStyle}>
+        <FontAwesome5 name={icon} size={20} color={textColor} />
         <Badge count={unreadNotifications} style={styles.badgeOffset} />
       </View>
-
       <Text type="body" color={colors.black}>
         {text}
       </Text>
@@ -59,6 +65,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 6,
     justifyContent: "center"
+  },
+  darkContainer: {
+    backgroundColor: colors.primary
   },
   iconContainer: {
     ...card.small,

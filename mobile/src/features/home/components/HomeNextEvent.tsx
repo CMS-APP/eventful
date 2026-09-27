@@ -27,6 +27,7 @@ import { getInviteFromDatabase } from "@/services/firebase/invite";
 import { getUserInfo } from "@/services/firebase/user";
 import { UserState } from "@/store/UserSlice";
 import { Event } from "@/types/Event";
+import { calculateTimeDifference, parseDatabaseDate } from "@/utils/date";
 import { haptics } from "@/utils/haptics";
 
 import { useNextEvent } from "../hooks/useNextEvent";
@@ -47,7 +48,8 @@ export function HomeNextEvent({
 }: HomeNextEventProps) {
   const navigation = useNavigation() as StackNavigationProp<MainStackParamList>;
   const eventNav = useNavigation() as StackNavigationProp<EventsStackParamList>;
-  const appNavigation = useNavigation() as StackNavigationProp<AppStackParamList>;
+  const appNavigation =
+    useNavigation() as StackNavigationProp<AppStackParamList>;
   const userId = useSelector((state: UserState) => state.uid);
   const { nextEvent, percentageComplete, accepted, loading } =
     useNextEvent(event);
@@ -116,6 +118,11 @@ export function HomeNextEvent({
     );
 
   if (!nextEvent) return null;
+
+  const isAutoNextEvent = !event;
+  const countdownElapsed =
+    calculateTimeDifference(parseDatabaseDate(nextEvent.date)).difference <= 0;
+  if (isAutoNextEvent && countdownElapsed) return null;
 
   return (
     <TouchableWithoutFeedback onPress={goToEvent}>
