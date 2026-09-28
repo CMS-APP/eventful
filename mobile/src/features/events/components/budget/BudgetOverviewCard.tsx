@@ -18,7 +18,10 @@ import {
   getBudgetSummary
 } from "@/features/events/utils/budget";
 import { Event } from "@/types/Event";
-import { getCurrencySymbolForDevice } from "@/utils/currency";
+import {
+  formatCurrencyAmount,
+  getCurrencySymbolForDevice
+} from "@/utils/currency";
 
 import { BudgetMaxEditModal } from "./BudgetMaxEditModal";
 import { BudgetSegmentedBar } from "./BudgetSegmentedBar";
@@ -78,7 +81,7 @@ export function BudgetOverviewCard({
           {summary.overBudget ? (
             <Text type="caption" color={colors.tertiary}>
               {currency}
-              {summary.overAmount} OVER
+              {formatCurrencyAmount(summary.overAmount)} OVER
             </Text>
           ) : (
             <Text type="caption" color={colors.gray}>
@@ -90,11 +93,11 @@ export function BudgetOverviewCard({
         <View style={styles.spentRow}>
           <Text type="title" color={colors.primary}>
             {currency}
-            {summary.totalSpent}
+            {formatCurrencyAmount(summary.totalSpent)}
           </Text>
           <Text type="body" color={colors.gray} style={styles.spentOfText}>
             OF {currency}
-            {summary.budgetMaximum}
+            {formatCurrencyAmount(summary.budgetMaximum)}
           </Text>
         </View>
 
@@ -106,7 +109,7 @@ export function BudgetOverviewCard({
               <View style={[styles.dot, { backgroundColor: category.color }]} />
               <Text type="caption" color={colors.black}>
                 {category.title.toUpperCase()} {currency}
-                {summary.perCategory[category.field].spent}
+                {formatCurrencyAmount(summary.perCategory[category.field].spent)}
               </Text>
             </View>
           ))}
@@ -128,7 +131,7 @@ export function BudgetOverviewCard({
             </View>
             <Text type="subHeader" color={colors.black}>
               {currency}
-              {summary.budgetMaximum}
+              {formatCurrencyAmount(summary.budgetMaximum)}
             </Text>
           </TouchableOpacity>
 
@@ -142,7 +145,7 @@ export function BudgetOverviewCard({
             >
               {summary.overBudget ? "-" : ""}
               {currency}
-              {Math.abs(summary.remaining)}
+              {formatCurrencyAmount(Math.abs(summary.remaining))}
             </Text>
           </View>
         </View>

@@ -11,7 +11,10 @@ import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { BudgetItem } from "@/types/BudgetItem";
-import { getCurrencySymbolForDevice } from "@/utils/currency";
+import {
+  formatCurrencyAmount,
+  getCurrencySymbolForDevice
+} from "@/utils/currency";
 
 interface BudgetItemModalProps {
   visible: boolean;
@@ -121,8 +124,8 @@ export function BudgetItemModal({
       {showEachPrice && (
         <Text type="caption" color={colors.gray}>
           {currency}
-          {cost} / {quantity} = {currency}
-          {(cost / quantity).toFixed(2)} each
+          {formatCurrencyAmount(cost)} / {quantity} = {currency}
+          {formatCurrencyAmount(cost / quantity)} each
         </Text>
       )}
 

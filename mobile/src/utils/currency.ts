@@ -23,3 +23,7 @@ export function getCurrencySymbolForDevice() {
     .replace(/\d|\.|,/g, "")
     .trim();
 }
+
+export function formatCurrencyAmount(value: number) {
+  return (value || 0).toFixed(2);
+}

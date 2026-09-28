@@ -8,7 +8,10 @@ import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { BudgetItem } from "@/types/BudgetItem";
-import { getCurrencySymbolForDevice } from "@/utils/currency";
+import {
+  formatCurrencyAmount,
+  getCurrencySymbolForDevice
+} from "@/utils/currency";
 import { haptics } from "@/utils/haptics";
 
 interface BudgetItemRowProps {
@@ -81,7 +84,7 @@ export function BudgetItemRow({
 
       <Text type="body" color={colors.black}>
         {currency}
-        {item.cost}
+        {formatCurrencyAmount(item.cost)}
       </Text>
     </View>
   );

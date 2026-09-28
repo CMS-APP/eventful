@@ -47,8 +47,14 @@ export const CATEGORY_CONFIG: CategoryConfig[] = [
   }
 ];
 
+function round2(value: number): number {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
+}
+
 export function getCategorySpend(items: BudgetItem[] | undefined): number {
-  return (items || []).reduce((sum, item) => sum + (item.cost || 0), 0);
+  return round2(
+    (items || []).reduce((sum, item) => sum + (item.cost || 0), 0)
+  );
 }
 
 export function getCategoryItemCount(items: BudgetItem[] | undefined): number {
@@ -84,9 +90,11 @@ export function getBudgetSummary(event: Event): BudgetSummary {
     {} as Record<BudgetCategoryField, CategorySummary>
   );
 
-  const totalSpent = CATEGORY_CONFIG.reduce(
-    (sum, category) => sum + perCategory[category.field].spent,
-    0
+  const totalSpent = round2(
+    CATEGORY_CONFIG.reduce(
+      (sum, category) => sum + perCategory[category.field].spent,
+      0
+    )
   );
   const totalItemCount = CATEGORY_CONFIG.reduce(
     (sum, category) => sum + perCategory[category.field].itemCount,

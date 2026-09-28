@@ -24,7 +24,10 @@ import {
 import { UserState } from "@/store/UserSlice";
 import { BudgetItem } from "@/types/BudgetItem";
 import { Event } from "@/types/Event";
-import { getCurrencySymbolForDevice } from "@/utils/currency";
+import {
+  formatCurrencyAmount,
+  getCurrencySymbolForDevice
+} from "@/utils/currency";
 
 import { BudgetItemModal } from "./BudgetItemModal";
 import { BudgetItemRow } from "./BudgetItemRow";
@@ -164,7 +167,7 @@ export function EventBudgetCategoryEdit({
               </Text>
               <Text type="subHeader" color={colors.primary}>
                 {currency}
-                {categorySpend}
+                {formatCurrencyAmount(categorySpend)}
               </Text>
             </View>
           </View>

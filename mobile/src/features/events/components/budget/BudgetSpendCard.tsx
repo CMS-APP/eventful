@@ -4,7 +4,10 @@ import { Text } from "@/design-system/components/text/Text";
 import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { BudgetSummary } from "@/features/events/utils/budget";
-import { getCurrencySymbolForDevice } from "@/utils/currency";
+import {
+  formatCurrencyAmount,
+  getCurrencySymbolForDevice
+} from "@/utils/currency";
 
 import { BudgetSegmentedBar } from "./BudgetSegmentedBar";
 
@@ -47,7 +50,7 @@ export function BudgetSpendCard({
           </Text>
           <Text type="title" color={colors.primary} style={styles.amount}>
             {currency}
-            {spent}
+            {formatCurrencyAmount(spent)}
           </Text>
         </View>
 
@@ -61,7 +64,7 @@ export function BudgetSpendCard({
           >
             {summary.overBudget ? "-" : ""}
             {currency}
-            {Math.abs(summary.remaining)} LEFT OVERALL
+            {formatCurrencyAmount(Math.abs(summary.remaining))} LEFT OVERALL
           </Text>
         </View>
       </View>

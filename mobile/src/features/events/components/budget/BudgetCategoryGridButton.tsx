@@ -9,7 +9,10 @@ import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { padding } from "@/design-system/tokens/padding";
-import { getCurrencySymbolForDevice } from "@/utils/currency";
+import {
+  formatCurrencyAmount,
+  getCurrencySymbolForDevice
+} from "@/utils/currency";
 import { haptics } from "@/utils/haptics";
 
 import { BudgetSegmentedBar } from "./BudgetSegmentedBar";
@@ -58,7 +61,7 @@ export function BudgetCategoryGridButton({
 
         <Text type="header" color={colors.primary} style={styles.amount}>
           {currency}
-          {spent}
+          {formatCurrencyAmount(spent)}
         </Text>
 
         <BudgetSegmentedBar
