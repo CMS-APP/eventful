@@ -145,6 +145,7 @@ export function useDataInit() {
     } catch (error) {
       log(`Error initialising app: ${error}`, "error");
       resolveBootDeepLink("Error");
+      setBootError(error instanceof Error ? error : new Error(String(error)));
     } finally {
       stopLoading();
     }
