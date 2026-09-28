@@ -1,6 +1,6 @@
 export interface BudgetItem {
   item: string;
-  cost: number;
+  cost: number | null;
   quantity?: number;
   paid?: boolean;
 }

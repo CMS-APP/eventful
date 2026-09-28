@@ -44,17 +44,28 @@ export function BudgetItemModal({
     setPrevVisible(visible);
     if (visible) {
       setName(initialItem?.item ?? "");
-      setCostText(initialItem ? String(initialItem.cost) : "");
+      setCostText(
+        initialItem && initialItem.cost !== null
+          ? String(initialItem.cost)
+          : ""
+      );
       setQuantityText(String(initialItem?.quantity ?? 1));
     }
   }
+
+  const parseCost = (text: string): number | null => {
+    const trimmed = text.trim();
+    if (trimmed === "") return null;
+    const parsed = Number(trimmed);
+    return Number.isNaN(parsed) ? null : parsed;
+  };
 
   const handleSave = () => {
     if (!name.trim()) return;
 
     const item: BudgetItem = {
       item: name.trim(),
-      cost: Number(costText) || 0,
+      cost: parseCost(costText),
       quantity: Number(quantityText) || 1,
       paid: initialItem?.paid ?? false
     };
@@ -68,9 +79,8 @@ export function BudgetItemModal({
     setVisible(false);
   };
 
-  const cost = Number(costText) || 0;
+  const cost = parseCost(costText);
   const quantity = Number(quantityText) || 0;
-  const showEachPrice = quantity > 1 && cost > 0;
   const currency = getCurrencySymbolForDevice();
 
   return (
@@ -121,7 +131,7 @@ export function BudgetItemModal({
         />
       </View>
 
-      {showEachPrice && (
+      {cost !== null && quantity > 1 && (
         <Text type="caption" color={colors.gray}>
           {currency}
           {formatCurrencyAmount(cost)} / {quantity} = {currency}

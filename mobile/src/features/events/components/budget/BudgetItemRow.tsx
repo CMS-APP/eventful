@@ -32,6 +32,7 @@ export function BudgetItemRow({
   const currency = getCurrencySymbolForDevice();
   const quantity = item.quantity && item.quantity > 0 ? item.quantity : 1;
   const paid = item.paid ?? false;
+  const hasCost = item.cost !== null && item.cost !== undefined;
 
   const handleTogglePaid = useCallback(() => {
     if (!premium) {
@@ -74,17 +75,16 @@ export function BudgetItemRow({
           {item.item}
           {quantity > 1 ? ` x${quantity}` : ""}
         </Text>
-        {quantity > 1 && (
+        {quantity > 1 && hasCost && (
           <Text type="caption" color={colors.gray}>
             {currency}
-            {(item.cost / quantity).toFixed(2)} EACH
+            {(item.cost! / quantity).toFixed(2)} EACH
           </Text>
         )}
       </TouchableOpacity>
 
-      <Text type="body" color={colors.black}>
-        {currency}
-        {formatCurrencyAmount(item.cost)}
+      <Text type="body" color={hasCost ? colors.black : colors.gray}>
+        {hasCost ? `${currency}${formatCurrencyAmount(item.cost!)}` : "TBC"}
       </Text>
     </View>
   );
