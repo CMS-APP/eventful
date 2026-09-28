@@ -4,6 +4,7 @@ export interface User {
   uid: string;
   email?: string;
   emailVerified: boolean;
+  authProvider?: "password" | "apple.com" | "google.com";
   name: string;
   firstName?: string;
   lastName?: string;

@@ -51,6 +51,28 @@ export function aggregateDeviceType(
     .sort((a, b) => b.count - a.count);
 }
 
+const AUTH_PROVIDER_LABELS: Record<string, string> = {
+  password: "Email",
+  "apple.com": "Apple",
+  "google.com": "Google"
+};
+
+export function authProviderLabel(value: string): string {
+  return AUTH_PROVIDER_LABELS[value] ?? "Unknown";
+}
+
+const AUTH_PROVIDER_COLORS: Record<string, string> = {
+  password: "#3987e5",
+  "apple.com": "#d95926",
+  "google.com": "#199e70"
+};
+
+const AUTH_PROVIDER_UNKNOWN_COLOR = "#6b7280";
+
+export function authProviderColor(value: string): string {
+  return AUTH_PROVIDER_COLORS[value] ?? AUTH_PROVIDER_UNKNOWN_COLOR;
+}
+
 export function compareVersionsDescending(a: string, b: string): number {
   if (a === b) return 0;
   if (a === "unknown") return 1;

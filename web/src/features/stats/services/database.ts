@@ -63,6 +63,7 @@ export interface UserDeviceStatsRow {
   locale: string;
   region: string;
   osVersion: string;
+  authProvider: string;
   lastLaunchedAt: string | null;
 }
 
@@ -105,6 +106,8 @@ export async function getUsersForDeviceStats(): Promise<UserDeviceStatsRow[]> {
         region: typeof data.region === "string" ? data.region : "unknown",
         osVersion:
           typeof data.osVersion === "string" ? data.osVersion : "unknown",
+        authProvider:
+          typeof data.authProvider === "string" ? data.authProvider : "unknown",
         lastLaunchedAt: lastLaunched?.toDate?.()?.toISOString?.() ?? null
       };
     });

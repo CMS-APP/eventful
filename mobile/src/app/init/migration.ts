@@ -1,7 +1,6 @@
 import { updateUserInfo } from "@/services/firebase/user";
 import { User } from "@/types/User";
 
-import { convertPhotoDataToGalleryPhotoData } from "../../services/firebase/dataUpdates";
 import {
   convertEventEventToEvent,
   convertLocalEventsToDatabase
@@ -10,6 +9,8 @@ import { convertEventGuestList, convertEventInvites } from "./migrations/1.2.0";
 import { convertUserFollowingToDatabaseFollowing } from "./migrations/1.4.0";
 import { convertPollVotesToDatabasePollVotes } from "./migrations/1.5.0";
 import { convertDateToTimestamp } from "./migrations/1.6.0";
+import { convertPhotoDataToGalleryPhotoData } from "./migrations/1.7.0";
+import { backfillAuthProvider } from "./migrations/1.8.0";
 
 type ConversionFn = (userId: string) => Promise<void>;
 
@@ -54,6 +55,11 @@ const UPDATE_STEPS: UpdateStep[] = [
     fromVersions: ["1.6.0"],
     toVersion: "1.7.0",
     conversions: [{ fn: convertPhotoDataToGalleryPhotoData }]
+  },
+  {
+    fromVersions: ["1.7.0"],
+    toVersion: "1.8.0",
+    conversions: [{ fn: backfillAuthProvider }]
   }
 ];
 

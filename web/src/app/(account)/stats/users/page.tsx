@@ -3,6 +3,7 @@
 import {
   faArrowLeft,
   faChartColumn,
+  faKey,
   faLaptop,
   faMapMarkerAlt,
   faMobileScreen
@@ -23,6 +24,7 @@ import {
   getUsersForDeviceStats
 } from "@/features/stats/services/database";
 import { useAdminGuard } from "@/features/stats/hooks/useAdminGuard";
+import { AuthProviderChart } from "@/features/stats/components/AuthProviderChart";
 import { WorldMap } from "@/features/stats/components/WorldMap";
 import {
   aggregateBy,
@@ -82,12 +84,14 @@ export default function UserStatsPage() {
       compareVersionsDescending(a.value, b.value)
     );
     const byDeviceType = aggregateDeviceType(rows);
+    const byAuthProvider = aggregateBy(rows, "authProvider");
 
     return {
       total,
       byPlatform,
       byAppVersion,
-      byDeviceType
+      byDeviceType,
+      byAuthProvider
     };
   }, [rows]);
 
@@ -156,6 +160,23 @@ export default function UserStatsPage() {
 
               <section className="user-stats-card">
                 <h2 className="user-stats-card-title">
+                  <FontAwesomeIcon icon={faLaptop} />
+                  Device type
+                </h2>
+                <ul className="user-stats-list">
+                  {stats.byDeviceType.map(({ value, count }) => (
+                    <li key={value} className="user-stats-row">
+                      <span className="user-stats-label">{value}</span>
+                      <span className="user-stats-count">
+                        {count.toLocaleString()}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              <section className="user-stats-card">
+                <h2 className="user-stats-card-title">
                   <FontAwesomeIcon icon={faChartColumn} />
                   App version
                 </h2>
@@ -173,19 +194,10 @@ export default function UserStatsPage() {
 
               <section className="user-stats-card">
                 <h2 className="user-stats-card-title">
-                  <FontAwesomeIcon icon={faLaptop} />
-                  Device type
+                  <FontAwesomeIcon icon={faKey} />
+                  Sign-in method
                 </h2>
-                <ul className="user-stats-list">
-                  {stats.byDeviceType.map(({ value, count }) => (
-                    <li key={value} className="user-stats-row">
-                      <span className="user-stats-label">{value}</span>
-                      <span className="user-stats-count">
-                        {count.toLocaleString()}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                <AuthProviderChart stats={stats.byAuthProvider} />
               </section>
             </div>
           )}
