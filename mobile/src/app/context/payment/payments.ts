@@ -28,13 +28,44 @@ function getSubscriptionProduct(
   return {
     id: product.identifier,
     title: period === "monthly" ? "1 Month" : "1 Year",
-    description: period === "yearly" ? "16% off" : "",
+    description: "",
     priceString:
       period === "monthly"
         ? `${product.pricePerMonthString} / month`
         : `${product.pricePerYearString} / year`,
     packageType: "subscription"
   };
+}
+
+function getYearlyDiscountDescription(
+  products: PurchasesStoreProduct[],
+  type: "photo_booth" | "premium",
+  platform: Platform["OS"]
+): string {
+  const monthlyKey = (
+    type +
+    "_monthly_" +
+    platform
+  ).toUpperCase() as keyof typeof SubscriptionTypes;
+  const yearlyKey = (
+    type +
+    "_yearly_" +
+    platform
+  ).toUpperCase() as keyof typeof SubscriptionTypes;
+  const monthlyProduct = products.find(
+    (p) => p.identifier === SubscriptionTypes[monthlyKey]
+  );
+  const yearlyProduct = products.find(
+    (p) => p.identifier === SubscriptionTypes[yearlyKey]
+  );
+  if (!monthlyProduct?.pricePerYear || !yearlyProduct?.pricePerYear) {
+    return "";
+  }
+
+  const discountPercent = Math.floor(
+    (1 - yearlyProduct.pricePerYear / monthlyProduct.pricePerYear) * 100
+  );
+  return discountPercent > 0 ? `${discountPercent}% off` : "";
 }
 
 export function getPhotoBoothProducts(
@@ -53,6 +84,11 @@ export function getPhotoBoothProducts(
     Platform.OS
   );
   if (monthly && yearly) {
+    yearly.description = getYearlyDiscountDescription(
+      products,
+      "photo_booth",
+      Platform.OS
+    );
     return [yearly, monthly];
   }
   return [];
@@ -74,6 +110,11 @@ export function getPremiumProducts(
     Platform.OS
   );
   if (monthly && yearly) {
+    yearly.description = getYearlyDiscountDescription(
+      products,
+      "premium",
+      Platform.OS
+    );
     return [yearly, monthly];
   }
   return [];
