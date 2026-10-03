@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  faBullseye,
   faChartLine,
   faCoins,
   faCommentDots,
@@ -18,7 +19,7 @@ import { FeatureUsageChart } from "@/features/stats/components/FeatureUsageChart
 import { FunnelChart } from "@/features/stats/components/FunnelChart";
 import { TrendChart } from "@/features/stats/components/TrendChart";
 import { UnauthorizedAccess } from "@/features/stats/components/UnauthorizedAccess";
-import { CHART_COLOR } from "@/features/stats/constants";
+import { CHART_COLOR, GOALS_ACCESS_EMAIL } from "@/features/stats/constants";
 import {
   type ActiveUserStatsPoint,
   type TotalUserStatsPoint,
@@ -284,12 +285,20 @@ export default function Stats() {
         </div>
 
         <div className="charts-section">
-          <h2 className="charts-section-title">Revenue</h2>
+          <div className="charts-section-header">
+            <h2 className="charts-section-title">Revenue</h2>
+            {user?.email === GOALS_ACCESS_EMAIL && (
+              <Link href="/stats/goals" className="charts-section-goals-link">
+                <FontAwesomeIcon icon={faBullseye} />
+                Goals
+              </Link>
+            )}
+          </div>
           <div className="charts-grid">
             <section className="chart-card">
               <h2 className="chart-card-title">
                 <FontAwesomeIcon icon={faCoins} />
-                MRR
+                MRR (proceeds)
               </h2>
               {!loadingSubscriptions && activeSubscriptions !== null && (
                 <p className="chart-card-active-subs">
@@ -313,11 +322,11 @@ export default function Stats() {
             <section className="chart-card">
               <h2 className="chart-card-title">
                 <FontAwesomeIcon icon={faCoins} />
-                Revenue per day
+                Proceeds per day
               </h2>
               <TrendChart
                 history={subscriptionHistory}
-                metric="revenue"
+                metric="proceeds"
                 color={CHART_COLOR}
                 formatValue={formatCurrency}
                 emptyMessage="No subscription data yet from RevenueCat for this range."

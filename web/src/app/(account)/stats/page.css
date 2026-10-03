@@ -220,6 +220,36 @@
   font-family: var(--font-playfair-display);
 }
 
+.charts-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.charts-section-header .charts-section-title {
+  margin: 0 0 16px 0;
+}
+
+.charts-section-goals-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 8px 16px;
+  border-radius: var(--radius-full, 999px);
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+  text-decoration: none;
+  font-family: var(--font-poppins-medium);
+  font-size: 0.85rem;
+  transition: background-color var(--transition-base);
+}
+
+.charts-section-goals-link:hover {
+  background-color: var(--color-secondary-dark);
+}
+
 .charts-section-subtitle {
   margin: -12px 0 16px 0;
   font-size: 0.85rem;

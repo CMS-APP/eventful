@@ -1,3 +1,4 @@
+import json
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 
@@ -22,16 +23,27 @@ def _extract_points(raw) -> list[dict]:
     return sorted(points, key=lambda point: point["date"])
 
 
-def fetch_chart(chart_name: str, project_id: str, api_key: str, start_date: str, end_date: str):
+def fetch_chart(
+    chart_name: str,
+    project_id: str,
+    api_key: str,
+    start_date: str,
+    end_date: str,
+    selectors: dict | None = None,
+):
+    params = {
+        "start_date": start_date,
+        "end_date": end_date,
+        "resolution": "day",
+        "currency": "GBP",
+    }
+    if selectors:
+        params["selectors"] = json.dumps(selectors)
+
     response = get(
         f"{REVENUECAT_API_BASE}/projects/{project_id}/charts/{chart_name}",
         headers={"Authorization": f"Bearer {api_key}"},
-        params={
-            "start_date": start_date,
-            "end_date": end_date,
-            "resolution": "day",
-            "currency": "GBP",
-        },
+        params=params,
     )
     if not response.ok:
         raise Exception(
@@ -66,26 +78,40 @@ def subscription_stats(project_id: str, api_key: str, days: int) -> dict:
     end_date = end.strftime("%Y-%m-%d")
 
     with ThreadPoolExecutor(max_workers=4) as executor:
-        mrr_future = executor.submit(fetch_chart, "mrr", project_id, api_key, start_date, end_date)
-        revenue_future = executor.submit(
-            fetch_chart, "revenue", project_id, api_key, start_date, end_date
+        mrr_future = executor.submit(
+            fetch_chart,
+            "mrr",
+            project_id,
+            api_key,
+            start_date,
+            end_date,
+            selectors={"revenue_type": "proceeds"},
+        )
+        proceeds_future = executor.submit(
+            fetch_chart,
+            "revenue",
+            project_id,
+            api_key,
+            start_date,
+            end_date,
+            selectors={"revenue_type": "proceeds"},
         )
         actives_future = executor.submit(
             fetch_chart, "actives", project_id, api_key, start_date, end_date
         )
         active_subs_future = executor.submit(fetch_active_subscriptions, project_id, api_key)
         mrr = mrr_future.result()
-        revenue = revenue_future.result()
+        proceeds = proceeds_future.result()
         actives = actives_future.result()
         active_subscriptions = active_subs_future.result()
 
-    revenue_by_date = {point["date"]: point["value"] for point in revenue}
+    proceeds_by_date = {point["date"]: point["value"] for point in proceeds}
     actives_by_date = {point["date"]: point["value"] for point in actives}
     history = [
         {
             "date": point["date"],
             "mrr": point["value"],
-            "revenue": revenue_by_date.get(point["date"], 0),
+            "proceeds": proceeds_by_date.get(point["date"], 0),
             "activeSubs": actives_by_date.get(point["date"], 0),
         }
         for point in mrr

@@ -1,0 +1,183 @@
+.goals-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.goals-header {
+  margin-bottom: 40px;
+}
+
+.goals-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-family: var(--font-poppins-regular);
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  transition: color var(--transition-base);
+}
+
+.goals-back-link:hover {
+  color: var(--color-white);
+}
+
+.goals-header h1 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 8px 0;
+  color: var(--color-white);
+  font-family: var(--font-playfair-display);
+}
+
+.goals-subtitle {
+  margin: 0;
+  max-width: 640px;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: var(--font-poppins-regular);
+}
+
+.goals-loading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 60px 20px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: var(--font-poppins-regular);
+}
+
+.goals-spinner {
+  width: 22px;
+  height: 22px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top: 3px solid var(--color-secondary);
+  border-radius: 50%;
+  animation: goals-spin 1s linear infinite;
+}
+
+@keyframes goals-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.goals-summary-card {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.goals-summary-item {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl);
+  padding: 20px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.goals-summary-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--font-poppins-medium);
+}
+
+.goals-summary-value {
+  font-size: 1.6rem;
+  color: var(--color-white);
+  font-family: var(--font-poppins-medium);
+}
+
+.goals-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.goals-empty {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--font-poppins-regular);
+}
+
+.goals-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.goals-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-poppins-regular);
+}
+
+.goals-table th {
+  text-align: left;
+  padding: 10px 16px;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.55);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+}
+
+.goals-table td {
+  padding: 14px 16px;
+  color: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  white-space: nowrap;
+}
+
+.goals-table tr:last-child td {
+  border-bottom: none;
+}
+
+.goals-table-horizon {
+  font-family: var(--font-poppins-medium);
+  color: var(--color-white);
+}
+
+.goals-table-positive {
+  color: #6fd98f;
+}
+
+.goals-table-negative {
+  color: #e68a8a;
+}
+
+.goals-table-empty {
+  color: rgba(255, 255, 255, 0.5);
+  white-space: normal;
+}
+
+@media (max-width: 768px) {
+  .goals-container {
+    padding: 10px;
+  }
+
+  .goals-summary-card {
+    grid-template-columns: 1fr;
+  }
+
+  .goals-card {
+    padding: 16px;
+  }
+}

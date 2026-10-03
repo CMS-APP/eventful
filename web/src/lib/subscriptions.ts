@@ -4,7 +4,7 @@ import { HOUR_MS, readLocalCache, writeLocalCache } from "@/lib/localCache";
 export interface RevenueCatDailyStat {
   date: string;
   mrr: number;
-  revenue: number;
+  proceeds: number;
   activeSubs: number;
 }
 
