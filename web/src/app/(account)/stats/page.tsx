@@ -20,6 +20,7 @@ import { FunnelChart } from "@/features/stats/components/FunnelChart";
 import { TrendChart } from "@/features/stats/components/TrendChart";
 import { UnauthorizedAccess } from "@/features/stats/components/UnauthorizedAccess";
 import { CHART_COLOR, GOALS_ACCESS_EMAIL } from "@/features/stats/constants";
+import { useAdminGuard } from "@/features/stats/hooks/useAdminGuard";
 import {
   type ActiveUserStatsPoint,
   type TotalUserStatsPoint,
@@ -27,7 +28,15 @@ import {
   getTotalUser,
   getTotalUserStatsHistory
 } from "@/features/stats/services/database";
-import { useAdminGuard } from "@/features/stats/hooks/useAdminGuard";
+import {
+  GAIN_INTERVALS,
+  GAIN_RANGES,
+  type GainInterval,
+  type GainRange,
+  isIntervalAvailable,
+  periodGain,
+  withProjection
+} from "@/features/stats/utils/periodGain";
 import {
   type FeatureUsageDomain,
   type FunnelStep,
@@ -46,7 +55,6 @@ import "./page.css";
 
 const ROLLING_MONTH_WINDOW_DAYS = 30;
 const ROLLING_MONTH_CHART_SPAN_DAYS = 90;
-const TOTAL_USERS_WEEK_SPAN = 52;
 
 const ACTIVE_USER_METRICS = [
   { key: "dau", label: "Daily active users" },
@@ -80,21 +88,37 @@ export default function Stats() {
   const [loadingPaywallFunnel, setLoadingPaywallFunnel] = useState(true);
   const [loadingFeatureUsage, setLoadingFeatureUsage] = useState(true);
 
-  const totalUserWeeklyHistory = useMemo(() => {
-    const weeklyPoints = totalUserHistory
-      .filter((point) => {
-        const dayOfWeek = new Date(`${point.date}T00:00:00Z`).getUTCDay();
-        return dayOfWeek === 0;
-      })
-      .slice(-TOTAL_USERS_WEEK_SPAN);
+  const [gainRange, setGainRange] = useState<GainRange>(GAIN_RANGES[3]);
+  const [gainInterval, setGainInterval] = useState<GainInterval>("month");
 
-    const todayDate = new Date().toISOString().slice(0, 10);
-    if (totalUser > 0 && weeklyPoints.at(-1)?.date !== todayDate) {
-      return [...weeklyPoints, { date: todayDate, totalUsers: totalUser }];
+  const userGainHistory = useMemo(() => {
+    const totals = totalUserHistory.map((point) => ({
+      date: point.date,
+      total: point.totalUsers
+    }));
+    if (totalUser > 0) {
+      totals.push({
+        date: new Date().toISOString().slice(0, 10),
+        total: totalUser
+      });
     }
+    return withProjection(
+      periodGain(totals, gainRange, gainInterval),
+      gainInterval,
+      new Date()
+    );
+  }, [totalUserHistory, totalUser, gainRange, gainInterval]);
 
-    return weeklyPoints;
-  }, [totalUserHistory, totalUser]);
+  function handleGainRangeChange(label: string) {
+    const range = GAIN_RANGES.find((r) => r.label === label)!;
+    setGainRange(range);
+    if (!isIntervalAvailable(range, gainInterval)) {
+      const fallback = [...GAIN_INTERVALS]
+        .reverse()
+        .find((i) => isIntervalAvailable(range, i.value))!;
+      setGainInterval(fallback.value);
+    }
+  }
 
   const newUserHistory = useMemo(() => {
     const diffs = totalUserHistory.slice(1).map((point, index) => ({
@@ -345,16 +369,52 @@ export default function Stats() {
               : ""}
           </p>
           <section className="chart-card chart-card-full">
-            <h2 className="chart-card-title">
-              <FontAwesomeIcon icon={faUsers} />
-              Total users (last 52 weeks)
-            </h2>
+            <div className="chart-card-header">
+              <h2 className="chart-card-title">
+                <FontAwesomeIcon icon={faUsers} />
+                Users gained
+              </h2>
+              <div className="chart-card-controls">
+                <select
+                  className="chart-card-select"
+                  aria-label="Time frame"
+                  value={gainRange.label}
+                  onChange={(e) => handleGainRangeChange(e.target.value)}
+                >
+                  {GAIN_RANGES.map((range) => (
+                    <option key={range.label} value={range.label}>
+                      {range.label}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  className="chart-card-select"
+                  aria-label="Interval"
+                  value={gainInterval}
+                  onChange={(e) =>
+                    setGainInterval(e.target.value as GainInterval)
+                  }
+                >
+                  {GAIN_INTERVALS.map((interval) => (
+                    <option
+                      key={interval.value}
+                      value={interval.value}
+                      disabled={!isIntervalAvailable(gainRange, interval.value)}
+                    >
+                      {interval.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
             <TrendChart
-              history={totalUserWeeklyHistory}
-              metric="totalUsers"
+              history={userGainHistory}
+              metric="gained"
               color={CHART_COLOR}
+              startAtZero
+              projectedMetric="projected"
               formatValue={(v) => v.toLocaleString()}
-              emptyMessage="No total user history yet — daily tracking started today. Check back tomorrow to see the trend build up."
+              emptyMessage="Not enough user history yet to show gains for this time frame."
               loading={loadingUsers}
             />
           </section>

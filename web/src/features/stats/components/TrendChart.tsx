@@ -28,7 +28,9 @@ export function TrendChart<T extends { date: string }>({
   loading,
   secondaryMetric,
   secondaryLabel,
-  formatSecondaryValue
+  formatSecondaryValue,
+  startAtZero,
+  projectedMetric
 }: {
   history: T[];
   metric: keyof T;
@@ -39,6 +41,8 @@ export function TrendChart<T extends { date: string }>({
   secondaryMetric?: keyof T;
   secondaryLabel?: string;
   formatSecondaryValue?: (value: number) => string;
+  startAtZero?: boolean;
+  projectedMetric?: keyof T;
 }) {
   if (loading) {
     return (
@@ -53,7 +57,9 @@ export function TrendChart<T extends { date: string }>({
     return <p className="chart-card-empty">{emptyMessage}</p>;
   }
 
-  const latest = Number(history[history.length - 1][metric]) || 0;
+  const lastPoint = history[history.length - 1];
+  const latest = Number(lastPoint[metric]) || 0;
+  const latestProjected = projectedMetric ? lastPoint[projectedMetric] : null;
 
   function renderTooltip({
     active,
@@ -66,15 +72,24 @@ export function TrendChart<T extends { date: string }>({
   }) {
     if (!active || !payload || payload.length === 0) return null;
     const point = (payload[0] as { payload: T }).payload;
+    const projected = projectedMetric ? point[projectedMetric] : null;
+    const showProjected = projected != null && projected !== point[metric];
 
     return (
       <div style={{ ...TOOLTIP_STYLE, padding: "8px 12px" }}>
         <div>{formatShortUtcDate(String(label))}</div>
         <div>{formatValue(Number(point[metric]) || 0)}</div>
-        {secondaryMetric && (
+        {showProjected && (
+          <div style={{ opacity: 0.75 }}>
+            Projected: ~{formatValue(Number(projected) || 0)}
+          </div>
+        )}
+        {secondaryMetric && point[secondaryMetric] != null && (
           <div style={{ opacity: 0.75 }}>
             {secondaryLabel}:{" "}
-            {(formatSecondaryValue ?? String)(Number(point[secondaryMetric]) || 0)}
+            {(formatSecondaryValue ?? String)(
+              Number(point[secondaryMetric]) || 0
+            )}
           </div>
         )}
       </div>
@@ -85,6 +100,11 @@ export function TrendChart<T extends { date: string }>({
     <div>
       <div className="chart-card-summary">
         <span className="chart-card-summary-value">{formatValue(latest)}</span>
+        {latestProjected != null && (
+          <span className="chart-card-summary-label">
+            ~{formatValue(Number(latestProjected) || 0)} projected
+          </span>
+        )}
       </div>
       <ResponsiveContainer width="100%" height={180}>
         <LineChart
@@ -101,7 +121,11 @@ export function TrendChart<T extends { date: string }>({
             minTickGap={24}
           />
           <YAxis
-            domain={["auto", "auto"]}
+            domain={
+              startAtZero
+                ? [(dataMin: number) => Math.min(0, dataMin), "auto"]
+                : ["auto", "auto"]
+            }
             tickFormatter={(v) => formatValue(Number(v))}
             tick={AXIS_TICK}
             axisLine={false}
@@ -117,6 +141,19 @@ export function TrendChart<T extends { date: string }>({
             dot={{ r: 3, fill: color, strokeWidth: 0 }}
             activeDot={{ r: 6 }}
           />
+          {projectedMetric && (
+            <Line
+              type="monotone"
+              dataKey={projectedMetric as string}
+              stroke={color}
+              strokeWidth={2}
+              strokeDasharray="5 5"
+              strokeOpacity={0.7}
+              dot={{ r: 3, fill: color, fillOpacity: 0.5, strokeWidth: 0 }}
+              activeDot={{ r: 6 }}
+              legendType="none"
+            />
+          )}
         </LineChart>
       </ResponsiveContainer>
     </div>

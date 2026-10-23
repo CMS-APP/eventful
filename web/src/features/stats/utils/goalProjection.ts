@@ -46,9 +46,12 @@ export function projectGoal(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
   const latest = sorted[sorted.length - 1];
+  const firstRevenue = sorted.find((p) => p.value > 0);
   const windowStart =
     horizon.days === null
-      ? -Infinity
+      ? firstRevenue
+        ? new Date(firstRevenue.date).getTime()
+        : -Infinity
       : new Date(latest.date).getTime() - horizon.days * MS_PER_DAY;
   const windowPoints = sorted.filter(
     (p) => new Date(p.date).getTime() >= windowStart
