@@ -1,0 +1,31 @@
+.terms-content,
+.terms-content h1,
+.terms-content h2,
+.terms-content h3,
+.terms-content p,
+.terms-content a,
+.terms-content span,
+.terms-content li,
+.terms-content strong {
+  color: var(--color-white) !important;
+}
+
+.terms-content a {
+  text-decoration: underline;
+}
+
+.terms-content a:hover {
+  color: var(--secondary) !important;
+}
+
+.terms-content h3 {
+  margin-top: 1.25rem;
+}
+
+.terms-content ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
