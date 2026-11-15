@@ -108,7 +108,6 @@ export async function getLocalEvents(): Promise<GalleryEvent[]> {
   const eventsData: { [key: string]: GalleryEvent } = {};
 
   try {
-    const newPhotosData = [] as GalleryPhoto[];
     const photosData = await getPhotosDataLocally();
     if (!photosData || photosData.length === 0) {
       return [];
@@ -131,16 +130,12 @@ export async function getLocalEvents(): Promise<GalleryEvent[]> {
       const assetResult = assetChecks[i];
 
       if (assetResult.status === "rejected" || !assetResult.value) {
-        log("No asset found for photo: " + JSON.stringify(photo), "warn");
+        // Skip this photo if the asset check failed or returned null
         continue;
       }
 
       photo.width = assetResult.value.width;
       photo.height = assetResult.value.height;
-
-      newPhotosData.push({
-        ...photo
-      });
 
       if (!eventsData[photo.eventTitle]) {
         eventsData[photo.eventTitle] = {
@@ -172,7 +167,7 @@ export async function getLocalEvents(): Promise<GalleryEvent[]> {
       }
     }
 
-    await AsyncStorage.setItem("photosData", JSON.stringify(newPhotosData));
+    await AsyncStorage.setItem("photosData", JSON.stringify(photosData));
     return Object.values(eventsData);
   } catch (error) {
     log(`Error getting events data: ${error}`, "error");
