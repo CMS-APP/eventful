@@ -8,6 +8,16 @@ function formatMessage(message: string) {
   return `[${hours}:${minutes}:${seconds}] ${message}`;
 }
 
+function captureLog(
+  message: string,
+  name: string,
+  level: Sentry.SeverityLevel
+) {
+  const error = new Error(message);
+  error.name = name;
+  Sentry.captureException(error, { level });
+}
+
 export function log(
   message: string,
   level: "debug" | "info" | "warn" | "error" = "info"
@@ -26,10 +36,10 @@ export function log(
 
   switch (level) {
     case "error":
-      Sentry.captureMessage(formattedMessage, "error");
+      captureLog(message, "Error", "error");
       break;
     case "warn":
-      Sentry.captureMessage(formattedMessage, "warning");
+      captureLog(message, "Warning", "warning");
       break;
     default:
       if (priority >= 1) {
