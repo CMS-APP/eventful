@@ -9,6 +9,7 @@ import { Event } from "@/types/Event";
 import { EventInvite } from "@/types/EventInvite";
 import { User } from "@/types/User";
 import { parseDatabaseDate } from "@/utils/date";
+import { log } from "@/utils/logging";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -284,9 +285,13 @@ export async function createNotificationForEvent(event: Event) {
     }
 
     const seconds = Math.floor((date.getTime() - new Date().getTime()) / 1000);
-    if (seconds > 0) {
+    if (seconds <= 0) {
+      continue;
+    }
+
+    try {
       let sent = false;
-      if (reminder.label === "in one week") {
+      if (reminder.type === "week") {
         sent = await scheduleToDoShoppingNotification(event, seconds);
       }
 
@@ -300,6 +305,8 @@ export async function createNotificationForEvent(event: Event) {
           identifier
         );
       }
+    } catch (error) {
+      log(`Error scheduling ${reminder.type} reminder: ${error}`, "info");
     }
   }
 }
