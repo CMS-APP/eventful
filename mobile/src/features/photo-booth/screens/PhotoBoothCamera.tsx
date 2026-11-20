@@ -54,6 +54,7 @@ export function PhotoBoothCamera() {
   const flashMode = flash ? "on" : "off";
 
   const maxPhotos = useMemo(() => {
+    if (collageStyle === "single") return 1;
     return collageStyle === "row" || collageStyle === "column" ? 3 : 4;
   }, [collageStyle]);
 

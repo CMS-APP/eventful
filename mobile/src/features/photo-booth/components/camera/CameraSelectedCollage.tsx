@@ -4,46 +4,8 @@ import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
+import { CameraCollageDiagram } from "./CameraCollageDiagram";
 import { CustomiseCollageModal } from "./CustomiseCollageModal";
-
-function CollageBox() {
-  return <View style={styles.collageBox} />;
-}
-
-function SquareCollage() {
-  return (
-    <View style={styles.collageContainer}>
-      <View style={styles.collageRow}>
-        <CollageBox />
-        <CollageBox />
-      </View>
-      <View style={styles.collageRow}>
-        <CollageBox />
-        <CollageBox />
-      </View>
-    </View>
-  );
-}
-
-function RowCollage() {
-  return (
-    <View style={styles.collageRow}>
-      <CollageBox />
-      <CollageBox />
-      <CollageBox />
-    </View>
-  );
-}
-
-function ColumnCollage() {
-  return (
-    <View style={styles.collageColumn}>
-      <CollageBox />
-      <CollageBox />
-      <CollageBox />
-    </View>
-  );
-}
 
 export function CameraSelectedCollage({
   show,
@@ -57,6 +19,9 @@ export function CameraSelectedCollage({
   if (collageStyle === "row" || collageStyle === "column") {
     photoCount = 3;
   }
+  if (collageStyle === "single") {
+    photoCount = 1;
+  }
 
   const isColumnStyle = collageStyle === "column";
 
@@ -68,7 +33,7 @@ export function CameraSelectedCollage({
         {collageStyle} Style
       </Text>
       <Text type="body" color={colors.lightGray}>
-        {photoCount} Photos Total
+        {photoCount} {photoCount === 1 ? "Photo" : "Photos"} Total
       </Text>
     </View>
   );
@@ -77,9 +42,7 @@ export function CameraSelectedCollage({
     <>
       <View style={[styles.headerRow, isColumnStyle && styles.headerRowWide]}>
         <View style={styles.collageBoxContainer}>
-          {collageStyle === "square" && <SquareCollage />}
-          {collageStyle === "row" && <RowCollage />}
-          {collageStyle === "column" && <ColumnCollage />}
+          <CameraCollageDiagram collageStyle={collageStyle} />
         </View>
 
         {isColumnStyle && textBlock}
@@ -92,27 +55,11 @@ export function CameraSelectedCollage({
 }
 
 const styles = StyleSheet.create({
-  collageBox: {
-    backgroundColor: colors.black,
-    height: 30,
-    width: 30
-  },
   collageBoxContainer: {
     alignSelf: "center",
     backgroundColor: colors.lightGray,
     borderRadius: 2,
     padding: 2
-  },
-  collageColumn: {
-    flexDirection: "column",
-    gap: 2
-  },
-  collageContainer: {
-    gap: 2
-  },
-  collageRow: {
-    flexDirection: "row",
-    gap: 2
   },
   headerRow: {
     alignItems: "center",

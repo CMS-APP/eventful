@@ -1,6 +1,6 @@
 import { captureRef } from "react-native-view-shot";
 
-import { type RefObject, useEffect, useState } from "react";
+import { type RefObject, useEffect, useRef, useState } from "react";
 
 import { Alert, StyleSheet, View } from "react-native";
 
@@ -31,11 +31,14 @@ import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
 import { PhotoBoothResultsButton } from "./PhotoBoothResultsButton";
+import { type CollageSize, getCollageCaptureOptions } from "./collageScale";
 
 export function PhotoBoothResultsButtons({
-  viewRef
+  viewRef,
+  captureSize
 }: {
   viewRef: RefObject<View | null>;
+  captureSize: CollageSize | null;
 }) {
   const navigation = useNavigation<NavigationProp<PhotoBoothStackParamList>>();
 
@@ -50,6 +53,11 @@ export function PhotoBoothResultsButtons({
     autoSave
   } = usePhotoBoothSettings();
   const [loading, setLoading] = useState(false);
+  const captureSizeRef = useRef(captureSize);
+
+  useEffect(() => {
+    captureSizeRef.current = captureSize;
+  }, [captureSize]);
 
   const handleRetake = () => {
     setPhotos([]);
@@ -71,10 +79,10 @@ export function PhotoBoothResultsButtons({
         }
       }
 
-      const capturedUri = await captureRef(viewRef.current, {
-        format: "png",
-        quality: 0.8
-      });
+      const capturedUri = await captureRef(
+        viewRef.current,
+        getCollageCaptureOptions(captureSizeRef.current)
+      );
 
       const cacheDir = FileSystem.cacheDirectory;
       const destUri = `${cacheDir}photo-booth-${Date.now()}.png`;
@@ -116,10 +124,10 @@ export function PhotoBoothResultsButtons({
         return;
       }
 
-      const capturedUri = await captureRef(viewRef.current, {
-        format: "png",
-        quality: 0.8
-      });
+      const capturedUri = await captureRef(
+        viewRef.current,
+        getCollageCaptureOptions(captureSizeRef.current)
+      );
 
       await sharePhoto(capturedUri);
       trackPhotoBoothPhotoShared();

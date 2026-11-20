@@ -10,7 +10,6 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { PanSnapGestureRoot } from "@/app/context/panSnap/PanSnapGestureRoot";
 import { PanSnapScrollHint } from "@/app/context/panSnap/PanSnapScrollHint";
-import { useAppDimensions } from "@/app/hooks/useAppDimensions";
 import type { PhotoBoothStackNavigation } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { Text } from "@/design-system/components/text/Text";
@@ -20,18 +19,17 @@ import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/Photo
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 import { showOptionsAlert } from "@/utils/alertModal";
 
-import { PhotoBoothColumnCollage } from "../components/result/PhotoBoothColumnCollage";
-import { PhotoBoothGridCollage } from "../components/result/PhotoBoothGridCollage";
+import { PhotoBoothCollage } from "../components/result/PhotoBoothCollage";
 import { PhotoBoothResultsButtons } from "../components/result/PhotoBoothResultsButtons";
-import { PhotoBoothRowCollage } from "../components/result/PhotoBoothRowCollage";
+import { ScaledCollage } from "../components/result/ScaledCollage";
+import type { CollageSize } from "../components/result/collageScale";
 import { filters } from "../filters";
 
 export function PhotoBoothResult() {
   const { setPhotos } = usePhotoBoothCamera();
-  const { collageStyle, filter: savedFilter } = usePhotoBoothSettings();
+  const { filter: savedFilter } = usePhotoBoothSettings();
   const navigation = useNavigation<PhotoBoothStackNavigation>();
   const insets = useSafeAreaInsets();
-  const width = useAppDimensions().screenWidth;
 
   const savedFilterIndex = useMemo(() => {
     const i = filters.indexOf(savedFilter);
@@ -39,6 +37,7 @@ export function PhotoBoothResult() {
   }, [savedFilter]);
 
   const [index, setIndex] = useState(savedFilterIndex);
+  const [captureSize, setCaptureSize] = useState<CollageSize | null>(null);
 
   const viewRef = useRef<View>(null);
 
@@ -92,28 +91,12 @@ export function PhotoBoothResult() {
           }}
         >
           <View style={styles.container}>
-            <View
-              ref={viewRef}
-              collapsable={false}
-              style={[styles.finalImageContainer, { maxWidth: width - 24 }]}
-            >
-              {collageStyle === "row" ? (
-                <PhotoBoothRowCollage
-                  filter={filters[index]}
-                  onPhotoPress={handlePhotoPress}
-                />
-              ) : collageStyle === "column" ? (
-                <PhotoBoothColumnCollage
-                  filter={filters[index]}
-                  onPhotoPress={handlePhotoPress}
-                />
-              ) : collageStyle === "square" ? (
-                <PhotoBoothGridCollage
-                  filter={filters[index]}
-                  onPhotoPress={handlePhotoPress}
-                />
-              ) : null}
-            </View>
+            <ScaledCollage captureRef={viewRef} onSizeChange={setCaptureSize}>
+              <PhotoBoothCollage
+                filter={filters[index]}
+                onPhotoPress={handlePhotoPress}
+              />
+            </ScaledCollage>
           </View>
 
           <View style={styles.redoContainer}>
@@ -133,6 +116,7 @@ export function PhotoBoothResult() {
           <PanSnapScrollHint labels={filters} />
           <PhotoBoothResultsButtons
             viewRef={viewRef as RefObject<View | null>}
+            captureSize={captureSize}
           />
         </View>
       </View>
@@ -145,12 +129,6 @@ const styles = StyleSheet.create({
     gap: 16,
     marginTop: 52,
     paddingHorizontal: 24
-  },
-  finalImageContainer: {
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6
   },
   redoContainer: {
     ...card.medium,

@@ -6,6 +6,7 @@ import { StyleSheet, View } from "react-native";
 
 import { Button } from "@/design-system/components/buttons/Button";
 import { SwitchButton } from "@/design-system/components/buttons/SwitchButton";
+import { SwitchButtonGroup } from "@/design-system/components/buttons/SwitchButtonGroup";
 import { DateTimeSelector } from "@/design-system/components/inputs/DateTimeSelector";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
@@ -157,12 +158,15 @@ export function EventDateTimeRangeEditor({
           />
         </View>
 
-        <SwitchButton
-          isChecked={multiDate}
-          onChange={handleSwitchChange}
-          title={"Multi-Day Event?"}
-          dark={dark}
-        />
+        <SwitchButtonGroup dark={dark}>
+          <SwitchButton
+            icon="calendar-alt"
+            title="Multi-Day Event?"
+            subtitle="Add an end date and time"
+            value={multiDate}
+            onChange={handleSwitchChange}
+          />
+        </SwitchButtonGroup>
 
         {multiDate && endDate && (
           <View style={styles.row}>

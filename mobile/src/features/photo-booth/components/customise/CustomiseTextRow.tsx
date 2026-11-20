@@ -1,3 +1,5 @@
+import Slider from "@react-native-community/slider";
+
 import { StyleSheet, TextStyle, TouchableOpacity, View } from "react-native";
 
 import { Input } from "@/design-system/components/inputs/Input";
@@ -11,7 +13,7 @@ interface CustomiseTextRowProps {
   setTitle: (title: string) => void;
   placeholder: string;
   handleTitleFontPress: () => void;
-  handleTitleSizePress: () => void;
+  onFontSizeChange: (size: number) => void;
   fontStyles: Record<string, TextStyle>;
   customTitleFont: string;
   customTitleFontSize: number;
@@ -22,66 +24,74 @@ export function CustomiseTextRow({
   setTitle,
   placeholder,
   handleTitleFontPress,
-  handleTitleSizePress,
+  onFontSizeChange,
   fontStyles,
   customTitleFont,
   customTitleFontSize
 }: CustomiseTextRowProps) {
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <Input
-          placeholder={placeholder}
-          value={title}
-          onChangeText={setTitle}
-          backgroundColor={colors.white}
-          textColor={colors.black}
-        />
-      </View>
-      <View style={styles.fontContainer}>
-        <Text type="body" color={colors.black}>
-          Font
-        </Text>
-        <TouchableOpacity
-          style={styles.controlButton}
-          onPress={handleTitleFontPress}
-          hitSlop={getHitSlop("small")}
-        >
-          <Text
-            style={[
-              fontStyles[customTitleFont] ?? fontStyles["Poppins"],
-              styles.fontButtonText
-            ]}
-          >
-            Aa
+      <View style={styles.topRow}>
+        <View style={styles.inputContainer}>
+          <Input
+            placeholder={placeholder}
+            value={title}
+            onChangeText={setTitle}
+            backgroundColor={colors.white}
+            textColor={colors.black}
+          />
+        </View>
+        <View style={styles.fontContainer}>
+          <Text type="body" color={colors.black}>
+            Font
           </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.controlButton}
+            onPress={handleTitleFontPress}
+            hitSlop={getHitSlop("small")}
+          >
+            <Text
+              style={[
+                fontStyles[customTitleFont] ?? fontStyles["Poppins"],
+                styles.fontButtonText
+              ]}
+            >
+              Aa
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
-      <View style={styles.sizeContainer}>
+      <View style={styles.sizeRow}>
         <Text type="body" color={colors.black}>
           Size
         </Text>
-        <TouchableOpacity
-          style={styles.controlButton}
-          onPress={handleTitleSizePress}
-          hitSlop={getHitSlop("small")}
-        >
-          <Text type="body" color={colors.black}>
-            {customTitleFontSize}
-          </Text>
-        </TouchableOpacity>
+        <Slider
+          style={styles.slider}
+          minimumValue={MIN_FONT_SIZE}
+          maximumValue={MAX_FONT_SIZE}
+          step={1}
+          value={customTitleFontSize}
+          onValueChange={onFontSizeChange}
+          minimumTrackTintColor={colors.primary}
+          maximumTrackTintColor={colors.lightGray}
+          thumbTintColor={colors.primaryTint}
+        />
+        <Text type="body" color={colors.black} style={styles.sizeValue}>
+          {customTitleFontSize}
+        </Text>
       </View>
     </View>
   );
 }
 
 const CONTROL_WIDTH = 48;
+const MIN_FONT_SIZE = 10;
+const MAX_FONT_SIZE = 48;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    gap: 12
+    gap: 8
   },
   controlButton: {
     ...card.small,
@@ -101,7 +111,20 @@ const styles = StyleSheet.create({
   inputContainer: {
     flex: 1
   },
-  sizeContainer: {
-    gap: 6
+  sizeRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 12
+  },
+  sizeValue: {
+    textAlign: "right",
+    width: 24
+  },
+  slider: {
+    flex: 1
+  },
+  topRow: {
+    flexDirection: "row",
+    gap: 12
   }
 });

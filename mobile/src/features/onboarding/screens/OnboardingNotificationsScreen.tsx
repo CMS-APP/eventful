@@ -6,9 +6,10 @@ import { StyleSheet, View } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { AllStackParamList } from "@/app/navigation";
 import { usePushNotificationsToggle } from "@/app/hooks/usePushNotificationsToggle";
+import { AllStackParamList } from "@/app/navigation";
 import { SwitchButton } from "@/design-system/components/buttons/SwitchButton";
+import { SwitchButtonGroup } from "@/design-system/components/buttons/SwitchButtonGroup";
 import { TextButton } from "@/design-system/components/buttons/TextButton";
 import { colors } from "@/design-system/tokens/colors";
 import { trackOnboardingCompleted } from "@/services/analytics/events";
@@ -49,19 +50,22 @@ export function OnboardingNotificationsScreen({
 
       <View style={styles.content}>
         <View style={styles.emailToggle}>
-          <SwitchButton
-            title="Push Notifications"
-            isChecked={pushNotifications}
-            onChange={togglePushNotifications}
-            dark
-          />
-
-          <SwitchButton
-            title="Email Notifications"
-            isChecked={emailNotifications}
-            onChange={() => setEmailNotificationsLocal(!emailNotifications)}
-            dark
-          />
+          <SwitchButtonGroup dark>
+            <SwitchButton
+              icon="bell"
+              title="Push Notifications"
+              subtitle="To-do reminders and RSVP updates"
+              value={pushNotifications}
+              onChange={togglePushNotifications}
+            />
+            <SwitchButton
+              icon="envelope"
+              title="Email Notifications"
+              subtitle="Event updates sent to your inbox"
+              value={emailNotifications}
+              onChange={() => setEmailNotificationsLocal(!emailNotifications)}
+            />
+          </SwitchButtonGroup>
         </View>
 
         <TextButton

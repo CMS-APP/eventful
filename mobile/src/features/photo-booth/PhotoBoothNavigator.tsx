@@ -16,13 +16,9 @@ import { PhotoBoothGallery } from "./screens/PhotoBoothGallery";
 import { PhotoBoothGuidedAccessInfo } from "./screens/PhotoBoothGuidedAccessInfo";
 import { PhotoBoothHome } from "./screens/PhotoBoothHome";
 import { PhotoBoothInspiration } from "./screens/PhotoBoothInspiration";
-import { PhotoBoothLayout } from "./screens/PhotoBoothLayout";
 import { PhotoBoothPhoto } from "./screens/PhotoBoothPhoto";
-import { PhotoBoothPreview } from "./screens/PhotoBoothPreview";
 import { PhotoBoothRedoPhoto } from "./screens/PhotoBoothRedoPhoto";
 import { PhotoBoothResult } from "./screens/PhotoBoothResult";
-import { PhotoBoothSettings } from "./screens/PhotoBoothSettings";
-import { PhotoBoothTextColors } from "./screens/PhotoBoothTextColors";
 
 const Stack = createNativeStackNavigator<PhotoBoothStackParamList>();
 
@@ -68,13 +64,6 @@ export function PhotoBoothNavigator() {
         name="PhotoBoothCustomise"
         component={PhotoBoothCustomise}
       />
-      <Stack.Screen name="PhotoBoothLayout" component={PhotoBoothLayout} />
-      <Stack.Screen name="PhotoBoothPreview" component={PhotoBoothPreview} />
-      <Stack.Screen
-        name="PhotoBoothTextColors"
-        component={PhotoBoothTextColors}
-      />
-      <Stack.Screen name="PhotoBoothSettings" component={PhotoBoothSettings} />
       <Stack.Screen
         name="PhotoBoothColorPicker"
         component={PhotoBoothColorPicker}

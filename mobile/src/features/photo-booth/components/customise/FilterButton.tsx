@@ -1,12 +1,11 @@
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { FontAwesome5 } from "@expo/vector-icons";
-
 import { Text } from "@/design-system/components/text/Text";
-import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { FilterWrapper } from "@/features/photo-booth/components/customise/FilterWrapper";
+
+const SIZE = 84;
 
 interface FilterButtonProps {
   filter: string;
@@ -20,90 +19,67 @@ export function FilterButton({
   isSelected
 }: FilterButtonProps) {
   const imageSource = require(`@/assets/backgrounds/welcome-background.png`);
-  const size = 120;
-
-  function image() {
-    return (
-      <Image
-        source={imageSource}
-        style={[styles.image, { width: size, height: size }]}
-      />
-    );
-  }
-
-  function getImage() {
-    const needsGrain =
-      filter === "Black & White" ||
-      filter === "Vintage" ||
-      filter === "Polaroid";
-    const isVintage = filter === "Vintage";
-    const wrapperSize = isVintage ? size + 4 : size;
-
-    return (
-      <FilterWrapper
-        filter={filter}
-        width={wrapperSize}
-        height={wrapperSize}
-        showGrain={needsGrain}
-      >
-        <View style={[styles.imageWrapper, { width: size, height: size }]}>
-          {image()}
-        </View>
-      </FilterWrapper>
-    );
-  }
+  const needsGrain =
+    filter === "Black & White" || filter === "Vintage" || filter === "Polaroid";
 
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.button, isSelected && styles.selectedContainer]}
+      style={styles.button}
       hitSlop={getHitSlop("small")}
     >
-      {getImage()}
-      <Text type="body">{filter}</Text>
-      {isSelected && (
-        <View style={styles.selectedIndicator}>
-          <FontAwesome5 name="check" size={16} color={colors.white} />
-        </View>
-      )}
+      <View style={styles.tile}>
+        <FilterWrapper
+          filter={filter}
+          width={SIZE}
+          height={SIZE}
+          showGrain={needsGrain}
+        >
+          <Image source={imageSource} style={styles.image} />
+        </FilterWrapper>
+        {isSelected && <View style={styles.selectedBorder} />}
+      </View>
+
+      <Text
+        type={isSelected ? "subHeader" : "body"}
+        color={isSelected ? colors.primary : colors.darkGray}
+        style={styles.label}
+        numberOfLines={2}
+      >
+        {filter}
+      </Text>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    ...card.small,
     alignItems: "center",
-    borderRadius: 6,
-    borderWidth: 1,
-    gap: 12,
-    marginBottom: 8,
-    paddingVertical: 14,
-    width: 160
+    gap: 6,
+    width: SIZE
   },
   image: {
-    alignSelf: "center",
-    borderColor: colors.lightGray,
-    borderRadius: 12,
-    borderWidth: 2
+    height: SIZE,
+    width: SIZE
   },
-  imageWrapper: {
-    alignSelf: "center"
+  label: {
+    fontSize: 9,
+    letterSpacing: 1,
+    lineHeight: 12,
+    textAlign: "center",
+    textTransform: "uppercase",
+    width: SIZE
   },
-  selectedContainer: {
+  selectedBorder: {
+    ...StyleSheet.absoluteFill,
     borderColor: colors.secondary,
-    borderWidth: 3,
-    paddingVertical: 12
+    borderRadius: 16,
+    borderWidth: 3
   },
-  selectedIndicator: {
-    alignItems: "center",
-    backgroundColor: colors.secondary,
-    borderRadius: 6,
-    height: 20,
-    justifyContent: "center",
-    position: "absolute",
-    right: -8,
-    top: -8,
-    width: 20
+  tile: {
+    borderRadius: 16,
+    height: SIZE,
+    overflow: "hidden",
+    width: SIZE
   }
 });

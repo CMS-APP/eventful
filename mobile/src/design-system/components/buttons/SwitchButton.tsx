@@ -1,73 +1,114 @@
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 
-import { StyleSheet, Switch, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, Switch, View } from "react-native";
+
+import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Text } from "@/design-system/components/text/Text";
-import { card } from "@/design-system/tokens/card";
 import { colors } from "@/design-system/tokens/colors";
-import { getHitSlop } from "@/design-system/tokens/hitSlop";
 import { haptics } from "@/utils/haptics";
 
+import { SwitchButtonDarkContext } from "./SwitchButtonGroup";
+
 interface SwitchButtonProps {
+  icon?: string;
+  iconColor?: string;
   title: string;
-  isChecked: boolean;
+  subtitle?: string;
+  value: boolean;
   onChange: () => void;
-  dark?: boolean;
 }
 
 export function SwitchButton({
+  icon,
+  iconColor,
   title,
-  isChecked,
-  onChange,
-  dark = false
+  subtitle,
+  value,
+  onChange
 }: SwitchButtonProps) {
+  const dark = useContext(SwitchButtonDarkContext);
+
   const handlePress = useCallback(() => {
     haptics.soft();
     onChange();
   }, [onChange]);
 
-  const textColor = dark ? colors.white : colors.black;
-  const backgroundColor = dark ? colors.primaryTint3 : colors.white;
-  const trackColor = dark ? colors.primaryTint3 : colors.primary;
-
   return (
-    <TouchableOpacity onPress={handlePress} hitSlop={getHitSlop("medium")}>
-      <View style={styles.switchButton}>
-        <View
-          style={[
-            styles.switchContainer,
-            !dark && card.small,
-            { backgroundColor }
-          ]}
-        >
-          <Text type="body" style={{ color: textColor }}>
+    <Pressable
+      onPress={handlePress}
+      style={({ pressed }) => pressed && styles.pressed}
+      accessibilityRole="switch"
+      accessibilityState={{ checked: value }}
+      accessibilityLabel={title}
+    >
+      <View style={styles.row}>
+        {icon && (
+          <View style={styles.iconContainer}>
+            <FontAwesome5
+              name={icon}
+              size={15}
+              color={iconColor ?? (dark ? colors.white : colors.primary)}
+              solid
+            />
+          </View>
+        )}
+        <View style={styles.textContainer}>
+          <Text type="body" color={dark ? colors.white : colors.black}>
             {title}
           </Text>
+          {subtitle && (
+            <Text
+              type="footnote"
+              color={dark ? colors.lightGray : colors.primaryTint3}
+              style={styles.subtitle}
+            >
+              {subtitle}
+            </Text>
+          )}
         </View>
-        <View>
+        <View style={styles.switchContainer}>
           <Switch
-            value={isChecked}
+            value={value}
             onValueChange={handlePress}
-            trackColor={{ true: trackColor, false: colors.lightGray }}
+            trackColor={{
+              true: dark ? colors.secondary : colors.primary,
+              false: colors.lightGray
+            }}
             thumbColor={colors.white}
-            ios_backgroundColor={colors.gray}
+            ios_backgroundColor={colors.lightGray}
           />
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  switchButton: {
+  iconContainer: {
+    alignItems: "center",
+    width: 20
+  },
+  pressed: {
+    opacity: 0.5
+  },
+  row: {
     alignItems: "center",
     flexDirection: "row",
-    gap: 12
+    gap: 12,
+    minHeight: 60,
+    paddingVertical: 8
+  },
+  subtitle: {
+    fontSize: 9,
+    lineHeight: 13
   },
   switchContainer: {
-    borderRadius: 12,
+    alignSelf: "stretch",
+    justifyContent: "center"
+  },
+  textContainer: {
     flex: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 12
+    gap: 2
   }
 });

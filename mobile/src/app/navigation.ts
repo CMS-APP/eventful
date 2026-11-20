@@ -149,10 +149,6 @@ export type PhotoBoothStackParamList = {
   PhotoBoothResult: undefined;
   PhotoBoothRedoPhoto: { index: number };
   PhotoBoothCustomise: undefined;
-  PhotoBoothLayout: undefined;
-  PhotoBoothPreview: undefined;
-  PhotoBoothTextColors: undefined;
-  PhotoBoothSettings: undefined;
   PhotoBoothColorPicker: { type: string; color: string };
   PhotoBoothGallery: undefined;
   PhotoBoothEventGallery: {

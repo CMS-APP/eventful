@@ -16,12 +16,13 @@ import { colors } from "@/design-system/tokens/colors";
 import { AccountButton } from "../../features/account/components/AccountButton";
 import { KeyboardScrollView } from "../views/KeyboardScrollView";
 import { CurvyHeader } from "./CurvyHeader";
+import { CurvyHeaderV2 } from "./CurvyHeaderV2";
 import { FlatHeader } from "./FlatHeader";
 import { FootNote } from "./Footnote";
 import { CurvyHeaderProps, FlatHeaderProps } from "./props";
 
 interface HeaderProps {
-  type?: "curvy" | "flat";
+  type?: "curvy" | "curvy-v2" | "flat";
   backgroundColor?: string;
   modal?: boolean;
   flatHeaderProps?: FlatHeaderProps;
@@ -113,10 +114,18 @@ export function Screen({
             </View>
           </>
         )}
+
+        {headerConfig?.type === "curvy-v2" && (
+          <CurvyHeaderV2 curvyHeaderProps={headerConfig?.curvyHeaderProps}>
+            <View style={nonScrollChildrenContainerStyle}>
+              {nonScrollChildren}
+            </View>
+          </CurvyHeaderV2>
+        )}
       </View>
 
       <View style={contentStyle}>
-        {nonScrollChildren && (
+        {nonScrollChildren && headerConfig?.type !== "curvy-v2" && (
           <View style={nonScrollChildrenContainerStyle}>
             {nonScrollChildren}
           </View>
