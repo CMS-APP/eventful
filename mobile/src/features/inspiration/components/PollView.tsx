@@ -60,6 +60,10 @@ export function PollView({ isAdmin }: PollViewProps) {
     }, [fetchPoll])
   );
 
+  const hasPoll = !!poll && poll.options.length > 0;
+
+  if (!isAdmin && !hasPoll) return null;
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -84,7 +88,7 @@ export function PollView({ isAdmin }: PollViewProps) {
         </View>
       )}
 
-      {!loading && poll && poll.options.length > 0 && (
+      {!loading && hasPoll && (
         <View style={styles.contentContainer}>
           <Text type="subHeader" color={colors.black}>
             {poll.title}
