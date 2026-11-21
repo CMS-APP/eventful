@@ -17,9 +17,9 @@ function RequirementRow({ label, met }: RequirementRowProps) {
       <FontAwesome5
         name={met ? "check" : "times"}
         size={12}
-        color={met ? colors.green : colors.red}
+        color={met ? colors.primaryTint : colors.red}
       />
-      <Text type="caption" color={met ? colors.green : colors.red}>
+      <Text type="caption" color={met ? colors.primaryTint : colors.red}>
         {label}
       </Text>
     </View>
@@ -32,7 +32,7 @@ const STRENGTH_COLORS = [
   colors.red,
   colors.amber,
   colors.yellow,
-  colors.green
+  colors.primaryTint
 ];
 
 interface PasswordStrengthMeterProps {

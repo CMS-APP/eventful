@@ -67,6 +67,7 @@ export function PhotoBoothNavigator() {
       <Stack.Screen
         name="PhotoBoothColorPicker"
         component={PhotoBoothColorPicker}
+        options={{ gestureEnabled: false }}
       />
       <Stack.Screen name="PhotoBoothGallery" component={PhotoBoothGallery} />
       <Stack.Screen

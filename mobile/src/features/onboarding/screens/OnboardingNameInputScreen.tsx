@@ -225,13 +225,13 @@ export function OnboardingNameInputScreen({
                 <Text
                   type="body"
                   italic
-                  color={usernameValid ? colors.green : colors.red + "CC"}
+                  color={usernameValid ? colors.primaryTint : colors.red + "CC"}
                   center
                 >
                   <FontAwesome5
                     name={usernameValid ? "check" : "times"}
                     size={12}
-                    color={usernameValid ? colors.green : colors.red + "CC"}
+                    color={usernameValid ? colors.primaryTint : colors.red + "CC"}
                   />{" "}
                   {helperText}
                 </Text>

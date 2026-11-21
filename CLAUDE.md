@@ -26,7 +26,7 @@ npx prettier --write .   # format
 npx expo-doctor          # validate Expo config/deps
 ```
 
-Before installing a native dependency or changing native config, run `expo prebuild`. Development builds (needed to test native modules like Firebase/RevenueCat on-device) are produced by `bash ./scripts/ios-dev-build.sh` / `bash ./scripts/android-dev-build.sh`. Version/build-number bumps and store uploads go through `bash ./scripts/upload.sh` — run only when merging to main, not per-commit.
+Before installing a native dependency or changing native config, run `expo prebuild`. Development builds (needed to test native modules like Firebase/RevenueCat on-device) are produced by `bash ./scripts/dev-ios.sh` / `bash ./scripts/dev-android.sh` (output to `build/dev/`), or `bash ./scripts/run-ios.sh` / `bash ./scripts/run-android.sh` to build and launch with Metro attached. Version/build-number bumps and store uploads go through `bash ./scripts/upload.sh` — run only when merging to main, not per-commit.
 
 End-to-end flows are defined as Maestro YAML specs in `mobile/tests/*.yaml`, run sequentially via `mobile/tests/run_tests.sh` (see `mobile/tests/TESTING.md` for the covered scenarios: auth, onboarding, events, invites, photo booth, etc). These exercise the real backend, not mocks.
 
