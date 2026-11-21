@@ -23,5 +23,15 @@ export async function getLoginNames() {
       firstName: googleOnboardingName?.firstName
     };
   }
+  const [firstName, ...lastNames] = (user.displayName ?? "")
+    .trim()
+    .split(/\s+/);
+  if (firstName) {
+    return {
+      type: "email",
+      firstName,
+      lastName: lastNames.join(" ")
+    };
+  }
   return null;
 }

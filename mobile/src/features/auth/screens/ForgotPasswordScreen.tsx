@@ -1,20 +1,21 @@
 import { useCallback, useState } from "react";
 
-import { Alert, StyleSheet, View } from "react-native";
+import { Alert } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { AuthStackParamList } from "@/app/navigation";
-import { FlatHeader } from "@/components/screen/FlatHeader";
-import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Button } from "@/design-system/components/buttons/Button";
-import { Input } from "@/design-system/components/inputs/Input";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { forgotPassword } from "@/services/firebase/backend";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 import { emailValid } from "@/utils/validation";
+
+import { AuthInput } from "../components/AuthInput";
+import { AuthLayout } from "../components/AuthLayout";
+import { ResetLinkSent } from "../components/ResetLinkSent";
 
 type ForgotPasswordScreenProps = NativeStackScreenProps<
   AuthStackParamList,
@@ -27,96 +28,92 @@ export function ForgotPasswordScreen({
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | undefined>();
   const [loading, setLoading] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [resent, setResent] = useState(false);
 
-  const handleSubmit = useCallback(async () => {
-    if (!emailValid(email)) {
-      setError("Please enter a valid email address.");
-      return;
+  const sendResetLink = useCallback(async () => {
+    const trimmedEmail = email.trim();
+    if (!emailValid(trimmedEmail)) {
+      setError("Enter a valid email");
+      return false;
     }
     setError(undefined);
     setLoading(true);
 
     try {
-      await forgotPassword(email);
-      Alert.alert(
-        "Check Your Email",
-        "If your email is registered, you will receive a password reset link.",
-        [{ text: "OK", onPress: () => navigation.goBack() }]
-      );
+      await forgotPassword(trimmedEmail);
+      return true;
     } catch (error) {
       log(`Error requesting password reset: ${error}`, "error");
       showErrorToast("Error Sending Reset Link");
       Alert.alert("Error", "An unexpected error occurred. Please try again.");
+      return false;
     } finally {
       setLoading(false);
     }
-  }, [email, navigation, setLoading]);
+  }, [email]);
+
+  const handleSubmit = useCallback(async () => {
+    if (sent) {
+      navigation.goBack();
+      return;
+    }
+    if (await sendResetLink()) {
+      setSent(true);
+      setResent(false);
+    }
+  }, [sent, sendResetLink, navigation]);
+
+  const handleResend = useCallback(async () => {
+    if (await sendResetLink()) {
+      setResent(true);
+    }
+  }, [sendResetLink]);
 
   return (
-    <View style={styles.container}>
-      <FlatHeader
-        title="Forgot Password"
-        backgroundColor={colors.white}
-        backAction
-      />
-
-      <KeyboardScrollView
-        tabBarPresent={false}
-        handleScroll={() => {}}
-        _handleScroll={() => {}}
-        backgroundColor={colors.white}
-      >
-        <View style={styles.formContainer}>
-          <Text type="body" color={colors.black}>
-            Enter your email address and we will send you a link to reset your
+    <AuthLayout
+      title="Reset password"
+      subtitle="Plan with ease, connect with joy"
+      onBack={navigation.goBack}
+      footer={
+        <Button
+          text={sent ? "Back to Sign In" : "Send Reset Link"}
+          color={colors.primary}
+          textColor={colors.white}
+          onPress={handleSubmit}
+          loading={loading}
+          disabled={loading}
+        />
+      }
+    >
+      {sent ? (
+        <ResetLinkSent
+          email={email.trim()}
+          resent={resent}
+          onResend={handleResend}
+        />
+      ) : (
+        <>
+          <Text type="body" color={colors.darkGray} center>
+            Enter your email and we&apos;ll send you a link to reset your
             password.
           </Text>
 
-          <View style={styles.inputContainer}>
-            <Input
-              placeholder="Email"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              backgroundColor={colors.white}
-              textColor={colors.black}
-            />
-
-            {error && (
-              <Text type="body" color={colors.red}>
-                {error}
-              </Text>
-            )}
-          </View>
-
-          <Button
-            text="Send Reset Link"
-            color={colors.primary}
-            textColor={colors.white}
-            onPress={handleSubmit}
-            leadingIcon="paper-plane"
-            loading={loading}
+          <AuthInput
+            label="Email"
+            placeholder="you@example.com"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            textContentType="emailAddress"
+            returnKeyType="send"
+            onSubmitEditing={handleSubmit}
+            error={error}
           />
-        </View>
-      </KeyboardScrollView>
-    </View>
+        </>
+      )}
+    </AuthLayout>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.white,
-    flex: 1,
-    paddingTop: 24
-  },
-  formContainer: {
-    backgroundColor: colors.white,
-    gap: 12,
-    paddingHorizontal: 24
-  },
-  inputContainer: {
-    gap: 4
-  }
-});

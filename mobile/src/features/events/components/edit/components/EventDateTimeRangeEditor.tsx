@@ -158,7 +158,7 @@ export function EventDateTimeRangeEditor({
           />
         </View>
 
-        <SwitchButtonGroup dark={dark}>
+        <SwitchButtonGroup>
           <SwitchButton
             icon="calendar-alt"
             title="Multi-Day Event?"

@@ -1,210 +1,216 @@
+import { updateProfile } from "@react-native-firebase/auth";
+
 import { useCallback, useState } from "react";
 
-import { Alert, LayoutChangeEvent, StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { AuthStackParamList } from "@/app/navigation";
-import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Button } from "@/design-system/components/buttons/Button";
-import { TextButton } from "@/design-system/components/buttons/TextButton";
-import { Input } from "@/design-system/components/inputs/Input";
+import { StepDots } from "@/design-system/components/feedback/StepDots";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { handleSignUp } from "@/services/firebase/auth";
 import { sendVerificationEmail } from "@/services/firebase/backend";
-import { FormErrors } from "@/types/FormErrors";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 import { emailValid, passwordValid } from "@/utils/validation";
 
-import { Header } from "../components/Header";
-import { HeaderArcs } from "../components/HeaderArcs";
-import {
-  EmailValidationHint,
-  PasswordMatchCheck,
-  PasswordStrengthMeter
-} from "../components/PasswordRequirements";
-import { formStyles } from "../styles/formStyles";
+import { AuthCheckbox } from "../components/AuthCheckbox";
+import { AuthInput } from "../components/AuthInput";
+import { AuthLayout } from "../components/AuthLayout";
+import { AuthSwitchLink } from "../components/AuthSwitchLink";
+import { PasswordStrengthMeter } from "../components/PasswordStrengthMeter";
+import { SocialLogins } from "../components/SocialLogins";
+
+const TERMS_URL =
+  "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
+const PRIVACY_URL = "https://app.eventfulapp.com/about/privacy-headerless";
+
+interface SignUpErrors {
+  name?: string;
+  email?: string;
+}
 
 type SignUpScreenProps = NativeStackScreenProps<AuthStackParamList, "SignUp">;
 
 export function SignUpScreen({ navigation }: SignUpScreenProps) {
+  const [step, setStep] = useState<1 | 2>(1);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [headerHeight, setHeaderHeight] = useState(0);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [errors, setErrors] = useState<SignUpErrors>({});
   const [isSigningUp, setIsSigningUp] = useState(false);
 
-  const handleEmailChange = useCallback((value: string) => {
-    setEmail(value);
-    setErrors((prev) => ({ ...prev, email: undefined }));
-  }, []);
+  const handleSignIn = useCallback(() => {
+    navigation.replace("SignIn", {});
+  }, [navigation]);
 
-  const validateForm = useCallback((): boolean => {
-    const newErrors: FormErrors = {};
+  const openWebView = useCallback(
+    (title: string, uri: string) => {
+      navigation.getParent()?.navigate("WebView", { title, uri });
+    },
+    [navigation]
+  );
 
-    if (!emailValid(email)) {
-      newErrors.email = "Please enter a valid email address.";
+  const handleContinue = useCallback(() => {
+    const newErrors: SignUpErrors = {};
+
+    if (!name.trim()) {
+      newErrors.name = "Add your name";
     }
 
-    if (!passwordValid(password)) {
-      newErrors.password =
-        "Password must be at least 8 characters and include an uppercase letter, a lowercase letter, a number, and a special character.";
-    }
-
-    if (password !== confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match.";
+    if (!emailValid(email.trim())) {
+      newErrors.email = "Enter a valid email";
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [email, password, confirmPassword]);
+    if (Object.keys(newErrors).length === 0) {
+      setStep(2);
+    }
+  }, [name, email]);
 
-  const handleSignIn = useCallback(() => {
-    navigation.replace("SignIn", { email: "", password: "" });
-  }, [navigation]);
-
-  const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
-    const { height } = event.nativeEvent.layout;
-    setHeaderHeight(height);
-  }, []);
+  const canCreateAccount = passwordValid(password) && acceptedTerms;
 
   const signUp = useCallback(async () => {
-    if (!validateForm()) {
+    if (!canCreateAccount) {
       return;
     }
 
+    const trimmedEmail = email.trim();
+
     setIsSigningUp(true);
     try {
-      const user = await handleSignUp(email, password);
+      const user = await handleSignUp(trimmedEmail, password);
       if (typeof user === "string") {
         setErrors({ email: user });
+        setStep(1);
         return;
       }
+
+      await updateProfile(user, { displayName: name.trim() });
 
       Alert.alert(
         "Account Created",
         "Check your email for a verification link to activate your account."
       );
 
-      navigation.replace("SignIn", { email, password });
+      navigation.replace("SignIn", { email: trimmedEmail, password });
       sendVerificationEmail(user as any);
     } catch (error) {
-      if (error instanceof Error) {
-        if (error.message.includes("auth/email-already-in-use")) {
-          setErrors({ email: "Email already in use." });
-        } else {
-          log(`Error Signing Up: ${error}`, "error");
-          showErrorToast("Error Signing Up");
-          Alert.alert(
-            "Error",
-            "An unexpected error occurred. Please try again."
-          );
-        }
-      }
+      log(`Error Signing Up: ${error}`, "error");
+      showErrorToast("Error Signing Up");
+      Alert.alert("Error", "An unexpected error occurred. Please try again.");
     } finally {
       setIsSigningUp(false);
     }
-  }, [email, password, validateForm, navigation]);
+  }, [canCreateAccount, email, password, name, navigation]);
 
   return (
-    <View style={styles.container}>
-      <Header title="Sign Up" onLayout={handleHeaderLayout} />
-      <HeaderArcs headerHeight={headerHeight} />
+    <AuthLayout
+      title="Create account"
+      subtitle="Plan with ease, connect with joy"
+      onBack={step === 2 ? () => setStep(1) : undefined}
+      footer={
+        <AuthSwitchLink
+          prompt="Already have an account?"
+          action="Sign in"
+          onPress={handleSignIn}
+        />
+      }
+    >
+      <StepDots step={step} total={2} />
 
-      <KeyboardScrollView
-        tabBarPresent={false}
-        handleScroll={() => {}}
-        _handleScroll={() => {}}
-      >
-        <View style={formStyles.formContainer}>
-          <View style={styles.inputContainer}>
-            <Input
-              placeholder="Email"
-              value={email}
-              onChangeText={handleEmailChange}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              backgroundColor={colors.white}
-              textColor={colors.black}
-            />
+      {step === 1 ? (
+        <>
+          <SocialLogins />
 
-            <EmailValidationHint email={email} error={errors.email} />
-          </View>
+          <AuthInput
+            label="Full name"
+            placeholder="Your name"
+            value={name}
+            onChangeText={setName}
+            autoCapitalize="words"
+            autoComplete="name"
+            textContentType="name"
+            returnKeyType="next"
+            error={errors.name}
+          />
 
-          <View style={styles.inputContainer}>
-            <Input
-              placeholder="Password"
+          <AuthInput
+            label="Email"
+            placeholder="you@example.com"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            textContentType="emailAddress"
+            returnKeyType="next"
+            onSubmitEditing={handleContinue}
+            error={errors.email}
+          />
+        </>
+      ) : (
+        <>
+          <View>
+            <AuthInput
+              label="Password"
+              placeholder="At least 8 characters"
               value={password}
               onChangeText={setPassword}
-              password
-              backgroundColor={colors.white}
-              textColor={colors.black}
+              autoCapitalize="none"
+              autoComplete="new-password"
+              textContentType="newPassword"
+              secure
             />
-
             <PasswordStrengthMeter password={password} />
           </View>
 
-          <View style={styles.inputContainer}>
-            <Input
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              password
-              backgroundColor={colors.white}
-              textColor={colors.black}
-            />
-
-            <PasswordMatchCheck
-              password={password}
-              confirmPassword={confirmPassword}
-            />
-          </View>
-
-          <Button
-            text="Sign Up"
-            color={colors.primary}
-            textColor={colors.white}
-            onPress={signUp}
-            leadingIcon={isSigningUp ? undefined : "user-plus"}
-            loading={isSigningUp}
-            disabled={isSigningUp}
-          />
-
-          <View style={styles.orContainer}>
-            <Text type="body" color={colors.black}>
-              Already have an account?
+          <AuthCheckbox
+            checked={acceptedTerms}
+            onChange={() => setAcceptedTerms(!acceptedTerms)}
+          >
+            <Text type="caption" color={colors.darkGray}>
+              I agree to the{" "}
+              <Text
+                type="caption"
+                color={colors.primary}
+                style={styles.link}
+                onPress={() => openWebView("Terms of Service", TERMS_URL)}
+              >
+                Terms
+              </Text>{" "}
+              and{" "}
+              <Text
+                type="caption"
+                color={colors.primary}
+                style={styles.link}
+                onPress={() => openWebView("Privacy Policy", PRIVACY_URL)}
+              >
+                Privacy Policy
+              </Text>
             </Text>
+          </AuthCheckbox>
+        </>
+      )}
 
-            <TextButton
-              text="Sign in"
-              textColor={colors.black}
-              textAlign="center"
-              type="body"
-              onPress={handleSignIn}
-            />
-          </View>
-        </View>
-      </KeyboardScrollView>
-    </View>
+      <Button
+        text={step === 1 ? "Continue" : "Create Account"}
+        onPress={step === 1 ? handleContinue : signUp}
+        color={colors.primary}
+        textColor={colors.white}
+        loading={isSigningUp}
+        disabled={isSigningUp || (step === 2 && !canCreateAccount)}
+      />
+    </AuthLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  inputContainer: {
-    gap: 4
-  },
-  orContainer: {
-    alignItems: "center",
-    flexDirection: "row",
-    gap: 8,
-    justifyContent: "center",
-    marginTop: 12
+  link: {
+    textDecorationLine: "underline"
   }
 });

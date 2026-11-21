@@ -86,7 +86,7 @@ export function GoogleLogin() {
 
   return (
     <Button
-      text="Google"
+      text="Continue with Google"
       onPress={onGoogleButtonPress}
       color={colors.white}
       textColor={colors.black}

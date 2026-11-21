@@ -77,7 +77,7 @@ export function PhotoBoothHome() {
             color: colors.white,
             accountButton: false,
             backgroundColor: colors.primary,
-            iconRight: locked ? "unlock" : "lock",
+            iconRight: locked ? "lock" : "unlock",
             iconRightAction: () => {
               if (locked) {
                 setPresentUnlockModal(true);
@@ -196,7 +196,7 @@ export function PhotoBoothHome() {
 
                 <View style={styles.gridRow}>
                   <Button
-                    leadingIcon={locked ? "unlock" : "lock"}
+                    leadingIcon={locked ? "lock" : "unlock"}
                     text={`${locked ? "Un" : ""}Lock`}
                     color={colors.white}
                     textColor={colors.primary}

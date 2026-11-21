@@ -2,11 +2,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { OnboardingStackParamList } from "@/app/navigation";
 
-import { Onboarding1Screen } from "./screens/Onboarding1Screen";
-import { Onboarding2Screen } from "./screens/Onboarding2Screen";
-import { Onboarding3Screen } from "./screens/Onboarding3Screen";
 import { OnboardingNameInputScreen } from "./screens/OnboardingNameInputScreen";
 import { OnboardingNotificationsScreen } from "./screens/OnboardingNotificationsScreen";
+import { OnboardingWelcomeScreen } from "./screens/OnboardingWelcomeScreen";
 
 export function OnboardingNavigator() {
   const Stack = createNativeStackNavigator<OnboardingStackParamList>();
@@ -19,9 +17,10 @@ export function OnboardingNavigator() {
         animation: "slide_from_bottom"
       }}
     >
-      <Stack.Screen name="Onboarding1" component={Onboarding1Screen} />
-      <Stack.Screen name="Onboarding2" component={Onboarding2Screen} />
-      <Stack.Screen name="Onboarding3" component={Onboarding3Screen} />
+      <Stack.Screen
+        name="OnboardingWelcome"
+        component={OnboardingWelcomeScreen}
+      />
       <Stack.Screen
         name="OnboardingNameInput"
         component={OnboardingNameInputScreen}

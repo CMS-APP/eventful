@@ -1,4 +1,4 @@
-import { useCallback, useContext } from "react";
+import { useCallback } from "react";
 
 import { Pressable, StyleSheet, Switch, View } from "react-native";
 
@@ -7,8 +7,6 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { haptics } from "@/utils/haptics";
-
-import { SwitchButtonDarkContext } from "./SwitchButtonGroup";
 
 interface SwitchButtonProps {
   icon?: string;
@@ -27,8 +25,6 @@ export function SwitchButton({
   value,
   onChange
 }: SwitchButtonProps) {
-  const dark = useContext(SwitchButtonDarkContext);
-
   const handlePress = useCallback(() => {
     haptics.soft();
     onChange();
@@ -48,19 +44,19 @@ export function SwitchButton({
             <FontAwesome5
               name={icon}
               size={15}
-              color={iconColor ?? (dark ? colors.white : colors.primary)}
+              color={iconColor ?? colors.primary}
               solid
             />
           </View>
         )}
         <View style={styles.textContainer}>
-          <Text type="body" color={dark ? colors.white : colors.black}>
+          <Text type="body" color={colors.black}>
             {title}
           </Text>
           {subtitle && (
             <Text
               type="footnote"
-              color={dark ? colors.lightGray : colors.primaryTint3}
+              color={colors.primaryTint3}
               style={styles.subtitle}
             >
               {subtitle}
@@ -71,12 +67,7 @@ export function SwitchButton({
           <Switch
             value={value}
             onValueChange={handlePress}
-            trackColor={{
-              true: dark ? colors.secondary : colors.primary,
-              false: colors.lightGray
-            }}
-            thumbColor={colors.white}
-            ios_backgroundColor={colors.lightGray}
+            trackColor={{ true: colors.primary }}
           />
         </View>
       </View>

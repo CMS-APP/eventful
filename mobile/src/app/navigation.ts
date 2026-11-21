@@ -69,7 +69,6 @@ export type AuthStackParamList = {
   SignIn: { email?: string; password?: string };
   SignUp: undefined;
   ForgotPassword: undefined;
-  Welcome: undefined;
 };
 
 export type CalendarStackParamList = {
@@ -128,17 +127,14 @@ export type HomeStackParamList = {
 export type MainStackParamList = {
   Home: undefined;
   Contacts:
-    | { screen: string; params: { open: boolean } | undefined }
-    | undefined;
+    { screen: string; params: { open: boolean } | undefined } | undefined;
   PhotoBooth: undefined;
   Events: { screen: string; params: { event: Event | null } } | undefined;
   Calendar: undefined;
 };
 
 export type OnboardingStackParamList = {
-  Onboarding1: undefined;
-  Onboarding2: undefined;
-  Onboarding3: undefined;
+  OnboardingWelcome: undefined;
   OnboardingNameInput: undefined;
   OnboardingNotifications: undefined;
 };
