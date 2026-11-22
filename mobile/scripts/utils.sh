@@ -54,6 +54,7 @@ run_tracks() {
   for i in "${!names[@]}"; do
     local log_file="${log_files[$i]}"
     local tmp_file="${log_file}.new"
+    local failed_log_file="${log_file%.log}-failed.log"
     local status_file="${log_file%.log}.status"
     local phase_file="${log_file%.log}.phase"
     rm -f "$status_file" "$phase_file" "$tmp_file"
@@ -63,14 +64,17 @@ run_tracks() {
 
     local fn="${fns[$i]}"
     # Write to a sibling .new file and only swap it over the real log file
-    # once this run exits (normally or via the TERM trap below), so the
-    # previous run's log stays intact — and readable — for the whole
-    # duration of this run instead of being truncated the instant it starts.
+    # if this run succeeds, so the log file always holds the last successful
+    # run. A failed or interrupted run's output goes to the -failed.log file.
     (
-      trap 'mv -f "$tmp_file" "$log_file" 2>/dev/null; exit 143' TERM
+      trap 'mv -f "$tmp_file" "$failed_log_file" 2>/dev/null; exit 143' TERM
       "$fn" "$phase_file" > "$tmp_file" 2>&1
       rc=$?
-      mv -f "$tmp_file" "$log_file" 2>/dev/null
+      if [ "$rc" = "0" ]; then
+        mv -f "$tmp_file" "$log_file" 2>/dev/null
+      else
+        mv -f "$tmp_file" "$failed_log_file" 2>/dev/null
+      fi
       echo "$rc" > "$status_file"
     ) &
     local pid=$!
@@ -114,7 +118,7 @@ run_tracks() {
         if [ "$(cat "$sf")" = "0" ]; then
           printf "\033[K✅ %s  Done (log: %s)\n" "$nm" "$lf"
         else
-          printf "\033[K❌ %s  Failed (log: %s)\n" "$nm" "$lf"
+          printf "\033[K❌ %s  Failed (log: %s)\n" "$nm" "${lf%.log}-failed.log"
         fi
       else
         all_done=false
@@ -153,7 +157,7 @@ run_tracks() {
   local failed=false
   for i in "${!names[@]}"; do
     if [ "$(cat "${status_files[$i]}")" != "0" ]; then
-      echo "❌ ${names[$i]} failed. Check ${log_files[$i]}"
+      echo "❌ ${names[$i]} failed. Check ${log_files[$i]%.log}-failed.log"
       failed=true
     fi
   done
@@ -188,4 +192,13 @@ print_summary() {
     [ "${STEP_DURATIONS[$i]}" -gt "$total" ] && total=${STEP_DURATIONS[$i]}
   done
   echo "  Total: $(format_duration "$total")"
+}
+
+check_expo_doctor() {
+  echo "🩺 Running expo-doctor..."
+  if ! npx expo-doctor; then
+    echo "❌ expo-doctor found issues. Fix them before building."
+    exit 1
+  fi
+  echo "✅ expo-doctor passed"
 }

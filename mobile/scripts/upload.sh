@@ -9,6 +9,8 @@ if ! npx eslint .; then
 fi
 echo "✅ No lint errors found"
 
+check_expo_doctor
+
 env_var() {
   grep -E "^$1=" .env 2>/dev/null | tail -n1 | cut -d '=' -f2-
 }

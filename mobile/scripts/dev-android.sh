@@ -2,6 +2,8 @@
 
 source "$(dirname "$0")/utils.sh"
 
+check_expo_doctor
+
 mkdir -p build/dev
 mkdir -p build/logs
 
