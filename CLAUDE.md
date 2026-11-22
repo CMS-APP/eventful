@@ -14,6 +14,15 @@ There is no shared root `package.json`; each of the three projects has its own d
 
 ## Commands
 
+### Running everything locally
+
+```bash
+./run_server.sh               # backend emulator (:5050) + web (:3000) in background, Metro in foreground
+./run_server.sh --no-mobile   # backend + web only
+```
+
+Dev builds of mobile and web call the backend at `http://localhost:5050` (`mobile/src/services/firebase/backend.ts`, `web/src/lib/backendUrl.ts`), so backend calls fail unless the emulator (`backend/emulate.sh`) is running. The emulator runs functions locally against **production** Firestore/Auth. Background logs go to `.dev-logs/`, and Ctrl+C stops everything.
+
 ### Mobile (`mobile/`)
 
 ```bash
@@ -67,7 +76,7 @@ npm run shell         # firebase functions:shell
 npm run logs
 ```
 
-Python functions (`backend/python/`) use `firebase_functions`, runtime `python314`, and are currently a stub (`pyHello`) — endpoints are migrated over from Node one at a time (see "Migrating a route to Python" below).
+Python functions (`backend/python/`) use `firebase_functions`, runtime `python314`. **All new backend functions go in Python, not Node** — the backend is migrating to Python, and `backend/node/` should only be touched to fix existing Node endpoints. Most HTTP, Firestore-triggered and scheduled functions already live here: `main.py` re-exports handlers from `src/functions/{http,firestore,scheduled}_handlers.py`, which delegate to plain functions in `src/services/<domain>.py`.
 
 There is no local Firebase emulator flow wired up for day-to-day iteration on Node functions beyond `npm run serve`; `./dev.sh` connects to **production** Firebase for interactive debugging.
 
@@ -75,7 +84,7 @@ There is no local Firebase emulator flow wired up for day-to-day iteration on No
 
 ### API gateway / migration pattern (important — read before touching backend routes)
 
-Public clients call `api.eventfulapp.com/<path>`, never Cloud Functions URLs directly. `backend/firebase.json` `hosting.rewrites` maps each path to a specific function (`functionId` + `region`). Today all routes point at Node functions; Python functions are added one at a time and swapped in by only changing the rewrite's `functionId` — no client/app release is required. When adding a new HTTP endpoint, add both the function export and a corresponding hosting rewrite.
+Public clients call `api.eventfulapp.com/<path>`, never Cloud Functions URLs directly. `backend/firebase.json` `hosting.rewrites` maps each path to a specific function (`functionId` + `region`). Rewrites don't care which codebase a function lives in, so a route moves from Node to Python just by changing the rewrite's `functionId`, with no client/app release required. When adding a new HTTP endpoint, write it in Python and add both the function export in `main.py` and a corresponding hosting rewrite. When migrating a handler, call `verify_app_check(req)` on the raw request before any `req = format_request(req)`-style reshaping, and verify the endpoint end-to-end afterwards, because lint won't catch runtime errors.
 
 Node HTTP handlers are written as factories that take dependencies (admin, db, secrets) and return an Express-style handler, then are wired up in `backend/node/index.js`:
 

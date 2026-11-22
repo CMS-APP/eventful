@@ -74,3 +74,5 @@ web/.vercel
 # `expo prebuild`, never committed. See mobile/scripts/deploy.sh.
 mobile/android/
 mobile/ios/
+# Local dev logs
+.dev-logs/
