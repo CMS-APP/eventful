@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { useDisableBackButton } from "@/app/hooks/useDisableBackButton";
 import { usePushNotificationsToggle } from "@/app/hooks/usePushNotificationsToggle";
 import { AllStackParamList } from "@/app/navigation";
 import { Button } from "@/design-system/components/buttons/Button";
@@ -31,6 +32,8 @@ export function OnboardingNotificationsScreen({
   const { pushNotifications, togglePushNotifications } =
     usePushNotificationsToggle();
 
+  useDisableBackButton();
+
   async function finishNotificationsStep() {
     await updateUserInfo(userId, { emailNotifications });
     dispatch(setEmailNotifications(emailNotifications));
@@ -41,7 +44,6 @@ export function OnboardingNotificationsScreen({
   return (
     <OnboardingLayout
       step={3}
-      onBack={navigation.goBack}
       title="Stay in the loop"
       subtitle="Choose how we let you know"
       image={require("@/assets/onboarding/notifications.png")}

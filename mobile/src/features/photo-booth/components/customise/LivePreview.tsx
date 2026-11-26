@@ -4,7 +4,7 @@ import { colors } from "@/design-system/tokens/colors";
 
 import { AnimatedPreviewCollage } from "./AnimatedPreviewCollage";
 
-const PREVIEW_HEIGHT = 210;
+const PREVIEW_HEIGHT = 280;
 const PREVIEW_PADDING = 16;
 
 export function LivePreview() {

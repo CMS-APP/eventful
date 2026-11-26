@@ -5,7 +5,7 @@ import {
   ImageBackground,
   Keyboard,
   type LayoutChangeEvent,
-  ScrollView,
+  Platform,
   StyleSheet,
   TouchableOpacity,
   View
@@ -14,6 +14,7 @@ import {
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
+import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { getHitSlop } from "@/design-system/tokens/hitSlop";
@@ -42,11 +43,14 @@ export function AuthLayout({
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
-    const show = Keyboard.addListener("keyboardWillShow", () =>
-      setKeyboardVisible(true)
+    const isIOS = Platform.OS === "ios";
+    const show = Keyboard.addListener(
+      isIOS ? "keyboardWillShow" : "keyboardDidShow",
+      () => setKeyboardVisible(true)
     );
-    const hide = Keyboard.addListener("keyboardWillHide", () =>
-      setKeyboardVisible(false)
+    const hide = Keyboard.addListener(
+      isIOS ? "keyboardWillHide" : "keyboardDidHide",
+      () => setKeyboardVisible(false)
     );
     return () => {
       show.remove();
@@ -55,8 +59,8 @@ export function AuthLayout({
   }, []);
 
   const contentPaddingBottom = keyboardVisible
-    ? 16
-    : 16 + (footer ? footerHeight : safeArea.paddingBottom);
+    ? 40
+    : 40 + (footer ? footerHeight : safeArea.paddingBottom);
 
   function handleFooterLayout(event: LayoutChangeEvent) {
     setFooterHeight(event.nativeEvent.layout.height);
@@ -98,17 +102,12 @@ export function AuthLayout({
       </ImageBackground>
 
       <View style={styles.panel}>
-        <ScrollView
-          contentContainerStyle={[
-            styles.content,
-            { paddingBottom: contentPaddingBottom }
-          ]}
-          keyboardShouldPersistTaps="handled"
-          automaticallyAdjustKeyboardInsets
-          showsVerticalScrollIndicator={false}
+        <KeyboardScrollView
+          tabBarPresent={false}
+          paddingBottom={contentPaddingBottom}
         >
-          {children}
-        </ScrollView>
+          <View style={styles.content}>{children}</View>
+        </KeyboardScrollView>
 
         {footer && (
           <View

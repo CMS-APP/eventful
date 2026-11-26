@@ -28,6 +28,7 @@ export function OnboardingNavigator() {
       <Stack.Screen
         name="OnboardingNotifications"
         component={OnboardingNotificationsScreen}
+        options={{ gestureEnabled: false }}
       />
     </Stack.Navigator>
   );

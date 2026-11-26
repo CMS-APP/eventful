@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 
-import { BackHandler, Platform } from "react-native";
-
 import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import { useDisableBackButton } from "@/app/hooks/useDisableBackButton";
 import type { PhotoBoothStackParamList } from "@/app/navigation";
 import { usePhotoBoothSession } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
 
@@ -30,16 +29,7 @@ export function PhotoBoothNavigator() {
     navigation.setOptions({ gestureEnabled: !locked });
   }, [navigation, locked]);
 
-  useEffect(() => {
-    if (Platform.OS !== "android" || !locked) return;
-
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => true
-    );
-
-    return () => backHandler.remove();
-  }, [locked]);
+  useDisableBackButton(locked);
 
   return (
     <Stack.Navigator

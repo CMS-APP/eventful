@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import {
   Image,
   type ImageSourcePropType,
-  ScrollView,
   StyleSheet,
   TouchableOpacity,
   View
@@ -12,6 +11,7 @@ import {
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
+import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { StepDots } from "@/design-system/components/feedback/StepDots";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
@@ -21,7 +21,7 @@ const TOTAL_STEPS = 3;
 
 interface OnboardingLayoutProps {
   step: number;
-  onBack: () => void;
+  onBack?: () => void;
   title: string;
   subtitle: string;
   image?: ImageSourcePropType;
@@ -43,20 +43,24 @@ export function OnboardingLayout({
   footer
 }: OnboardingLayoutProps) {
   const { safeArea } = useSafeAreaStyles();
-  const contentPaddingBottom = footer ? 16 : 32 + safeArea.paddingBottom;
+  const contentPaddingBottom = footer ? 40 : 56 + safeArea.paddingBottom;
 
   return (
     <View style={[styles.container, { paddingTop: safeArea.paddingTop }]}>
       <View style={styles.topBar}>
-        <TouchableOpacity
-          onPress={onBack}
-          hitSlop={getHitSlop("medium")}
-          style={styles.backButton}
-          accessibilityRole="button"
-          accessibilityLabel="Back"
-        >
-          <FontAwesome5 name="arrow-left" size={20} color={colors.white} />
-        </TouchableOpacity>
+        {onBack ? (
+          <TouchableOpacity
+            onPress={onBack}
+            hitSlop={getHitSlop("medium")}
+            style={styles.backButton}
+            accessibilityRole="button"
+            accessibilityLabel="Back"
+          >
+            <FontAwesome5 name="arrow-left" size={20} color={colors.white} />
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.backButton} />
+        )}
         <StepDots
           step={step}
           total={TOTAL_STEPS}
@@ -85,17 +89,12 @@ export function OnboardingLayout({
       </View>
 
       <View style={[styles.sheet, !expandHero && styles.sheetExpanded]}>
-        <ScrollView
-          contentContainerStyle={[
-            styles.sheetContent,
-            { paddingBottom: contentPaddingBottom }
-          ]}
-          keyboardShouldPersistTaps="handled"
-          automaticallyAdjustKeyboardInsets
-          showsVerticalScrollIndicator={false}
+        <KeyboardScrollView
+          tabBarPresent={false}
+          paddingBottom={contentPaddingBottom}
         >
-          {children}
-        </ScrollView>
+          <View style={styles.sheetContent}>{children}</View>
+        </KeyboardScrollView>
 
         {footer && (
           <View

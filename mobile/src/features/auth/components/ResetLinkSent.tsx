@@ -9,10 +9,16 @@ import { colors } from "@/design-system/tokens/colors";
 interface ResetLinkSentProps {
   email: string;
   resent: boolean;
+  sending: boolean;
   onResend: () => void;
 }
 
-export function ResetLinkSent({ email, resent, onResend }: ResetLinkSentProps) {
+export function ResetLinkSent({
+  email,
+  resent,
+  sending,
+  onResend
+}: ResetLinkSentProps) {
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
@@ -29,7 +35,7 @@ export function ResetLinkSent({ email, resent, onResend }: ResetLinkSentProps) {
         , we&apos;ve sent a link to reset your password.
       </Text>
       <TextButton
-        text={resent ? "Sent again" : "Resend link"}
+        text={sending ? "Sending..." : resent ? "Sent again" : "Resend link"}
         textColor={colors.primary}
         textAlign="center"
         type="body"

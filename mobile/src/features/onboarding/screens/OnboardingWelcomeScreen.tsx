@@ -71,7 +71,7 @@ export function OnboardingWelcomeScreen({
       step={1}
       onBack={handleExit}
       title="You're in!"
-      subtitle="Two quick steps and you're ready to plan your first event"
+      subtitle="A couple of quick steps and you're ready to plan your first event"
       image={require("@/assets/onboarding/drinks.png")}
       imageSize={200}
       expandHero

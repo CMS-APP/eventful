@@ -225,7 +225,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
         color={colors.primary}
         textColor={colors.white}
         loading={isSigningIn}
-        disabled={isSigningIn}
+        disabled={isSigningIn || !email.trim() || !password}
       />
     </AuthLayout>
   );

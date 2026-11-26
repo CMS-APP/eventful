@@ -65,10 +65,11 @@ export function ForgotPasswordScreen({
   }, [sent, sendResetLink, navigation]);
 
   const handleResend = useCallback(async () => {
+    if (loading) return;
     if (await sendResetLink()) {
       setResent(true);
     }
-  }, [sendResetLink]);
+  }, [loading, sendResetLink]);
 
   return (
     <AuthLayout
@@ -90,6 +91,7 @@ export function ForgotPasswordScreen({
         <ResetLinkSent
           email={email.trim()}
           resent={resent}
+          sending={loading}
           onResend={handleResend}
         />
       ) : (

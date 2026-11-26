@@ -1,5 +1,7 @@
 import Slider from "@react-native-community/slider";
 
+import { useState } from "react";
+
 import { StyleSheet, TextStyle, TouchableOpacity, View } from "react-native";
 
 import { Input } from "@/design-system/components/inputs/Input";
@@ -29,6 +31,13 @@ export function CustomiseTextRow({
   customTitleFont,
   customTitleFontSize
 }: CustomiseTextRowProps) {
+  const [draggingFontSize, setDraggingFontSize] = useState<number | null>(null);
+
+  function handleSlidingComplete(size: number) {
+    onFontSizeChange(size);
+    setDraggingFontSize(null);
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.topRow}>
@@ -72,13 +81,14 @@ export function CustomiseTextRow({
           maximumValue={MAX_FONT_SIZE}
           step={1}
           value={customTitleFontSize}
-          onValueChange={onFontSizeChange}
+          onValueChange={setDraggingFontSize}
+          onSlidingComplete={handleSlidingComplete}
           minimumTrackTintColor={colors.primary}
           maximumTrackTintColor={colors.lightGray}
           thumbTintColor={colors.primaryTint}
         />
         <Text type="body" color={colors.black} style={styles.sizeValue}>
-          {customTitleFontSize}
+          {draggingFontSize ?? customTitleFontSize}
         </Text>
       </View>
     </View>

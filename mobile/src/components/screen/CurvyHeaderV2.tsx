@@ -1,6 +1,6 @@
 import React from "react";
 
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 
@@ -22,6 +22,7 @@ export function CurvyHeaderV2({
   children
 }: CurvyHeaderV2Props) {
   const navigation = useNavigation();
+  const isAndroid = Platform.OS === "android";
 
   function handleBackPress() {
     navigation.goBack();
@@ -54,11 +55,11 @@ export function CurvyHeaderV2({
 
       <ArcCutout
         color={curvyHeaderProps?.arcCutoutColor}
-        position={{ top: 62, right: 0 }}
+        position={{ top: isAndroid ? 63.6 : 62, right: 0 }}
       />
       <ArcCutout
         color={curvyHeaderProps?.backgroundColor}
-        position={{ top: 102, left: 0 }}
+        position={{ top: isAndroid ? 103.8 : 102, left: 0 }}
         rotation={-90}
       />
     </View>

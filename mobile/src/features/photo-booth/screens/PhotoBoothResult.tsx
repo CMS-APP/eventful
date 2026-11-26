@@ -10,6 +10,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import { PanSnapGestureRoot } from "@/app/context/panSnap/PanSnapGestureRoot";
 import { PanSnapScrollHint } from "@/app/context/panSnap/PanSnapScrollHint";
+import { useBackButtonAction } from "@/app/hooks/useBackButtonAction";
 import type { PhotoBoothStackNavigation } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { Text } from "@/design-system/components/text/Text";
@@ -45,6 +46,8 @@ export function PhotoBoothResult() {
     setPhotos([]);
     navigation.goBack();
   }
+
+  useBackButtonAction(handleBackAction);
 
   function handleIndexChange(index: number) {
     setIndex(index);

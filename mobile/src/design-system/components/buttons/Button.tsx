@@ -107,7 +107,7 @@ export function Button({
     styles.container,
     style,
     fullWidth && styles.fullWidth,
-    color === colors.white && { ...card.small }
+    color === colors.white && { ...card.small, elevation: 8 }
   ];
   const buttonStyle = buttonStyles[size];
   let iconSize = iconSizes[size];
