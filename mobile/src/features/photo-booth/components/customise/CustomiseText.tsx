@@ -29,12 +29,8 @@ export function CustomiseText() {
     setCustomSubTitleFontSize
   } = usePhotoBoothSettings();
 
-  const fontSizes = [10, 11, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48];
-
   const [isFontPickerVisible, setIsFontPickerVisible] = useState(false);
   const [selectedFont, setSelectedFont] = useState<string | null>(null);
-  const [isFontSizePickerVisible, setIsFontSizePickerVisible] = useState(false);
-  const [selectedFontSize, setSelectedFontSize] = useState<string | null>(null);
   const [pickerType, setPickerType] = useState("title");
 
   const handleTitleFontPress = useCallback(() => {
@@ -43,23 +39,11 @@ export function CustomiseText() {
     setSelectedFont(customTitleFont);
   }, [customTitleFont]);
 
-  const handleTitleSizePress = useCallback(() => {
-    setIsFontSizePickerVisible(true);
-    setPickerType("title");
-    setSelectedFontSize(customTitleFontSize + "pt");
-  }, [customTitleFontSize]);
-
   const handleSubTitleFontPress = useCallback(() => {
     setIsFontPickerVisible(true);
     setPickerType("subTitle");
     setSelectedFont(customSubTitleFont as string);
   }, [customSubTitleFont]);
-
-  const handleSubTitleSizePress = useCallback(() => {
-    setIsFontSizePickerVisible(true);
-    setPickerType("subTitle");
-    setSelectedFontSize(customSubTitleFontSize + "pt");
-  }, [customSubTitleFontSize]);
 
   const handleFontSelect = useCallback(
     (item: string) => {
@@ -73,18 +57,6 @@ export function CustomiseText() {
     [pickerType, setCustomTitleFont, setCustomSubTitleFont]
   );
 
-  const handleFontSizeSelect = useCallback(
-    (item: string) => {
-      setSelectedFontSize(item);
-      if (pickerType === "title") {
-        setCustomTitleFontSize(Number(item.split("pt")[0]));
-      } else {
-        setCustomSubTitleFontSize(Number(item.split("pt")[0]));
-      }
-    },
-    [pickerType, setCustomTitleFontSize, setCustomSubTitleFontSize]
-  );
-
   return (
     <View style={styles.container}>
       <CustomiseTextRow
@@ -92,7 +64,7 @@ export function CustomiseText() {
         setTitle={setTitle}
         placeholder="Title"
         handleTitleFontPress={handleTitleFontPress}
-        handleTitleSizePress={handleTitleSizePress}
+        onFontSizeChange={setCustomTitleFontSize}
         fontStyles={fontStyles}
         customTitleFont={customTitleFont}
         customTitleFontSize={customTitleFontSize}
@@ -103,7 +75,7 @@ export function CustomiseText() {
         setTitle={setSubTitle}
         placeholder="Subtitle"
         handleTitleFontPress={handleSubTitleFontPress}
-        handleTitleSizePress={handleSubTitleSizePress}
+        onFontSizeChange={setCustomSubTitleFontSize}
         fontStyles={fontStyles}
         customTitleFont={customSubTitleFont}
         customTitleFontSize={customSubTitleFontSize}
@@ -117,15 +89,6 @@ export function CustomiseText() {
         placeholder="Select Font"
         selectedItem={selectedFont as string}
         onSelect={handleFontSelect}
-      />
-
-      <Dropdown
-        data={fontSizes.map((size) => `${size}pt`)}
-        isVisible={isFontSizePickerVisible}
-        setIsVisible={setIsFontSizePickerVisible}
-        placeholder="Select Font Size"
-        selectedItem={selectedFontSize as string}
-        onSelect={handleFontSizeSelect}
       />
     </View>
   );

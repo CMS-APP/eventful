@@ -25,8 +25,8 @@ export function KeyboardScrollView({
   bottomMargin = false
 }: {
   children: React.ReactNode;
-  handleScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
-  _handleScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  handleScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  _handleScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   tabBarPresent: boolean;
   backgroundColor?: string;
   paddingBottom?: number;

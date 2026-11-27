@@ -1,22 +1,24 @@
-import { StyleSheet, View } from "react-native";
+import { useState } from "react";
 
-import { useNavigation } from "@react-navigation/native";
-
-import type { PhotoBoothStackNavigation } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
-import { Button } from "@/design-system/components/buttons/Button";
+import { SegmentedIconControl } from "@/design-system/components/buttons/SegmentedIconControl";
 import { colors } from "@/design-system/tokens/colors";
 
+import { LayoutTab } from "../components/customise/tabs/LayoutTab";
+import { PreviewTab } from "../components/customise/tabs/PreviewTab";
+import { SettingsTab } from "../components/customise/tabs/SettingsTab";
+import { TextColorsTab } from "../components/customise/tabs/TextColorsTab";
+
 export function PhotoBoothCustomise() {
-  const navigation = useNavigation<PhotoBoothStackNavigation>();
+  const [selectedIcon, setSelectedIcon] = useState("images");
 
   return (
     <Screen
       contentConfig={{ tabBarPresent: true }}
       headerConfig={{
-        type: "curvy",
+        type: "curvy-v2",
         curvyHeaderProps: {
-          title: "Photo Booth",
+          title: "Customise",
           subTitle: "Customise",
           icon: "cog",
           color: colors.white,
@@ -25,56 +27,19 @@ export function PhotoBoothCustomise() {
           backAction: true
         }
       }}
+      nonScrollChildren={
+        <SegmentedIconControl
+          icons={["images", "font", "sliders-h", "eye"]}
+          selectedIcon={selectedIcon}
+          setSelectedIcon={setSelectedIcon}
+        />
+      }
+      nonScrollConfig={{ paddingTop: 20 }}
     >
-      <View style={styles.container}>
-        <Button
-          text="Layout & Filters"
-          leadingIcon="images"
-          onPress={() => {
-            navigation.navigate("PhotoBoothLayout");
-          }}
-          color={colors.primary}
-          textColor={colors.white}
-        />
-
-        <Button
-          text="Text & Colors"
-          leadingIcon="font"
-          onPress={() => {
-            navigation.navigate("PhotoBoothTextColors");
-          }}
-          color={colors.primary}
-          textColor={colors.white}
-        />
-
-        <Button
-          text="Settings"
-          leadingIcon="cog"
-          onPress={() => {
-            navigation.navigate("PhotoBoothSettings");
-          }}
-          color={colors.primary}
-          textColor={colors.white}
-        />
-
-        <Button
-          text="Preview"
-          leadingIcon="eye"
-          onPress={() => {
-            navigation.navigate("PhotoBoothPreview");
-          }}
-          color={colors.primary}
-          textColor={colors.white}
-        />
-      </View>
+      {selectedIcon === "images" && <LayoutTab />}
+      {selectedIcon === "font" && <TextColorsTab />}
+      {selectedIcon === "sliders-h" && <SettingsTab />}
+      {selectedIcon === "eye" && <PreviewTab />}
     </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    gap: 16,
-    marginTop: 52,
-    paddingHorizontal: 24
-  }
-});

@@ -29,6 +29,7 @@ type ConfigState = {
   flipPhotosHorizontally: boolean;
   collageStyle: string;
   canChangeCollage: boolean;
+  canRetakePhoto: boolean;
   canChangeFilter: boolean;
   flash: boolean;
   filter: string;
@@ -56,6 +57,7 @@ const getDefaultConfig = (): ConfigState => ({
   flipPhotosHorizontally: PB_CONFIG.flipPhotosHorizontally,
   collageStyle: PB_CONFIG.collageStyle,
   canChangeCollage: PB_CONFIG.canChangeCollage,
+  canRetakePhoto: PB_CONFIG.canRetakePhoto,
   canChangeFilter: PB_CONFIG.canChangeFilter,
   flash: PB_CONFIG.flash,
   filter: PB_CONFIG.filter,
@@ -94,6 +96,7 @@ const applyConfigWithDefaults = (
       config.flipPhotosHorizontally ?? defaults.flipPhotosHorizontally,
     collageStyle: config.collageStyle ?? defaults.collageStyle,
     canChangeCollage: config.canChangeCollage ?? defaults.canChangeCollage,
+    canRetakePhoto: config.canRetakePhoto ?? defaults.canRetakePhoto,
     canChangeFilter: config.canChangeFilter ?? defaults.canChangeFilter,
     flash: config.flash ?? defaults.flash,
     filter: config.filter ?? defaults.filter,
@@ -197,6 +200,8 @@ export function PhotoBoothSettingsProvider({
     setCollageStyle: (style: string) => updateConfig("collageStyle", style),
     setCanChangeCollage: (canChange: boolean) =>
       updateConfig("canChangeCollage", canChange),
+    setCanRetakePhoto: (canRetake: boolean) =>
+      updateConfig("canRetakePhoto", canRetake),
     setCanChangeFilter: (canChange: boolean) =>
       updateConfig("canChangeFilter", canChange),
     setFlash: (flash: boolean) => updateConfig("flash", flash),

@@ -280,13 +280,13 @@ export function ChangeNameModal({
             type="body"
             italic
             style={styles.usernameHelperText}
-            color={usernameExists ? colors.red : colors.green}
+            color={usernameExists ? colors.red : colors.primaryTint}
           >
             {helperText.length > 0 && (
               <FontAwesome5
                 name={usernameExists ? "times" : "check"}
                 size={12}
-                color={usernameExists ? colors.red : colors.green}
+                color={usernameExists ? colors.red : colors.primaryTint}
               />
             )}{" "}
             {helperText}

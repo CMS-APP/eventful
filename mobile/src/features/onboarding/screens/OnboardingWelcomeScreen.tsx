@@ -2,7 +2,7 @@ import { getAuth, signOut } from "@react-native-firebase/auth";
 
 import { useEffect } from "react";
 
-import { StatusBar, StyleSheet, View } from "react-native";
+import { StatusBar } from "react-native";
 
 import { CommonActions } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -13,19 +13,21 @@ import {
   OnboardingStackParamList,
   navigationRef
 } from "@/app/navigation";
+import { Button } from "@/design-system/components/buttons/Button";
 import { colors } from "@/design-system/tokens/colors";
 import { trackOnboardingStarted } from "@/services/analytics/events";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 
-import { FeatureView } from "../components/FeatureView";
-import { OnboardingButtons } from "../components/OnboardingButtons";
+import { OnboardingLayout } from "../components/OnboardingLayout";
 
-interface Onboarding1ScreenProps {
+interface OnboardingWelcomeScreenProps {
   navigation: StackNavigationProp<AllStackParamList>;
 }
 
-export function Onboarding1Screen({ navigation }: Onboarding1ScreenProps) {
+export function OnboardingWelcomeScreen({
+  navigation
+}: OnboardingWelcomeScreenProps) {
   async function handleExit() {
     try {
       const auth = getAuth();
@@ -40,7 +42,7 @@ export function Onboarding1Screen({ navigation }: Onboarding1ScreenProps) {
   async function handleNext() {
     trackOnboardingStarted();
     (navigation as StackNavigationProp<OnboardingStackParamList>).navigate(
-      "Onboarding2"
+      "OnboardingNameInput"
     );
   }
 
@@ -65,22 +67,22 @@ export function Onboarding1Screen({ navigation }: Onboarding1ScreenProps) {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <FeatureView
-        image={require("@/assets/onboarding/drinks.png")}
-        title="Welcome"
-        subTitle="Plan Your Perfect Event"
-        description="Easily organize events with friends and family. From parties to weddings, your event details are all in one place!"
+    <OnboardingLayout
+      step={1}
+      onBack={handleExit}
+      title="You're in!"
+      subtitle="A couple of quick steps and you're ready to plan your first event"
+      image={require("@/assets/onboarding/drinks.png")}
+      imageSize={200}
+      expandHero
+    >
+      <Button
+        text="Let's go"
+        color={colors.primary}
+        textColor={colors.white}
+        onPress={handleNext}
+        leadingIcon="arrow-right"
       />
-
-      <OnboardingButtons exit={handleExit} next={handleNext} />
-    </View>
+    </OnboardingLayout>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.primary,
-    flex: 1
-  }
-});

@@ -10,11 +10,7 @@ export type { PhotoBoothPermissionsContextValue } from "@/features/photo-booth/c
 export type { PhotoBoothSessionContextValue } from "@/features/photo-booth/context/session/PhotoBoothSessionContext";
 export type { PhotoBoothSettingsValue } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
-export function PhotoBoothProvider({
-  children
-}: {
-  children: ReactNode;
-}) {
+export function PhotoBoothProvider({ children }: { children: ReactNode }) {
   return (
     <PhotoBoothPermissionsProvider>
       <PhotoBoothSettingsProvider>

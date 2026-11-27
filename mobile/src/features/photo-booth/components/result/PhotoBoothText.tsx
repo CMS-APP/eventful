@@ -10,7 +10,7 @@ import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/P
 export function PhotoBoothText({
   collage
 }: {
-  collage?: "column" | "grid" | "row";
+  collage?: "column" | "grid" | "row" | "single";
 }) {
   const {
     title,
@@ -47,7 +47,7 @@ export function PhotoBoothText({
         fontSize /= 4;
       }
 
-      if (collage === "grid") {
+      if (collage === "grid" || collage === "single") {
         fontSize /= 1.5;
       }
 
@@ -95,7 +95,7 @@ export function PhotoBoothText({
   return (
     <View
       style={
-        collage === "column" || collage === "grid"
+        collage === "column" || collage === "grid" || collage === "single"
           ? styles.columnContainer
           : undefined
       }

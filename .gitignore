@@ -71,6 +71,8 @@ web/.vercel
 
 # Android and iOS (mobile/android, mobile/ios) — Continuous Native Generation:
 # these are build artifacts regenerated from mobile/app.config.ts via
-# `expo prebuild`, never committed. See mobile/scripts/deploy.sh.
+# `expo prebuild`, never committed. See mobile/scripts/build.sh.
 mobile/android/
 mobile/ios/
+# Local dev logs
+.dev-logs/

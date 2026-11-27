@@ -1,75 +1,70 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { getHitSlop } from "@/design-system/tokens/hitSlop";
+import { shadows } from "@/design-system/tokens/shadows";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
-import { CustomiseCollageItem } from "./CustomiseCollageItem";
+import { CollageDiagram, type CollageOption } from "./CollageDiagram";
 
-function CollageBox() {
-  return <View style={styles.collageBox} />;
-}
+const COLLAGE_OPTIONS: CollageOption[] = [
+  { style: "single", label: "Single", columns: 1, rows: 1 },
+  { style: "column", label: "Strip of 3", columns: 1, rows: 3 },
+  { style: "row", label: "Row of 3", columns: 3, rows: 1 },
+  { style: "square", label: "Grid", columns: 2, rows: 2 }
+];
 
 export function CustomiseCollage() {
   const { collageStyle, setCollageStyle } = usePhotoBoothSettings();
 
   return (
     <View style={styles.container}>
-      <View style={styles.collageContainer}>
-        <CustomiseCollageItem
-          isSelected={collageStyle === "square"}
-          onPress={() => setCollageStyle("square")}
+      {COLLAGE_OPTIONS.map((option) => (
+        <TouchableOpacity
+          key={option.style}
+          style={[
+            styles.item,
+            collageStyle === option.style && styles.selectedItem
+          ]}
+          onPress={() => setCollageStyle(option.style)}
+          hitSlop={getHitSlop("medium")}
         >
-          <View style={styles.collageRow}>
-            <CollageBox />
-            <CollageBox />
-          </View>
-          <View style={styles.collageRow}>
-            <CollageBox />
-            <CollageBox />
-          </View>
-        </CustomiseCollageItem>
-
-        <CustomiseCollageItem
-          isSelected={collageStyle === "row"}
-          onPress={() => setCollageStyle("row")}
-        >
-          <View style={styles.collageRow}>
-            <CollageBox />
-            <CollageBox />
-            <CollageBox />
-          </View>
-        </CustomiseCollageItem>
-
-        <CustomiseCollageItem
-          isSelected={collageStyle === "column"}
-          onPress={() => setCollageStyle("column")}
-        >
-          <CollageBox />
-          <CollageBox />
-          <CollageBox />
-        </CustomiseCollageItem>
-      </View>
+          <CollageDiagram {...option} />
+          <Text type="body" color={colors.black} style={styles.label}>
+            {option.label}
+          </Text>
+        </TouchableOpacity>
+      ))}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  collageBox: {
-    backgroundColor: colors.black,
-    height: 30,
-    width: 30
-  },
-  collageContainer: {
-    alignItems: "flex-start",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 12
-  },
-  collageRow: {
-    flexDirection: "row",
-    gap: 2
-  },
   container: {
-    gap: 12
+    flexDirection: "row",
+    gap: 10
+  },
+  item: {
+    ...shadows.lightShadow,
+    alignItems: "center",
+    backgroundColor: colors.white,
+    borderColor: colors.lightGray,
+    borderRadius: 16,
+    borderWidth: 0.5,
+    flex: 1,
+    gap: 6,
+    paddingHorizontal: 4,
+    paddingVertical: 10
+  },
+  label: {
+    fontSize: 9,
+    letterSpacing: 1,
+    textAlign: "center",
+    textTransform: "uppercase"
+  },
+  selectedItem: {
+    borderColor: colors.secondary,
+    borderWidth: 3
   }
 });

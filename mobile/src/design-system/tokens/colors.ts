@@ -18,7 +18,6 @@ export const colors = {
   red: "#FF0000",
   amber: "#FFA500",
   yellow: "#FFD500",
-  green: "#00DD00",
   grayTint: "#DEDEDE40",
   buttonBlue: "#24A0ED",
   buttonBorder: "#E9E9E940"

@@ -5,17 +5,13 @@ import { useMemo, useState } from "react";
 import { Alert, Clipboard, StyleSheet, View } from "react-native";
 
 import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
 
-import { FontAwesome5 } from "@expo/vector-icons";
-
-import { AllStackParamList, EventsStackParamList } from "@/app/navigation";
+import { EventsStackParamList } from "@/app/navigation";
 import { Screen } from "@/components/screen/Screen";
 import { Button } from "@/design-system/components/buttons/Button";
 import { SegmentedControl } from "@/design-system/components/buttons/SegmentedControl";
 import { SwitchButton } from "@/design-system/components/buttons/SwitchButton";
-import { Text } from "@/design-system/components/text/Text";
-import { card } from "@/design-system/tokens/card";
+import { SwitchButtonGroup } from "@/design-system/components/buttons/SwitchButtonGroup";
 import { colors } from "@/design-system/tokens/colors";
 import { EventInviteUserItem } from "@/features/events/components/guest-list/EventInviteUserItem";
 import { LinkInviteDisclaimerModal } from "@/features/invite/components/LinkInviteDisclaimerModal";
@@ -33,12 +29,10 @@ import { Event } from "@/types/Event";
 import { UserInvite } from "@/types/UserInvite";
 
 interface EventInviteGuestLinkScreenProps {
-  navigation: StackNavigationProp<AllStackParamList>;
   route: RouteProp<EventsStackParamList, "EventInviteGuestLink">;
 }
 
 export function EventInviteGuestLinkScreen({
-  navigation,
   route
 }: EventInviteGuestLinkScreenProps) {
   const event = route.params?.event;
@@ -179,26 +173,15 @@ export function EventInviteGuestLinkScreen({
       >
         <View style={styles.contentContainer}>
           <View style={styles.switchContainer}>
-            <SwitchButton
-              title={"Enable Link Invite"}
-              isChecked={enableLinkInvite ?? false}
-              onChange={handleSwitchChange}
-            />
-
-            {enableLinkInvite && (
-              <View style={styles.urlContainer}>
-                <FontAwesome5 name="link" size={14} color={colors.black} />
-                <Text
-                  type="caption"
-                  color={colors.black}
-                  style={styles.urlText}
-                  numberOfLines={1}
-                  ellipsizeMode="middle"
-                >
-                  {url}
-                </Text>
-              </View>
-            )}
+            <SwitchButtonGroup>
+              <SwitchButton
+                icon="link"
+                title="Enable Link Invite"
+                subtitle="Anyone with the link can RSVP"
+                value={enableLinkInvite ?? false}
+                onChange={handleSwitchChange}
+              />
+            </SwitchButtonGroup>
 
             <View
               style={
@@ -216,12 +199,6 @@ export function EventInviteGuestLinkScreen({
                 disabled={!enableLinkInvite}
                 leadingIcon={"copy"}
               />
-
-              {enableLinkInvite && (
-                <Text type="caption" color={colors.gray} center>
-                  Anyone with this link can respond to the event
-                </Text>
-              )}
             </View>
           </View>
 
@@ -274,21 +251,6 @@ const styles = StyleSheet.create({
   switchContainer: {
     gap: 12,
     paddingHorizontal: 16
-  },
-  urlContainer: {
-    ...card.small,
-    alignItems: "center",
-    backgroundColor: colors.white,
-    flexDirection: "row",
-    gap: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 12
-  },
-  urlText: {
-    flex: 1,
-    fontStyle: "italic",
-    textAlign: "left",
-    textTransform: "none"
   },
   userListContainer: {
     gap: 12,

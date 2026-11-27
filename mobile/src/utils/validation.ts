@@ -30,7 +30,6 @@ export function passwordValid(password: string) {
 
 export interface PasswordStrength {
   score: 0 | 1 | 2 | 3 | 4;
-  label: string;
   message: string;
 }
 
@@ -41,7 +40,7 @@ function joinWithAmpersand(items: string[]): string {
 
 export function getPasswordStrength(password: string): PasswordStrength {
   if (password.length === 0) {
-    return { score: 0, label: "", message: "" };
+    return { score: 0, message: "" };
   }
 
   const missing: string[] = [];
@@ -54,18 +53,18 @@ export function getPasswordStrength(password: string): PasswordStrength {
   const criteriaMet = 5 - missing.length;
 
   if (missing.length === 0) {
-    return { score: 4, label: "Strong", message: "Strong enough — nice one" };
+    return { score: 4, message: "" };
   }
 
   const message = `Add ${joinWithAmpersand(missing)}`;
 
   if (criteriaMet <= 2) {
-    return { score: 1, label: "Weak", message };
+    return { score: 1, message };
   }
   if (criteriaMet === 3) {
-    return { score: 2, label: "Fair", message };
+    return { score: 2, message };
   }
-  return { score: 3, label: "Good", message };
+  return { score: 3, message };
 }
 
 export type NameFieldCheckResult = {

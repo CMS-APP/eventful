@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-import { Screen } from "@/components/screen/Screen";
 import { SwitchButton } from "@/design-system/components/buttons/SwitchButton";
+import { SwitchButtonGroup } from "@/design-system/components/buttons/SwitchButtonGroup";
 import { Input } from "@/design-system/components/inputs/Input";
+import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
+import { trackPhotoBoothCustomised } from "@/services/analytics/events";
 
-export function PhotoBoothSettings() {
+export function SettingsTab() {
   const {
     autoSave,
     setAutoSave,
@@ -16,13 +18,15 @@ export function PhotoBoothSettings() {
     setSaveIndividualPhotos,
     flipPhotosHorizontally,
     setFlipPhotosHorizontally,
-    removeWatermark,
-    setRemoveWatermark,
     flash,
     setFlash,
     timerDuration,
     setTimerDuration,
     photoPromptsEnabled,
+    canChangeCollage,
+    setCanChangeCollage,
+    canRetakePhoto,
+    setCanRetakePhoto,
     setPhotoPromptsEnabled
   } = usePhotoBoothSettings();
 
@@ -42,12 +46,17 @@ export function PhotoBoothSettings() {
     setFlipPhotosHorizontally(!flipPhotosHorizontally);
   }
 
-  function handleRemoveWatermarkChange() {
-    setRemoveWatermark(!removeWatermark);
-  }
-
   function handleFlashChange() {
     setFlash(!flash);
+  }
+
+  function handleCanChangeCollageChange() {
+    setCanChangeCollage(!canChangeCollage);
+    trackPhotoBoothCustomised("collage");
+  }
+
+  function handleCanRetakePhotoChange() {
+    setCanRetakePhoto(!canRetakePhoto);
   }
 
   function handlePhotoPromptsEnabledChange() {
@@ -67,75 +76,77 @@ export function PhotoBoothSettings() {
   }, [timerDurationLocal]);
 
   return (
-    <Screen
-      contentConfig={{ tabBarPresent: true }}
-      headerConfig={{
-        type: "curvy",
-        curvyHeaderProps: {
-          title: "Photo Booth",
-          subTitle: "Settings",
-          icon: "cog",
-          color: colors.white,
-          accountButton: false,
-          backgroundColor: colors.primary,
-          backAction: true
-        }
-      }}
-    >
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <Text type="subHeader">Settings</Text>
+
+      <Input
+        placeholder="Photo Timer Duration (seconds)"
+        value={timerDurationLocal.toString()}
+        onChangeText={(text) => setTimerDurationLocal(text)}
+        keyboardType="number-pad"
+        backgroundColor={colors.white}
+        textColor={colors.black}
+      />
+
+      <SwitchButtonGroup>
         <SwitchButton
+          icon="save"
           title="Auto Save"
-          isChecked={autoSave}
+          subtitle="Saves each collage to the camera roll"
+          value={autoSave}
           onChange={handleAutoSaveChange}
         />
-
         <SwitchButton
+          icon="images"
           title="Save Individual Photos"
-          isChecked={saveIndividualPhotos}
+          subtitle="Also saves every photo on its own"
+          value={saveIndividualPhotos}
           onChange={handleSaveIndividualPhotosChange}
         />
-
         <SwitchButton
+          icon="arrows-alt-h"
           title="Flip Photos Horizontally"
-          isChecked={flipPhotosHorizontally}
+          subtitle="Mirrors photos like a selfie"
+          value={flipPhotosHorizontally}
           onChange={handleFlipPhotosHorizontallyChange}
         />
-
         <SwitchButton
-          title="Remove Watermark"
-          isChecked={removeWatermark}
-          onChange={handleRemoveWatermarkChange}
-        />
-
-        <SwitchButton
+          icon="bolt"
           title="Flash"
-          isChecked={flash}
+          subtitle="Uses the camera flash for each photo"
+          value={flash}
           onChange={handleFlashChange}
         />
-
         <SwitchButton
+          icon="comment-dots"
           title="Photo Prompts"
-          isChecked={photoPromptsEnabled}
+          subtitle={'Shows ideas like "Strike your best pose!"'}
+          value={photoPromptsEnabled}
           onChange={handlePhotoPromptsEnabledChange}
         />
-
-        <Input
-          placeholder="Photo Timer Duration (seconds)"
-          value={timerDurationLocal.toString()}
-          onChangeText={(text) => setTimerDurationLocal(text)}
-          keyboardType="number-pad"
-          backgroundColor={colors.white}
-          textColor={colors.black}
+        <SwitchButton
+          icon="th-large"
+          title="Layout Change"
+          subtitle="Guests can pick a different layout for their collage"
+          value={canChangeCollage}
+          onChange={handleCanChangeCollageChange}
         />
-      </View>
-    </Screen>
+        <SwitchButton
+          icon="redo"
+          title="Retake Photos"
+          subtitle="Guests can tap a photo on the result to retake it"
+          value={canRetakePhoto}
+          onChange={handleCanRetakePhotoChange}
+        />
+      </SwitchButtonGroup>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     gap: 16,
-    marginTop: 52,
+    marginTop: 24,
     paddingHorizontal: 24
   }
 });

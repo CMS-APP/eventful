@@ -1,10 +1,27 @@
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
+import Constants from "expo-constants";
+
 import { getAppCheckToken } from "@/app/init/firebase";
 
-const BASE_URL = __DEV__
-  ? "http://localhost:5050"
+const DEV_HOST = Constants.expoConfig?.hostUri?.split(":")[0] ?? "localhost";
+
+export const BASE_URL = __DEV__
+  ? `http://${DEV_HOST}:5050`
   : "https://api.eventfulapp.com";
+
+export async function checkBackendConnection(timeoutMs = 5000) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    await fetch(BASE_URL, { method: "GET", signal: controller.signal });
+    return true;
+  } catch {
+    return false;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
 
 const ENDPOINTS = {
   sendVerificationEmail: `${BASE_URL}/sendVerificationEmail`,

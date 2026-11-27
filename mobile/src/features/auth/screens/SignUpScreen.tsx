@@ -1,210 +1,194 @@
 import { useCallback, useState } from "react";
 
-import { Alert, LayoutChangeEvent, StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { AuthStackParamList } from "@/app/navigation";
-import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Button } from "@/design-system/components/buttons/Button";
-import { TextButton } from "@/design-system/components/buttons/TextButton";
-import { Input } from "@/design-system/components/inputs/Input";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
 import { handleSignUp } from "@/services/firebase/auth";
 import { sendVerificationEmail } from "@/services/firebase/backend";
-import { FormErrors } from "@/types/FormErrors";
 import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 import { emailValid, passwordValid } from "@/utils/validation";
 
-import { Header } from "../components/Header";
-import { HeaderArcs } from "../components/HeaderArcs";
-import {
-  EmailValidationHint,
-  PasswordMatchCheck,
-  PasswordStrengthMeter
-} from "../components/PasswordRequirements";
-import { formStyles } from "../styles/formStyles";
+import { AuthCheckbox } from "../components/AuthCheckbox";
+import { AuthInput } from "../components/AuthInput";
+import { AuthLayout } from "../components/AuthLayout";
+import { AuthSwitchLink } from "../components/AuthSwitchLink";
+import { PasswordStrengthMeter } from "../components/PasswordStrengthMeter";
+import { SocialLogins } from "../components/SocialLogins";
+import { PRIVACY_URL, TERMS_URL } from "../legalLinks";
+
+interface SignUpErrors {
+  email?: string;
+}
 
 type SignUpScreenProps = NativeStackScreenProps<AuthStackParamList, "SignUp">;
 
 export function SignUpScreen({ navigation }: SignUpScreenProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [headerHeight, setHeaderHeight] = useState(0);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [errors, setErrors] = useState<SignUpErrors>({});
   const [isSigningUp, setIsSigningUp] = useState(false);
 
-  const handleEmailChange = useCallback((value: string) => {
-    setEmail(value);
-    setErrors((prev) => ({ ...prev, email: undefined }));
-  }, []);
-
-  const validateForm = useCallback((): boolean => {
-    const newErrors: FormErrors = {};
-
-    if (!emailValid(email)) {
-      newErrors.email = "Please enter a valid email address.";
-    }
-
-    if (!passwordValid(password)) {
-      newErrors.password =
-        "Password must be at least 8 characters and include an uppercase letter, a lowercase letter, a number, and a special character.";
-    }
-
-    if (password !== confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match.";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [email, password, confirmPassword]);
-
   const handleSignIn = useCallback(() => {
-    navigation.replace("SignIn", { email: "", password: "" });
+    navigation.replace("SignIn", {});
   }, [navigation]);
 
-  const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
-    const { height } = event.nativeEvent.layout;
-    setHeaderHeight(height);
-  }, []);
+  const openWebView = useCallback(
+    (title: string, uri: string) => {
+      navigation.getParent()?.navigate("WebView", { title, uri });
+    },
+    [navigation]
+  );
+
+  const canCreateAccount = passwordValid(password) && acceptedTerms;
 
   const signUp = useCallback(async () => {
-    if (!validateForm()) {
+    if (!canCreateAccount) {
       return;
     }
 
+    const trimmedEmail = email.trim();
+
+    if (!emailValid(trimmedEmail)) {
+      setErrors({ email: "Enter a valid email" });
+      return;
+    }
+
+    setErrors({});
     setIsSigningUp(true);
     try {
-      const user = await handleSignUp(email, password);
+      const user = await handleSignUp(trimmedEmail, password);
       if (typeof user === "string") {
         setErrors({ email: user });
         return;
       }
 
-      Alert.alert(
-        "Account Created",
-        "Check your email for a verification link to activate your account."
-      );
-
-      navigation.replace("SignIn", { email, password });
-      sendVerificationEmail(user as any);
-    } catch (error) {
-      if (error instanceof Error) {
-        if (error.message.includes("auth/email-already-in-use")) {
-          setErrors({ email: "Email already in use." });
-        } else {
-          log(`Error Signing Up: ${error}`, "error");
-          showErrorToast("Error Signing Up");
-          Alert.alert(
-            "Error",
-            "An unexpected error occurred. Please try again."
+      let verificationSent = false;
+      try {
+        const response = await sendVerificationEmail(user);
+        verificationSent = response.ok;
+        if (!response.ok) {
+          log(
+            `Verification email failed after sign up (${response.status})`,
+            "error"
           );
         }
+      } catch (error) {
+        log(
+          `Error sending verification email after sign up: ${error}`,
+          "error"
+        );
       }
+
+      if (verificationSent) {
+        Alert.alert(
+          "Account Created",
+          "Check your email for a verification link to activate your account."
+        );
+      } else {
+        Alert.alert(
+          "Account Created",
+          "We couldn't send your verification email. Sign in to resend it."
+        );
+      }
+
+      navigation.replace("SignIn", { email: trimmedEmail, password });
+    } catch (error) {
+      log(`Error Signing Up: ${error}`, "error");
+      showErrorToast("Error Signing Up");
+      Alert.alert("Error", "An unexpected error occurred. Please try again.");
     } finally {
       setIsSigningUp(false);
     }
-  }, [email, password, validateForm, navigation]);
+  }, [canCreateAccount, email, password, navigation]);
 
   return (
-    <View style={styles.container}>
-      <Header title="Sign Up" onLayout={handleHeaderLayout} />
-      <HeaderArcs headerHeight={headerHeight} />
+    <AuthLayout
+      title="Create account"
+      subtitle="Plan with ease, connect with joy"
+      footer={
+        <AuthSwitchLink
+          prompt="Already have an account?"
+          action="Sign in"
+          onPress={handleSignIn}
+        />
+      }
+    >
+      <SocialLogins />
 
-      <KeyboardScrollView
-        tabBarPresent={false}
-        handleScroll={() => {}}
-        _handleScroll={() => {}}
+      <AuthInput
+        label="Email"
+        placeholder="you@example.com"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        autoComplete="email"
+        textContentType="emailAddress"
+        returnKeyType="next"
+        error={errors.email}
+      />
+
+      <View>
+        <AuthInput
+          label="Password"
+          placeholder="At least 8 characters"
+          value={password}
+          onChangeText={setPassword}
+          autoCapitalize="none"
+          autoComplete="new-password"
+          textContentType="newPassword"
+          secure
+        />
+        <PasswordStrengthMeter password={password} />
+      </View>
+
+      <AuthCheckbox
+        checked={acceptedTerms}
+        onChange={() => setAcceptedTerms(!acceptedTerms)}
       >
-        <View style={formStyles.formContainer}>
-          <View style={styles.inputContainer}>
-            <Input
-              placeholder="Email"
-              value={email}
-              onChangeText={handleEmailChange}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              backgroundColor={colors.white}
-              textColor={colors.black}
-            />
-
-            <EmailValidationHint email={email} error={errors.email} />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Input
-              placeholder="Password"
-              value={password}
-              onChangeText={setPassword}
-              password
-              backgroundColor={colors.white}
-              textColor={colors.black}
-            />
-
-            <PasswordStrengthMeter password={password} />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Input
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              password
-              backgroundColor={colors.white}
-              textColor={colors.black}
-            />
-
-            <PasswordMatchCheck
-              password={password}
-              confirmPassword={confirmPassword}
-            />
-          </View>
-
-          <Button
-            text="Sign Up"
+        <Text type="caption" color={colors.darkGray}>
+          I agree to the{" "}
+          <Text
+            type="caption"
             color={colors.primary}
-            textColor={colors.white}
-            onPress={signUp}
-            leadingIcon={isSigningUp ? undefined : "user-plus"}
-            loading={isSigningUp}
-            disabled={isSigningUp}
-          />
+            style={styles.link}
+            onPress={() => openWebView("Terms of Service", TERMS_URL)}
+          >
+            Terms
+          </Text>{" "}
+          and{" "}
+          <Text
+            type="caption"
+            color={colors.primary}
+            style={styles.link}
+            onPress={() => openWebView("Privacy Policy", PRIVACY_URL)}
+          >
+            Privacy Policy
+          </Text>
+        </Text>
+      </AuthCheckbox>
 
-          <View style={styles.orContainer}>
-            <Text type="body" color={colors.black}>
-              Already have an account?
-            </Text>
-
-            <TextButton
-              text="Sign in"
-              textColor={colors.black}
-              textAlign="center"
-              type="body"
-              onPress={handleSignIn}
-            />
-          </View>
-        </View>
-      </KeyboardScrollView>
-    </View>
+      <Button
+        text="Create Account"
+        onPress={signUp}
+        color={colors.primary}
+        textColor={colors.white}
+        loading={isSigningUp}
+        disabled={isSigningUp || !canCreateAccount}
+      />
+    </AuthLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  inputContainer: {
-    gap: 4
-  },
-  orContainer: {
-    alignItems: "center",
-    flexDirection: "row",
-    gap: 8,
-    justifyContent: "center",
-    marginTop: 12
+  link: {
+    textDecorationLine: "underline"
   }
 });

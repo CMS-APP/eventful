@@ -1,11 +1,11 @@
 import { StyleSheet, View } from "react-native";
 
-import { useAppDimensions } from "@/app/hooks/useAppDimensions";
 import { usePhotoBoothCamera } from "@/features/photo-booth/context/camera/PhotoBoothCameraContext";
 import { usePhotoBoothSettings } from "@/features/photo-booth/context/settings/PhotoBoothSettingsContext";
 
 import { PhotoBoothText } from "./PhotoBoothText";
 import { ResultImage } from "./ResultImage";
+import { COLLAGE_BASE_WIDTH } from "./collageScale";
 import { previewPlaceholderPhoto } from "./previewPlaceholderPhoto";
 
 type PhotoBoothColumnCollageProps = {
@@ -19,7 +19,7 @@ export function PhotoBoothColumnCollage({
   onPhotoPress = () => {},
   preview = false
 }: PhotoBoothColumnCollageProps) {
-  const width = useAppDimensions().screenWidth;
+  const width = COLLAGE_BASE_WIDTH;
 
   const padding = 24;
   const imageWidth = width - padding;

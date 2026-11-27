@@ -11,13 +11,12 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { useSafeAreaStyles } from "@/app/hooks/useSafeAreaStyles";
 import { FIREBASE_AUTH } from "@/app/init/firebase";
 import { OnboardingStackParamList } from "@/app/navigation";
-import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
-import { Input } from "@/design-system/components/inputs/Input";
+import { Button } from "@/design-system/components/buttons/Button";
 import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
+import { AuthInput } from "@/features/auth/components/AuthInput";
 import { API_COLLECTIONS } from "@/services/api/constants";
 import { createDocument } from "@/services/api/create";
 import {
@@ -31,7 +30,7 @@ import { log } from "@/utils/logging";
 import { showErrorToast } from "@/utils/toast";
 import { capitalize, checkNames, checkUsernameValid } from "@/utils/validation";
 
-import { OnboardingButtons } from "../components/OnboardingButtons";
+import { OnboardingLayout } from "../components/OnboardingLayout";
 import { getLoginNames } from "../utils";
 
 interface OnboardingNameInputScreenProps {
@@ -51,8 +50,6 @@ export function OnboardingNameInputScreen({
   const [helperText, setHelperText] = useState("");
   const [editable, setEditable] = useState(true);
   const dispatch = useDispatch();
-
-  const { paddingTop } = useSafeAreaStyles().safeArea;
 
   async function handleBack() {
     navigation.goBack();
@@ -169,107 +166,87 @@ export function OnboardingNameInputScreen({
     })();
   }, []);
 
+  const statusColor = usernameValid ? colors.primary : colors.red;
+
   return (
-    <View style={styles.container}>
-      <KeyboardScrollView
-        tabBarPresent={false}
-        backgroundColor={colors.primary}
-        handleScroll={() => {}}
-        _handleScroll={() => {}}
-      >
-        <View
-          style={[
-            styles.contentContainer,
-            {
-              marginTop: paddingTop + 20
-            }
-          ]}
-        >
-          <Text type="header" style={styles.title}>
-            User Details
-          </Text>
+    <OnboardingLayout
+      step={2}
+      onBack={handleBack}
+      title="Make it yours"
+      subtitle="This is how friends find you"
+    >
+      <AuthInput
+        label="First name"
+        placeholder="First name"
+        value={firstName}
+        onChangeText={setFirstName}
+        autoCapitalize="words"
+        autoComplete="given-name"
+        textContentType="givenName"
+        editable={editable}
+      />
 
-          <Input
-            placeholder="First Name"
-            onChangeText={(text: string) => setFirstName(text)}
-            value={firstName}
-            dark
-            backgroundColor={colors.lightGray}
-            textColor={colors.black}
-            editable={editable}
-          />
+      <AuthInput
+        label="Last name"
+        placeholder="Last name"
+        value={lastName}
+        onChangeText={setLastName}
+        autoCapitalize="words"
+        autoComplete="family-name"
+        textContentType="familyName"
+        editable={editable}
+      />
 
-          <Input
-            placeholder="Last Name"
-            onChangeText={(text: string) => setLastName(text)}
-            value={lastName}
-            dark
-            backgroundColor={colors.lightGray}
-            textColor={colors.black}
-            editable={editable}
-          />
-
-          <Input
-            placeholder="Username"
-            onChangeText={(text: string) => setUsername(text)}
-            value={username}
-            autoCapitalize="none"
-            autoCorrect={false}
-            textContentType="username"
-            dark
-            backgroundColor={colors.lightGray}
-            textColor={colors.black}
-          >
-            {helperText && (
-              <View style={styles.helperTextContainer}>
-                <Text
-                  type="body"
-                  italic
-                  color={usernameValid ? colors.green : colors.red + "CC"}
-                  center
-                >
-                  <FontAwesome5
-                    name={usernameValid ? "check" : "times"}
-                    size={12}
-                    color={usernameValid ? colors.green : colors.red + "CC"}
-                  />{" "}
-                  {helperText}
-                </Text>
-              </View>
-            )}
-          </Input>
-        </View>
-
-        <OnboardingButtons
-          backText="Back"
-          exit={handleBack}
-          next={handleNext}
+      <View style={styles.usernameContainer}>
+        <AuthInput
+          label="Username"
+          placeholder="username"
+          prefix="@"
+          value={username}
+          onChangeText={setUsername}
+          autoCapitalize="none"
+          autoComplete="username"
+          textContentType="username"
         />
-      </KeyboardScrollView>
-    </View>
+        {helperText ? (
+          <View style={styles.status}>
+            <FontAwesome5
+              name={usernameValid ? "check-circle" : "times-circle"}
+              size={12}
+              color={statusColor}
+            />
+            <Text type="caption" color={statusColor} style={styles.statusText}>
+              {helperText}
+            </Text>
+          </View>
+        ) : (
+          <Text type="caption" color={colors.primaryTint3}>
+            Letters, numbers, dots, dashes and underscores
+          </Text>
+        )}
+      </View>
+
+      <Button
+        text="Continue"
+        color={colors.primary}
+        textColor={colors.white}
+        onPress={handleNext}
+        leadingIcon="arrow-right"
+      />
+    </OnboardingLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.primary,
-    flex: 1
-  },
-  contentContainer: {
-    backgroundColor: colors.primary,
-    gap: 24,
-    justifyContent: "center",
-    marginBottom: 24,
-    marginHorizontal: 24
-  },
-  helperTextContainer: {
+  status: {
     alignItems: "center",
     flexDirection: "row",
-    justifyContent: "center",
-    margin: 12
+    gap: 6
   },
-  title: {
-    color: colors.white,
-    textAlign: "center"
+  statusText: {
+    flex: 1
+  },
+  usernameContainer: {
+    gap: 6
   }
 });

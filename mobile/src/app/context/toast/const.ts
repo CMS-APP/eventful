@@ -3,7 +3,7 @@ import { colors } from "@/design-system/tokens/colors";
 export type ToastType = "success" | "warning" | "error";
 
 export const toastColors: Record<ToastType, string> = {
-  success: colors.green,
+  success: colors.primaryTint,
   warning: colors.secondary,
   error: colors.red
 };

@@ -27,6 +27,7 @@ export interface PhotoBoothConfig {
   flipPhotosHorizontally: boolean;
   collageStyle: string;
   canChangeCollage: boolean;
+  canRetakePhoto: boolean;
   canChangeFilter: boolean;
   flash: boolean;
   filter: string;
@@ -52,6 +53,7 @@ export interface PhotoBoothConfig {
   setFlipPhotosHorizontally: (flipPhotosHorizontally: boolean) => void;
   setCollageStyle: (collageStyle: string) => void;
   setCanChangeCollage: (canChangeCollage: boolean) => void;
+  setCanRetakePhoto: (canRetakePhoto: boolean) => void;
   setCanChangeFilter: (canChangeFilter: boolean) => void;
   setFlash: (flash: boolean) => void;
   setFilter: (filter: string) => void;
@@ -74,6 +76,7 @@ export const PB_CONFIG = {
   flipPhotosHorizontally: true,
   collageStyle: "square",
   canChangeCollage: false,
+  canRetakePhoto: true,
   canChangeFilter: false,
   flash: false,
   filter: "Normal",

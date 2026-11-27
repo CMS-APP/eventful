@@ -1,21 +1,12 @@
-import {
-  ColorMatrix,
-  type Matrix,
-  cool,
-  grayscale,
-  kodachrome,
-  normal,
-  polaroid,
-  sepia,
-  vintage,
-  warm
-} from "react-native-color-matrix-image-filters";
+import { ColorMatrix } from "react-native-color-matrix-image-filters";
 
 import { memo, useMemo } from "react";
 
 import { Image, Pressable, StyleSheet, View } from "react-native";
 
 import { PhotoResult } from "expo-camera";
+
+import { matrixForFilter, needsGrainOverlay } from "./filterMatrix";
 
 interface ResultImageProps {
   filter: string;
@@ -29,35 +20,6 @@ interface ResultImageProps {
 }
 
 const grainSource = require("@/assets/textures/grain.png");
-
-function matrixForFilter(filter: string): Matrix {
-  switch (filter) {
-    case "Normal":
-      return normal();
-    case "Black & White":
-      return grayscale(1);
-    case "Sepia":
-      return sepia(1);
-    case "Vintage":
-      return vintage();
-    case "Warm":
-      return warm();
-    case "Cool":
-      return cool();
-    case "Kodachrome":
-      return kodachrome();
-    case "Polaroid":
-      return polaroid();
-    default:
-      return normal();
-  }
-}
-
-function needsGrainOverlay(filter: string): boolean {
-  return (
-    filter === "Black & White" || filter === "Vintage" || filter === "Polaroid"
-  );
-}
 
 function ResultImageInner({
   filter = "Normal",

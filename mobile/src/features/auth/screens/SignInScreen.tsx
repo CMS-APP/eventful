@@ -2,23 +2,21 @@ import { useDispatch } from "react-redux";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { Alert, LayoutChangeEvent, StyleSheet, View } from "react-native";
+import { Alert } from "react-native";
 
 import { CommonActions } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { dataInit } from "@/app/init/data";
 import { AuthStackParamList, navigationRef } from "@/app/navigation";
-import { KeyboardScrollView } from "@/components/views/KeyboardScrollView";
 import { Button } from "@/design-system/components/buttons/Button";
 import { TextButton } from "@/design-system/components/buttons/TextButton";
-import { Input } from "@/design-system/components/inputs/Input";
-import { Text } from "@/design-system/components/text/Text";
 import { colors } from "@/design-system/tokens/colors";
-import { Header } from "@/features/auth/components/Header";
-import { HeaderArcs } from "@/features/auth/components/HeaderArcs";
+import { AuthInput } from "@/features/auth/components/AuthInput";
+import { AuthLayout } from "@/features/auth/components/AuthLayout";
+import { AuthSwitchLink } from "@/features/auth/components/AuthSwitchLink";
+import { SocialLogins } from "@/features/auth/components/SocialLogins";
 import { SIGN_IN_ERROR_DETAILS } from "@/features/auth/signInErrors";
-import { formStyles } from "@/features/auth/styles/formStyles";
 import { handleSignIn } from "@/services/firebase/auth";
 import { sendVerificationEmail } from "@/services/firebase/backend";
 import { showOptionsAlert } from "@/utils/alertModal";
@@ -45,7 +43,6 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
   }, [email, password]);
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [headerHeight, setHeaderHeight] = useState(0);
   const [isSigningIn, setIsSigningIn] = useState(false);
 
   const dispatch = useDispatch();
@@ -75,11 +72,6 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
   const handleForgotPassword = () => {
     navigation.navigate("ForgotPassword");
   };
-
-  const handleHeaderLayout = useCallback((event: LayoutChangeEvent) => {
-    const { height } = event.nativeEvent.layout;
-    setHeaderHeight(height);
-  }, []);
 
   const sendEmailVerificationAlert = useCallback(async (user: any) => {
     try {
@@ -179,103 +171,62 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
   );
 
   return (
-    <View style={styles.container}>
-      <Header title="Sign In" onLayout={handleHeaderLayout} />
-      <HeaderArcs headerHeight={headerHeight} />
+    <AuthLayout
+      title="Welcome back"
+      subtitle="Sign in to access your account"
+      footer={
+        <AuthSwitchLink
+          prompt="New to Eventful?"
+          action="Sign up"
+          onPress={handleSignUp}
+        />
+      }
+    >
+      <SocialLogins />
 
-      <KeyboardScrollView
-        tabBarPresent={false}
-        handleScroll={() => {}}
-        _handleScroll={() => {}}
-      >
-        <View style={formStyles.formContainer}>
-          <View style={styles.inputContainer}>
-            <Input
-              placeholder="Email"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              backgroundColor={colors.white}
-              textColor={colors.black}
-            />
+      <AuthInput
+        label="Email"
+        placeholder="you@example.com"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        autoComplete="email"
+        textContentType="emailAddress"
+        returnKeyType="next"
+        error={errors.email}
+      />
 
-            {errors.email && (
-              <Text type="body" color="red">
-                {errors.email}
-              </Text>
-            )}
-          </View>
+      <AuthInput
+        label="Password"
+        placeholder="Your password"
+        value={password}
+        onChangeText={setPassword}
+        autoCapitalize="none"
+        autoComplete="current-password"
+        textContentType="password"
+        returnKeyType="go"
+        onSubmitEditing={() => signIn()}
+        secure
+        error={errors.password}
+      />
 
-          <View style={styles.inputContainer}>
-            <Input
-              placeholder="Password"
-              value={password}
-              onChangeText={setPassword}
-              keyboardType="default"
-              backgroundColor={colors.white}
-              textColor={colors.black}
-              password
-            />
+      <TextButton
+        type="body"
+        onPress={handleForgotPassword}
+        textAlign="right"
+        textColor={colors.primary}
+        text="Forgot Password?"
+      />
 
-            {errors.password && (
-              <Text type="body" color="red">
-                {errors.password}
-              </Text>
-            )}
-          </View>
-
-          <TextButton
-            type="body"
-            onPress={handleForgotPassword}
-            textAlign="left"
-            textColor={colors.black}
-            text="Forgot Password?"
-          />
-
-          <Button
-            text="Sign In"
-            onPress={signIn}
-            color={colors.primary}
-            textColor={colors.white}
-            leadingIcon={isSigningIn ? undefined : "sign-in-alt"}
-            loading={isSigningIn}
-            disabled={isSigningIn}
-          />
-
-          <View style={styles.orContainer}>
-            <Text type="body" color={colors.black}>
-              Don&apos;t have an account?
-            </Text>
-
-            <TextButton
-              text="Sign up"
-              textColor={colors.black}
-              textAlign="center"
-              type="body"
-              onPress={handleSignUp}
-            />
-          </View>
-        </View>
-      </KeyboardScrollView>
-    </View>
+      <Button
+        text="Sign In"
+        onPress={signIn}
+        color={colors.primary}
+        textColor={colors.white}
+        loading={isSigningIn}
+        disabled={isSigningIn || !email.trim() || !password}
+      />
+    </AuthLayout>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    color: colors.white,
-    flex: 1
-  },
-  inputContainer: {
-    gap: 4
-  },
-  orContainer: {
-    alignItems: "center",
-    flexDirection: "row",
-    gap: 8,
-    justifyContent: "center",
-    marginTop: 12
-  }
-});
