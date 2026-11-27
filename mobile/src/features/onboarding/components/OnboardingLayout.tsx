@@ -144,7 +144,8 @@ const styles = StyleSheet.create({
   },
   sheet: {
     backgroundColor: colors.white,
-    borderTopLeftRadius: 40
+    borderTopLeftRadius: 40,
+    overflow: "hidden"
   },
   sheetContent: {
     gap: 20,

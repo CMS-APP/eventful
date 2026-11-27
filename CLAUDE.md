@@ -21,7 +21,7 @@ There is no shared root `package.json`; each of the three projects has its own d
 ./run_server.sh --no-mobile   # backend + web only
 ```
 
-Dev builds of mobile and web call the backend at `http://localhost:5050` (`mobile/src/services/firebase/backend.ts`, `web/src/lib/backendUrl.ts`), so backend calls fail unless the emulator (`backend/emulate.sh`) is running. The emulator runs functions locally against **production** Firestore/Auth. Background logs go to `.dev-logs/`, and Ctrl+C stops everything.
+Dev builds of web call the backend at `http://localhost:5050` (`web/src/lib/backendUrl.ts`); mobile dev builds use the Metro host's address on port 5050 (`mobile/src/services/firebase/backend.ts`), so physical devices reach the Mac's emulator over Wi-Fi (the hosting emulator listens on `0.0.0.0`). Backend calls fail unless the emulator (`backend/emulate.sh`) is running. The emulator runs functions locally against **production** Firestore/Auth. Background logs go to `.dev-logs/`, and Ctrl+C stops everything.
 
 ### Mobile (`mobile/`)
 

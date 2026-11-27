@@ -41,7 +41,10 @@ export function ForgotPasswordScreen({
     setLoading(true);
 
     try {
-      await forgotPassword(trimmedEmail);
+      const response = await forgotPassword(trimmedEmail);
+      if (!response.ok) {
+        throw new Error(`Request failed (${response.status})`);
+      }
       return true;
     } catch (error) {
       log(`Error requesting password reset: ${error}`, "error");

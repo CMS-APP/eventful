@@ -69,13 +69,36 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
         return;
       }
 
-      Alert.alert(
-        "Account Created",
-        "Check your email for a verification link to activate your account."
-      );
+      let verificationSent = false;
+      try {
+        const response = await sendVerificationEmail(user);
+        verificationSent = response.ok;
+        if (!response.ok) {
+          log(
+            `Verification email failed after sign up (${response.status})`,
+            "error"
+          );
+        }
+      } catch (error) {
+        log(
+          `Error sending verification email after sign up: ${error}`,
+          "error"
+        );
+      }
+
+      if (verificationSent) {
+        Alert.alert(
+          "Account Created",
+          "Check your email for a verification link to activate your account."
+        );
+      } else {
+        Alert.alert(
+          "Account Created",
+          "We couldn't send your verification email. Sign in to resend it."
+        );
+      }
 
       navigation.replace("SignIn", { email: trimmedEmail, password });
-      sendVerificationEmail(user as any);
     } catch (error) {
       log(`Error Signing Up: ${error}`, "error");
       showErrorToast("Error Signing Up");

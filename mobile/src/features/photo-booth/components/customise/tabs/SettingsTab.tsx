@@ -25,6 +25,8 @@ export function SettingsTab() {
     photoPromptsEnabled,
     canChangeCollage,
     setCanChangeCollage,
+    canRetakePhoto,
+    setCanRetakePhoto,
     setPhotoPromptsEnabled
   } = usePhotoBoothSettings();
 
@@ -51,6 +53,10 @@ export function SettingsTab() {
   function handleCanChangeCollageChange() {
     setCanChangeCollage(!canChangeCollage);
     trackPhotoBoothCustomised("collage");
+  }
+
+  function handleCanRetakePhotoChange() {
+    setCanRetakePhoto(!canRetakePhoto);
   }
 
   function handlePhotoPromptsEnabledChange() {
@@ -124,6 +130,13 @@ export function SettingsTab() {
           subtitle="Guests can pick a different layout for their collage"
           value={canChangeCollage}
           onChange={handleCanChangeCollageChange}
+        />
+        <SwitchButton
+          icon="redo"
+          title="Retake Photos"
+          subtitle="Guests can tap a photo on the result to retake it"
+          value={canRetakePhoto}
+          onChange={handleCanRetakePhotoChange}
         />
       </SwitchButtonGroup>
     </View>

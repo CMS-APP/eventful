@@ -447,9 +447,7 @@ export async function getSuggestedFollows(
     .slice(0, maxResults)
     .map(([candidateId]) => candidateId);
 
-  const users = await Promise.all(
-    topCandidateIds.map((id) => getUserInfo(id))
-  );
+  const users = await Promise.all(topCandidateIds.map((id) => getUserInfo(id)));
 
   return users.filter((user): user is User => user !== null);
 }
@@ -608,6 +606,8 @@ export async function savePhotoBoothConfig(
     collageStyle: config.collageStyle || "square",
     canChangeCollage:
       config.canChangeCollage !== undefined ? config.canChangeCollage : false,
+    canRetakePhoto:
+      config.canRetakePhoto !== undefined ? config.canRetakePhoto : true,
     canChangeFilter:
       config.canChangeFilter !== undefined ? config.canChangeFilter : false,
     flash: config.flash !== undefined ? config.flash : false,

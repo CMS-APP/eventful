@@ -10,6 +10,7 @@ import {
 
 import { ErrorFallback } from "@/app/context/error/ErrorFallback";
 import { useBackButtonHandler } from "@/app/hooks/useBackButtonHandler";
+import { useDevBackendCheck } from "@/app/hooks/useDevBackendCheck";
 import { useSyncEventWidget } from "@/app/hooks/useSyncEventWidget";
 import { useDataInit } from "@/app/init/data";
 import { AppStackParamList, navigationRef } from "@/app/navigation";
@@ -45,6 +46,7 @@ export function AppNavigator() {
   const userId = useSelector((state: UserState) => state.uid);
 
   useBackButtonHandler();
+  useDevBackendCheck();
   useSyncEventWidget(userId);
 
   if (bootError) {

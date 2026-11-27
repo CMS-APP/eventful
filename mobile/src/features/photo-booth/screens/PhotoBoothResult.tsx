@@ -28,7 +28,7 @@ import { filters } from "../filters";
 
 export function PhotoBoothResult() {
   const { setPhotos } = usePhotoBoothCamera();
-  const { filter: savedFilter } = usePhotoBoothSettings();
+  const { filter: savedFilter, canRetakePhoto } = usePhotoBoothSettings();
   const navigation = useNavigation<PhotoBoothStackNavigation>();
   const insets = useSafeAreaInsets();
 
@@ -97,17 +97,19 @@ export function PhotoBoothResult() {
             <ScaledCollage captureRef={viewRef} onSizeChange={setCaptureSize}>
               <PhotoBoothCollage
                 filter={filters[index]}
-                onPhotoPress={handlePhotoPress}
+                onPhotoPress={canRetakePhoto ? handlePhotoPress : undefined}
               />
             </ScaledCollage>
           </View>
 
-          <View style={styles.redoContainer}>
-            <FontAwesome5 name="redo" size={20} color={colors.black} />
-            <Text type="body" center>
-              Tap on a photo to redo
-            </Text>
-          </View>
+          {canRetakePhoto && (
+            <View style={styles.redoContainer}>
+              <FontAwesome5 name="redo" size={20} color={colors.black} />
+              <Text type="body" center>
+                Tap on a photo to redo
+              </Text>
+            </View>
+          )}
         </Screen>
 
         <View
