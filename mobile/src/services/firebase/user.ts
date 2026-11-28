@@ -36,7 +36,7 @@ import { PostLike } from "@/types/PostLike";
 import { User } from "@/types/User";
 import { log } from "@/utils/logging";
 
-import { deleteUserImageAsnyc } from "./storage";
+import { deleteUserGalleryAsync, deleteUserImageAsnyc } from "./storage";
 
 export function convertTimestampsToMillis(user: User) {
   try {
@@ -104,15 +104,14 @@ async function deleteUserInvites(userId: string) {
       API_COLLECTIONS.INVITE
     )) as Invite[];
 
-    const deletePromise = [
-      recipientInvites.map((invite) =>
-        deleteDocument(API_COLLECTIONS.INVITE, invite.id)
-      ),
-      senderInvites.map((invite) =>
-        deleteDocument(API_COLLECTIONS.INVITE, invite.id)
+    const inviteIds = new Set(
+      [...recipientInvites, ...senderInvites].map((invite) => invite.id)
+    );
+    await Promise.all(
+      [...inviteIds].map((inviteId) =>
+        deleteDocument(API_COLLECTIONS.INVITE, inviteId)
       )
-    ];
-    await Promise.all(deletePromise);
+    );
   } catch (error) {
     log(`Error deleting user invites: ${error}`, "error");
     throw error;
@@ -214,6 +213,45 @@ async function deleteUserPostLikes(userId: string) {
   }
 }
 
+async function deleteUserPhotoBoothPhotos(userId: string) {
+  const photos = (await getDocumentsByQuery(
+    [where("userId", "==", userId)],
+    API_COLLECTIONS.PHOTO_BOOTH_PHOTOS
+  )) as { id: string }[];
+
+  const deletePromises = photos.map((photo) =>
+    deleteDocument(API_COLLECTIONS.PHOTO_BOOTH_PHOTOS, photo.id)
+  );
+
+  await Promise.all(deletePromises);
+}
+
+async function deleteUserEventLinks(userId: string) {
+  const eventLinks = (await getDocumentsByQuery(
+    [where("userId", "==", userId)],
+    API_COLLECTIONS.EVENT_LINKS
+  )) as { id: string }[];
+
+  const deletePromises = eventLinks.map((eventLink) =>
+    deleteDocument(API_COLLECTIONS.EVENT_LINKS, eventLink.id)
+  );
+
+  await Promise.all(deletePromises);
+}
+
+async function deleteUserEventResponses(userId: string) {
+  const eventResponses = (await getDocumentsByQuery(
+    [where("hostId", "==", userId)],
+    API_COLLECTIONS.EVENT_RESPONSES
+  )) as EventLinkResponse[];
+
+  const deletePromises = eventResponses.map((eventResponse) =>
+    deleteDocument(API_COLLECTIONS.EVENT_RESPONSES, eventResponse.id)
+  );
+
+  await Promise.all(deletePromises);
+}
+
 async function deleteUserPhotoBoothConfig(userId: string) {
   try {
     await deleteDocument(API_COLLECTIONS.PHOTO_BOOTH_CONFIG, userId);
@@ -234,7 +272,11 @@ export async function deleteUserData(userId: string): Promise<void> {
       deleteUserPollVotes(userId),
       deleteUserPostLikes(userId),
       deleteUserPhotoBoothConfig(userId),
-      deleteUserImageAsnyc(userId)
+      deleteUserPhotoBoothPhotos(userId),
+      deleteUserEventLinks(userId),
+      deleteUserEventResponses(userId),
+      deleteUserImageAsnyc(userId),
+      deleteUserGalleryAsync(userId)
     ]);
 
     await removeData("spotifyData");

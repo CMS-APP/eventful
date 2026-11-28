@@ -1,6 +1,7 @@
 from firebase_admin import initialize_app
 
 from src.functions.firestore_handlers import (
+    eventDeleted,
     inviteWritten,
     notificationWritten,
     sendFeedbackEmail,

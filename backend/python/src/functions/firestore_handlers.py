@@ -1,6 +1,7 @@
 from firebase_functions import firestore_fn
 
 from src.config import MJ_API_KEY, MJ_SECRET
+from src.services.event_responses import handle_event_deleted
 from src.services.feedback import handle_send_feedback_email
 from src.services.followers import handle_sync_followers, handle_sync_following
 from src.services.notifications import handle_invite_written, handle_notification_written
@@ -29,3 +30,8 @@ def inviteWritten(event):
 @firestore_fn.on_document_written(document="feedback/{feedbackId}", secrets=[MJ_API_KEY, MJ_SECRET])
 def sendFeedbackEmail(event):
     handle_send_feedback_email(event, MJ_API_KEY, MJ_SECRET)
+
+
+@firestore_fn.on_document_deleted(document="event/{eventId}")
+def eventDeleted(event):
+    handle_event_deleted(event)

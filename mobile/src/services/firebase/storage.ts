@@ -1,6 +1,8 @@
 import {
+  FirebaseStorageTypes,
   deleteObject,
   getDownloadURL,
+  listAll,
   ref,
   uploadBytesResumable
 } from "@react-native-firebase/storage";
@@ -65,6 +67,20 @@ export async function uploadImageAsync(
 export async function deleteImageAsync(storageString: string) {
   const storageRef = ref(FIREBASE_STORAGE, storageString + ".jpg");
   await deleteObject(storageRef);
+}
+
+async function deleteFolderRecursive(
+  folderRef: FirebaseStorageTypes.Reference
+): Promise<void> {
+  const { items, prefixes } = await listAll(folderRef);
+  await Promise.all([
+    ...items.map((item) => deleteObject(item)),
+    ...prefixes.map((prefix) => deleteFolderRecursive(prefix))
+  ]);
+}
+
+export async function deleteUserGalleryAsync(userId: string) {
+  await deleteFolderRecursive(ref(FIREBASE_STORAGE, `gallery/${userId}`));
 }
 
 export async function deleteUserImageAsnyc(userId: string) {

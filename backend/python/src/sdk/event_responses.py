@@ -100,3 +100,20 @@ def record_event_response(
         )
 
     return "created"
+
+
+def get_event_host_id(event_id: str) -> str | None:
+    if not (link := firestore.client().collection("eventLinks").document(event_id).get()).exists:
+        return None
+    return (link.to_dict() or {}).get("userId")
+
+
+def delete_event_link_and_responses(event_id: str) -> int:
+    db = firestore.client()
+    writer = db.bulk_writer()
+    responses = list(db.collection("eventResponses").where("eventId", "==", event_id).stream())
+    for doc in responses:
+        writer.delete(doc.reference)
+    writer.delete(db.collection("eventLinks").document(event_id))
+    writer.close()
+    return len(responses)
